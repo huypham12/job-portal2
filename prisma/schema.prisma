@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client-js" // Sửa thành cái này
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -18,24 +17,21 @@ model activity_logs {
   @@index([user_id], map: "idx_activity_logs_user")
 }
 
-/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
 model applications {
-  id            String              @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id       String              @db.Uuid
-  job_id        String              @db.Uuid
-  job_posted_at DateTime            @db.Timestamp(6)
-  resume_id     String?             @db.Uuid
-  status        application_status? @default(pending)
-  applied_at    DateTime            @default(now()) @db.Timestamp(6)
-  metadata      Json?
-  version       Int?                @default(1)
-  jobs          jobs                @relation(fields: [job_id, job_posted_at], references: [id, posted_at], onDelete: Cascade, onUpdate: NoAction)
-  resumes       resumes?            @relation(fields: [resume_id], references: [id], onUpdate: NoAction)
-  users         users               @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String              @db.Uuid
+  job_id     String              @db.Uuid
+  resume_id  String?             @db.Uuid
+  status     application_status? @default(pending)
+  applied_at DateTime?           @default(now()) @db.Timestamp(6)
+  metadata   Json?
+  version    Int?                @default(1)
+  jobs       jobs                @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  resumes    resumes?            @relation(fields: [resume_id], references: [id], onUpdate: NoAction)
+  users      users               @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([id, applied_at])
-  @@index([job_id, job_posted_at], map: "idx_applications_job")
-  @@index([user_id, job_id, job_posted_at], map: "idx_applications_user_job")
+  @@index([job_id], map: "idx_applications_job")
+  @@index([user_id, job_id], map: "idx_applications_user_job")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -105,41 +101,37 @@ model company_subscriptions {
 }
 
 model job_posts_history {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  job_id        String    @db.Uuid
-  job_posted_at DateTime  @db.Timestamp(6)
-  version       Int
-  content       Json?
-  updated_at    DateTime? @default(now()) @db.Timestamp(6)
-  jobs          jobs      @relation(fields: [job_id, job_posted_at], references: [id, posted_at], onDelete: SetNull, onUpdate: NoAction)
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  job_id     String    @db.Uuid
+  version    Int
+  content    Json?
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  jobs       jobs      @relation(fields: [job_id], references: [id], onUpdate: NoAction)
 
-  @@unique([job_id, job_posted_at, version])
+  @@unique([job_id, version])
 }
 
 model job_skills {
-  job_id        String   @db.Uuid
-  job_posted_at DateTime @db.Timestamp(6)
-  skill_id      String   @db.Uuid
-  jobs          jobs     @relation(fields: [job_id, job_posted_at], references: [id, posted_at], onDelete: Cascade, onUpdate: NoAction)
-  skills        skills   @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  job_id   String @db.Uuid
+  skill_id String @db.Uuid
+  jobs     jobs   @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  skills   skills @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([job_id, job_posted_at, skill_id])
+  @@id([job_id, skill_id])
 }
 
 model job_tags {
-  job_id        String   @db.Uuid
-  job_posted_at DateTime @db.Timestamp(6)
-  tag_id        String   @db.Uuid
-  jobs          jobs     @relation(fields: [job_id, job_posted_at], references: [id, posted_at], onDelete: Cascade, onUpdate: NoAction)
-  tags          tags     @relation(fields: [tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  job_id String @db.Uuid
+  tag_id String @db.Uuid
+  jobs   jobs   @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tags   tags   @relation(fields: [tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([job_id, job_posted_at, tag_id])
+  @@id([job_id, tag_id])
 }
 
-/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model jobs {
-  id                String              @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title             String
   description       String
   company_id        String?             @db.Uuid
@@ -147,7 +139,7 @@ model jobs {
   salary_range      Json?
   job_type          job_type?
   experience_level  Int?
-  posted_at         DateTime            @default(now()) @db.Timestamp(6)
+  posted_at         DateTime?           @default(now()) @db.Timestamp(6)
   expires_at        DateTime?           @db.Timestamp(6)
   status            job_status?         @default(draft)
   metadata          Json?
@@ -161,7 +153,6 @@ model jobs {
   locations         locations?          @relation(fields: [location_id], references: [id], onUpdate: NoAction)
   saved_jobs        saved_jobs[]
 
-  @@id([id, posted_at])
   @@index([company_id], map: "idx_jobs_company")
   @@index([location_id], map: "idx_jobs_location")
   @@index([posted_at], map: "idx_jobs_posted_at")
@@ -169,10 +160,11 @@ model jobs {
 }
 
 model locations {
-  id        String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   city      String?
   country   String?
-  geo_point Unsupported("point")?
+  latitude  Decimal?   @db.Decimal(9, 6)
+  longitude Decimal?   @db.Decimal(9, 6)
   jobs      jobs[]
   profiles  profiles[]
 }
@@ -277,15 +269,14 @@ model roles_permissions {
 }
 
 model saved_jobs {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id       String    @db.Uuid
-  job_id        String    @db.Uuid
-  job_posted_at DateTime  @db.Timestamp(6)
-  saved_at      DateTime? @default(now()) @db.Timestamp(6)
-  jobs          jobs      @relation(fields: [job_id, job_posted_at], references: [id, posted_at], onDelete: Cascade, onUpdate: NoAction)
-  users         users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id  String    @db.Uuid
+  job_id   String    @db.Uuid
+  saved_at DateTime? @default(now()) @db.Timestamp(6)
+  jobs     jobs      @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users    users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@unique([user_id, job_id, job_posted_at])
+  @@unique([user_id, job_id])
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -335,8 +326,8 @@ model user_follows {
   follower_id                            String    @db.Uuid
   following_id                           String    @db.Uuid
   followed_at                            DateTime? @default(now()) @db.Timestamp(6)
-  users_user_follows_follower_idTousers  users     @relation("user_follows_follower_idTousers", fields: [follower_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  users_user_follows_following_idTousers users     @relation("user_follows_following_idTousers", fields: [following_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  follower  users @relation("Following", fields: [follower_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  following users @relation("Followers", fields: [following_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([follower_id, following_id])
   @@index([following_id], map: "idx_user_follows_following")
@@ -385,8 +376,8 @@ model users {
   resumes                                       resumes[]
   saved_jobs                                    saved_jobs[]
   search_history                                search_history[]
-  user_follows_user_follows_follower_idTousers  user_follows[]   @relation("user_follows_follower_idTousers")
-  user_follows_user_follows_following_idTousers user_follows[]   @relation("user_follows_following_idTousers")
+  following user_follows[] @relation("Following") // Những người mà user này đang follow
+  followers user_follows[] @relation("Followers") // Những người đang follow user này
   user_skills                                   user_skills[]
   user_tokens                                   user_tokens[]
 
