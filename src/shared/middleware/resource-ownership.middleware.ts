@@ -13,8 +13,8 @@ export const checkResourceOwnership = (
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id, role } = req.decoded_authorization as TokenPayload
-      const resourceId = req.params.id || req.params.userId
-
+      const paramId = req.params.id || req.params.userId
+      const resourceId = paramId ?? (resourceType === 'user' ? user_id : undefined)
       if (!resourceId) {
         return next(new HttpError('Missing resource ID in URL parameters', HTTP_STATUS.BAD_REQUEST))
       }

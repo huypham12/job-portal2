@@ -1,8 +1,8 @@
 // src/app.ts
 import express, { Request, Response } from 'express'
 import { envConfig } from './config/getEnvConfig'
-import { authRouter } from './api'
-import { errorHandler } from './shared/middleware/error-handler.middlewares'
+import { authRouter, userRouter } from './api'
+import { errorHandler } from './shared/middleware/error-handler.middleware'
 
 const main = async () => {
   const app = express()
@@ -11,6 +11,7 @@ const main = async () => {
   try {
     app.use(express.json())
     app.use('/api/auth', authRouter)
+    app.use('/api/user', userRouter)
     app.use(errorHandler)
 
     app.listen(PORT, () => {
