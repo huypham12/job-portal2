@@ -3,7 +3,6 @@ import { HttpError } from '../common/http-error'
 import { ErrorResponseDto } from '../common/error-response.dto'
 
 // trình xử lý lỗi chung, mọi error sẽ đều được next tới đây
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const status = err instanceof HttpError ? err.statusCode : 500
   const message = err.message || 'Internal Server Error'

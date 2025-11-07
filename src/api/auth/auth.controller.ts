@@ -56,13 +56,14 @@ export class AuthController {
 
   refreshToken: PostHandler<RefreshTokenBodyDto, RefreshTokenResponseDto> = async (req, res) => {
     const { refresh_token } = req.body
-    const { user_id, verify, exp } = req.decoded_refresh_token as TokenPayload
+    const { user_id, verify, exp, role } = req.decoded_refresh_token as TokenPayload
 
-    if (!user_id || !verify || !exp) return
+    if (!user_id || !verify || !exp || !role) return
     const result = await this.authService.refreshToken({
       refresh_token,
       user_id,
       verify,
+      role,
       exp
     })
     res.json(result)

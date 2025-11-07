@@ -45,6 +45,10 @@ export const MESSAGES = {
 
   // token messages
   LOGIN_FAILED: 'Login failed',
+  INSUFFICIENT_PERMISSIONS: 'Bạn không có quyền truy cập tài nguyên này',
+  ADMIN_ONLY: 'Chỉ Admin mới có quyền thực hiện hành động này',
+  RECRUITER_ONLY: 'Chỉ Recruiter mới có quyền thực hiện hành động này',
+  CANDIDATE_ONLY: 'Chỉ Candidate mới có quyền thực hiện hành động này',
   TOKEN_IS_REQUIRED: 'Token is required',
   TOKEN_INVALID_FORMAT: 'Invalid token format',
   TOKEN_MUST_BE_STRING: 'Token must be a string',

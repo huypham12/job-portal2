@@ -12,7 +12,7 @@ import {
 } from '../dto'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'
-import { TokenType, UserVerifyStatus } from '@/shared/constants/enums'
+import { TokenType, UserRole, UserVerifyStatus } from '@/shared/constants/enums'
 import { signTokenByType, verifyToken } from '@/shared/utils/jwt'
 import { compareHash, generateHash } from '@/shared/utils/crypto'
 import { envConfig } from '@/config/getEnvConfig'
@@ -24,10 +24,19 @@ import { TokenPayload } from '@/types/token-payload.type'
 export class AuthService {
   constructor(private readonly emailService: EmailService) {}
 
-  private signAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }): Promise<string> {
+  private signAccessToken({
+    user_id,
+    verify,
+    role
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: UserRole
+  }): Promise<string> {
     return signTokenByType({
       user_id,
       verify,
+      role,
       token_type: TokenType.AccessToken,
       secretKey: envConfig.secrets.jwt.access as string,
       expiresIn: envConfig.tokenExpires.access
@@ -37,15 +46,18 @@ export class AuthService {
   private signRefreshToken({
     user_id,
     verify,
+    role,
     exp
   }: {
     user_id: string
     verify: UserVerifyStatus
+    role: UserRole
     exp?: number
   }): Promise<string> {
     return signTokenByType({
       user_id,
       verify,
+      role,
       token_type: TokenType.RefreshToken,
       secretKey: envConfig.secrets.jwt.refresh as string,
       expiresIn: exp ? undefined : envConfig.tokenExpires.refresh,
@@ -53,20 +65,38 @@ export class AuthService {
     })
   }
 
-  private signEmailVerifyToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }): Promise<string> {
+  private signEmailVerifyToken({
+    user_id,
+    verify,
+    role
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: UserRole
+  }): Promise<string> {
     return signTokenByType({
       user_id,
       verify,
+      role,
       token_type: TokenType.EmailVerifyToken,
       secretKey: envConfig.secrets.jwt.emailVerify as string,
       expiresIn: envConfig.tokenExpires.emailVerify
     })
   }
 
-  private signForgotPasswordToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }): Promise<string> {
+  private signForgotPasswordToken({
+    user_id,
+    verify,
+    role
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: UserRole
+  }): Promise<string> {
     return signTokenByType({
       user_id,
       verify,
+      role,
       token_type: TokenType.ForgotPasswordToken,
       secretKey: envConfig.secrets.jwt.forgotPassword as string,
       expiresIn: envConfig.tokenExpires.forgotPassword
@@ -76,13 +106,18 @@ export class AuthService {
   private signAccessAndRefreshToken({
     user_id,
     verify,
+    role,
     exp
   }: {
     user_id: string
     verify: UserVerifyStatus
+    role: UserRole
     exp?: number
   }): Promise<[string, string]> {
-    return Promise.all([this.signAccessToken({ user_id, verify }), this.signRefreshToken({ user_id, verify, exp })])
+    return Promise.all([
+      this.signAccessToken({ user_id, verify, role }),
+      this.signRefreshToken({ user_id, verify, role, exp })
+    ])
   }
 
   private decodeToken(token: string, secretKey: string) {
@@ -111,7 +146,8 @@ export class AuthService {
     // 3. Tạo email verify token
     const email_verify_token = await this.signEmailVerifyToken({
       user_id: user.id, // [SỬA ĐỔI] Dùng user.id (UUID string)
-      verify: UserVerifyStatus.Unverified // Giữ nguyên logic payload của JWT
+      verify: UserVerifyStatus.Unverified, // Giữ nguyên logic payload của JWT
+      role: user.role as UserRole // Thêm role vào payload token
     })
 
     // 4. [LOGIC MỚI] Lấy 'expires_at' từ token vừa tạo
@@ -180,7 +216,8 @@ export class AuthService {
     // 1. Tạo forgot password token (token thô)
     const forgot_password_token = await this.signForgotPasswordToken({
       user_id: user.id,
-      verify: UserVerifyStatus.Unverified
+      verify: UserVerifyStatus.Unverified,
+      role: user.role as UserRole
     })
 
     // 2. Lấy 'expires_at' từ token
@@ -267,7 +304,8 @@ export class AuthService {
         // --- B. TẠO VÀ LƯU EMAIL VERIFY TOKEN (Dạng Hash) ---
         const email_verify_token = await this.signEmailVerifyToken({
           user_id: newUser.id,
-          verify: UserVerifyStatus.Unverified
+          verify: UserVerifyStatus.Unverified,
+          role: newUser.role as UserRole
         })
         console.log(email_verify_token)
 
@@ -294,7 +332,8 @@ export class AuthService {
         // --- C. TẠO VÀ LƯU REFRESH TOKEN (Dạng Hash) ---
         const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
           user_id: newUser.id,
-          verify: UserVerifyStatus.Unverified
+          verify: UserVerifyStatus.Unverified,
+          role: newUser.role as UserRole
         })
 
         // Lấy exp và hash token
@@ -382,7 +421,8 @@ export class AuthService {
 
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
       user_id: user.id, // Dùng user.id (UUID string)
-      verify: verifyStatus
+      verify: verifyStatus,
+      role: user.role as UserRole
     })
 
     // 5. [LOGIC MỚI] Lưu refresh token (đã hash) vào db
@@ -431,11 +471,13 @@ export class AuthService {
     refresh_token,
     user_id,
     verify,
+    role,
     exp
   }: {
     refresh_token: string // Token thô (cũ)
     user_id: string
     verify: UserVerifyStatus
+    role: UserRole
     exp: number // 'exp' từ payload của token cũ
   }): Promise<RefreshTokenResponseDto> => {
     // --- 1. [LOGIC MỚI] Xác thực token cũ trong CSDL ---
@@ -468,8 +510,8 @@ export class AuthService {
     // --- 2. Tạo token mới ---
     // (Giữ nguyên logic gốc: tạo token mới nhưng vẫn dùng 'exp' CŨ)
     const [new_refresh_token, new_access_token] = await Promise.all([
-      this.signRefreshToken({ user_id, verify, exp }),
-      this.signAccessToken({ user_id, verify })
+      this.signRefreshToken({ user_id, verify, exp, role }),
+      this.signAccessToken({ user_id, verify, role })
     ])
 
     // --- 3. [LOGIC MỚI] Xoay vòng token trong Transaction ---
@@ -595,6 +637,7 @@ export class AuthService {
   }): Promise<ResetPasswordResponseDto> => {
     let user_id: string
     let verify: UserVerifyStatus
+    let role: UserRole
 
     try {
       // 1. Giải mã token (để lấy user_id và kiểm tra chữ ký/hết hạn)
@@ -605,6 +648,7 @@ export class AuthService {
 
       user_id = decodedPayload.user_id
       verify = decodedPayload.verify || UserVerifyStatus.Unverified
+      role = decodedPayload.role as UserRole
     } catch (error: any) {
       // Xử lý lỗi nếu `decodeToken` thất bại (vd: hết hạn, sai chữ ký)
       // Lỗi này đã được xử lý bên trong `verifyToken` (ném HttpError)
@@ -652,7 +696,8 @@ export class AuthService {
     // (Phải tạo token mới trước khi vào transaction để lưu hash)
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
       user_id: user_id,
-      verify: verify
+      verify: verify,
+      role: role
     })
 
     // Hash refresh token mới

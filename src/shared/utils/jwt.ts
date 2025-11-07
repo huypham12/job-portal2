@@ -6,6 +6,7 @@ import { HTTP_STATUS } from '../constants/httpStatus'
 import { TokenPayload } from '@/types/token-payload.type'
 import { z } from 'zod'
 import { TokenType, UserVerifyStatus } from '../constants/enums'
+import { UserRole } from '../constants/enums/user.enum'
 
 // Promisify jwt.sign và jwt.verify để tránh callback
 const signAsync = promisify<string | Buffer | object, string, SignOptions | undefined, string>(jwt.sign)
@@ -16,6 +17,7 @@ const tokenPayloadSchema = z.object({
   user_id: z.string(),
   verify: z.number().optional(),
   token_type: z.string(),
+  role: z.enum([UserRole.Admin, UserRole.Recruiter, UserRole.Candidate]),
   iat: z.number().optional(),
   exp: z.number().optional()
 })
@@ -44,6 +46,7 @@ export const signTokenByType = async ({
   user_id,
   verify,
   token_type,
+  role,
   secretKey,
   expiresIn,
   exp
@@ -51,6 +54,7 @@ export const signTokenByType = async ({
   user_id: string
   verify: UserVerifyStatus
   token_type: TokenType
+  role: UserRole
   secretKey: string
   expiresIn?: string
   exp?: number
@@ -66,6 +70,7 @@ export const signTokenByType = async ({
     user_id,
     token_type,
     verify,
+    role,
     ...(exp && { exp })
   }
 
