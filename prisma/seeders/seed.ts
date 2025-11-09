@@ -4,7 +4,7 @@
 import { PrismaClient } from '@prisma/client'
 import { seedLocations } from './seed-locations'
 import { seedSkills } from './seed-skills' // <-- THÊM DÒNG NÀY
-import { seedAdminUser } from './seed-admin' // <-- THÊM DÒNG NÀY
+import { seedUsers } from './seed-users' // <-- THÊM DÒNG NÀY
 const prisma = new PrismaClient()
 
 async function main() {
@@ -20,10 +20,10 @@ async function main() {
   await seedSkills(prisma) // <-- THÊM DÒNG NÀY
   console.log('Seed Skills hoàn tất.')
 
-  // 3. Seed Admin User (chạy sau cùng)
-  console.log('[3/3] Bắt đầu seed Admin User...')
-  await seedAdminUser(prisma)
-  console.log('Seed Admin User hoàn tất.')
+  // 3. Seed Users (chạy sau cùng)
+  console.log('[3/3] Bắt đầu seed Users...')
+  await seedUsers(prisma)
+  console.log('Seed Users hoàn tất.')
 
   console.log('Quá trình seed tổng đã hoàn tất thành công!')
 }

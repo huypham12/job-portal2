@@ -11,7 +11,6 @@ import { UserVerifyStatus } from '@/shared/constants/enums'
 import { compareHash } from '@/shared/utils/crypto' // <-- [THÊM MỚI]
 
 // Middleware xác thực access token
-// [KHÔNG THAY ĐỔI] - Hàm này không truy cập CSDL
 export const authenticateAccessToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authorization = req.headers.authorization
@@ -39,7 +38,7 @@ export const authenticateAccessToken = async (req: Request, res: Response, next:
 }
 
 // Middleware xác thực email verify token
-// [KHÔNG THAY ĐỔI] - Hàm này chỉ decode. Validator (bên Zod) sẽ làm nhiệm vụ kiểm tra DB.
+// Hàm này chỉ decode. Validator (bên Zod) sẽ làm nhiệm vụ kiểm tra DB.
 export const authenticateEmailVerifyToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { token } = req.body
@@ -60,7 +59,6 @@ export const authenticateEmailVerifyToken = async (req: Request, res: Response, 
   }
 }
 
-// [SỬA LỖI LOGIC]
 // Validator (forgotPasswordTokenSchema) đã kiểm tra CSDL rồi.
 // Middleware này chỉ cần decode token (giống hệt authenticateEmailVerifyToken)
 export const authenticateForgotPasswordToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -84,7 +82,6 @@ export const authenticateForgotPasswordToken = async (req: Request, res: Respons
 }
 
 // Middleware xác thực refresh token
-// [SỬA LỖI 73 - VIẾT LẠI HOÀN TOÀN]
 export const authenticateRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { refresh_token } = req.body
@@ -133,7 +130,6 @@ export const authenticateRefreshToken = async (req: Request, res: Response, next
   }
 }
 
-// [KHÔNG THAY ĐỔI] - Hàm này không truy cập CSDL
 export const verifiedUserValidator = (req: Request, res: Response, next: NextFunction) => {
   const { verify } = req.decoded_authorization as TokenPayload
   if (verify !== UserVerifyStatus.Verified) {
