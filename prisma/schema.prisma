@@ -68,7 +68,7 @@ model companies {
   id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                  String
   description           String?
-  recruiter_id          String?                 @db.Uuid
+  recruiter_id          String?                 @unique @db.Uuid
   logo_url              String?
   size                  Int?
   metadata              Json?

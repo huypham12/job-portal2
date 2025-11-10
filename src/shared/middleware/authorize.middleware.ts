@@ -21,11 +21,11 @@ export const authorize = (allowedRoles: UserRole[]) => {
 // Middleware chỉ cho Admin
 export const adminOnly = authorize([UserRole.Admin])
 
-// Middleware chỉ cho Recruiter và Admin
-export const recruiterAndAdmin = authorize([UserRole.Recruiter, UserRole.Admin])
+// Middleware chỉ cho Recruiter
+export const recruiter = authorize([UserRole.Recruiter])
 
-// Middleware chỉ cho Candidate và Admin
-export const candidateAndAdmin = authorize([UserRole.Candidate, UserRole.Admin])
+// Middleware chỉ cho Candidate
+export const candidate = authorize([UserRole.Candidate])
 
 // Middleware cho tất cả role đã đăng nhập
 export const authenticatedUser = authorize([UserRole.Admin, UserRole.Recruiter, UserRole.Candidate])

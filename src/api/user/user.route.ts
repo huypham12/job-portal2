@@ -5,13 +5,7 @@ import { wrapController } from '@/shared/utils/wrap-controller'
 import { prisma } from '@/config/database.service'
 import { authenticateAccessToken, authenticateRefreshToken } from '@/shared/middleware/verify.middleware'
 import { accessTokenValidator, refreshTokenValidator } from '../auth/auth.validator'
-import {
-  authorize,
-  adminOnly,
-  authenticatedUser,
-  candidateAndAdmin,
-  recruiterAndAdmin
-} from '@/shared/middleware/authorize.middleware'
+import { authorize, adminOnly, authenticatedUser, candidate, recruiter } from '@/shared/middleware/authorize.middleware'
 
 const userRouter = Router()
 const userService = new UserService()

@@ -21,6 +21,11 @@ export const MESSAGES = {
   EMAIL_ALREADY_VERIFIED: 'Email already verified',
   FORGOT_PASSWORD_TOKEN_INVALID: 'Forgot password token is invalid',
   USER_ALREADY_FOLLOWED: 'User already followed',
+  CREATE_COMPANY_SUCCESS: 'Create company success',
+  GET_COMPANY_SUCCESS: 'Get company success',
+  UPDATE_COMPANY_SUCCESS: 'Update company success',
+  COMPANY_ALREADY_EXISTS: 'Company already exists',
+  COMPANY_NOT_FOUND: 'Company not found',
 
   // success messages
   PASSWORD_RESET_SUCCESS: 'Password reset success',
