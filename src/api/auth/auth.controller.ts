@@ -88,7 +88,6 @@ export class AuthController {
   forgotPassword: PostHandler<SendEmailBodyDto, SendEmailResponseDto> = async (req, res) => {
     const { email } = req.body
     const token = await this.authService.forgotPassword(email)
-    console.log(token)
     // gửi link kèm email verify token để khi người dùng click vào link đó thì gọi đến api /verify-email
     const html = getForgotPasswordTemplate(token)
     const result = await this.emailService.sendEmail(

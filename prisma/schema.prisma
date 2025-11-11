@@ -65,39 +65,17 @@ model audits {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model companies {
-  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                  String
-  description           String?
-  recruiter_id          String?                 @unique @db.Uuid
-  logo_url              String?
-  size                  Int?
-  metadata              Json?
-  created_at            DateTime?               @default(now()) @db.Timestamp(6)
-  updated_at            DateTime?               @default(now()) @db.Timestamp(6)
-  users                 users?                  @relation(fields: [recruiter_id], references: [id], onUpdate: NoAction)
-  company_subscriptions company_subscriptions[]
-  jobs                  jobs[]
-  payments              payments[]
-}
-
-model company_subscriptions {
-  id               String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  company_id       String              @db.Uuid
-  package_id       String              @db.Uuid
-  payment_id       String?             @unique @db.Uuid
-  start_date       DateTime            @default(now()) @db.Timestamp(6)
-  end_date         DateTime?           @db.Timestamp(6)
-  status           subscription_status @default(pending_payment)
-  auto_renew       Boolean?            @default(false)
-  created_at       DateTime?           @default(now()) @db.Timestamp(6)
-  updated_at       DateTime?           @default(now()) @db.Timestamp(6)
-  companies        companies           @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  service_packages service_packages    @relation(fields: [package_id], references: [id], onUpdate: NoAction)
-  payments         payments?           @relation(fields: [payment_id], references: [id], onUpdate: NoAction)
-
-  @@index([company_id, status, end_date], map: "idx_company_subscriptions_company")
-  @@index([package_id], map: "idx_company_subscriptions_package")
-  @@index([payment_id], map: "idx_company_subscriptions_payment")
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  description  String?
+  recruiter_id String?   @unique @db.Uuid
+  logo_url     String?
+  size         Int?
+  metadata     Json?
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  updated_at   DateTime? @default(now()) @db.Timestamp(6)
+  users        users?    @relation(fields: [recruiter_id], references: [id], onUpdate: NoAction)
+  jobs         jobs[]
 }
 
 model job_posts_history {
@@ -131,27 +109,32 @@ model job_tags {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model jobs {
-  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title             String
-  description       String
-  company_id        String?             @db.Uuid
-  location_id       String?             @db.Uuid
-  salary_range      Json?
-  job_type          job_type?
-  experience_level  Int?
-  posted_at         DateTime?           @default(now()) @db.Timestamp(6)
-  expires_at        DateTime?           @db.Timestamp(6)
-  status            job_status?         @default(draft)
-  metadata          Json?
-  version           Int?                @default(1)
-  deleted           Boolean?            @default(false)
-  applications      applications[]
-  job_posts_history job_posts_history[]
-  job_skills        job_skills[]
-  job_tags          job_tags[]
-  companies         companies?          @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  locations         locations?          @relation(fields: [location_id], references: [id], onUpdate: NoAction)
-  saved_jobs        saved_jobs[]
+  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                String
+  description          String
+  company_id           String?                @db.Uuid
+  location_id          String?                @db.Uuid
+  salary_range         Json?
+  job_type             job_type?
+  experience_level     Int?
+  posted_at            DateTime?              @default(now()) @db.Timestamp(6)
+  expires_at           DateTime?              @db.Timestamp(6)
+  status               job_status?            @default(draft)
+  metadata             Json?
+  version              Int?                   @default(1)
+  deleted              Boolean?               @default(false)
+  applications         applications[]
+  job_posts_history    job_posts_history[]
+  job_skills           job_skills[]
+  job_tags             job_tags[]
+  companies            companies?             @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  locations            locations?             @relation(fields: [location_id], references: [id], onUpdate: NoAction)
+  saved_jobs           saved_jobs[]
+  connection_interests connection_interests[]
+  job_views            job_views[]
+  referrer_views       job_views[]            @relation("JobReferrals")
+  job1_similarities    job_similarities[]     @relation("Job1Similarities")
+  job2_similarities    job_similarities[]     @relation("Job2Similarities")
 
   @@index([company_id], map: "idx_jobs_company")
   @@index([location_id], map: "idx_jobs_location")
@@ -195,27 +178,6 @@ model notifications {
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model payments {
-  id                     String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id                String                 @db.Uuid
-  company_id             String?                @db.Uuid
-  related_to_entity_type String?
-  related_to_entity_id   String?                @db.Uuid
-  amount                 Decimal                @db.Decimal(10, 2)
-  currency               String                 @default("USD") @db.Char(3)
-  status                 payment_status         @default(pending)
-  gateway_transaction_id String?
-  gateway_response       Json?
-  created_at             DateTime?              @default(now()) @db.Timestamp(6)
-  updated_at             DateTime?              @default(now()) @db.Timestamp(6)
-  company_subscriptions  company_subscriptions?
-  companies              companies?             @relation(fields: [company_id], references: [id], onUpdate: NoAction)
-  users                  users                  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([user_id], map: "idx_payments_user")
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model profiles {
   id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id     String     @db.Uuid
@@ -244,18 +206,6 @@ model refresh_tokens {
   users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([user_id], map: "idx_refresh_tokens_user_id")
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model reports {
-  id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  reporter_id String?            @db.Uuid
-  target_id   String             @db.Uuid
-  target_type report_target_type
-  reason      String
-  created_at  DateTime?          @default(now()) @db.Timestamp(6)
-  status      String?            @default("pending")
-  users       users?             @relation(fields: [reporter_id], references: [id], onUpdate: NoAction)
 }
 
 model resumes {
@@ -297,26 +247,17 @@ model search_history {
   search_query Json
   search_type  String
   searched_at  DateTime? @default(now()) @db.Timestamp(6)
+  result_count Int?      @default(0)
+  clicked_jobs Json?     @default("[]")
+  filters_used Json?     @default("{}")
+  session_id   String?   @db.Uuid
   users        users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([user_id, searched_at(sort: Desc)], map: "idx_search_history_user_time")
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model service_packages {
-  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                  String                  @unique
-  description           String?
-  price                 Decimal                 @db.Decimal(10, 2)
-  currency              String                  @default("USD") @db.Char(3)
-  duration_days         Int?
-  features              Json?
-  is_active             Boolean?                @default(true)
-  created_at            DateTime?               @default(now()) @db.Timestamp(6)
-  updated_at            DateTime?               @default(now()) @db.Timestamp(6)
-  company_subscriptions company_subscriptions[]
-
-  @@index([is_active], map: "idx_service_packages_active")
+  @@index([user_id, session_id, searched_at], map: "idx_search_history_session")
+  @@index([search_type, searched_at(sort: Desc), result_count], map: "idx_search_history_analytics")
+  @@index([clicked_jobs], type: Gin, map: "idx_search_history_clicked_jobs_gin")
+  @@index([filters_used], type: Gin, map: "idx_search_history_filters_gin")
 }
 
 model skills {
@@ -333,15 +274,80 @@ model tags {
   job_tags job_tags[]
 }
 
-model user_follows {
-  follower_id  String    @db.Uuid
-  following_id String    @db.Uuid
-  followed_at  DateTime? @default(now()) @db.Timestamp(6)
-  follower     users     @relation("Following", fields: [follower_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  following    users     @relation("Followers", fields: [following_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+model connection_interests {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  candidate_id  String    @db.Uuid
+  recruiter_id  String    @db.Uuid
+  job_id        String?   @db.Uuid
+  interest_type String // 'candidate_to_recruiter' hoặc 'recruiter_to_candidate'
+  status        String    @default("pending") // 'pending', 'accepted', 'declined', 'expired'
+  message       String?
+  contact_info  Json?
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  expires_at    DateTime? @db.Timestamp(6)
+  responded_at  DateTime? @db.Timestamp(6)
 
-  @@id([follower_id, following_id])
-  @@index([following_id], map: "idx_user_follows_following")
+  candidate users @relation("CandidateInterests", fields: [candidate_id], references: [id], onDelete: Cascade)
+  recruiter users @relation("RecruiterInterests", fields: [recruiter_id], references: [id], onDelete: Cascade)
+  jobs      jobs? @relation(fields: [job_id], references: [id], onDelete: Cascade)
+
+  @@unique([candidate_id, recruiter_id, job_id, interest_type])
+  @@index([candidate_id, status, created_at(sort: Desc)], map: "idx_connection_interests_candidate_status")
+  @@index([recruiter_id, status, created_at(sort: Desc)], map: "idx_connection_interests_recruiter_status")
+  @@index([job_id, status], map: "idx_connection_interests_job")
+  @@index([expires_at], map: "idx_connection_interests_expires")
+  @@index([contact_info], type: Gin, map: "idx_connection_interests_contact_info_gin")
+}
+
+model job_views {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String?   @db.Uuid
+  job_id           String    @db.Uuid
+  viewed_at        DateTime? @default(now()) @db.Timestamp(6)
+  duration_seconds Int?
+  source           String?   @default("direct") // 'search', 'recommendation', 'direct', 'connection'
+  referrer_job_id  String?   @db.Uuid
+
+  users        users? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  jobs         jobs   @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  referrer_job jobs?  @relation("JobReferrals", fields: [referrer_job_id], references: [id], onDelete: SetNull)
+
+  @@index([job_id, viewed_at(sort: Desc), duration_seconds], map: "idx_job_views_job_analytics")
+  @@index([user_id, viewed_at(sort: Desc), source], map: "idx_job_views_user_behavior")
+  @@index([referrer_job_id, job_id], map: "idx_job_views_recommendation")
+}
+
+model job_similarities {
+  job1_id          String    @db.Uuid
+  job2_id          String    @db.Uuid
+  similarity_score Decimal   @db.Decimal(5, 4)
+  similarity_type  String    @default("hybrid") // 'content', 'skill', 'behavior', 'location', 'hybrid'
+  calculated_at    DateTime? @default(now()) @db.Timestamp(6)
+
+  job1 jobs @relation("Job1Similarities", fields: [job1_id], references: [id], onDelete: Cascade)
+  job2 jobs @relation("Job2Similarities", fields: [job2_id], references: [id], onDelete: Cascade)
+
+  @@id([job1_id, job2_id, similarity_type])
+  @@index([job1_id, similarity_score(sort: Desc), similarity_type], map: "idx_job_similarities_lookup")
+  @@index([job2_id, similarity_score(sort: Desc), similarity_type], map: "idx_job_similarities_reverse")
+}
+
+model user_preferences {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String    @db.Uuid
+  preference_type  String // 'salary_range', 'location', 'job_type', 'company_size', 'skills', 'industry'
+  preference_value Json
+  weight           Decimal?  @default(1.0) @db.Decimal(3, 2)
+  source           String?   @default("explicit") // 'explicit', 'implicit', 'inferred'
+  created_at       DateTime? @default(now()) @db.Timestamp(6)
+  updated_at       DateTime? @default(now()) @db.Timestamp(6)
+
+  users users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, preference_type])
+  @@index([user_id, preference_type, weight(sort: Desc)], map: "idx_user_preferences_lookup")
+  @@index([preference_type, weight(sort: Desc)], map: "idx_user_preferences_type")
+  @@index([preference_value], type: Gin, map: "idx_user_preferences_value_gin")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -368,29 +374,29 @@ model user_tokens {
 }
 
 model users {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email          String           @unique
-  password_hash  String
-  role           user_role
-  verified       Boolean?         @default(false)
-  created_at     DateTime?        @default(now()) @db.Timestamp(6)
-  updated_at     DateTime?        @default(now()) @db.Timestamp(6)
-  deleted        Boolean?         @default(false)
-  version        Int?             @default(1)
-  applications   applications[]
-  companies      companies[]
-  notifications  notifications[]
-  payments       payments[]
-  profiles       profiles[]
-  refresh_tokens refresh_tokens[]
-  reports        reports[]
-  resumes        resumes[]
-  saved_jobs     saved_jobs[]
-  search_history search_history[]
-  following      user_follows[]   @relation("Following") // Những người mà user này đang follow
-  followers      user_follows[]   @relation("Followers") // Những người đang follow user này
-  user_skills    user_skills[]
-  user_tokens    user_tokens[]
+  id                  String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email               String                 @unique
+  password_hash       String
+  role                user_role
+  verified            Boolean?               @default(false)
+  created_at          DateTime?              @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?              @default(now()) @db.Timestamp(6)
+  deleted             Boolean?               @default(false)
+  version             Int?                   @default(1)
+  applications        applications[]
+  companies           companies[]
+  notifications       notifications[]
+  profiles            profiles[]
+  refresh_tokens      refresh_tokens[]
+  resumes             resumes[]
+  saved_jobs          saved_jobs[]
+  search_history      search_history[]
+  candidate_interests connection_interests[] @relation("CandidateInterests")
+  recruiter_interests connection_interests[] @relation("RecruiterInterests")
+  job_views           job_views[]
+  user_preferences    user_preferences[]
+  user_skills         user_skills[]
+  user_tokens         user_tokens[]
 
   @@index([email(ops: raw("gist_trgm_ops"))], map: "trigram_users_email", type: Gist)
 }

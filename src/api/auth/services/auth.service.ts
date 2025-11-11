@@ -307,7 +307,6 @@ export class AuthService {
           verify: UserVerifyStatus.Unverified,
           role: newUser.role as UserRole
         })
-        console.log(email_verify_token)
 
         // Lấy exp và hash token (như Ppattern đã làm)
         const decodedVerifyToken = await this.decodeToken(
@@ -319,7 +318,6 @@ export class AuthService {
         }
         const verifyTokenExpiresAt = new Date(decodedVerifyToken.exp * 1000)
         const hashedVerifyToken = await generateHash(email_verify_token)
-        console.log(hashedVerifyToken)
         await tx.user_tokens.create({
           data: {
             user_id: newUser.id,
