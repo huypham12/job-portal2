@@ -69,12 +69,12 @@ export class AuthController {
     res.json(result)
   }
 
-  resendVerifyEmail: PostHandler<SendEmailBodyDto, SendEmailResponseDto> = async (req, res) => {
+  resendVerifyEmail: PostHandler<SendEmailBodyDto> = async (req, res) => {
     const { email } = req.body
     const token = await this.authService.resendVerifyEmail(email)
     // gửi link kèm email verify token để khi người dùng click vào link đó thì gọi đến api /verify-email
     const html = getVerifyEmailTemplate(token)
-    const result = await this.emailService.sendEmail(
+    const result = await this.emailService.sendVerifyEmail(
       {
         to: email,
         subject: 'Xác nhận địa chỉ email của bạn',
@@ -85,12 +85,12 @@ export class AuthController {
     res.json(result)
   }
 
-  forgotPassword: PostHandler<SendEmailBodyDto, SendEmailResponseDto> = async (req, res) => {
+  forgotPassword: PostHandler<SendEmailBodyDto> = async (req, res) => {
     const { email } = req.body
     const token = await this.authService.forgotPassword(email)
     // gửi link kèm email verify token để khi người dùng click vào link đó thì gọi đến api /verify-email
     const html = getForgotPasswordTemplate(token)
-    const result = await this.emailService.sendEmail(
+    const result = await this.emailService.sendVerifyEmail(
       {
         to: email,
         subject: 'Xác nhận địa chỉ email của bạn',

@@ -295,7 +295,7 @@ export class AuthService {
             email: payload.email,
             password_hash: hashedPassword,
             role: payload.role, // Giả định 'payload.role' tồn tại và khớp Enum 'user_role'
-            verified: true
+            verified: false
           }
         })
 
@@ -364,11 +364,13 @@ export class AuthService {
       throw new HttpError(error.message || 'Registration failed', HTTP_STATUS.INTERNAL_SERVER_ERROR)
     }
 
+    console.log('hi')
     // 3. Gửi Email (Sau khi transaction thành công)
     // Đặt bên ngoài transaction vì đây là I/O, không phải DB
     try {
       const html = getVerifyEmailTemplate(txResult.email_verify_token)
-      await this.emailService.sendEmail(
+      console.log(html)
+      await this.emailService.sendVerifyEmail(
         {
           to: payload.email,
           subject: 'Xác nhận địa chỉ email của bạn',

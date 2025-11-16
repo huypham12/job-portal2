@@ -81,10 +81,12 @@ interface EnvConfig {
     emailVerify: string
     forgotPassword: string
   }
-  sendGrid: {
-    apiKey: string
+  aws: {
+    accessKeyId: string
+    secretAccessKey: string
+    region: string
+    sesFromAddress: string
   }
-  resendApiKey: string
 }
 
 /**
@@ -201,10 +203,12 @@ export const envConfig: EnvConfig = {
     emailVerify: getEnvVar('EMAIL_VERIFY_TOKEN_EXPIRES_IN', true, '1d'),
     forgotPassword: getEnvVar('FORGOT_PASSWORD_TOKEN_EXPIRES_IN', true, '1h')
   },
-  sendGrid: {
-    apiKey: getEnvVar('SENDGRID_API_KEY', false)
-  },
-  resendApiKey: getEnvVar('RESEND_API_KEY', false)
+  aws: {
+    accessKeyId: getEnvVar('AWS_ACCESS_KEY_ID', false),
+    secretAccessKey: getEnvVar('AWS_SECRET_ACCESS_KEY', false),
+    region: getEnvVar('AWS_REGION', false, 'ap-southeast-1'),
+    sesFromAddress: getEnvVar('SES_FROM_ADDRESS', false)
+  }
 }
 
 // Self-invoking function to validate critical configurations on application start

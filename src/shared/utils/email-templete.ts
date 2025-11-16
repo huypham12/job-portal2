@@ -19,7 +19,7 @@ export function getEmailTemplate({ title, description, buttonText, buttonUrl, fo
       <p>Nếu bạn không thực hiện yêu cầu này, bạn có thể bỏ qua email này.</p>
       <hr style="margin-top: 30px;" />
       <p style="font-size: 0.85em; color: #777;">
-        Đây là email tự động từ hệ thống của <strong>X</strong> – Nền tảng share video. <br />
+        Đây là email tự động từ hệ thống của <strong>JOB-FINAL</strong> – Nền tảng share video. <br />
         Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ bộ phận hỗ trợ. <br /><br />
         ${footerNote ?? 'Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!'}
       </p>
@@ -28,12 +28,12 @@ export function getEmailTemplate({ title, description, buttonText, buttonUrl, fo
 }
 
 export function getVerifyEmailTemplate(token: string) {
-  const verifyUrl = `http://localhost:3000/auth/verify-email?token=${token}`
+  const verifyUrl = `http://localhost:4000/auth/verify-email?token=${token}`
 
   return getEmailTemplate({
     title: 'Xin chào,',
     description:
-      'Bạn đã đăng ký tài khoản tại <strong>X</strong>. Vui lòng xác nhận email của bạn bằng cách nhấn vào nút bên dưới:',
+      'Bạn đã đăng ký tài khoản tại <strong>JOB-FINAL</strong>. Vui lòng xác nhận email của bạn bằng cách nhấn vào nút bên dưới:',
     buttonText: 'Xác nhận địa chỉ email',
     buttonUrl: verifyUrl
   })
@@ -45,7 +45,7 @@ export function getForgotPasswordTemplate(token: string) {
   return getEmailTemplate({
     title: 'Xin chào,',
     description:
-      'Bạn (hoặc ai đó) đã yêu cầu đặt lại mật khẩu cho tài khoản tại <strong>X</strong>. Nhấn vào nút bên dưới để tiến hành đặt lại mật khẩu:',
+      'Bạn (hoặc ai đó) đã yêu cầu đặt lại mật khẩu cho tài khoản tại <strong>JOB-FINAL</strong>. Nhấn vào nút bên dưới để tiến hành đặt lại mật khẩu:',
     buttonText: 'Đặt lại mật khẩu',
     buttonUrl: resetPasswordUrl
   })

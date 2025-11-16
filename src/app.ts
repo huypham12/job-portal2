@@ -1,5 +1,6 @@
 // src/app.ts
 import express, { Request, Response } from 'express'
+import cors from 'cors'
 import { envConfig } from './config/getEnvConfig'
 import { authRouter, userRouter } from './api'
 import { errorHandler } from './shared/middleware/error-handler.middleware'
@@ -11,7 +12,7 @@ import fs from 'fs'
 
 const main = async () => {
   const app = express()
-  const PORT = envConfig.app.port || 3000
+  const PORT = envConfig.app.port || 4000
 
   try {
     // Load Swagger documentation
@@ -28,6 +29,22 @@ const main = async () => {
         defaultModelsExpandDepth: -1
       }
     }
+
+    // Cấu hình CORS
+    app.use(
+      cors({
+        origin: [
+          'http://localhost:3000',
+          'http://localhost:5173',
+          'http://localhost:5174',
+          'http://127.0.0.1:5173',
+          'http://127.0.0.1:5174'
+        ],
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+      })
+    )
 
     app.use(express.json())
     app.use('/api/auth', authRouter)

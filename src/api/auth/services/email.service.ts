@@ -1,38 +1,86 @@
-import sgMail from '@sendgrid/mail'
-import { envConfig } from '@/config/getEnvConfig'
-import { SendEmailResponseDto } from '../dto'
+import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses'
+import { envConfig } from '../../../config/getEnvConfig'
 
-interface SendEmailOptions {
+interface SendEmailParams {
+  fromAddress: string
+  toAddresses: string | string[]
+  ccAddresses?: string | string[]
+  body: string
+  subject: string
+  replyToAddresses?: string | string[]
+}
+
+interface VerifyEmailParams {
   to: string
   subject: string
-  text?: string
-  html?: string
+  html: string
 }
 
 export class EmailService {
-  private readonly senderEmail: string
+  private sesClient: SESClient
 
   constructor() {
-    sgMail.setApiKey(envConfig.sendGrid.apiKey as string)
-    this.senderEmail = 'huy9008437@gmail.com'
+    this.sesClient = new SESClient({
+      region: envConfig.aws.region,
+      credentials: {
+        secretAccessKey: envConfig.aws.secretAccessKey,
+        accessKeyId: envConfig.aws.accessKeyId
+      }
+    })
   }
 
-  async sendEmail({ to, subject, text, html }: SendEmailOptions, message: string): Promise<SendEmailResponseDto> {
-    const msg = {
-      to,
-      from: this.senderEmail,
-      subject,
-      text: text ?? subject, // fallback nếu không truyền text
-      html
-    }
+  private createSendEmailCommand({
+    fromAddress,
+    toAddresses,
+    ccAddresses = [],
+    body,
+    subject,
+    replyToAddresses = []
+  }: SendEmailParams): SendEmailCommand {
+    return new SendEmailCommand({
+      Destination: {
+        /* required */
+        CcAddresses: ccAddresses instanceof Array ? ccAddresses : [ccAddresses],
+        ToAddresses: toAddresses instanceof Array ? toAddresses : [toAddresses]
+      },
+      Message: {
+        /* required */
+        Body: {
+          /* required */
+          Html: {
+            Charset: 'UTF-8',
+            Data: body
+          }
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: subject
+        }
+      },
+      Source: fromAddress,
+      ReplyToAddresses: replyToAddresses instanceof Array ? replyToAddresses : [replyToAddresses]
+    })
+  }
+
+  async sendVerifyEmail(params: VerifyEmailParams, successMessage?: string): Promise<any> {
+    const sendEmailCommand = this.createSendEmailCommand({
+      fromAddress: envConfig.aws.sesFromAddress,
+      toAddresses: params.to,
+      body: params.html,
+      subject: params.subject
+    })
 
     try {
-      await sgMail.send(msg)
-      console.log('Email sent to:', to)
-      return new SendEmailResponseDto(message)
+      const result = await this.sesClient.send(sendEmailCommand)
+      if (successMessage) {
+        console.log(successMessage)
+      }
+      return result
     } catch (error: any) {
-      console.error('SendGrid error:', error.response?.body || error.message)
-      throw new Error('Gửi email thất bại.')
+      console.error('Failed to send email. Error details:')
+      console.error(error) // log object đầy đủ
+      console.error(JSON.stringify(error, null, 2)) // log dạng JSON readable
+      throw error
     }
   }
 }
