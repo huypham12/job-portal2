@@ -76,9 +76,11 @@ async function seedAdmins(prisma: PrismaClient, hashedPassword: string) {
         verified: true,
         // Admin cũng cần có profile
         profiles: {
-          // Sửa lỗi: 'profiles' -> 'profile'
           create: {
-            name: admin.name //
+            full_name: admin.name.substring(0, 255),
+            display_name: admin.name.substring(0, 255),
+            headline: 'System Administrator',
+            is_looking_for_job: false
           }
         }
       }
@@ -97,9 +99,9 @@ async function seedRecruiters(prisma: PrismaClient, hashedPassword: string) {
   for (let i = 1; i <= 10; i++) {
     const firstName = faker.person.firstName()
     const lastName = faker.person.lastName()
-    const recruiterName = `${firstName} ${lastName}`
+    const recruiterName = `${firstName} ${lastName}`.substring(0, 255)
     const recruiterEmail = `recruiter${i}@gmail.com` // Cập nhật email
-    const companyName = faker.company.name() + ` ${i}`
+    const companyName = (faker.company.name() + ` ${i}`).substring(0, 255)
 
     // 1. Tạo hoặc cập nhật User (Recruiter)
     const recruiterUser = await prisma.users.upsert({
@@ -116,10 +118,13 @@ async function seedRecruiters(prisma: PrismaClient, hashedPassword: string) {
         verified: true,
         // Tạo Profile lồng nhau vẫn ổn
         profiles: {
-          // Sửa lỗi: 'profiles' -> 'profile'
           create: {
-            name: recruiterName,
-            phone: faker.phone.number()
+            full_name: recruiterName,
+            display_name: recruiterName,
+            phone_number: faker.phone.number().substring(0, 20),
+            headline: 'Recruiter at ' + companyName.substring(0, 50),
+            is_looking_for_job: false,
+            bio: 'Experienced recruiter looking for talented candidates to join our team.'
           }
         }
       }
@@ -135,8 +140,8 @@ async function seedRecruiters(prisma: PrismaClient, hashedPassword: string) {
       await prisma.companies.create({
         data: {
           name: companyName,
-          description: faker.company.catchPhrase(),
-          logo_url: faker.image.urlLoremFlickr({ category: 'business' }),
+          description: faker.company.catchPhrase().substring(0, 500),
+          logo_url: faker.image.url().substring(0, 255),
           size: faker.number.int({ min: 10, max: 5000 }),
           recruiter_id: recruiterUser.id // Gán FK thủ công
         }
@@ -173,12 +178,27 @@ async function seedCandidates(prisma: PrismaClient, hashedPassword: string) {
           verified: true, // Seed là true để test
           // Mỗi candidate cũng có 1 profile
           profiles: {
-            // Sửa lỗi: 'profiles' -> 'profile'
             create: {
-              name: `${firstName} ${lastName}`,
-              phone: faker.phone.number()
-              // bạn có thể thêm experience_years ở đây nếu muốn
-              // experience_years: faker.number.int({ min: 0, max: 15 })
+              full_name: `${firstName} ${lastName}`.substring(0, 255),
+              display_name: `${firstName} ${lastName}`.substring(0, 255),
+              phone_number: faker.phone.number().substring(0, 20),
+              headline: faker.person.jobTitle().substring(0, 255),
+              date_of_birth: faker.date.birthdate({ min: 22, max: 45, mode: 'age' }),
+              gender: faker.helpers.arrayElement(['Male', 'Female', 'Other']),
+              personal_website: faker.datatype.boolean(0.3) ? faker.internet.url() : null,
+              linkedin_url: faker.datatype.boolean(0.7)
+                ? `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`
+                : null,
+              github_url: faker.datatype.boolean(0.4)
+                ? `https://github.com/${firstName.toLowerCase()}${lastName.toLowerCase()}`
+                : null,
+              years_of_experience: faker.number.int({ min: 0, max: 15 }),
+              bio: faker.lorem.paragraph(2).substring(0, 1000),
+              desired_job_title: faker.person.jobTitle().substring(0, 255),
+              desired_salary_min: faker.number.int({ min: 500, max: 2000 }),
+              desired_currency: 'VND',
+              desired_job_type: faker.helpers.arrayElements(['full_time', 'part_time', 'contract'], { min: 1, max: 2 }),
+              is_looking_for_job: faker.datatype.boolean(0.8)
             }
           }
         }

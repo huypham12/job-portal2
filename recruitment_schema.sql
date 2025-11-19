@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict iEtxsRSwZxYzfk0SibSeV2aahW126XjAMep7Mtlxmne8Lv4P5aGfVZ0VmtpvZoY
+\restrict cME6gM09svf4VvcoSpk9NPTBr9AUkbKjZl2LZ0FCBme4kO6fZNbggV4MQ7z7YtT
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -375,6 +375,22 @@ $$;
 
 ALTER FUNCTION recruitment.trigger_set_timestamp() OWNER TO postgres;
 
+--
+-- Name: update_updated_at_column(); Type: FUNCTION; Schema: recruitment; Owner: postgres
+--
+
+CREATE FUNCTION recruitment.update_updated_at_column() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION recruitment.update_updated_at_column() OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -432,6 +448,46 @@ ALTER SEQUENCE recruitment.activity_logs_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE recruitment.activity_logs_id_seq OWNED BY recruitment.activity_logs.id;
 
+
+--
+-- Name: application_documents; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.application_documents (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    application_id uuid NOT NULL,
+    document_type character varying(50) NOT NULL,
+    file_url text NOT NULL,
+    original_filename character varying(255),
+    mime_type character varying(100),
+    file_size_bytes bigint,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE recruitment.application_documents OWNER TO postgres;
+
+--
+-- Name: application_stages; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.application_stages (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    application_id uuid NOT NULL,
+    stage_name character varying(100) NOT NULL,
+    stage_order integer NOT NULL,
+    status character varying(50) NOT NULL,
+    scheduled_at timestamp(6) without time zone,
+    completed_at timestamp(6) without time zone,
+    feedback text,
+    rating integer,
+    interviewer_notes text,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT check_stage_rating CHECK (((rating IS NULL) OR ((rating >= 1) AND (rating <= 10))))
+);
+
+
+ALTER TABLE recruitment.application_stages OWNER TO postgres;
 
 --
 -- Name: applications; Type: TABLE; Schema: recruitment; Owner: postgres
@@ -529,6 +585,63 @@ CREATE TABLE recruitment.companies (
 ALTER TABLE recruitment.companies OWNER TO postgres;
 
 --
+-- Name: company_benefits; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.company_benefits (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    company_id uuid NOT NULL,
+    benefit_type character varying(50) NOT NULL,
+    title character varying(255) NOT NULL,
+    description text,
+    is_featured boolean DEFAULT false NOT NULL,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE recruitment.company_benefits OWNER TO postgres;
+
+--
+-- Name: company_cultures; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.company_cultures (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    company_id uuid NOT NULL,
+    culture_aspect character varying(50) NOT NULL,
+    rating integer,
+    description text,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT check_culture_rating CHECK (((rating IS NULL) OR ((rating >= 1) AND (rating <= 5))))
+);
+
+
+ALTER TABLE recruitment.company_cultures OWNER TO postgres;
+
+--
+-- Name: company_details; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.company_details (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    company_id uuid NOT NULL,
+    industry character varying(100),
+    founded_year integer,
+    employee_count_min integer,
+    employee_count_max integer,
+    website_url character varying(255),
+    headquarters_location_id uuid,
+    company_type character varying(50),
+    revenue_range character varying(50),
+    stock_symbol character varying(10),
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE recruitment.company_details OWNER TO postgres;
+
+--
 -- Name: connection_interests; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
@@ -552,6 +665,24 @@ CREATE TABLE recruitment.connection_interests (
 ALTER TABLE recruitment.connection_interests OWNER TO postgres;
 
 --
+-- Name: job_benefits; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.job_benefits (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    job_id uuid NOT NULL,
+    benefit_type character varying(50) NOT NULL,
+    title character varying(255) NOT NULL,
+    description text,
+    value_amount numeric(15,2),
+    value_currency character varying(10) DEFAULT 'VND'::character varying,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE recruitment.job_benefits OWNER TO postgres;
+
+--
 -- Name: job_posts_history; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
@@ -567,22 +698,23 @@ CREATE TABLE recruitment.job_posts_history (
 ALTER TABLE recruitment.job_posts_history OWNER TO postgres;
 
 --
--- Name: job_similarities; Type: TABLE; Schema: recruitment; Owner: postgres
+-- Name: job_requirements; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
-CREATE TABLE recruitment.job_similarities (
-    job1_id uuid NOT NULL,
-    job2_id uuid NOT NULL,
-    similarity_score numeric(5,4) NOT NULL,
-    similarity_type text DEFAULT 'hybrid'::text NOT NULL,
-    calculated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT check_job_order CHECK ((job1_id < job2_id)),
-    CONSTRAINT check_similarity_score CHECK (((similarity_score >= (0)::numeric) AND (similarity_score <= (1)::numeric))),
-    CONSTRAINT check_similarity_type CHECK ((similarity_type = ANY (ARRAY['content'::text, 'skill'::text, 'behavior'::text, 'location'::text, 'hybrid'::text])))
+CREATE TABLE recruitment.job_requirements (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    job_id uuid NOT NULL,
+    requirement_type character varying(50) NOT NULL,
+    title character varying(255) NOT NULL,
+    description text,
+    is_required boolean DEFAULT true NOT NULL,
+    level character varying(50),
+    years_experience integer,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
-ALTER TABLE recruitment.job_similarities OWNER TO postgres;
+ALTER TABLE recruitment.job_requirements OWNER TO postgres;
 
 --
 -- Name: job_skills; Type: TABLE; Schema: recruitment; Owner: postgres
@@ -627,6 +759,26 @@ CREATE TABLE recruitment.job_views (
 ALTER TABLE recruitment.job_views OWNER TO postgres;
 
 --
+-- Name: job_work_arrangements; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.job_work_arrangements (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    job_id uuid NOT NULL,
+    is_remote_allowed boolean DEFAULT false NOT NULL,
+    remote_percentage integer DEFAULT 0 NOT NULL,
+    flexible_hours boolean DEFAULT false NOT NULL,
+    travel_requirement character varying(50),
+    overtime_expected boolean DEFAULT false NOT NULL,
+    shift_type character varying(50),
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT check_remote_percentage CHECK (((remote_percentage >= 0) AND (remote_percentage <= 100)))
+);
+
+
+ALTER TABLE recruitment.job_work_arrangements OWNER TO postgres;
+
+--
 -- Name: jobs; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
@@ -644,7 +796,8 @@ CREATE TABLE recruitment.jobs (
     status recruitment.job_status DEFAULT 'draft'::recruitment.job_status,
     metadata jsonb,
     version integer DEFAULT 1,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false,
+    updated_at timestamp(6) without time zone
 );
 
 
@@ -831,58 +984,6 @@ CREATE MATERIALIZED VIEW recruitment.mv_report_user_growth AS
 ALTER MATERIALIZED VIEW recruitment.mv_report_user_growth OWNER TO postgres;
 
 --
--- Name: user_preferences; Type: TABLE; Schema: recruitment; Owner: postgres
---
-
-CREATE TABLE recruitment.user_preferences (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid NOT NULL,
-    preference_type text NOT NULL,
-    preference_value jsonb NOT NULL,
-    weight numeric(3,2) DEFAULT 1.0,
-    source text DEFAULT 'explicit'::text,
-    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT check_preference_type CHECK ((preference_type = ANY (ARRAY['salary_range'::text, 'location'::text, 'job_type'::text, 'company_size'::text, 'skills'::text, 'industry'::text]))),
-    CONSTRAINT check_source_type CHECK ((source = ANY (ARRAY['explicit'::text, 'implicit'::text, 'inferred'::text]))),
-    CONSTRAINT check_weight CHECK (((weight >= (0)::numeric) AND (weight <= (1)::numeric)))
-);
-
-
-ALTER TABLE recruitment.user_preferences OWNER TO postgres;
-
---
--- Name: mv_report_user_preferences; Type: MATERIALIZED VIEW; Schema: recruitment; Owner: postgres
---
-
-CREATE MATERIALIZED VIEW recruitment.mv_report_user_preferences AS
- SELECT preference_type,
-    source,
-    count(id) AS users_count,
-    avg(weight) AS avg_weight,
-    count(
-        CASE
-            WHEN (source = 'explicit'::text) THEN 1
-            ELSE NULL::integer
-        END) AS explicit_count,
-    count(
-        CASE
-            WHEN (source = 'implicit'::text) THEN 1
-            ELSE NULL::integer
-        END) AS implicit_count,
-    count(
-        CASE
-            WHEN (source = 'inferred'::text) THEN 1
-            ELSE NULL::integer
-        END) AS inferred_count
-   FROM recruitment.user_preferences up
-  GROUP BY preference_type, source
-  WITH NO DATA;
-
-
-ALTER MATERIALIZED VIEW recruitment.mv_report_user_preferences OWNER TO postgres;
-
---
 -- Name: notifications; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
@@ -899,18 +1000,81 @@ CREATE TABLE recruitment.notifications (
 ALTER TABLE recruitment.notifications OWNER TO postgres;
 
 --
+-- Name: profile_educations; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.profile_educations (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    profile_id uuid NOT NULL,
+    school_name character varying(255) NOT NULL,
+    degree character varying(255),
+    field_of_study character varying(255),
+    start_date date NOT NULL,
+    end_date date
+);
+
+
+ALTER TABLE recruitment.profile_educations OWNER TO postgres;
+
+--
+-- Name: profile_experiences; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.profile_experiences (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    profile_id uuid NOT NULL,
+    company_name character varying(255) NOT NULL,
+    "position" character varying(255) NOT NULL,
+    start_date date NOT NULL,
+    end_date date,
+    is_current boolean DEFAULT false NOT NULL,
+    description text
+);
+
+
+ALTER TABLE recruitment.profile_experiences OWNER TO postgres;
+
+--
+-- Name: profile_skills; Type: TABLE; Schema: recruitment; Owner: postgres
+--
+
+CREATE TABLE recruitment.profile_skills (
+    profile_id uuid NOT NULL,
+    skill_id uuid NOT NULL,
+    proficiency integer,
+    level text
+);
+
+
+ALTER TABLE recruitment.profile_skills OWNER TO postgres;
+
+--
 -- Name: profiles; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
 CREATE TABLE recruitment.profiles (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_id uuid NOT NULL,
-    name text,
-    phone text,
     location_id uuid,
-    metadata jsonb,
-    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL,
+    bio text,
+    date_of_birth date,
+    desired_currency character varying(10) DEFAULT 'VND'::character varying,
+    desired_job_title character varying(255),
+    desired_job_type recruitment.job_type[] DEFAULT ARRAY[]::recruitment.job_type[],
+    desired_salary_min integer,
+    display_name character varying(255),
+    full_name character varying(255) NOT NULL,
+    gender character varying(20),
+    github_url character varying(255),
+    headline character varying(255),
+    is_looking_for_job boolean DEFAULT true NOT NULL,
+    linkedin_url character varying(255),
+    location_text character varying(100),
+    personal_website character varying(255),
+    phone_number character varying(20),
+    years_of_experience integer DEFAULT 0
 );
 
 
@@ -1045,19 +1209,6 @@ CREATE TABLE recruitment.tags (
 ALTER TABLE recruitment.tags OWNER TO postgres;
 
 --
--- Name: user_skills; Type: TABLE; Schema: recruitment; Owner: postgres
---
-
-CREATE TABLE recruitment.user_skills (
-    user_id uuid NOT NULL,
-    skill_id uuid NOT NULL,
-    proficiency integer
-);
-
-
-ALTER TABLE recruitment.user_skills OWNER TO postgres;
-
---
 -- Name: user_tokens; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
@@ -1117,6 +1268,22 @@ ALTER TABLE ONLY recruitment.activity_logs
 
 
 --
+-- Name: application_documents application_documents_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.application_documents
+    ADD CONSTRAINT application_documents_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: application_stages application_stages_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.application_stages
+    ADD CONSTRAINT application_stages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: applications applications_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -1149,11 +1316,43 @@ ALTER TABLE ONLY recruitment.companies
 
 
 --
+-- Name: company_benefits company_benefits_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.company_benefits
+    ADD CONSTRAINT company_benefits_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: company_cultures company_cultures_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.company_cultures
+    ADD CONSTRAINT company_cultures_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: company_details company_details_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.company_details
+    ADD CONSTRAINT company_details_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: connection_interests connection_interests_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
 ALTER TABLE ONLY recruitment.connection_interests
     ADD CONSTRAINT connection_interests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: job_benefits job_benefits_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.job_benefits
+    ADD CONSTRAINT job_benefits_pkey PRIMARY KEY (id);
 
 
 --
@@ -1165,11 +1364,11 @@ ALTER TABLE ONLY recruitment.job_posts_history
 
 
 --
--- Name: job_similarities job_similarities_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+-- Name: job_requirements job_requirements_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
-ALTER TABLE ONLY recruitment.job_similarities
-    ADD CONSTRAINT job_similarities_pkey PRIMARY KEY (job1_id, job2_id, similarity_type);
+ALTER TABLE ONLY recruitment.job_requirements
+    ADD CONSTRAINT job_requirements_pkey PRIMARY KEY (id);
 
 
 --
@@ -1197,6 +1396,14 @@ ALTER TABLE ONLY recruitment.job_views
 
 
 --
+-- Name: job_work_arrangements job_work_arrangements_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.job_work_arrangements
+    ADD CONSTRAINT job_work_arrangements_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -1218,6 +1425,30 @@ ALTER TABLE ONLY recruitment.locations
 
 ALTER TABLE ONLY recruitment.notifications
     ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: profile_educations profile_educations_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.profile_educations
+    ADD CONSTRAINT profile_educations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: profile_experiences profile_experiences_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.profile_experiences
+    ADD CONSTRAINT profile_experiences_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: profile_skills profile_skills_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.profile_skills
+    ADD CONSTRAINT profile_skills_pkey PRIMARY KEY (profile_id, skill_id);
 
 
 --
@@ -1285,22 +1516,6 @@ ALTER TABLE ONLY recruitment.tags
 
 
 --
--- Name: user_preferences user_preferences_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.user_preferences
-    ADD CONSTRAINT user_preferences_pkey PRIMARY KEY (id);
-
-
---
--- Name: user_skills user_skills_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.user_skills
-    ADD CONSTRAINT user_skills_pkey PRIMARY KEY (user_id, skill_id);
-
-
---
 -- Name: user_tokens user_tokens_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -1324,17 +1539,17 @@ CREATE UNIQUE INDEX companies_recruiter_id_key ON recruitment.companies USING bt
 
 
 --
+-- Name: company_details_company_id_key; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE UNIQUE INDEX company_details_company_id_key ON recruitment.company_details USING btree (company_id);
+
+
+--
 -- Name: connection_interests_candidate_id_recruiter_id_job_id_inter_key; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
 CREATE UNIQUE INDEX connection_interests_candidate_id_recruiter_id_job_id_inter_key ON recruitment.connection_interests USING btree (candidate_id, recruiter_id, job_id, interest_type);
-
-
---
--- Name: gin_profiles_metadata; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX gin_profiles_metadata ON recruitment.profiles USING gin (metadata jsonb_path_ops);
 
 
 --
@@ -1345,10 +1560,52 @@ CREATE INDEX idx_activity_logs_user ON recruitment.activity_logs USING btree (us
 
 
 --
+-- Name: idx_application_documents_app; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_application_documents_app ON recruitment.application_documents USING btree (application_id);
+
+
+--
+-- Name: idx_application_documents_type; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_application_documents_type ON recruitment.application_documents USING btree (document_type);
+
+
+--
+-- Name: idx_application_stages_order; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_application_stages_order ON recruitment.application_stages USING btree (application_id, stage_order);
+
+
+--
+-- Name: idx_application_stages_scheduling; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_application_stages_scheduling ON recruitment.application_stages USING btree (status, scheduled_at);
+
+
+--
+-- Name: idx_applications_dashboard; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_applications_dashboard ON recruitment.applications USING btree (job_id, status, applied_at DESC);
+
+
+--
 -- Name: idx_applications_job; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
 CREATE INDEX idx_applications_job ON recruitment.applications USING btree (job_id);
+
+
+--
+-- Name: idx_applications_pipeline; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_applications_pipeline ON recruitment.applications USING btree (job_id, status, applied_at);
 
 
 --
@@ -1373,17 +1630,52 @@ CREATE INDEX idx_audits_table_record ON recruitment.audits USING btree (table_na
 
 
 --
+-- Name: idx_companies_elasticsearch_sync; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_companies_elasticsearch_sync ON recruitment.companies USING btree (updated_at, id);
+
+
+--
+-- Name: idx_company_benefits_company; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_company_benefits_company ON recruitment.company_benefits USING btree (company_id);
+
+
+--
+-- Name: idx_company_benefits_fulltext; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_company_benefits_fulltext ON recruitment.company_benefits USING gin (to_tsvector('english'::regconfig, (((title)::text || ' '::text) || COALESCE(description, ''::text))));
+
+
+--
+-- Name: idx_company_cultures_company; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_company_cultures_company ON recruitment.company_cultures USING btree (company_id);
+
+
+--
+-- Name: idx_company_details_size_industry; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_company_details_size_industry ON recruitment.company_details USING btree (industry, employee_count_min, employee_count_max) WHERE (industry IS NOT NULL);
+
+
+--
+-- Name: idx_connection_active_matching; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_connection_active_matching ON recruitment.connection_interests USING btree (candidate_id, status, created_at DESC) WHERE (status = ANY (ARRAY['pending'::text, 'accepted'::text]));
+
+
+--
 -- Name: idx_connection_interests_candidate_status; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
 CREATE INDEX idx_connection_interests_candidate_status ON recruitment.connection_interests USING btree (candidate_id, status, created_at DESC);
-
-
---
--- Name: idx_connection_interests_contact_info_gin; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_connection_interests_contact_info_gin ON recruitment.connection_interests USING gin (contact_info);
 
 
 --
@@ -1415,38 +1707,66 @@ CREATE INDEX idx_connection_interests_recruiter_status ON recruitment.connection
 
 
 --
--- Name: idx_job_similarities_lookup; Type: INDEX; Schema: recruitment; Owner: postgres
+-- Name: idx_job_benefits_fulltext; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
-CREATE INDEX idx_job_similarities_lookup ON recruitment.job_similarities USING btree (job1_id, similarity_score DESC, similarity_type);
-
-
---
--- Name: idx_job_similarities_reverse; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_job_similarities_reverse ON recruitment.job_similarities USING btree (job2_id, similarity_score DESC, similarity_type);
+CREATE INDEX idx_job_benefits_fulltext ON recruitment.job_benefits USING gin (to_tsvector('english'::regconfig, (((title)::text || ' '::text) || COALESCE(description, ''::text))));
 
 
 --
--- Name: idx_job_views_job_analytics; Type: INDEX; Schema: recruitment; Owner: postgres
+-- Name: idx_job_benefits_job; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
-CREATE INDEX idx_job_views_job_analytics ON recruitment.job_views USING btree (job_id, viewed_at DESC, duration_seconds);
-
-
---
--- Name: idx_job_views_recommendation; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_job_views_recommendation ON recruitment.job_views USING btree (referrer_job_id, job_id);
+CREATE INDEX idx_job_benefits_job ON recruitment.job_benefits USING btree (job_id);
 
 
 --
--- Name: idx_job_views_user_behavior; Type: INDEX; Schema: recruitment; Owner: postgres
+-- Name: idx_job_requirements_fulltext; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
-CREATE INDEX idx_job_views_user_behavior ON recruitment.job_views USING btree (user_id, viewed_at DESC, source);
+CREATE INDEX idx_job_requirements_fulltext ON recruitment.job_requirements USING gin (to_tsvector('english'::regconfig, (((title)::text || ' '::text) || COALESCE(description, ''::text))));
+
+
+--
+-- Name: idx_job_requirements_job; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_job_requirements_job ON recruitment.job_requirements USING btree (job_id);
+
+
+--
+-- Name: idx_job_views_job_basic; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_job_views_job_basic ON recruitment.job_views USING btree (job_id, viewed_at DESC);
+
+
+--
+-- Name: idx_job_views_recommendation_engine; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_job_views_recommendation_engine ON recruitment.job_views USING btree (user_id, viewed_at DESC, duration_seconds DESC) WHERE ((duration_seconds > 30) AND (user_id IS NOT NULL));
+
+
+--
+-- Name: idx_job_views_user_basic; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_job_views_user_basic ON recruitment.job_views USING btree (user_id, viewed_at DESC);
+
+
+--
+-- Name: idx_jobs_active_search; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_jobs_active_search ON recruitment.jobs USING btree (status, location_id, job_type, posted_at DESC) WHERE ((status = 'approved'::recruitment.job_status) AND (deleted = false));
+
+
+--
+-- Name: idx_jobs_cleanup; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_jobs_cleanup ON recruitment.jobs USING btree (expires_at) WHERE ((expires_at IS NOT NULL) AND (status = 'approved'::recruitment.job_status));
 
 
 --
@@ -1457,6 +1777,20 @@ CREATE INDEX idx_jobs_company ON recruitment.jobs USING btree (company_id);
 
 
 --
+-- Name: idx_jobs_elasticsearch_sync; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_jobs_elasticsearch_sync ON recruitment.jobs USING btree (updated_at, id);
+
+
+--
+-- Name: idx_jobs_expiration; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_jobs_expiration ON recruitment.jobs USING btree (expires_at);
+
+
+--
 -- Name: idx_jobs_location; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
@@ -1464,10 +1798,31 @@ CREATE INDEX idx_jobs_location ON recruitment.jobs USING btree (location_id);
 
 
 --
+-- Name: idx_jobs_location_salary; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_jobs_location_salary ON recruitment.jobs USING btree (location_id, status) INCLUDE (salary_range, job_type, posted_at) WHERE ((status = 'approved'::recruitment.job_status) AND (deleted = false));
+
+
+--
+-- Name: idx_jobs_location_salary_covering; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_jobs_location_salary_covering ON recruitment.jobs USING btree (location_id, status) INCLUDE (salary_range, job_type, posted_at) WHERE ((status = 'approved'::recruitment.job_status) AND (deleted = false));
+
+
+--
 -- Name: idx_jobs_posted_at; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
 CREATE INDEX idx_jobs_posted_at ON recruitment.jobs USING btree (posted_at);
+
+
+--
+-- Name: idx_jobs_salary_range_gist; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX idx_jobs_salary_range_gist ON recruitment.jobs USING gist (int4range(COALESCE(((salary_range ->> 'min'::text))::integer, 0), COALESCE(((salary_range ->> 'max'::text))::integer, 999999999))) WHERE ((status = 'approved'::recruitment.job_status) AND (deleted = false));
 
 
 --
@@ -1527,10 +1882,10 @@ CREATE UNIQUE INDEX idx_mv_search_analytics_day_type ON recruitment.mv_report_se
 
 
 --
--- Name: idx_mv_user_preferences_type_source; Type: INDEX; Schema: recruitment; Owner: postgres
+-- Name: idx_notifications_unread_recent; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
-CREATE UNIQUE INDEX idx_mv_user_preferences_type_source ON recruitment.mv_report_user_preferences USING btree (preference_type, source);
+CREATE INDEX idx_notifications_unread_recent ON recruitment.notifications USING btree (user_id, sent_at DESC) WHERE (read = false);
 
 
 --
@@ -1541,10 +1896,10 @@ CREATE INDEX idx_notifications_user_read ON recruitment.notifications USING btre
 
 
 --
--- Name: idx_profiles_user; Type: INDEX; Schema: recruitment; Owner: postgres
+-- Name: idx_profiles_elasticsearch_sync; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
-CREATE INDEX idx_profiles_user ON recruitment.profiles USING btree (user_id);
+CREATE INDEX idx_profiles_elasticsearch_sync ON recruitment.profiles USING btree (updated_at, id);
 
 
 --
@@ -1562,27 +1917,6 @@ CREATE INDEX idx_resumes_user ON recruitment.resumes USING btree (user_id);
 
 
 --
--- Name: idx_search_history_analytics; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_search_history_analytics ON recruitment.search_history USING btree (search_type, searched_at DESC, result_count);
-
-
---
--- Name: idx_search_history_clicked_jobs_gin; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_search_history_clicked_jobs_gin ON recruitment.search_history USING gin (clicked_jobs);
-
-
---
--- Name: idx_search_history_filters_gin; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_search_history_filters_gin ON recruitment.search_history USING gin (filters_used);
-
-
---
 -- Name: idx_search_history_session; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
@@ -1597,24 +1931,10 @@ CREATE INDEX idx_search_history_user_time ON recruitment.search_history USING bt
 
 
 --
--- Name: idx_user_preferences_lookup; Type: INDEX; Schema: recruitment; Owner: postgres
+-- Name: idx_user_activity_timeline; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
-CREATE INDEX idx_user_preferences_lookup ON recruitment.user_preferences USING btree (user_id, preference_type, weight DESC);
-
-
---
--- Name: idx_user_preferences_type; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_user_preferences_type ON recruitment.user_preferences USING btree (preference_type, weight DESC);
-
-
---
--- Name: idx_user_preferences_value_gin; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_user_preferences_value_gin ON recruitment.user_preferences USING gin (preference_value);
+CREATE INDEX idx_user_activity_timeline ON recruitment.activity_logs USING btree (user_id, "timestamp");
 
 
 --
@@ -1639,10 +1959,52 @@ CREATE UNIQUE INDEX job_posts_history_job_id_version_key ON recruitment.job_post
 
 
 --
+-- Name: job_work_arrangements_job_id_key; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE UNIQUE INDEX job_work_arrangements_job_id_key ON recruitment.job_work_arrangements USING btree (job_id);
+
+
+--
 -- Name: locations_type_idx; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
 CREATE INDEX locations_type_idx ON recruitment.locations USING btree (type);
+
+
+--
+-- Name: profile_educations_profile_id_idx; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX profile_educations_profile_id_idx ON recruitment.profile_educations USING btree (profile_id);
+
+
+--
+-- Name: profile_experiences_profile_id_idx; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX profile_experiences_profile_id_idx ON recruitment.profile_experiences USING btree (profile_id);
+
+
+--
+-- Name: profiles_is_looking_for_job_idx; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX profiles_is_looking_for_job_idx ON recruitment.profiles USING btree (is_looking_for_job);
+
+
+--
+-- Name: profiles_user_id_idx; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE INDEX profiles_user_id_idx ON recruitment.profiles USING btree (user_id);
+
+
+--
+-- Name: profiles_user_id_key; Type: INDEX; Schema: recruitment; Owner: postgres
+--
+
+CREATE UNIQUE INDEX profiles_user_id_key ON recruitment.profiles USING btree (user_id);
 
 
 --
@@ -1678,20 +2040,6 @@ CREATE UNIQUE INDEX skills_name_key ON recruitment.skills USING btree (name);
 --
 
 CREATE UNIQUE INDEX tags_name_key ON recruitment.tags USING btree (name);
-
-
---
--- Name: trigram_users_email; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX trigram_users_email ON recruitment.users USING gist (email recruitment.gist_trgm_ops);
-
-
---
--- Name: user_preferences_user_id_preference_type_key; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE UNIQUE INDEX user_preferences_user_id_preference_type_key ON recruitment.user_preferences USING btree (user_id, preference_type);
 
 
 --
@@ -1751,13 +2099,6 @@ CREATE TRIGGER set_resumes_timestamp BEFORE UPDATE ON recruitment.resumes FOR EA
 
 
 --
--- Name: user_preferences set_user_preferences_timestamp; Type: TRIGGER; Schema: recruitment; Owner: postgres
---
-
-CREATE TRIGGER set_user_preferences_timestamp BEFORE UPDATE ON recruitment.user_preferences FOR EACH ROW EXECUTE FUNCTION recruitment.trigger_set_timestamp();
-
-
---
 -- Name: users set_users_timestamp; Type: TRIGGER; Schema: recruitment; Owner: postgres
 --
 
@@ -1776,6 +2117,36 @@ CREATE TRIGGER trigger_job_view_dedup BEFORE INSERT ON recruitment.job_views FOR
 --
 
 CREATE TRIGGER trigger_set_connection_expires_at BEFORE INSERT ON recruitment.connection_interests FOR EACH ROW EXECUTE FUNCTION recruitment.set_connection_expires_at();
+
+
+--
+-- Name: company_details update_company_details_updated_at; Type: TRIGGER; Schema: recruitment; Owner: postgres
+--
+
+CREATE TRIGGER update_company_details_updated_at BEFORE UPDATE ON recruitment.company_details FOR EACH ROW EXECUTE FUNCTION recruitment.update_updated_at_column();
+
+
+--
+-- Name: jobs update_jobs_updated_at; Type: TRIGGER; Schema: recruitment; Owner: postgres
+--
+
+CREATE TRIGGER update_jobs_updated_at BEFORE UPDATE ON recruitment.jobs FOR EACH ROW EXECUTE FUNCTION recruitment.update_updated_at_column();
+
+
+--
+-- Name: application_documents application_documents_application_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.application_documents
+    ADD CONSTRAINT application_documents_application_id_fkey FOREIGN KEY (application_id) REFERENCES recruitment.applications(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: application_stages application_stages_application_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.application_stages
+    ADD CONSTRAINT application_stages_application_id_fkey FOREIGN KEY (application_id) REFERENCES recruitment.applications(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1811,6 +2182,38 @@ ALTER TABLE ONLY recruitment.companies
 
 
 --
+-- Name: company_benefits company_benefits_company_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.company_benefits
+    ADD CONSTRAINT company_benefits_company_id_fkey FOREIGN KEY (company_id) REFERENCES recruitment.companies(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: company_cultures company_cultures_company_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.company_cultures
+    ADD CONSTRAINT company_cultures_company_id_fkey FOREIGN KEY (company_id) REFERENCES recruitment.companies(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: company_details company_details_company_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.company_details
+    ADD CONSTRAINT company_details_company_id_fkey FOREIGN KEY (company_id) REFERENCES recruitment.companies(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: company_details company_details_headquarters_location_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.company_details
+    ADD CONSTRAINT company_details_headquarters_location_id_fkey FOREIGN KEY (headquarters_location_id) REFERENCES recruitment.locations(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
 -- Name: connection_interests connection_interests_candidate_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -1835,6 +2238,14 @@ ALTER TABLE ONLY recruitment.connection_interests
 
 
 --
+-- Name: job_benefits job_benefits_job_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.job_benefits
+    ADD CONSTRAINT job_benefits_job_id_fkey FOREIGN KEY (job_id) REFERENCES recruitment.jobs(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: job_posts_history job_posts_history_job_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -1843,19 +2254,11 @@ ALTER TABLE ONLY recruitment.job_posts_history
 
 
 --
--- Name: job_similarities job_similarities_job1_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+-- Name: job_requirements job_requirements_job_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
-ALTER TABLE ONLY recruitment.job_similarities
-    ADD CONSTRAINT job_similarities_job1_id_fkey FOREIGN KEY (job1_id) REFERENCES recruitment.jobs(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: job_similarities job_similarities_job2_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.job_similarities
-    ADD CONSTRAINT job_similarities_job2_id_fkey FOREIGN KEY (job2_id) REFERENCES recruitment.jobs(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY recruitment.job_requirements
+    ADD CONSTRAINT job_requirements_job_id_fkey FOREIGN KEY (job_id) REFERENCES recruitment.jobs(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1915,6 +2318,14 @@ ALTER TABLE ONLY recruitment.job_views
 
 
 --
+-- Name: job_work_arrangements job_work_arrangements_job_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.job_work_arrangements
+    ADD CONSTRAINT job_work_arrangements_job_id_fkey FOREIGN KEY (job_id) REFERENCES recruitment.jobs(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: jobs jobs_company_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -1947,11 +2358,43 @@ ALTER TABLE ONLY recruitment.notifications
 
 
 --
+-- Name: profile_educations profile_educations_profile_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.profile_educations
+    ADD CONSTRAINT profile_educations_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES recruitment.profiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: profile_experiences profile_experiences_profile_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.profile_experiences
+    ADD CONSTRAINT profile_experiences_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES recruitment.profiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: profile_skills profile_skills_profile_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.profile_skills
+    ADD CONSTRAINT profile_skills_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES recruitment.profiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: profile_skills profile_skills_skill_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
+--
+
+ALTER TABLE ONLY recruitment.profile_skills
+    ADD CONSTRAINT profile_skills_skill_id_fkey FOREIGN KEY (skill_id) REFERENCES recruitment.skills(id) ON DELETE CASCADE;
+
+
+--
 -- Name: profiles profiles_location_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
 ALTER TABLE ONLY recruitment.profiles
-    ADD CONSTRAINT profiles_location_id_fkey FOREIGN KEY (location_id) REFERENCES recruitment.locations(id) ON DELETE SET NULL;
+    ADD CONSTRAINT profiles_location_id_fkey FOREIGN KEY (location_id) REFERENCES recruitment.locations(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
 --
@@ -1959,7 +2402,7 @@ ALTER TABLE ONLY recruitment.profiles
 --
 
 ALTER TABLE ONLY recruitment.profiles
-    ADD CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES recruitment.users(id) ON DELETE CASCADE;
+    ADD CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES recruitment.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -2003,30 +2446,6 @@ ALTER TABLE ONLY recruitment.search_history
 
 
 --
--- Name: user_preferences user_preferences_user_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.user_preferences
-    ADD CONSTRAINT user_preferences_user_id_fkey FOREIGN KEY (user_id) REFERENCES recruitment.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: user_skills user_skills_skill_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.user_skills
-    ADD CONSTRAINT user_skills_skill_id_fkey FOREIGN KEY (skill_id) REFERENCES recruitment.skills(id) ON DELETE CASCADE;
-
-
---
--- Name: user_skills user_skills_user_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.user_skills
-    ADD CONSTRAINT user_skills_user_id_fkey FOREIGN KEY (user_id) REFERENCES recruitment.users(id) ON DELETE CASCADE;
-
-
---
 -- Name: user_tokens user_tokens_user_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -2038,5 +2457,5 @@ ALTER TABLE ONLY recruitment.user_tokens
 -- PostgreSQL database dump complete
 --
 
-\unrestrict iEtxsRSwZxYzfk0SibSeV2aahW126XjAMep7Mtlxmne8Lv4P5aGfVZ0VmtpvZoY
+\unrestrict cME6gM09svf4VvcoSpk9NPTBr9AUkbKjZl2LZ0FCBme4kO6fZNbggV4MQ7z7YtT
 

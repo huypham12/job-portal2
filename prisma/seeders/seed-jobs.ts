@@ -1,6 +1,6 @@
 // prisma/seeders/seed-jobs.ts
 
-import { PrismaClient, job_type, job_status } from '@prisma/client'
+import { PrismaClient, job_type, job_status, LocationType } from '@prisma/client'
 import { faker } from '@faker-js/faker'
 
 export async function seedJobs(prisma: PrismaClient) {
@@ -10,7 +10,7 @@ export async function seedJobs(prisma: PrismaClient) {
     // 1. Lấy danh sách companies, locations, skills, tags có sẵn
     const companies = await prisma.companies.findMany({ select: { id: true } })
     const locations = await prisma.locations.findMany({
-      where: { type: 'district' }, // Chỉ lấy quận/huyện
+      where: { type: LocationType.district }, // Chỉ lấy quận/huyện
       select: { id: true }
     })
     const skills = await prisma.skills.findMany({ select: { id: true } })

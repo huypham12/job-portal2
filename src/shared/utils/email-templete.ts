@@ -28,7 +28,7 @@ export function getEmailTemplate({ title, description, buttonText, buttonUrl, fo
 }
 
 export function getVerifyEmailTemplate(token: string) {
-  const verifyUrl = `http://localhost:4000/auth/verify-email?token=${token}`
+  const verifyUrl = `http://localhost:5174/auth/verify-email?token=${token}`
 
   return getEmailTemplate({
     title: 'Xin chào,',
@@ -40,7 +40,7 @@ export function getVerifyEmailTemplate(token: string) {
 }
 
 export function getForgotPasswordTemplate(token: string) {
-  const resetPasswordUrl = `http://localhost:3000/auth/reset-password?token=${token}`
+  const resetPasswordUrl = `http://localhost:5174/auth/reset-password?token=${token}`
 
   return getEmailTemplate({
     title: 'Xin chào,',

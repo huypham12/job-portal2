@@ -1,6 +1,6 @@
 import { PrismaClient, LocationType } from '@prisma/client'
-import fs from 'fs'
-import path from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
 
 // Định nghĩa kiểu dữ liệu cho file Tỉnh/Thành
 interface CityData {
@@ -38,7 +38,7 @@ export async function seedLocations(prisma: PrismaClient) {
     for (const city of cities) {
       const newProvince = await prisma.locations.create({
         data: {
-          name: city.name, //
+          name: city.name,
           type: LocationType.province,
           parent_id: null
         }
@@ -58,7 +58,7 @@ export async function seedLocations(prisma: PrismaClient) {
 
       if (parentUuid) {
         districtDataToCreate.push({
-          name: district.name, //
+          name: district.name,
           type: LocationType.district,
           parent_id: parentUuid
         })

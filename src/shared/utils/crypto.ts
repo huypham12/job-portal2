@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 
 export async function generateHash(data: string): Promise<string> {
   const saltRounds = 10
