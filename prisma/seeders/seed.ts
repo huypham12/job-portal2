@@ -12,6 +12,8 @@ import { seedApplications } from './seed-applications'
 import { seedProfileSkills } from './seed-profile-skills'
 import { seedProfileExperiences } from './seed-profile-experiences'
 import { seedProfileEducations } from './seed-profile-educations'
+import { seedProfileCertifications } from './seed-profile-certifications'
+import { seedProfileAwards } from './seed-profile-awards'
 import { seedCompanyMetadata } from './seed-company-metadata'
 import { seedJobMetadata } from './seed-job-metadata'
 import { seedApplicationMetadata } from './seed-application-metadata'
@@ -61,29 +63,39 @@ async function main() {
   await seedProfileSkills(prisma)
   console.log('Seed Profile Skills hoàn tất.')
 
-  // 9. Seed Profile Experiences (chạy sau khi có profiles)
-  console.log('[9/13] Bắt đầu seed Profile Experiences và Educations...')
+  // 9. Seed Profile Experiences và Educations (chạy sau khi có profiles)
+  console.log('[9/15] Bắt đầu seed Profile Experiences và Educations...')
   await seedProfileExperiences(prisma)
   await seedProfileEducations(prisma)
   console.log('Seed Profile Experiences và Educations hoàn tất.')
 
-  // 10. Seed Company Metadata (chạy sau khi có companies)
-  console.log('[10/13] Bắt đầu seed Company Metadata...')
+  // 10. Seed Profile Certifications (chạy sau khi có profiles)
+  console.log('[10/15] Bắt đầu seed Profile Certifications...')
+  await seedProfileCertifications(prisma)
+  console.log('Seed Profile Certifications hoàn tất.')
+
+  // 11. Seed Profile Awards (chạy sau khi có profiles)
+  console.log('[11/15] Bắt đầu seed Profile Awards...')
+  await seedProfileAwards(prisma)
+  console.log('Seed Profile Awards hoàn tất.')
+
+  // 12. Seed Company Metadata (chạy sau khi có companies)
+  console.log('[12/15] Bắt đầu seed Company Metadata...')
   await seedCompanyMetadata(prisma)
   console.log('Seed Company Metadata hoàn tất.')
 
-  // 11. Seed Job Metadata (chạy sau khi có jobs)
-  console.log('[11/13] Bắt đầu seed Job Metadata...')
+  // 13. Seed Job Metadata (chạy sau khi có jobs)
+  console.log('[13/15] Bắt đầu seed Job Metadata...')
   await seedJobMetadata(prisma)
   console.log('Seed Job Metadata hoàn tất.')
 
-  // 12. Seed Application Metadata (chạy sau khi có applications)
-  console.log('[12/13] Bắt đầu seed Application Metadata...')
+  // 14. Seed Application Metadata (chạy sau khi có applications)
+  console.log('[14/15] Bắt đầu seed Application Metadata...')
   await seedApplicationMetadata(prisma)
   console.log('Seed Application Metadata hoàn tất.')
 
-  // 13. Seed Additional Features (chạy cuối cùng)
-  console.log('[13/13] Bắt đầu seed Additional Features...')
+  // 15. Seed Additional Features (chạy cuối cùng)
+  console.log('[15/15] Bắt đầu seed Additional Features...')
   await seedAdditionalFeatures(prisma)
   console.log('Seed Additional Features hoàn tất.')
 
