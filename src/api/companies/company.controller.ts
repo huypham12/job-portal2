@@ -140,8 +140,6 @@ class CompanyController {
     })
   }
 
-
-
   /**
    * @description (Recruiter) Lấy thông tin chi tiết công ty của mình
    * @route GET /api/companies/me/details

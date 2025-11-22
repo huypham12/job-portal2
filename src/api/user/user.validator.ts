@@ -97,6 +97,43 @@ const updateProfileBody = z
   .strict()
   .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
 
+// Create profile body (full_name is required)
+const createProfileBody = z
+  .object({
+    // Basic info - full_name is required for profile creation
+    full_name: z.string().trim().min(1, 'Full name is required').max(255),
+    display_name: z.string().trim().max(255).optional(),
+    headline: z.string().trim().max(255).optional(),
+    date_of_birth: z
+      .string()
+      .date()
+      .transform((str) => new Date(str))
+      .optional(),
+    gender: z.string().max(20).optional(),
+
+    // Contact info
+    phone_number: z.string().min(7).max(20).optional(),
+    personal_website: z.string().url('Invalid website URL').or(z.string().regex(urlRegex)).optional(),
+    linkedin_url: z.string().url('Invalid LinkedIn URL').or(z.string().min(1)).optional(),
+    github_url: z.string().url('Invalid GitHub URL').or(z.string().min(1)).optional(),
+
+    // Location
+    location_text: z.string().max(100).optional(),
+    location_id: z.string().uuid().optional().nullable(),
+
+    // Professional info
+    bio: z.string().max(2000).optional(),
+    years_of_experience: z.number().int().min(0).max(50).optional(),
+
+    // Job preferences
+    desired_job_title: z.string().trim().max(255).optional(),
+    desired_salary_min: z.number().int().min(0).optional(),
+    desired_currency: z.string().max(10).default('VND').optional(),
+    desired_job_type: z.array(jobTypeEnum).optional(),
+    is_looking_for_job: z.boolean().optional()
+  })
+  .strict()
+
 // Update user basic info (email, role)
 const updateUserBody = z
   .object({
@@ -268,6 +305,7 @@ export type UpdateProfileAwardDto = z.infer<typeof updateProfileAwardBody>
 export type AwardIdParamDto = z.infer<typeof awardIdParam>
 
 // === EXPORTED VALIDATORS ===
+export const createProfileValidator = zodValidate({ body: createProfileBody })
 export const updateProfileValidator = zodValidate({ body: updateProfileBody })
 export const updateUserValidator = zodValidate({ body: updateUserBody })
 export const getUsersValidator = zodValidate({ query: getUsersQuery })
@@ -319,6 +357,13 @@ export const deleteProfileSkillValidator = zodValidate({ params: skillIdParam })
 export const deleteProfileCertificationValidator = zodValidate({ params: certificationIdParam })
 export const deleteProfileAwardValidator = zodValidate({ params: awardIdParam })
 
+// Profile sub-entities validators - GET individual operations
+export const getProfileExperienceValidator = zodValidate({ params: experienceIdParam })
+export const getProfileEducationValidator = zodValidate({ params: educationIdParam })
+export const getProfileSkillValidator = zodValidate({ params: skillIdParam })
+export const getProfileCertificationValidator = zodValidate({ params: certificationIdParam })
+export const getProfileAwardValidator = zodValidate({ params: awardIdParam })
+
 // Pagination validators
 export const paginationValidator = zodValidate({
   query: paginationQuery
@@ -328,6 +373,7 @@ export const paginationValidator = zodValidate({
 export type GetUsersQuery = z.infer<typeof getUsersQuery>
 export type PaginationQuery = z.infer<typeof paginationQuery>
 export type UpdateUserDto = z.infer<typeof updateUserBody>
+export type CreateProfileDto = z.infer<typeof createProfileBody>
 export type UpdateProfileDto = z.infer<typeof updateProfileBody>
 export type CreateExperienceDto = z.infer<typeof profileExperienceBody>
 export type UpdateExperienceDto = z.infer<typeof updateProfileExperienceBody>

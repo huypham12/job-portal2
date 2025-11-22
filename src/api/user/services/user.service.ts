@@ -239,6 +239,88 @@ export class UserService {
     })
   }
 
+  // Tạo profile mới
+  async createProfile(
+    userId: string,
+    data: {
+      full_name: string
+      display_name?: string
+      headline?: string
+      date_of_birth?: Date
+      gender?: string
+      phone_number?: string
+      personal_website?: string
+      linkedin_url?: string
+      github_url?: string
+      location_id?: string | null
+      location_text?: string
+      bio?: string
+      years_of_experience?: number
+      desired_job_title?: string
+      desired_salary_min?: number
+      desired_currency?: string
+      desired_job_type?: job_type[]
+      is_looking_for_job?: boolean
+    }
+  ) {
+    // Kiểm tra xem profile đã tồn tại chưa
+    const existing = await prisma.profiles.findFirst({
+      where: { user_id: userId }
+    })
+
+    if (existing) {
+      throw new Error('Profile already exists')
+    }
+
+    return await prisma.profiles.create({
+      data: {
+        user_id: userId,
+        full_name: data.full_name,
+        display_name: data.display_name,
+        headline: data.headline,
+        date_of_birth: data.date_of_birth,
+        gender: data.gender,
+        phone_number: data.phone_number,
+        personal_website: data.personal_website,
+        linkedin_url: data.linkedin_url,
+        github_url: data.github_url,
+        location_id: data.location_id,
+        location_text: data.location_text,
+        bio: data.bio,
+        years_of_experience: data.years_of_experience || 0,
+        desired_job_title: data.desired_job_title,
+        desired_salary_min: data.desired_salary_min,
+        desired_currency: data.desired_currency || 'VND',
+        desired_job_type: data.desired_job_type || [],
+        is_looking_for_job: data.is_looking_for_job ?? true
+      },
+      select: {
+        id: true,
+        user_id: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        date_of_birth: true,
+        gender: true,
+        phone_number: true,
+        personal_website: true,
+        linkedin_url: true,
+        github_url: true,
+        location_id: true,
+        location_text: true,
+        bio: true,
+        years_of_experience: true,
+        desired_job_title: true,
+        desired_salary_min: true,
+        desired_currency: true,
+        desired_job_type: true,
+        is_looking_for_job: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+  }
+
   // Thêm mới: cập nhật/khởi tạo profile theo user_id
   async updateProfileForUser(
     userId: string,
@@ -1569,6 +1651,380 @@ export class UserService {
       created_at: user.created_at,
       updated_at: user.updated_at,
       profile: user.profiles || null
+    }
+  }
+
+  // === GET INDIVIDUAL SUB-RESOURCES ===
+  async getProfileExperience(userId: string, experienceId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_experiences.findFirst({
+      where: {
+        id: experienceId,
+        profile_id: profile.id
+      },
+      select: {
+        id: true,
+        company_name: true,
+        position: true,
+        start_date: true,
+        end_date: true,
+        is_current: true,
+        description: true
+      }
+    })
+  }
+
+  async getProfileEducation(userId: string, educationId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_educations.findFirst({
+      where: {
+        id: educationId,
+        profile_id: profile.id
+      },
+      select: {
+        id: true,
+        school_name: true,
+        degree: true,
+        field_of_study: true,
+        start_date: true,
+        end_date: true
+      }
+    })
+  }
+
+  async getProfileSkill(userId: string, skillId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_skills.findFirst({
+      where: {
+        profile_id: profile.id,
+        skill_id: skillId
+      },
+      select: {
+        skill_id: true,
+        proficiency: true,
+        level: true,
+        skills: {
+          select: {
+            id: true,
+            name: true,
+            category: true
+          }
+        }
+      }
+    })
+  }
+
+  async getProfileCertification(userId: string, certificationId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_certifications.findFirst({
+      where: {
+        id: certificationId,
+        profile_id: profile.id
+      },
+      select: {
+        id: true,
+        name: true,
+        issuing_org: true,
+        credential_id: true,
+        credential_url: true,
+        issue_date: true,
+        expiry_date: true,
+        never_expires: true,
+        description: true,
+        skills_acquired: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+  }
+
+  async getProfileAward(userId: string, awardId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_awards.findFirst({
+      where: {
+        id: awardId,
+        profile_id: profile.id
+      },
+      select: {
+        id: true,
+        title: true,
+        issuer: true,
+        date: true,
+        description: true,
+        url: true,
+        category: true,
+        level: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+  }
+
+  // === GET COLLECTIONS WITH PAGINATION ===
+  async getProfileExperiences(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 10 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      return { experiences: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+    }
+
+    const [experiences, total] = await Promise.all([
+      prisma.profile_experiences.findMany({
+        where: { profile_id: profile.id },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          company_name: true,
+          position: true,
+          start_date: true,
+          end_date: true,
+          is_current: true,
+          description: true
+        },
+        orderBy: { start_date: 'desc' }
+      }),
+      prisma.profile_experiences.count({ where: { profile_id: profile.id } })
+    ])
+
+    return {
+      experiences,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  async getProfileEducations(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 10 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      return { educations: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+    }
+
+    const [educations, total] = await Promise.all([
+      prisma.profile_educations.findMany({
+        where: { profile_id: profile.id },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          school_name: true,
+          degree: true,
+          field_of_study: true,
+          start_date: true,
+          end_date: true
+        },
+        orderBy: { start_date: 'desc' }
+      }),
+      prisma.profile_educations.count({ where: { profile_id: profile.id } })
+    ])
+
+    return {
+      educations,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  async getProfileSkills(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 20 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      return { skills: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+    }
+
+    const [skills, total] = await Promise.all([
+      prisma.profile_skills.findMany({
+        where: { profile_id: profile.id },
+        skip,
+        take: limit,
+        select: {
+          skill_id: true,
+          proficiency: true,
+          level: true,
+          skills: {
+            select: {
+              id: true,
+              name: true,
+              category: true
+            }
+          }
+        },
+        orderBy: {
+          skills: { name: 'asc' }
+        }
+      }),
+      prisma.profile_skills.count({ where: { profile_id: profile.id } })
+    ])
+
+    return {
+      skills,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  async getProfileCertifications(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 10 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      return { certifications: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+    }
+
+    const [certifications, total] = await Promise.all([
+      prisma.profile_certifications.findMany({
+        where: { profile_id: profile.id },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          issuing_org: true,
+          credential_id: true,
+          credential_url: true,
+          issue_date: true,
+          expiry_date: true,
+          never_expires: true,
+          description: true,
+          skills_acquired: true,
+          created_at: true,
+          updated_at: true
+        },
+        orderBy: { issue_date: 'desc' }
+      }),
+      prisma.profile_certifications.count({ where: { profile_id: profile.id } })
+    ])
+
+    return {
+      certifications,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  async getProfileAwards(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 10 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      return { awards: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+    }
+
+    const [awards, total] = await Promise.all([
+      prisma.profile_awards.findMany({
+        where: { profile_id: profile.id },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          title: true,
+          issuer: true,
+          date: true,
+          description: true,
+          url: true,
+          category: true,
+          level: true,
+          created_at: true,
+          updated_at: true
+        },
+        orderBy: { date: 'desc' }
+      }),
+      prisma.profile_awards.count({ where: { profile_id: profile.id } })
+    ])
+
+    return {
+      awards,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
     }
   }
 }

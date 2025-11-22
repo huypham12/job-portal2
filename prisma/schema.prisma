@@ -163,8 +163,6 @@ model company_benefits {
   @@index([company_id], map: "idx_company_benefits_company")
 }
 
-
-
 model job_posts_history {
   id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   job_id     String    @db.Uuid

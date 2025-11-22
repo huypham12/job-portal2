@@ -4,6 +4,7 @@ import {
   GetUsersQuery,
   PaginationQuery,
   UpdateUserDto,
+  CreateProfileDto,
   UpdateProfileDto,
   CreateExperienceDto,
   UpdateExperienceDto,
@@ -68,6 +69,33 @@ export class UserController {
     })
   }
 
+  createProfile: PostHandler<CreateProfileDto> = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    try {
+      const payload = req.body as CreateProfileDto
+      const profile = await this.userService.createProfile(userId, payload)
+      res.status(201).json({
+        success: true,
+        message: 'Profile created successfully',
+        data: profile
+      })
+    } catch (error: any) {
+      if (error.message === 'Profile already exists') {
+        res.status(409).json({
+          success: false,
+          message: 'Profile already exists for this user'
+        })
+        return
+      }
+      throw error
+    }
+  }
+
   updateProfile: PutHandler<UpdateProfileDto> = async (req, res) => {
     const userId = req.decoded_authorization?.user_id
     if (!userId) {
@@ -79,7 +107,11 @@ export class UserController {
     const payload = req.body as UpdateProfileDto
 
     const profile = await this.userService.updateProfileForUser(userId, payload)
-    res.json({ message: 'Profile updated', profile })
+    res.json({
+      success: true,
+      message: 'Profile updated',
+      data: profile
+    })
     return
   }
 
@@ -261,5 +293,162 @@ export class UserController {
 
     await this.userService.deleteProfileAward(userId, awardId)
     res.json({ message: 'Award deleted' })
+  }
+
+  // === GET INDIVIDUAL SUB-RESOURCES ===
+  getExperience: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    const { experienceId } = req.params
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const experience = await this.userService.getProfileExperience(userId, experienceId)
+    if (!experience) {
+      res.status(404).json({ success: false, message: 'Experience not found' })
+      return
+    }
+
+    res.json({ success: true, data: experience })
+  }
+
+  getEducation: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    const { educationId } = req.params
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const education = await this.userService.getProfileEducation(userId, educationId)
+    if (!education) {
+      res.status(404).json({ success: false, message: 'Education not found' })
+      return
+    }
+
+    res.json({ success: true, data: education })
+  }
+
+  getSkill: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    const { skillId } = req.params
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const skill = await this.userService.getProfileSkill(userId, skillId)
+    if (!skill) {
+      res.status(404).json({ success: false, message: 'Skill not found' })
+      return
+    }
+
+    res.json({ success: true, data: skill })
+  }
+
+  getCertification: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    const { certificationId } = req.params
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const certification = await this.userService.getProfileCertification(userId, certificationId)
+    if (!certification) {
+      res.status(404).json({ success: false, message: 'Certification not found' })
+      return
+    }
+
+    res.json({ success: true, data: certification })
+  }
+
+  getAward: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    const { awardId } = req.params
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const award = await this.userService.getProfileAward(userId, awardId)
+    if (!award) {
+      res.status(404).json({ success: false, message: 'Award not found' })
+      return
+    }
+
+    res.json({ success: true, data: award })
+  }
+
+  // === GET COLLECTIONS WITH PAGINATION ===
+  getExperiences: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+
+    const result = await this.userService.getProfileExperiences(userId, { page, limit })
+    res.json({ success: true, data: result.experiences, pagination: result.pagination })
+  }
+
+  getEducations: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+
+    const result = await this.userService.getProfileEducations(userId, { page, limit })
+    res.json({ success: true, data: result.educations, pagination: result.pagination })
+  }
+
+  getSkills: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 20
+
+    const result = await this.userService.getProfileSkills(userId, { page, limit })
+    res.json({ success: true, data: result.skills, pagination: result.pagination })
+  }
+
+  getCertifications: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+
+    const result = await this.userService.getProfileCertifications(userId, { page, limit })
+    res.json({ success: true, data: result.certifications, pagination: result.pagination })
+  }
+
+  getAwards: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+
+    const result = await this.userService.getProfileAwards(userId, { page, limit })
+    res.json({ success: true, data: result.awards, pagination: result.pagination })
   }
 }

@@ -40,10 +40,8 @@ export async function seedCompanyMetadata(prisma: PrismaClient) {
 
     // Tạo culture description
     const cultureAspects = ['work_life_balance', 'innovation', 'diversity', 'collaboration', 'growth', 'flexibility']
-    const selectedAspects = cultureAspects
-      .sort(() => 0.5 - Math.random())
-      .slice(0, Math.floor(Math.random() * 3) + 2)
-    
+    const selectedAspects = cultureAspects.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 3) + 2)
+
     const cultureDescription = `Chúng tôi tập trung vào ${selectedAspects.join(', ')} để tạo ra một môi trường làm việc tích cực và phát triển. Công ty khuyến khích sự sáng tạo, hỗ trợ cân bằng cuộc sống và công việc, đồng thời tạo cơ hội phát triển nghề nghiệp cho tất cả nhân viên.`
 
     await prisma.company_details.upsert({
@@ -80,8 +78,6 @@ export async function seedCompanyMetadata(prisma: PrismaClient) {
         }
       })
     }
-
-
   }
 
   console.log(`Đã seed metadata cho ${companies.length} companies`)
