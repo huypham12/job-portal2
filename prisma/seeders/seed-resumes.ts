@@ -7,23 +7,25 @@ export async function seedResumes(prisma: PrismaClient) {
   console.log('  Bắt đầu seed dữ liệu Resumes...')
 
   try {
-    // 1. Lấy danh sách candidates (users với role = 'candidate')
-    const candidates = await prisma.users.findMany({
-      where: { role: 'candidate' },
-      select: { id: true },
-      take: 100 // Chỉ lấy 100 candidates đầu tiên
+    // 1. Lấy danh sách profiles của candidates
+    const candidateProfiles = await prisma.profiles.findMany({
+      where: {
+        users: { role: 'candidate' }
+      },
+      select: { id: true, user_id: true },
+      take: 100 // Chỉ lấy 100 candidate profiles đầu tiên
     })
 
-    if (candidates.length === 0) {
-      console.warn('  ⚠️ Không có candidates nào. Bỏ qua seed resumes.')
+    if (candidateProfiles.length === 0) {
+      console.warn('  ⚠️ Không có candidate profiles nào. Bỏ qua seed resumes.')
       return
     }
 
-    // 2. Tạo resume cho mỗi candidate
-    console.log(`  Đang tạo resumes cho ${candidates.length} candidates...`)
+    // 2. Tạo resume cho mỗi candidate profile
+    console.log(`  Đang tạo resumes cho ${candidateProfiles.length} candidate profiles...`)
 
-    for (let i = 0; i < candidates.length; i++) {
-      const candidate = candidates[i]
+    for (let i = 0; i < candidateProfiles.length; i++) {
+      const candidateProfile = candidateProfiles[i]
 
       // Tạo nội dung resume giả
       const resumeContent = {
@@ -108,23 +110,23 @@ export async function seedResumes(prisma: PrismaClient) {
 
       // Random file URL (giả lập)
       const fileUrl = faker.datatype.boolean()
-        ? `https://storage.example.com/resumes/${candidate.id}/${faker.system.fileName({ extensionCount: 0 })}.pdf`
+        ? `https://storage.example.com/resumes/${candidateProfile.id}/${faker.system.fileName({ extensionCount: 0 })}.pdf`
         : null
 
       await prisma.resumes.create({
         data: {
-          user_id: candidate.id,
+          profile_id: candidateProfile.id,
           content: resumeContent,
           file_url: fileUrl
         }
       })
 
       if ((i + 1) % 20 === 0) {
-        console.log(`    ... Đã tạo ${i + 1} / ${candidates.length} resumes`)
+        console.log(`    ... Đã tạo ${i + 1} / ${candidateProfiles.length} resumes`)
       }
     }
 
-    console.log(`  Seed ${candidates.length} resumes hoàn tất.`)
+    console.log(`  Seed ${candidateProfiles.length} resumes hoàn tất.`)
   } catch (error) {
     console.error('  Lỗi khi seed dữ liệu resumes:', error)
     throw error

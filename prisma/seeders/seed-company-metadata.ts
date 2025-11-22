@@ -38,6 +38,14 @@ export async function seedCompanyMetadata(prisma: PrismaClient) {
     const randomType = companyTypes[Math.floor(Math.random() * companyTypes.length)]
     const randomRevenue = revenueRanges[Math.floor(Math.random() * revenueRanges.length)]
 
+    // Tạo culture description
+    const cultureAspects = ['work_life_balance', 'innovation', 'diversity', 'collaboration', 'growth', 'flexibility']
+    const selectedAspects = cultureAspects
+      .sort(() => 0.5 - Math.random())
+      .slice(0, Math.floor(Math.random() * 3) + 2)
+    
+    const cultureDescription = `Chúng tôi tập trung vào ${selectedAspects.join(', ')} để tạo ra một môi trường làm việc tích cực và phát triển. Công ty khuyến khích sự sáng tạo, hỗ trợ cân bằng cuộc sống và công việc, đồng thời tạo cơ hội phát triển nghề nghiệp cho tất cả nhân viên.`
+
     await prisma.company_details.upsert({
       where: { company_id: company.id },
       update: {},
@@ -50,7 +58,8 @@ export async function seedCompanyMetadata(prisma: PrismaClient) {
         website_url: `https://${company.name.toLowerCase().replace(/\s+/g, '')}.com`,
         headquarters_location_id: randomLocation.id,
         company_type: randomType,
-        revenue_range: randomRevenue
+        revenue_range: randomRevenue,
+        culture_description: cultureDescription
       }
     })
 
@@ -72,22 +81,7 @@ export async function seedCompanyMetadata(prisma: PrismaClient) {
       })
     }
 
-    // Seed company_cultures (2-4 aspects per company)
-    const cultureAspects = ['work_life_balance', 'innovation', 'diversity', 'collaboration', 'growth', 'flexibility']
-    const cultureCount = Math.floor(Math.random() * 3) + 2
 
-    for (let i = 0; i < cultureCount; i++) {
-      const randomAspect = cultureAspects[Math.floor(Math.random() * cultureAspects.length)]
-
-      await prisma.company_cultures.create({
-        data: {
-          company_id: company.id,
-          culture_aspect: randomAspect,
-          rating: Math.floor(Math.random() * 3) + 3, // 3-5 rating
-          description: `Strong focus on ${randomAspect} within our company culture`
-        }
-      })
-    }
   }
 
   console.log(`Đã seed metadata cho ${companies.length} companies`)

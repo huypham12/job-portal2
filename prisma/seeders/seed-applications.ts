@@ -7,10 +7,12 @@ export async function seedApplications(prisma: PrismaClient) {
   console.log('  Bắt đầu seed dữ liệu Applications...')
 
   try {
-    // 1. Lấy danh sách candidates, jobs, và resumes
-    const candidates = await prisma.users.findMany({
-      where: { role: 'candidate' },
-      select: { id: true },
+    // 1. Lấy danh sách profiles từ candidates, jobs, và resumes
+    const candidateProfiles = await prisma.profiles.findMany({
+      where: {
+        users: { role: 'candidate' }
+      },
+      select: { id: true, user_id: true },
       take: 50 // Chỉ lấy 50 candidates
     })
 
@@ -21,18 +23,18 @@ export async function seedApplications(prisma: PrismaClient) {
     })
 
     const resumes = await prisma.resumes.findMany({
-      select: { id: true, user_id: true }
+      select: { id: true, profile_id: true }
     })
 
-    if (candidates.length === 0 || jobs.length === 0) {
-      console.warn('  ⚠️ Không có đủ candidates hoặc jobs. Bỏ qua seed applications.')
+    if (candidateProfiles.length === 0 || jobs.length === 0) {
+      console.warn('  ⚠️ Không có đủ candidate profiles hoặc jobs. Bỏ qua seed applications.')
       return
     }
 
-    // 2. Tạo map resume theo user_id
+    // 2. Tạo map resume theo profile_id
     const resumeMap = new Map()
     resumes.forEach((resume) => {
-      resumeMap.set(resume.user_id, resume.id)
+      resumeMap.set(resume.profile_id, resume.id)
     })
 
     // 3. Tạo applications mẫu
@@ -42,19 +44,19 @@ export async function seedApplications(prisma: PrismaClient) {
     const createdApplications = new Set() // Để tránh duplicate user_id + job_id
 
     for (let i = 0; i < numberOfApplications; i++) {
-      const candidate = faker.helpers.arrayElement(candidates)
+      const candidateProfile = faker.helpers.arrayElement(candidateProfiles)
       const job = faker.helpers.arrayElement(jobs)
 
       // Tạo key unique để check duplicate
-      const applicationKey = `${candidate.id}-${job.id}`
+      const applicationKey = `${candidateProfile.id}-${job.id}`
 
       if (createdApplications.has(applicationKey)) {
         // Nếu đã tồn tại, thử lại với combination khác
         continue
       }
 
-      // Lấy resume của candidate (nếu có)
-      const resumeId = resumeMap.get(candidate.id) || null
+      // Lấy resume của candidate profile (nếu có)
+      const resumeId = resumeMap.get(candidateProfile.id) || null
 
       // Random status với tỷ lệ thực tế
       const status = faker.helpers.weightedArrayElement([
@@ -68,7 +70,7 @@ export async function seedApplications(prisma: PrismaClient) {
       const appliedAt = faker.date.recent({ days: 90 })
 
       const applicationData = {
-        user_id: candidate.id,
+        profile_id: candidateProfile.id,
         job_id: job.id,
         resume_id: resumeId,
         status: status,
@@ -95,7 +97,7 @@ export async function seedApplications(prisma: PrismaClient) {
       } catch (error: any) {
         // Bỏ qua lỗi unique constraint nếu có
         if (error.code !== 'P2002') {
-          console.warn(`    Lỗi tạo application cho candidate ${candidate.id}, job ${job.id}:`, error.message)
+          console.warn(`    Lỗi tạo application cho profile ${candidateProfile.id}, job ${job.id}:`, error.message)
         }
       }
     }

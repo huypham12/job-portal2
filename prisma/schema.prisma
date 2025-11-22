@@ -20,58 +20,53 @@ model activity_logs {
 
 model applications {
   id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id               String                  @db.Uuid
   job_id                String                  @db.Uuid
   resume_id             String?                 @db.Uuid
   status                application_status?     @default(pending)
   applied_at            DateTime?               @default(now()) @db.Timestamp(6)
   metadata              Json?
   version               Int?                    @default(1)
-  jobs                  jobs                    @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  resumes               resumes?                @relation(fields: [resume_id], references: [id], onUpdate: NoAction)
-  users                 users                   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  // New metadata relations
-  application_stages    application_stages[]
+  profile_id            String                  @db.Uuid
   application_documents application_documents[]
+  application_stages    application_stages[]
+  jobs                  jobs                    @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles              profiles                @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  resumes               resumes?                @relation(fields: [resume_id], references: [id], onUpdate: NoAction)
 
   @@index([job_id], map: "idx_applications_job")
-  @@index([user_id, job_id], map: "idx_applications_user_job")
-  // New optimized index
+  @@index([profile_id, job_id], map: "idx_applications_profile_job")
   @@index([job_id, status, applied_at], map: "idx_applications_pipeline")
   @@index([job_id, status, applied_at(sort: Desc)], map: "idx_applications_dashboard")
 }
 
-// Application metadata tables
 model application_stages {
-  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  application_id    String    @db.Uuid
-  stage_name        String    @db.VarChar(100) // 'screening', 'phone_interview', 'technical_test'
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  application_id    String       @db.Uuid
+  stage_name        String       @db.VarChar(100)
   stage_order       Int
-  status            String    @db.VarChar(50) // 'pending', 'passed', 'failed', 'skipped'
-  scheduled_at      DateTime? @db.Timestamp(6)
-  completed_at      DateTime? @db.Timestamp(6)
-  feedback          String?   @db.Text
-  rating            Int? // 1-10 scale
-  interviewer_notes String?   @db.Text
-  created_at        DateTime  @default(now()) @db.Timestamp(6)
-
-  applications applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
+  status            String       @db.VarChar(50)
+  scheduled_at      DateTime?    @db.Timestamp(6)
+  completed_at      DateTime?    @db.Timestamp(6)
+  feedback          String?
+  rating            Int?
+  interviewer_notes String?
+  created_at        DateTime     @default(now()) @db.Timestamp(6)
+  applications      applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
 
   @@index([application_id, stage_order], map: "idx_application_stages_order")
   @@index([status, scheduled_at], map: "idx_application_stages_scheduling")
 }
 
 model application_documents {
-  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  application_id    String   @db.Uuid
-  document_type     String   @db.VarChar(50) // 'cover_letter', 'portfolio', 'certificate'
-  file_url          String   @db.Text
-  original_filename String?  @db.VarChar(255)
-  mime_type         String?  @db.VarChar(100)
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  application_id    String       @db.Uuid
+  document_type     String       @db.VarChar(50)
+  file_url          String
+  original_filename String?      @db.VarChar(255)
+  mime_type         String?      @db.VarChar(100)
   file_size_bytes   BigInt?
-  created_at        DateTime @default(now()) @db.Timestamp(6)
-
-  applications applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
+  created_at        DateTime     @default(now()) @db.Timestamp(6)
+  applications      applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
 
   @@index([application_id], map: "idx_application_documents_app")
   @@index([document_type], map: "idx_application_documents_type")
@@ -108,71 +103,67 @@ model audits {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model companies {
-  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name             String
-  description      String?
-  recruiter_id     String?            @unique @db.Uuid
-  logo_url         String?
-  size             Int?
-  metadata         Json?
-  created_at       DateTime?          @default(now()) @db.Timestamp(6)
-  updated_at       DateTime?          @default(now()) @db.Timestamp(6)
-  users            users?             @relation(fields: [recruiter_id], references: [id], onUpdate: NoAction)
-  jobs             jobs[]
-  // New metadata relations
-  company_details  company_details?
-  company_benefits company_benefits[]
-  company_cultures company_cultures[]
+  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  description       String?
+  recruiter_id      String?            @unique @db.Uuid
+  logo_url          String?
+  size              Int?
+  created_at        DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?          @default(now()) @db.Timestamp(6)
+  contact_email     String?            @db.VarChar(255)
+  contact_phone     String?            @db.VarChar(20)
+  contact_address   String?
+  linkedin_url      String?            @db.VarChar(255)
+  facebook_url      String?            @db.VarChar(255)
+  twitter_url       String?            @db.VarChar(255)
+  tax_code          String?            @db.VarChar(50)
+  business_license  String?            @db.VarChar(100)
+  is_verified       Boolean?           @default(false)
+  verification_date DateTime?          @db.Timestamp(6)
+  status            String?            @default("active") @db.VarChar(20)
+  users             users?             @relation(fields: [recruiter_id], references: [id], onUpdate: NoAction)
+  company_benefits  company_benefits[]
+  company_details   company_details?
+  jobs              jobs[]
 
   @@index([updated_at, id], map: "idx_companies_elasticsearch_sync")
 }
 
-// Company metadata tables
 model company_details {
-  id                       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  company_id               String   @unique @db.Uuid
-  industry                 String?  @db.VarChar(100)
+  id                       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id               String     @unique @db.Uuid
+  industry                 String?    @db.VarChar(100)
   founded_year             Int?
   employee_count_min       Int?
   employee_count_max       Int?
-  website_url              String?  @db.VarChar(255)
-  headquarters_location_id String?  @db.Uuid
-  company_type             String?  @db.VarChar(50) // 'startup', 'corporation', 'government', 'ngo'
-  revenue_range            String?  @db.VarChar(50)
-  stock_symbol             String?  @db.VarChar(10)
-  created_at               DateTime @default(now()) @db.Timestamp(6)
-  updated_at               DateTime @updatedAt @db.Timestamp(6)
-
-  companies             companies  @relation(fields: [company_id], references: [id], onDelete: Cascade)
-  headquarters_location locations? @relation(fields: [headquarters_location_id], references: [id], onDelete: SetNull)
+  website_url              String?    @db.VarChar(255)
+  headquarters_location_id String?    @db.Uuid
+  company_type             String?    @db.VarChar(50)
+  revenue_range            String?    @db.VarChar(50)
+  stock_symbol             String?    @db.VarChar(10)
+  culture_description      String?    @db.Text
+  created_at               DateTime   @default(now()) @db.Timestamp(6)
+  updated_at               DateTime   @updatedAt @db.Timestamp(6)
+  companies                companies  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  headquarters_location    locations? @relation(fields: [headquarters_location_id], references: [id])
 }
 
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model company_benefits {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  company_id   String   @db.Uuid
-  benefit_type String   @db.VarChar(50)
-  title        String   @db.VarChar(255)
-  description  String?  @db.Text
-  is_featured  Boolean  @default(false)
-  created_at   DateTime @default(now()) @db.Timestamp(6)
-
-  companies companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id   String    @db.Uuid
+  benefit_type String    @db.VarChar(50)
+  title        String    @db.VarChar(255)
+  description  String?
+  is_featured  Boolean   @default(false)
+  created_at   DateTime  @default(now()) @db.Timestamp(6)
+  companies    companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
 
   @@index([company_id], map: "idx_company_benefits_company")
 }
 
-model company_cultures {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  company_id     String   @db.Uuid
-  culture_aspect String   @db.VarChar(50) // 'work_life_balance', 'innovation', 'diversity'
-  rating         Int? // 1-5 scale
-  description    String?  @db.Text
-  created_at     DateTime @default(now()) @db.Timestamp(6)
 
-  companies companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
-
-  @@index([company_id], map: "idx_company_cultures_company")
-}
 
 model job_posts_history {
   id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -221,57 +212,54 @@ model jobs {
   deleted               Boolean?               @default(false)
   updated_at            DateTime?              @updatedAt @db.Timestamp(6)
   applications          applications[]
+  connection_interests  connection_interests[]
+  job_benefits          job_benefits[]
   job_posts_history     job_posts_history[]
+  job_requirements      job_requirements[]
   job_skills            job_skills[]
   job_tags              job_tags[]
+  job_views             job_views[]
+  referrer_views        job_views[]            @relation("JobReferrals")
+  job_work_arrangements job_work_arrangements?
   companies             companies?             @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   locations             locations?             @relation(fields: [location_id], references: [id], onUpdate: NoAction)
   saved_jobs            saved_jobs[]
-  connection_interests  connection_interests[]
-  job_views             job_views[]
-  referrer_views        job_views[]            @relation("JobReferrals")
-  // New metadata relations
-  job_requirements      job_requirements[]
-  job_benefits          job_benefits[]
-  job_work_arrangements job_work_arrangements?
 
   @@index([company_id], map: "idx_jobs_company")
   @@index([location_id], map: "idx_jobs_location")
   @@index([posted_at], map: "idx_jobs_posted_at")
   @@index([status], map: "idx_jobs_status")
-  // Keeping essential indexes only
   @@index([expires_at], map: "idx_jobs_expiration")
   @@index([updated_at, id], map: "idx_jobs_elasticsearch_sync")
 }
 
-// Job metadata tables
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model job_requirements {
   id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   job_id           String   @db.Uuid
-  requirement_type String   @db.VarChar(50) // 'education', 'skill', 'certification', 'language'
+  requirement_type String   @db.VarChar(50)
   title            String   @db.VarChar(255)
-  description      String?  @db.Text
+  description      String?
   is_required      Boolean  @default(true)
-  level            String?  @db.VarChar(50) // 'beginner', 'intermediate', 'advanced', 'expert'
+  level            String?  @db.VarChar(50)
   years_experience Int?
   created_at       DateTime @default(now()) @db.Timestamp(6)
-
-  jobs jobs @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  jobs             jobs     @relation(fields: [job_id], references: [id], onDelete: Cascade)
 
   @@index([job_id], map: "idx_job_requirements_job")
 }
 
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model job_benefits {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   job_id         String   @db.Uuid
-  benefit_type   String   @db.VarChar(50) // 'health', 'bonus', 'vacation', 'remote', 'training'
+  benefit_type   String   @db.VarChar(50)
   title          String   @db.VarChar(255)
-  description    String?  @db.Text
+  description    String?
   value_amount   Decimal? @db.Decimal(15, 2)
   value_currency String?  @default("VND") @db.VarChar(10)
   created_at     DateTime @default(now()) @db.Timestamp(6)
-
-  jobs jobs @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  jobs           jobs     @relation(fields: [job_id], references: [id], onDelete: Cascade)
 
   @@index([job_id], map: "idx_job_benefits_job")
 }
@@ -280,37 +268,30 @@ model job_work_arrangements {
   id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   job_id             String   @unique @db.Uuid
   is_remote_allowed  Boolean  @default(false)
-  remote_percentage  Int      @default(0) // 0-100%
+  remote_percentage  Int      @default(0)
   flexible_hours     Boolean  @default(false)
-  travel_requirement String?  @db.VarChar(50) // 'none', 'occasional', 'frequent'
+  travel_requirement String?  @db.VarChar(50)
   overtime_expected  Boolean  @default(false)
-  shift_type         String?  @db.VarChar(50) // 'day', 'night', 'rotating'
+  shift_type         String?  @db.VarChar(50)
   created_at         DateTime @default(now()) @db.Timestamp(6)
-
-  jobs jobs @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  jobs               jobs     @relation(fields: [job_id], references: [id], onDelete: Cascade)
 }
 
 model locations {
-  id        String       @id @default(uuid()) @db.Uuid
-  name      String       @db.Text
-  type      LocationType // Sử dụng Enum ở trên
-  latitude  Decimal?     @db.Decimal(9, 6)
-  longitude Decimal?     @db.Decimal(9, 6)
-
-  // --- Quan hệ Tự tham chiếu (Cha-Con) ---
-  parent_id String?     @db.Uuid
-  parent    locations?  @relation("ParentChild", fields: [parent_id], references: [id], onDelete: Cascade)
-  children  locations[] @relation("ParentChild")
-
-  // --- Quan hệ với các bảng khác ---
-  // (Quan trọng) Giữ lại các quan hệ mà bảng Location cũ có
-  profiles             profiles[]
-  jobs                 jobs[]
+  id                   String            @id @default(uuid()) @db.Uuid
+  latitude             Decimal?          @db.Decimal(9, 6)
+  longitude            Decimal?          @db.Decimal(9, 6)
+  name                 String
+  parent_id            String?           @db.Uuid
+  type                 LocationType
   company_headquarters company_details[]
+  jobs                 jobs[]
+  parent               locations?        @relation("ParentChild", fields: [parent_id], references: [id], onDelete: Cascade)
+  children             locations[]       @relation("ParentChild")
+  profiles             profiles[]
 
-  // --- Indexes (Prisma tự động tạo index cho parent_id) ---
-  @@index([type]) // Index cho 'type' (province/district)
-  @@map("locations") // Map về tên bảng 'locations'
+  @@index([type])
+  @@map("locations")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -328,49 +309,41 @@ model notifications {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model profiles {
-  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id String @unique @db.Uuid // FK tới Users
-
-  // --- Basic Info ---
-  full_name     String    @db.VarChar(255)
-  display_name  String?   @db.VarChar(255)
-  headline      String?   @db.VarChar(255)
-  date_of_birth DateTime? @db.Date
-  gender        String?   @db.VarChar(20)
-
-  // --- Contact ---
-  phone_number     String?    @db.VarChar(20)
-  personal_website String?    @db.VarChar(255)
-  linkedin_url     String?    @db.VarChar(255)
-  github_url       String?    @db.VarChar(255)
-  // --- Location (Đã sửa lỗi FK) ---
-  location_text    String?    @db.VarChar(100) // Dùng để lưu tên Tỉnh/Thành phố
-  location_id      String?    @db.Uuid // FK tới locations
-  location         locations? @relation(fields: [location_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
-
-  // --- Professional Summary ---
-  bio                 String? @db.Text
-  years_of_experience Int?    @default(0)
-
-  // --- Job Search Preferences (MỚI) ---
-  desired_job_title  String?    @db.VarChar(255)
-  desired_salary_min Int?
-  desired_currency   String?    @default("VND") @db.VarChar(10)
-  // Lưu ý: Postgres Array cho job type
-  desired_job_type   job_type[] @default([])
-
-  is_looking_for_job Boolean @default(true)
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  // --- Relations ---
-  users          users                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  experiences    profile_experiences[]
-  educations     profile_educations[]
-  skills         profile_skills[]
-  certifications profile_certifications[]
-  awards         profile_awards[]
+  id                  String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id             String                   @unique @db.Uuid
+  location_id         String?                  @db.Uuid
+  created_at          DateTime                 @default(now())
+  updated_at          DateTime                 @updatedAt
+  bio                 String?
+  date_of_birth       DateTime?                @db.Date
+  desired_currency    String?                  @default("VND") @db.VarChar(10)
+  desired_job_title   String?                  @db.VarChar(255)
+  desired_job_type    job_type[]               @default([])
+  desired_salary_min  Int?
+  display_name        String?                  @db.VarChar(255)
+  full_name           String                   @db.VarChar(255)
+  gender              String?                  @db.VarChar(20)
+  github_url          String?                  @db.VarChar(255)
+  headline            String?                  @db.VarChar(255)
+  is_looking_for_job  Boolean                  @default(true)
+  linkedin_url        String?                  @db.VarChar(255)
+  location_text       String?                  @db.VarChar(100)
+  personal_website    String?                  @db.VarChar(255)
+  phone_number        String?                  @db.VarChar(20)
+  years_of_experience Int?                     @default(0)
+  applications        applications[]
+  candidate_interests connection_interests[]   @relation("CandidateInterests")
+  job_views           job_views[]
+  awards              profile_awards[]
+  certifications      profile_certifications[]
+  educations          profile_educations[]
+  experiences         profile_experiences[]
+  skills              profile_skills[]
+  location            locations?               @relation(fields: [location_id], references: [id])
+  users               users                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  resumes             resumes[]
+  saved_jobs          saved_jobs[]
+  search_history      search_history[]
 
   @@index([user_id])
   @@index([is_looking_for_job])
@@ -378,13 +351,12 @@ model profiles {
 }
 
 model profile_skills {
-  profile_id  String  @db.Uuid
-  skill_id    String  @db.Uuid
-  proficiency Int? // 1-5 scale, same as old user_skills
-  level       String? // beginner, intermediate, advanced (additional text description)
-
-  profiles profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  skills   skills   @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profile_id  String   @db.Uuid
+  skill_id    String   @db.Uuid
+  proficiency Int?
+  level       String?
+  profiles    profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  skills      skills   @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([profile_id, skill_id])
 }
@@ -397,9 +369,8 @@ model profile_experiences {
   start_date   DateTime  @db.Date
   end_date     DateTime? @db.Date
   is_current   Boolean   @default(false)
-  description  String?   @db.Text
-
-  profiles profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  description  String?
+  profiles     profiles  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 
   @@index([profile_id])
 }
@@ -412,8 +383,7 @@ model profile_educations {
   field_of_study String?   @db.VarChar(255)
   start_date     DateTime  @db.Date
   end_date       DateTime? @db.Date
-
-  profiles profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profiles       profiles  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 
   @@index([profile_id])
 }
@@ -428,12 +398,11 @@ model profile_certifications {
   issue_date      DateTime  @db.Date
   expiry_date     DateTime? @db.Date
   never_expires   Boolean   @default(false)
-  description     String?   @db.Text
-  skills_acquired String?   @db.Text
+  description     String?
+  skills_acquired String?
   created_at      DateTime  @default(now()) @db.Timestamp(6)
   updated_at      DateTime  @updatedAt @db.Timestamp(6)
-
-  profiles profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profiles        profiles  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 
   @@index([profile_id])
   @@index([expiry_date], map: "idx_certifications_expiry")
@@ -445,14 +414,13 @@ model profile_awards {
   title       String   @db.VarChar(255)
   issuer      String   @db.VarChar(255)
   date        DateTime @db.Date
-  description String?  @db.Text
+  description String?
   url         String?  @db.VarChar(255)
-  category    String?  @db.VarChar(100) // 'academic', 'professional', 'competition', 'volunteer', 'other'
-  level       String?  @db.VarChar(50) // 'international', 'national', 'regional', 'local', 'organizational'
+  category    String?  @db.VarChar(100)
+  level       String?  @db.VarChar(50)
   created_at  DateTime @default(now()) @db.Timestamp(6)
   updated_at  DateTime @updatedAt @db.Timestamp(6)
-
-  profiles profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profiles    profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 
   @@index([profile_id])
   @@index([category], map: "idx_awards_category")
@@ -474,15 +442,15 @@ model refresh_tokens {
 
 model resumes {
   id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id      String         @db.Uuid
   content      Json?
   file_url     String?
   created_at   DateTime?      @default(now()) @db.Timestamp(6)
   updated_at   DateTime?      @default(now()) @db.Timestamp(6)
+  profile_id   String         @db.Uuid
   applications applications[]
-  users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles     profiles       @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@index([user_id], map: "idx_resumes_user")
+  @@index([profile_id], map: "idx_resumes_profile")
 }
 
 model roles_permissions {
@@ -494,31 +462,31 @@ model roles_permissions {
 }
 
 model saved_jobs {
-  id       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id  String    @db.Uuid
-  job_id   String    @db.Uuid
-  saved_at DateTime? @default(now()) @db.Timestamp(6)
-  jobs     jobs      @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  users    users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  job_id     String    @db.Uuid
+  saved_at   DateTime? @default(now()) @db.Timestamp(6)
+  profile_id String    @db.Uuid
+  jobs       jobs      @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles   profiles  @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@unique([user_id, job_id])
+  @@unique([profile_id, job_id])
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model search_history {
   id           BigInt    @id @default(autoincrement())
-  user_id      String    @db.Uuid
   search_query Json
   search_type  String
   searched_at  DateTime? @default(now()) @db.Timestamp(6)
-  result_count Int?      @default(0)
   clicked_jobs Json?     @default("[]")
   filters_used Json?     @default("{}")
+  result_count Int?      @default(0)
   session_id   String?   @db.Uuid
-  users        users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profile_id   String    @db.Uuid
+  profiles     profiles  @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@index([user_id, searched_at(sort: Desc)], map: "idx_search_history_user_time")
-  @@index([user_id, session_id, searched_at], map: "idx_search_history_session")
+  @@index([profile_id, searched_at(sort: Desc)], map: "idx_search_history_profile_time")
+  @@index([profile_id, session_id, searched_at], map: "idx_search_history_session")
 }
 
 model skills {
@@ -540,17 +508,16 @@ model connection_interests {
   candidate_id  String    @db.Uuid
   recruiter_id  String    @db.Uuid
   job_id        String?   @db.Uuid
-  interest_type String // 'candidate_to_recruiter' hoặc 'recruiter_to_candidate'
-  status        String    @default("pending") // 'pending', 'accepted', 'declined', 'expired'
+  interest_type String
+  status        String    @default("pending")
   message       String?
   contact_info  Json?
   created_at    DateTime? @default(now()) @db.Timestamp(6)
   expires_at    DateTime? @db.Timestamp(6)
   responded_at  DateTime? @db.Timestamp(6)
-
-  candidate users @relation("CandidateInterests", fields: [candidate_id], references: [id], onDelete: Cascade)
-  recruiter users @relation("RecruiterInterests", fields: [recruiter_id], references: [id], onDelete: Cascade)
-  jobs      jobs? @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  candidate     profiles  @relation("CandidateInterests", fields: [candidate_id], references: [id], onDelete: Cascade)
+  jobs          jobs?     @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  recruiter     users     @relation("RecruiterInterests", fields: [recruiter_id], references: [id], onDelete: Cascade)
 
   @@unique([candidate_id, recruiter_id, job_id, interest_type])
   @@index([candidate_id, status, created_at(sort: Desc)], map: "idx_connection_interests_candidate_status")
@@ -561,19 +528,18 @@ model connection_interests {
 
 model job_views {
   id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id          String?   @db.Uuid
   job_id           String    @db.Uuid
   viewed_at        DateTime? @default(now()) @db.Timestamp(6)
   duration_seconds Int?
-  source           String?   @default("direct") // 'search', 'recommendation', 'direct', 'connection'
+  source           String?   @default("direct")
   referrer_job_id  String?   @db.Uuid
-
-  users        users? @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  jobs         jobs   @relation(fields: [job_id], references: [id], onDelete: Cascade)
-  referrer_job jobs?  @relation("JobReferrals", fields: [referrer_job_id], references: [id], onDelete: SetNull)
+  profile_id       String?   @db.Uuid
+  jobs             jobs      @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  profiles         profiles? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  referrer_job     jobs?     @relation("JobReferrals", fields: [referrer_job_id], references: [id])
 
   @@index([job_id, viewed_at(sort: Desc)], map: "idx_job_views_job_basic")
-  @@index([user_id, viewed_at(sort: Desc)], map: "idx_job_views_user_basic")
+  @@index([profile_id, viewed_at(sort: Desc)], map: "idx_job_views_profile_basic")
 }
 
 model user_tokens {
@@ -598,17 +564,11 @@ model users {
   updated_at          DateTime?              @default(now()) @db.Timestamp(6)
   deleted             Boolean?               @default(false)
   version             Int?                   @default(1)
-  applications        applications[]
-  companies           companies[]
+  companies           companies?
+  recruiter_interests connection_interests[] @relation("RecruiterInterests")
   notifications       notifications[]
   profiles            profiles?
   refresh_tokens      refresh_tokens[]
-  resumes             resumes[]
-  saved_jobs          saved_jobs[]
-  search_history      search_history[]
-  candidate_interests connection_interests[] @relation("CandidateInterests")
-  recruiter_interests connection_interests[] @relation("RecruiterInterests")
-  job_views           job_views[]
   user_tokens         user_tokens[]
 }
 
@@ -666,10 +626,9 @@ enum user_token_type {
   reset_password
 }
 
-// Thêm Enum này để quản lý type ('province', 'district')
 enum LocationType {
   province
   district
 
-  @@map("location_type") // Đặt tên cho Enum trong DB
+  @@map("location_type")
 }

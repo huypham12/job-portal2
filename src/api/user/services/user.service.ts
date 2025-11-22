@@ -1,4 +1,5 @@
 import { prisma } from '@/config/database.service'
+import { job_type } from '@prisma/client'
 export class UserService {
   getUserById = async (userId: string) => {
     return await prisma.users.findUnique({
@@ -16,55 +17,249 @@ export class UserService {
         role: true,
         verified: true,
 
-        // 2. Lấy Profile (chung cho cả 2 vai trò)
+        // 2. Lấy Profile với tất cả các relation (chung cho cả 2 vai trò)
         profiles: {
           select: {
-            name: true,
-            phone: true,
-            metadata: true // (chứa avatar, bio...)
+            id: true,
+            full_name: true,
+            display_name: true,
+            headline: true,
+            date_of_birth: true,
+            gender: true,
+            phone_number: true,
+            personal_website: true,
+            linkedin_url: true,
+            github_url: true,
+            location_text: true,
+            location_id: true,
+            bio: true,
+            years_of_experience: true,
+            desired_job_title: true,
+            desired_salary_min: true,
+            desired_currency: true,
+            desired_job_type: true,
+            is_looking_for_job: true,
+            created_at: true,
+            updated_at: true,
+            // Location với parent hierarchy
+            location: {
+              select: {
+                id: true,
+                name: true,
+                type: true,
+                parent: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true
+                  }
+                }
+              }
+            },
+            // Kinh nghiệm làm việc
+            experiences: {
+              select: {
+                id: true,
+                company_name: true,
+                position: true,
+                start_date: true,
+                end_date: true,
+                is_current: true,
+                description: true
+              },
+              orderBy: { start_date: 'desc' }
+            },
+            // Học vấn
+            educations: {
+              select: {
+                id: true,
+                school_name: true,
+                degree: true,
+                field_of_study: true,
+                start_date: true,
+                end_date: true
+              },
+              orderBy: { start_date: 'desc' }
+            },
+            // Kỹ năng
+            skills: {
+              select: {
+                skill_id: true,
+                proficiency: true,
+                level: true,
+                skills: {
+                  select: {
+                    id: true,
+                    name: true,
+                    category: true
+                  }
+                }
+              },
+              orderBy: {
+                skills: { name: 'asc' }
+              }
+            },
+            // Chứng chỉ
+            certifications: {
+              select: {
+                id: true,
+                name: true,
+                issuing_org: true,
+                credential_id: true,
+                credential_url: true,
+                issue_date: true,
+                expiry_date: true,
+                never_expires: true,
+                description: true,
+                skills_acquired: true,
+                created_at: true,
+                updated_at: true
+              },
+              orderBy: { issue_date: 'desc' }
+            },
+            // Giải thưởng
+            awards: {
+              select: {
+                id: true,
+                title: true,
+                issuer: true,
+                date: true,
+                description: true,
+                url: true,
+                category: true,
+                level: true,
+                created_at: true,
+                updated_at: true
+              },
+              orderBy: { date: 'desc' }
+            }
           }
         },
 
-        // 3. Lấy Công ty (Recruiter sẽ có, Candidate là mảng rỗng [])
+        // 3. Lấy Công ty với tất cả relation (Recruiter sẽ có, Candidate là mảng rỗng [])
         companies: {
           select: {
             id: true,
             name: true,
+            description: true,
+            recruiter_id: true,
             logo_url: true,
-            size: true
+            size: true,
+            created_at: true,
+            updated_at: true,
+            // Chi tiết công ty
+            company_details: {
+              select: {
+                id: true,
+                industry: true,
+                founded_year: true,
+                employee_count_min: true,
+                employee_count_max: true,
+                website_url: true,
+                company_type: true,
+                revenue_range: true,
+                stock_symbol: true,
+                created_at: true,
+                updated_at: true,
+                headquarters_location: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true,
+                    parent: {
+                      select: {
+                        id: true,
+                        name: true,
+                        type: true
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            // Phúc lợi công ty
+            company_benefits: {
+              select: {
+                id: true,
+                benefit_type: true,
+                title: true,
+                description: true,
+                is_featured: true,
+                created_at: true
+              },
+              orderBy: { created_at: 'desc' }
+            },
+            // Job posts của công ty (tóm tắt)
+            jobs: {
+              select: {
+                id: true,
+                title: true,
+                status: true,
+                job_type: true,
+                posted_at: true,
+                expires_at: true
+              },
+              where: {
+                deleted: false,
+                status: { not: 'draft' }
+              },
+              orderBy: { posted_at: 'desc' },
+              take: 10 // Chỉ lấy 10 job gần nhất
+            }
           }
         },
 
-        // 4. Lấy CV (Candidate sẽ có, Recruiter là mảng rỗng [])
-        resumes: {
+        // Relations that moved to profiles: resumes, applications, saved_jobs, candidate_interests
+        // Use the new dedicated methods to get this data
+
+        // 4. Applications moved to profiles - use getCandidateApplications() method
+
+        // 5. Saved jobs moved to profiles - use getCandidateSavedJobs() method
+
+        // 7. Lấy notifications
+        notifications: {
           select: {
             id: true,
-            content: true, // (JSONB chứa skills, experience_years)
-            file_url: true,
-            updated_at: true
+            type: true,
+            content: true,
+            sent_at: true,
+            read: true
           },
-          orderBy: {
-            updated_at: 'desc' // Lấy CV mới nhất lên đầu
-          }
+          orderBy: { sent_at: 'desc' },
+          take: 50 // Lấy 50 notification gần nhất
         }
+
+        // 8. Connection interests moved to profiles table - use dedicated methods
+        // - getCandidateInterests() for candidate interests
+        // - getUserActivity() for combined notifications and interests
+
+        // TODO: recruiter_interests needs to be handled differently
+        // since candidate_id now references profiles.id not users.id
       }
     })
   }
-
-  updateUserById = async (userId: string, updatedData: Partial<{ email: string; role: string }>) => {}
 
   // Thêm mới: cập nhật/khởi tạo profile theo user_id
   async updateProfileForUser(
     userId: string,
     data: {
-      name?: string
-      phone?: string
+      full_name?: string
+      display_name?: string
+      headline?: string
+      phone_number?: string
       location_id?: string | null
-      metadata?: Record<string, any>
+      location_text?: string
+      bio?: string
+      years_of_experience?: number
+      desired_job_title?: string
+      desired_salary_min?: number
+      desired_currency?: string
+      desired_job_type?: job_type[]
+      is_looking_for_job?: boolean
     }
   ) {
     // Lọc bỏ các field undefined để tránh overwrite ngoài ý muốn
-    const cleaned = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined)) as typeof data
+    const cleaned = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined))
 
     const existing = await prisma.profiles.findFirst({
       where: { user_id: userId },
@@ -74,17 +269,23 @@ export class UserService {
     if (existing) {
       const updated = await prisma.profiles.update({
         where: { id: existing.id },
-        data: {
-          ...cleaned,
-          updated_at: new Date()
-        },
+        data: cleaned,
         select: {
           id: true,
           user_id: true,
-          name: true,
-          phone: true,
+          full_name: true,
+          display_name: true,
+          headline: true,
+          phone_number: true,
           location_id: true,
-          metadata: true,
+          location_text: true,
+          bio: true,
+          years_of_experience: true,
+          desired_job_title: true,
+          desired_salary_min: true,
+          desired_currency: true,
+          desired_job_type: true,
+          is_looking_for_job: true,
           updated_at: true,
           created_at: true
         }
@@ -95,19 +296,1279 @@ export class UserService {
     const created = await prisma.profiles.create({
       data: {
         user_id: userId,
+        full_name: data.full_name || '',
         ...cleaned
       },
       select: {
         id: true,
         user_id: true,
-        name: true,
-        phone: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        phone_number: true,
         location_id: true,
-        metadata: true,
+        location_text: true,
+        bio: true,
+        years_of_experience: true,
+        desired_job_title: true,
+        desired_salary_min: true,
+        desired_currency: true,
+        desired_job_type: true,
+        is_looking_for_job: true,
         updated_at: true,
         created_at: true
       }
     })
     return created
+  }
+
+  // Get user with complete profile data including relations
+  async getUserWithCompleteProfile(userId: string) {
+    return await prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        verified: true,
+        created_at: true,
+        updated_at: true,
+        profiles: {
+          select: {
+            id: true,
+            full_name: true,
+            display_name: true,
+            headline: true,
+            date_of_birth: true,
+            gender: true,
+            phone_number: true,
+            personal_website: true,
+            linkedin_url: true,
+            github_url: true,
+            location_text: true,
+            location_id: true,
+            bio: true,
+            years_of_experience: true,
+            desired_job_title: true,
+            desired_salary_min: true,
+            desired_currency: true,
+            desired_job_type: true,
+            is_looking_for_job: true,
+            created_at: true,
+            updated_at: true,
+            location: {
+              select: {
+                id: true,
+                name: true,
+                type: true,
+                parent: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true
+                  }
+                }
+              }
+            },
+            experiences: {
+              select: {
+                id: true,
+                company_name: true,
+                position: true,
+                start_date: true,
+                end_date: true,
+                is_current: true,
+                description: true
+              },
+              orderBy: { start_date: 'desc' }
+            },
+            educations: {
+              select: {
+                id: true,
+                school_name: true,
+                degree: true,
+                field_of_study: true,
+                start_date: true,
+                end_date: true
+              },
+              orderBy: { start_date: 'desc' }
+            },
+            skills: {
+              select: {
+                skill_id: true,
+                proficiency: true,
+                level: true,
+                skills: {
+                  select: {
+                    id: true,
+                    name: true,
+                    category: true
+                  }
+                }
+              }
+            },
+            certifications: {
+              select: {
+                id: true,
+                name: true,
+                issuing_org: true,
+                credential_id: true,
+                credential_url: true,
+                issue_date: true,
+                expiry_date: true,
+                never_expires: true,
+                description: true,
+                skills_acquired: true
+              },
+              orderBy: { issue_date: 'desc' }
+            },
+            awards: {
+              select: {
+                id: true,
+                title: true,
+                issuer: true,
+                date: true,
+                description: true,
+                url: true,
+                category: true,
+                level: true
+              },
+              orderBy: { date: 'desc' }
+            }
+          }
+        },
+        companies: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            logo_url: true,
+            size: true,
+            created_at: true,
+            updated_at: true,
+            company_details: {
+              select: {
+                industry: true,
+                founded_year: true,
+                employee_count_min: true,
+                employee_count_max: true,
+                website_url: true,
+                company_type: true,
+                headquarters_location: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true
+                  }
+                }
+              }
+            },
+            company_benefits: {
+              select: {
+                benefit_type: true,
+                title: true,
+                description: true,
+                is_featured: true
+              }
+            }
+          }
+        }
+      }
+    })
+  }
+
+  // Delete user and all related data
+  async deleteUser(userId: string) {
+    return await prisma.users.update({
+      where: { id: userId },
+      data: {
+        deleted: true,
+        updated_at: new Date()
+      }
+    })
+  }
+
+  // Get users with pagination and filtering
+  async getUsers(options: { page?: number; limit?: number; role?: string; verified?: boolean; search?: string }) {
+    const { page = 1, limit = 10, role, verified, search } = options
+    const skip = (page - 1) * limit
+
+    const where: any = {
+      deleted: false
+    }
+
+    if (role) where.role = role
+    if (verified !== undefined) where.verified = verified
+    if (search) {
+      where.OR = [
+        { email: { contains: search, mode: 'insensitive' } },
+        {
+          profiles: {
+            OR: [
+              { full_name: { contains: search, mode: 'insensitive' } },
+              { display_name: { contains: search, mode: 'insensitive' } }
+            ]
+          }
+        }
+      ]
+    }
+
+    const [users, total] = await Promise.all([
+      prisma.users.findMany({
+        where,
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          verified: true,
+          created_at: true,
+          updated_at: true,
+          profiles: {
+            select: {
+              full_name: true,
+              display_name: true,
+              headline: true,
+              phone_number: true,
+              location_text: true,
+              is_looking_for_job: true
+            }
+          }
+        },
+        orderBy: { created_at: 'desc' }
+      }),
+      prisma.users.count({ where })
+    ])
+
+    return {
+      users,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  // === PROFILE EXPERIENCE METHODS ===
+  async createProfileExperience(userId: string, data: any) {
+    // Get profile ID first
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_experiences.create({
+      data: {
+        profile_id: profile.id,
+        ...data
+      },
+      select: {
+        id: true,
+        company_name: true,
+        position: true,
+        start_date: true,
+        end_date: true,
+        is_current: true,
+        description: true
+      }
+    })
+  }
+
+  async updateProfileExperience(userId: string, experienceId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_experiences.update({
+      where: {
+        id: experienceId,
+        profile_id: profile.id
+      },
+      data,
+      select: {
+        id: true,
+        company_name: true,
+        position: true,
+        start_date: true,
+        end_date: true,
+        is_current: true,
+        description: true
+      }
+    })
+  }
+
+  async deleteProfileExperience(userId: string, experienceId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_experiences.delete({
+      where: {
+        id: experienceId,
+        profile_id: profile.id
+      }
+    })
+  }
+
+  // === PROFILE EDUCATION METHODS ===
+  async createProfileEducation(userId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_educations.create({
+      data: {
+        profile_id: profile.id,
+        ...data
+      },
+      select: {
+        id: true,
+        school_name: true,
+        degree: true,
+        field_of_study: true,
+        start_date: true,
+        end_date: true
+      }
+    })
+  }
+
+  async updateProfileEducation(userId: string, educationId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_educations.update({
+      where: {
+        id: educationId,
+        profile_id: profile.id
+      },
+      data,
+      select: {
+        id: true,
+        school_name: true,
+        degree: true,
+        field_of_study: true,
+        start_date: true,
+        end_date: true
+      }
+    })
+  }
+
+  async deleteProfileEducation(userId: string, educationId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_educations.delete({
+      where: {
+        id: educationId,
+        profile_id: profile.id
+      }
+    })
+  }
+
+  // === PROFILE SKILL METHODS ===
+  async createProfileSkill(userId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_skills.create({
+      data: {
+        profile_id: profile.id,
+        ...data
+      },
+      select: {
+        skill_id: true,
+        proficiency: true,
+        level: true,
+        skills: {
+          select: {
+            id: true,
+            name: true,
+            category: true
+          }
+        }
+      }
+    })
+  }
+
+  async updateProfileSkill(userId: string, skillId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_skills.update({
+      where: {
+        profile_id_skill_id: {
+          profile_id: profile.id,
+          skill_id: skillId
+        }
+      },
+      data,
+      select: {
+        skill_id: true,
+        proficiency: true,
+        level: true,
+        skills: {
+          select: {
+            id: true,
+            name: true,
+            category: true
+          }
+        }
+      }
+    })
+  }
+
+  async deleteProfileSkill(userId: string, skillId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_skills.delete({
+      where: {
+        profile_id_skill_id: {
+          profile_id: profile.id,
+          skill_id: skillId
+        }
+      }
+    })
+  }
+
+  // === PROFILE CERTIFICATION METHODS ===
+  async createProfileCertification(userId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_certifications.create({
+      data: {
+        profile_id: profile.id,
+        ...data
+      },
+      select: {
+        id: true,
+        name: true,
+        issuing_org: true,
+        credential_id: true,
+        credential_url: true,
+        issue_date: true,
+        expiry_date: true,
+        never_expires: true,
+        description: true,
+        skills_acquired: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+  }
+
+  async updateProfileCertification(userId: string, certificationId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_certifications.update({
+      where: {
+        id: certificationId,
+        profile_id: profile.id
+      },
+      data,
+      select: {
+        id: true,
+        name: true,
+        issuing_org: true,
+        credential_id: true,
+        credential_url: true,
+        issue_date: true,
+        expiry_date: true,
+        never_expires: true,
+        description: true,
+        skills_acquired: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+  }
+
+  async deleteProfileCertification(userId: string, certificationId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_certifications.delete({
+      where: {
+        id: certificationId,
+        profile_id: profile.id
+      }
+    })
+  }
+
+  // === PROFILE AWARD METHODS ===
+  async createProfileAward(userId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_awards.create({
+      data: {
+        profile_id: profile.id,
+        ...data
+      },
+      select: {
+        id: true,
+        title: true,
+        issuer: true,
+        date: true,
+        description: true,
+        url: true,
+        category: true,
+        level: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+  }
+
+  async updateProfileAward(userId: string, awardId: string, data: any) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_awards.update({
+      where: {
+        id: awardId,
+        profile_id: profile.id
+      },
+      data,
+      select: {
+        id: true,
+        title: true,
+        issuer: true,
+        date: true,
+        description: true,
+        url: true,
+        category: true,
+        level: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+  }
+
+  async deleteProfileAward(userId: string, awardId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return await prisma.profile_awards.delete({
+      where: {
+        id: awardId,
+        profile_id: profile.id
+      }
+    })
+  }
+
+  // === SPECIALIZED GET METHODS ===
+
+  // Get basic user info (for navigation/header)
+  async getBasicUserInfo(userId: string) {
+    return await prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        verified: true,
+        created_at: true,
+        profiles: {
+          select: {
+            id: true,
+            full_name: true,
+            display_name: true,
+            headline: true,
+            years_of_experience: true,
+            is_looking_for_job: true,
+            location_text: true
+          }
+        }
+      }
+    })
+  }
+
+  // Get complete profile data (for profile page)
+  async getCompleteProfile(userId: string) {
+    return await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: {
+        id: true,
+        user_id: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        date_of_birth: true,
+        gender: true,
+        phone_number: true,
+        personal_website: true,
+        linkedin_url: true,
+        github_url: true,
+        location_text: true,
+        location_id: true,
+        bio: true,
+        years_of_experience: true,
+        desired_job_title: true,
+        desired_salary_min: true,
+        desired_currency: true,
+        desired_job_type: true,
+        is_looking_for_job: true,
+        created_at: true,
+        updated_at: true,
+        // Location with hierarchy
+        location: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            parent: {
+              select: {
+                id: true,
+                name: true,
+                type: true
+              }
+            }
+          }
+        },
+        // All profile sub-entities
+        experiences: {
+          select: {
+            id: true,
+            company_name: true,
+            position: true,
+            start_date: true,
+            end_date: true,
+            is_current: true,
+            description: true
+          },
+          orderBy: { start_date: 'desc' }
+        },
+        educations: {
+          select: {
+            id: true,
+            school_name: true,
+            degree: true,
+            field_of_study: true,
+            start_date: true,
+            end_date: true
+          },
+          orderBy: { start_date: 'desc' }
+        },
+        skills: {
+          select: {
+            skill_id: true,
+            proficiency: true,
+            level: true,
+            skills: {
+              select: {
+                id: true,
+                name: true,
+                category: true
+              }
+            }
+          },
+          orderBy: {
+            skills: { name: 'asc' }
+          }
+        },
+        certifications: {
+          select: {
+            id: true,
+            name: true,
+            issuing_org: true,
+            credential_id: true,
+            credential_url: true,
+            issue_date: true,
+            expiry_date: true,
+            never_expires: true,
+            description: true,
+            skills_acquired: true,
+            created_at: true,
+            updated_at: true
+          },
+          orderBy: { issue_date: 'desc' }
+        },
+        awards: {
+          select: {
+            id: true,
+            title: true,
+            issuer: true,
+            date: true,
+            description: true,
+            url: true,
+            category: true,
+            level: true,
+            created_at: true,
+            updated_at: true
+          },
+          orderBy: { date: 'desc' }
+        }
+      }
+    })
+  }
+
+  // Get user applications (for applications page) - NEEDS MIGRATION
+  async getUserApplications(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 10 } = options
+    const skip = (page - 1) * limit
+
+    // Get profile first
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) return { applications: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+
+    const [applications, total] = await Promise.all([
+      prisma.applications.findMany({
+        where: { profile_id: profile.id },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          job_id: true,
+          resume_id: true,
+          status: true,
+          applied_at: true,
+          version: true,
+          jobs: {
+            select: {
+              id: true,
+              title: true,
+              job_type: true,
+              status: true,
+              salary_range: true,
+              posted_at: true,
+              expires_at: true,
+              companies: {
+                select: {
+                  id: true,
+                  name: true,
+                  logo_url: true
+                }
+              },
+              locations: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              }
+            }
+          }
+        },
+        orderBy: { applied_at: 'desc' }
+      }),
+      prisma.applications.count({ where: { profile_id: profile.id } })
+    ])
+
+    return {
+      applications,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  // Get user saved jobs (for saved jobs page)
+  async getUserSavedJobs(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 10 } = options
+    const skip = (page - 1) * limit
+
+    // Get profile first
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) return { savedJobs: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+
+    const [savedJobs, total] = await Promise.all([
+      prisma.saved_jobs.findMany({
+        where: { profile_id: profile.id },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          job_id: true,
+          saved_at: true,
+          jobs: {
+            select: {
+              id: true,
+              title: true,
+              job_type: true,
+              status: true,
+              salary_range: true,
+              posted_at: true,
+              expires_at: true,
+              companies: {
+                select: {
+                  id: true,
+                  name: true,
+                  logo_url: true
+                }
+              },
+              locations: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              }
+            }
+          }
+        },
+        orderBy: { saved_at: 'desc' }
+      }),
+      prisma.saved_jobs.count({ where: { profile_id: profile.id } })
+    ])
+
+    return {
+      savedJobs,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  // Get user activity (notifications + interests)
+  async getUserActivity(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 20 } = options
+    const skip = (page - 1) * limit
+
+    // Get profile for candidate interests
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    const [notifications, candidateInterests, recruiterInterests] = await Promise.all([
+      prisma.notifications.findMany({
+        where: { user_id: userId },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          type: true,
+          content: true,
+          sent_at: true,
+          read: true
+        },
+        orderBy: { sent_at: 'desc' }
+      }),
+      // candidateInterests now need to query by profile.id
+      profile
+        ? prisma.connection_interests.findMany({
+            where: { candidate_id: profile.id },
+            select: {
+              id: true,
+              recruiter_id: true,
+              job_id: true,
+              interest_type: true,
+              status: true,
+              message: true,
+              created_at: true,
+              expires_at: true,
+              responded_at: true,
+              recruiter: {
+                select: {
+                  id: true,
+                  email: true,
+                  profiles: {
+                    select: {
+                      full_name: true,
+                      display_name: true,
+                      headline: true
+                    }
+                  }
+                }
+              },
+              jobs: {
+                select: {
+                  id: true,
+                  title: true,
+                  companies: {
+                    select: {
+                      name: true,
+                      logo_url: true
+                    }
+                  }
+                }
+              }
+            },
+            orderBy: { created_at: 'desc' },
+            take: 10
+          })
+        : Promise.resolve([]),
+      prisma.connection_interests.findMany({
+        where: { recruiter_id: userId },
+        select: {
+          id: true,
+          candidate_id: true,
+          job_id: true,
+          interest_type: true,
+          status: true,
+          message: true,
+          created_at: true,
+          expires_at: true,
+          responded_at: true,
+          candidate: {
+            // This now references profiles table
+            select: {
+              id: true,
+              full_name: true,
+              display_name: true,
+              headline: true,
+              years_of_experience: true,
+              desired_job_title: true,
+              users: {
+                // Get email from users table
+                select: {
+                  email: true
+                }
+              }
+            }
+          },
+          jobs: {
+            select: {
+              id: true,
+              title: true,
+              companies: {
+                select: {
+                  name: true,
+                  logo_url: true
+                }
+              }
+            }
+          }
+        },
+        orderBy: { created_at: 'desc' },
+        take: 10
+      })
+    ])
+
+    return {
+      notifications,
+      candidateInterests,
+      recruiterInterests
+    }
+  }
+
+  // Specialized endpoints for better performance
+
+  // ⚠️  IMPORTANT: SCHEMA MIGRATION REQUIRED
+  // The following methods will work after running the database migration
+  // to apply the new schema changes where candidate data moved from 'users' to 'profiles'
+
+  /*
+  // TODO: Uncomment these methods after running migration
+
+  // Get candidate applications (moved from users to profiles)
+  async getCandidateApplications(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 20 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: {
+        applications: {
+          select: {
+            id: true,
+            profile_id: true, // Changed from user_id
+            job_id: true,
+            resume_id: true,
+            status: true,
+            applied_at: true,
+            version: true,
+            jobs: {
+              select: {
+                id: true,
+                title: true,
+                job_type: true,
+                status: true,
+                companies: {
+                  select: {
+                    id: true,
+                    name: true,
+                    logo_url: true
+                  }
+                }
+              }
+            }
+          },
+          orderBy: { applied_at: 'desc' },
+          skip,
+          take: limit
+        }
+      }
+    })
+
+    return profile?.applications || []
+  }
+
+  // Get candidate resumes (moved from users to profiles)
+  async getCandidateResumes(userId: string) {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: {
+        resumes: {
+          select: {
+            id: true,
+            profile_id: true, // Changed from user_id
+            content: true,
+            file_url: true,
+            created_at: true,
+            updated_at: true
+          },
+          orderBy: { updated_at: 'desc' }
+        }
+      }
+    })
+
+    return profile?.resumes || []
+  }
+
+  // Get candidate saved jobs (moved from users to profiles)
+  async getCandidateSavedJobs(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 20 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: {
+        saved_jobs: {
+          select: {
+            id: true,
+            profile_id: true, // Changed from user_id
+            job_id: true,
+            saved_at: true,
+            jobs: {
+              select: {
+                id: true,
+                title: true,
+                job_type: true,
+                status: true,
+                salary_range: true,
+                posted_at: true,
+                expires_at: true,
+                companies: {
+                  select: {
+                    id: true,
+                    name: true,
+                    logo_url: true
+                  }
+                },
+                locations: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true
+                  }
+                }
+              }
+            }
+          },
+          orderBy: { saved_at: 'desc' },
+          skip,
+          take: limit
+        }
+      }
+    })
+
+    return profile?.saved_jobs || []
+  }
+
+  // Get candidate interests (moved from users to profiles)
+  async getCandidateInterests(userId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 20 } = options
+    const skip = (page - 1) * limit
+
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      select: {
+        candidate_interests: {
+          select: {
+            id: true,
+            candidate_id: true, // This is now profile.id
+            recruiter_id: true, // This still references users.id
+            job_id: true,
+            interest_type: true,
+            status: true,
+            message: true,
+            created_at: true,
+            expires_at: true,
+            responded_at: true,
+            recruiter: {
+              select: {
+                id: true,
+                email: true,
+                profiles: {
+                  select: {
+                    full_name: true,
+                    display_name: true,
+                    headline: true
+                  }
+                }
+              }
+            },
+            jobs: {
+              select: {
+                id: true,
+                title: true,
+                companies: {
+                  select: {
+                    name: true,
+                    logo_url: true
+                  }
+                }
+              }
+            }
+          },
+          orderBy: { created_at: 'desc' },
+          skip,
+          take: limit
+        }
+      }
+    })
+
+    return profile?.candidate_interests || []
+  }
+  */
+
+  // GET /me - Basic user information only
+  getBasicMe = async (userId: string) => {
+    const user = await prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        verified: true,
+        created_at: true,
+        updated_at: true,
+        profiles: {
+          select: {
+            id: true,
+            display_name: true,
+            headline: true,
+            location_id: true,
+            location_text: true,
+            is_looking_for_job: true,
+            location: {
+              select: {
+                name: true,
+                type: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    if (!user) return null
+
+    // Transform to flat structure for basic info
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      verified: user.verified,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+      profile: user.profiles || null
+    }
   }
 }

@@ -32,7 +32,7 @@ export class AdminService {
     if (search) {
       where.OR = [
         { email: { contains: search, mode: 'insensitive' } },
-        { profiles: { some: { name: { contains: search, mode: 'insensitive' } } } }
+        { profiles: { full_name: { contains: search, mode: 'insensitive' } } }
       ]
     }
 
@@ -70,8 +70,8 @@ export class AdminService {
           profiles: {
             // Join với bảng profile để lấy tên
             select: {
-              name: true,
-              phone: true
+              full_name: true,
+              phone_number: true
             }
           }
         },
@@ -116,10 +116,9 @@ export class AdminService {
         profiles: {
           select: {
             id: true,
-            name: true,
-            phone: true,
-            location_id: true,
-            metadata: true
+            full_name: true,
+            phone_number: true,
+            location_id: true
           }
         }
         // Bạn có thể join thêm thông tin nếu cần, ví dụ:

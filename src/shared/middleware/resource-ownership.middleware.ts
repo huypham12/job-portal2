@@ -47,13 +47,16 @@ export const checkResourceOwnership = (
         }
 
         case 'resume': {
-          // Kiểm tra resume thuộc về user hiện tại
+          // Kiểm tra resume thuộc về profile của user hiện tại
           const resume = await prisma.resumes.findUnique({
             where: { id: resourceId },
-            select: { user_id: true }
+            select: {
+              profile_id: true,
+              profiles: { select: { user_id: true } }
+            }
           })
 
-          if (!resume || resume.user_id !== user_id) {
+          if (!resume || resume.profiles.user_id !== user_id) {
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
           break
@@ -80,7 +83,13 @@ export const checkResourceOwnership = (
             return next(new HttpError('Application not found', HTTP_STATUS.NOT_FOUND))
           }
 
-          if (role === UserRole.Candidate && application.user_id !== user_id) {
+          // Kiểm tra xem application có thuộc về profile của user không
+          const applicationProfile = await prisma.profiles.findUnique({
+            where: { id: application.profile_id },
+            select: { user_id: true }
+          })
+
+          if (role === UserRole.Candidate && applicationProfile?.user_id !== user_id) {
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
 
@@ -138,13 +147,16 @@ export const checkResourceOwnership = (
         }
 
         case 'saved_job': {
-          // User chỉ có thể truy cập saved jobs của họ
+          // User chỉ có thể truy cập saved jobs của profile của họ
           const savedJob = await prisma.saved_jobs.findUnique({
             where: { id: resourceId },
-            select: { user_id: true }
+            select: {
+              profile_id: true,
+              profiles: { select: { user_id: true } }
+            }
           })
 
-          if (!savedJob || savedJob.user_id !== user_id) {
+          if (!savedJob || savedJob.profiles.user_id !== user_id) {
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
           break
@@ -198,6 +210,8 @@ export const checkResourceOwnership = (
 }
 
 // Middleware đặc biệt cho company subscription (chỉ company owner)
+// TODO: Uncomment when company_subscriptions table is added to schema
+/*
 export const checkCompanySubscriptionOwnership = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { user_id, role } = req.decoded_authorization as TokenPayload
@@ -237,8 +251,11 @@ export const checkCompanySubscriptionOwnership = async (req: Request, res: Respo
     next(new HttpError('Error checking subscription ownership', HTTP_STATUS.INTERNAL_SERVER_ERROR))
   }
 }
+*/
 
 // Middleware kiểm tra quyền truy cập payment
+// TODO: Uncomment when payments table is added to schema
+/*
 export const checkPaymentOwnership = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { user_id, role } = req.decoded_authorization as TokenPayload
@@ -278,3 +295,4 @@ export const checkPaymentOwnership = async (req: Request, res: Response, next: N
     next(new HttpError('Error checking payment ownership', HTTP_STATUS.INTERNAL_SERVER_ERROR))
   }
 }
+*/

@@ -43,7 +43,7 @@ export async function seedAdditionalFeatures(prisma: PrismaClient) {
       try {
         await prisma.connection_interests.create({
           data: {
-            candidate_id: randomCandidate.id,
+            candidate_id: randomCandidate.profiles?.id || '',
             recruiter_id: randomRecruiter.id,
             job_id: Math.random() > 0.3 ? randomJob.id : null, // 70% có job_id
             interest_type: randomType,
@@ -159,7 +159,7 @@ export async function seedAdditionalFeatures(prisma: PrismaClient) {
 
       await prisma.search_history.create({
         data: {
-          user_id: user.id,
+          profile_id: user.profiles?.id || '',
           search_query: {
             keywords: randomQuery,
             location: null,
