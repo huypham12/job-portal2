@@ -6,7 +6,7 @@ import {
   UpdateCompanyDetailsBody,
   CompanyBenefitBody,
   UpdateCompanyBenefitBody
-} from './company.dto'
+} from './company.validator'
 import { HttpError } from '@/shared/common/http-error'
 import { MESSAGES } from '@/shared/constants/messages'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'

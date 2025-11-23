@@ -8,7 +8,7 @@ import {
   UpdateCompanyDetailsBody,
   CompanyBenefitBody,
   UpdateCompanyBenefitBody
-} from './company.dto'
+} from './company.validator'
 import { CompanyService } from './company.service'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'

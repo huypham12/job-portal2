@@ -46,38 +46,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegisterRequest"
+              $ref: '#/components/schemas/RegisterRequest'
             example:
-              name: "John Doe"
-              email: "john.doe@example.com"
-              password: "P@ssw0rd123"
-              confirm_password: "P@ssw0rd123"
-              date_of_birth: "1990-01-01"
+              name: 'John Doe'
+              email: 'john.doe@example.com'
+              password: 'P@ssw0rd123'
+              confirm_password: 'P@ssw0rd123'
+              date_of_birth: '1990-01-01'
       responses:
-        "201":
+        '201':
           description: User registered successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RegisterResponse"
+                $ref: '#/components/schemas/RegisterResponse'
               example:
                 statusCode: 201
-                message: "Register success, please check your email to verify your account"
+                message: 'Register success, please check your email to verify your account'
                 data:
-                  access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                  refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        "400":
+                  access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                  refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+        '400':
           description: Bad request - Validation error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "409":
+                $ref: '#/components/schemas/Error'
+        '409':
           description: User already exists
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/login:
     post:
@@ -91,35 +91,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginRequest"
+              $ref: '#/components/schemas/LoginRequest'
             example:
-              email: "john.doe@example.com"
-              password: "P@ssw0rd123"
+              email: 'john.doe@example.com'
+              password: 'P@ssw0rd123'
       responses:
-        "200":
+        '200':
           description: Login successful
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LoginResponse"
+                $ref: '#/components/schemas/LoginResponse'
               example:
                 statusCode: 200
-                message: "Login success"
+                message: 'Login success'
                 data:
-                  access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                  refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        "400":
+                  access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                  refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+        '400':
           description: Bad request - Validation error or user does not exist
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Invalid credentials
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/logout:
     post:
@@ -135,31 +135,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RefreshTokenRequest"
+              $ref: '#/components/schemas/RefreshTokenRequest'
             example:
-              refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
       responses:
-        "200":
+        '200':
           description: Logout successful
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: '#/components/schemas/SuccessResponse'
               example:
                 statusCode: 200
-                message: "Logout success"
-        "400":
+                message: 'Logout success'
+        '400':
           description: Bad request - Invalid refresh token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Invalid access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/refresh-token:
     post:
@@ -173,34 +173,34 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RefreshTokenRequest"
+              $ref: '#/components/schemas/RefreshTokenRequest'
             example:
-              refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
       responses:
-        "201":
+        '201':
           description: Token refreshed successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RefreshTokenResponse"
+                $ref: '#/components/schemas/RefreshTokenResponse'
               example:
                 statusCode: 201
-                message: "Refresh token success"
+                message: 'Refresh token success'
                 data:
-                  access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                  refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        "400":
+                  access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                  refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+        '400':
           description: Invalid refresh token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Token expired or invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/resend-verify-email:
     post:
@@ -214,31 +214,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EmailRequest"
+              $ref: '#/components/schemas/EmailRequest'
             example:
-              email: "john.doe@example.com"
+              email: 'john.doe@example.com'
       responses:
-        "200":
+        '200':
           description: Verification email sent
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: '#/components/schemas/SuccessResponse'
               example:
                 statusCode: 200
-                message: "Resend verify email success"
-        "400":
+                message: 'Resend verify email success'
+        '400':
           description: Bad request - Invalid email or user not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: Email does not exist
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/verify-email:
     post:
@@ -252,33 +252,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TokenRequest"
+              $ref: '#/components/schemas/TokenRequest'
             example:
-              token: "verification-token-here"
+              token: 'verification-token-here'
       responses:
-        "200":
+        '200':
           description: Email verified successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VerifyEmailResponse"
+                $ref: '#/components/schemas/VerifyEmailResponse'
               example:
                 statusCode: 200
-                message: "Verify email success"
+                message: 'Verify email success'
                 data:
-                  message: "Email verified successfully"
-        "400":
+                  message: 'Email verified successfully'
+        '400':
           description: Invalid or expired token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Token invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/forgot-password:
     post:
@@ -292,31 +292,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EmailRequest"
+              $ref: '#/components/schemas/EmailRequest'
             example:
-              email: "john.doe@example.com"
+              email: 'john.doe@example.com'
       responses:
-        "200":
+        '200':
           description: Password reset email sent
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: '#/components/schemas/SuccessResponse'
               example:
                 statusCode: 200
-                message: "Forgot password success, please check your email to reset your password"
-        "400":
+                message: 'Forgot password success, please check your email to reset your password'
+        '400':
           description: Bad request - Invalid email
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: Email does not exist
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/verify-forgot-password:
     post:
@@ -332,27 +332,27 @@ paths:
             schema:
               type: object
       responses:
-        "200":
+        '200':
           description: Token verified successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: '#/components/schemas/SuccessResponse'
               example:
                 statusCode: 200
-                message: "Verify forgot password token success"
-        "400":
+                message: 'Verify forgot password token success'
+        '400':
           description: Invalid or expired token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Token invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/reset-password:
     post:
@@ -366,35 +366,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ResetPasswordRequest"
+              $ref: '#/components/schemas/ResetPasswordRequest'
             example:
-              token: "verified-reset-token"
-              new_password: "NewP@ssw0rd123"
+              token: 'verified-reset-token'
+              new_password: 'NewP@ssw0rd123'
       responses:
-        "200":
+        '200':
           description: Password reset successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResetPasswordResponse"
+                $ref: '#/components/schemas/ResetPasswordResponse'
               example:
                 statusCode: 200
-                message: "Password reset success"
+                message: 'Password reset success'
                 data:
-                  access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                  refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        "400":
+                  access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                  refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+        '400':
           description: Invalid token or password validation error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Token invalid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /auth/change-password:
     patch:
@@ -410,39 +410,39 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ChangePasswordRequest"
+              $ref: '#/components/schemas/ChangePasswordRequest'
             example:
-              old_password: "OldP@ssw0rd123"
-              new_password: "NewP@ssw0rd123"
-              confirm_password: "NewP@ssw0rd123"
+              old_password: 'OldP@ssw0rd123'
+              new_password: 'NewP@ssw0rd123'
+              confirm_password: 'NewP@ssw0rd123'
       responses:
-        "200":
+        '200':
           description: Password changed successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: '#/components/schemas/SuccessResponse'
               example:
                 statusCode: 200
-                message: "Change password success"
-        "400":
+                message: 'Change password success'
+        '400':
           description: Bad request - Validation error or incorrect old password
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Invalid access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - User not verified
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   # ============================================
   # USER ENDPOINTS
@@ -457,43 +457,43 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: User profile retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserProfileResponse"
+                $ref: '#/components/schemas/UserProfileResponse'
               example:
-                id: "123e4567-e89b-12d3-a456-426614174000"
-                email: "john.doe@example.com"
-                role: "candidate"
+                id: '123e4567-e89b-12d3-a456-426614174000'
+                email: 'john.doe@example.com'
+                role: 'candidate'
                 verified: true
                 profiles:
-                  - name: "John Doe"
-                    phone: "+1234567890"
+                  - name: 'John Doe'
+                    phone: '+1234567890'
                     metadata:
-                      avatar: "https://example.com/avatar.jpg"
-                      bio: "Software developer"
+                      avatar: 'https://example.com/avatar.jpg'
+                      bio: 'Software developer'
                 companies: []
                 resumes:
-                  - id: "123e4567-e89b-12d3-a456-426614174001"
+                  - id: '123e4567-e89b-12d3-a456-426614174001'
                     content:
-                      skills: ["JavaScript", "TypeScript"]
+                      skills: ['JavaScript', 'TypeScript']
                       experience_years: 5
-                    file_url: "https://example.com/resume.pdf"
-                    updated_at: "2024-01-01T00:00:00.000Z"
-        "401":
+                    file_url: 'https://example.com/resume.pdf'
+                    updated_at: '2024-01-01T00:00:00.000Z'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /user/me/profile:
     put:
@@ -509,46 +509,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateProfileRequest"
+              $ref: '#/components/schemas/UpdateProfileRequest'
             example:
-              name: "John Doe Updated"
-              phone: "+1234567890"
-              location_id: "123e4567-e89b-12d3-a456-426614174000"
+              name: 'John Doe Updated'
+              phone: '+1234567890'
+              location_id: '123e4567-e89b-12d3-a456-426614174000'
               metadata:
-                avatar: "https://example.com/avatar.jpg"
-                bio: "Updated bio"
+                avatar: 'https://example.com/avatar.jpg'
+                bio: 'Updated bio'
       responses:
-        "200":
+        '200':
           description: Profile updated successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UpdateProfileResponse"
+                $ref: '#/components/schemas/UpdateProfileResponse'
               example:
-                message: "Profile updated"
+                message: 'Profile updated'
                 profile:
-                  id: "123e4567-e89b-12d3-a456-426614174002"
-                  user_id: "123e4567-e89b-12d3-a456-426614174000"
-                  name: "John Doe Updated"
-                  phone: "+1234567890"
-                  location_id: "123e4567-e89b-12d3-a456-426614174000"
+                  id: '123e4567-e89b-12d3-a456-426614174002'
+                  user_id: '123e4567-e89b-12d3-a456-426614174000'
+                  name: 'John Doe Updated'
+                  phone: '+1234567890'
+                  location_id: '123e4567-e89b-12d3-a456-426614174000'
                   metadata:
-                    avatar: "https://example.com/avatar.jpg"
-                    bio: "Updated bio"
-                  updated_at: "2024-01-01T00:00:00.000Z"
-                  created_at: "2024-01-01T00:00:00.000Z"
-        "400":
+                    avatar: 'https://example.com/avatar.jpg'
+                    bio: 'Updated bio'
+                  updated_at: '2024-01-01T00:00:00.000Z'
+                  created_at: '2024-01-01T00:00:00.000Z'
+        '400':
           description: Bad request - Validation error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   # ============================================
   # ADMIN ENDPOINTS
@@ -567,94 +567,94 @@ paths:
       parameters:
         - name: page
           in: query
-          description: "Page number (default: 1)"
+          description: 'Page number (default: 1)'
           required: false
           schema:
             type: string
-            default: "1"
-          example: "1"
+            default: '1'
+          example: '1'
         - name: limit
           in: query
-          description: "Number of items per page (default: 10)"
+          description: 'Number of items per page (default: 10)'
           required: false
           schema:
             type: string
-            default: "10"
-          example: "20"
+            default: '10'
+          example: '20'
         - name: search
           in: query
           description: Search by email or name
           required: false
           schema:
             type: string
-          example: "john"
+          example: 'john'
         - name: role
           in: query
           description: Filter by user role
           required: false
           schema:
-            $ref: "#/components/schemas/UserRole"
-          example: "candidate"
+            $ref: '#/components/schemas/UserRole'
+          example: 'candidate'
         - name: verified
           in: query
           description: Filter by verification status
           required: false
           schema:
             type: string
-            enum: ["true", "false"]
-          example: "true"
+            enum: ['true', 'false']
+          example: 'true'
         - name: deleted
           in: query
           description: Filter by deleted status (soft delete)
           required: false
           schema:
             type: string
-            enum: ["true", "false"]
-          example: "false"
+            enum: ['true', 'false']
+          example: 'false'
       responses:
-        "200":
+        '200':
           description: Users retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetAllUsersResponse"
+                $ref: '#/components/schemas/GetAllUsersResponse'
               example:
-                message: "Lấy danh sách người dùng thành công."
+                message: 'Lấy danh sách người dùng thành công.'
                 data:
                   users:
-                    - id: "123e4567-e89b-12d3-a456-426614174000"
-                      email: "john.doe@example.com"
-                      role: "candidate"
+                    - id: '123e4567-e89b-12d3-a456-426614174000'
+                      email: 'john.doe@example.com'
+                      role: 'candidate'
                       verified: true
                       deleted: false
-                      created_at: "2024-01-01T00:00:00.000Z"
-                      updated_at: "2024-01-01T00:00:00.000Z"
+                      created_at: '2024-01-01T00:00:00.000Z'
+                      updated_at: '2024-01-01T00:00:00.000Z'
                       profiles:
-                        - name: "John Doe"
-                          phone: "+1234567890"
+                        - name: 'John Doe'
+                          phone: '+1234567890'
                   pagination:
                     total: 100
                     page: 1
                     limit: 20
                     totalPages: 5
-        "401":
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - Admin access required
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "422":
+                $ref: '#/components/schemas/Error'
+        '422':
           description: Unprocessable Entity - Validation error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /admin/users/{userId}:
     get:
@@ -675,55 +675,55 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: '123e4567-e89b-12d3-a456-426614174000'
       responses:
-        "200":
+        '200':
           description: User details retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserDetailsResponse"
+                $ref: '#/components/schemas/UserDetailsResponse'
               example:
-                message: "Lấy thông tin chi tiết người dùng thành công."
+                message: 'Lấy thông tin chi tiết người dùng thành công.'
                 data:
-                  id: "123e4567-e89b-12d3-a456-426614174000"
-                  email: "john.doe@example.com"
-                  role: "candidate"
+                  id: '123e4567-e89b-12d3-a456-426614174000'
+                  email: 'john.doe@example.com'
+                  role: 'candidate'
                   verified: true
                   deleted: false
-                  created_at: "2024-01-01T00:00:00.000Z"
-                  updated_at: "2024-01-01T00:00:00.000Z"
+                  created_at: '2024-01-01T00:00:00.000Z'
+                  updated_at: '2024-01-01T00:00:00.000Z'
                   profiles:
-                    - id: "123e4567-e89b-12d3-a456-426614174001"
-                      name: "John Doe"
-                      phone: "+1234567890"
-                      location_id: "123e4567-e89b-12d3-a456-426614174002"
+                    - id: '123e4567-e89b-12d3-a456-426614174001'
+                      name: 'John Doe'
+                      phone: '+1234567890'
+                      location_id: '123e4567-e89b-12d3-a456-426614174002'
                       metadata:
-                        avatar: "https://example.com/avatar.jpg"
-        "401":
+                        avatar: 'https://example.com/avatar.jpg'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - Admin access required
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "422":
+                $ref: '#/components/schemas/Error'
+        '422':
           description: Unprocessable Entity - Validation error (invalid UUID format)
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
     patch:
       tags:
@@ -744,63 +744,63 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: '123e4567-e89b-12d3-a456-426614174000'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AdminUpdateUserRequest"
+              $ref: '#/components/schemas/AdminUpdateUserRequest'
             example:
-              role: "recruiter"
+              role: 'recruiter'
               verified: true
               deleted: false
       responses:
-        "200":
+        '200':
           description: User updated successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AdminUpdateUserResponse"
+                $ref: '#/components/schemas/AdminUpdateUserResponse'
               example:
-                message: "Cập nhật tài khoản thành công."
+                message: 'Cập nhật tài khoản thành công.'
                 data:
-                  id: "123e4567-e89b-12d3-a456-426614174000"
-                  email: "john.doe@example.com"
-                  role: "recruiter"
+                  id: '123e4567-e89b-12d3-a456-426614174000'
+                  email: 'john.doe@example.com'
+                  role: 'recruiter'
                   verified: true
                   deleted: false
-                  updated_at: "2024-01-01T00:00:00.000Z"
-        "400":
+                  updated_at: '2024-01-01T00:00:00.000Z'
+        '400':
           description: Bad request - Validation error or body is empty
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - Admin access required
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "422":
+                $ref: '#/components/schemas/Error'
+        '422':
           description: Unprocessable Entity - Validation error (invalid UUID format)
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
     delete:
       tags:
@@ -821,40 +821,40 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: '123e4567-e89b-12d3-a456-426614174000'
       responses:
-        "200":
+        '200':
           description: User deleted successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: '#/components/schemas/SuccessResponse'
               example:
-                message: "Xóa tài khoản người dùng thành công."
-        "401":
+                message: 'Xóa tài khoản người dùng thành công.'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - Admin access required
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "422":
+                $ref: '#/components/schemas/Error'
+        '422':
           description: Unprocessable Entity - Validation error (invalid UUID format)
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   # ============================================
   # COMPANY ENDPOINTS
@@ -876,65 +876,65 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateCompanyRequest"
+              $ref: '#/components/schemas/CreateCompanyRequest'
             example:
-              name: "Công ty Cổ phần Công nghệ ABC"
-              description: "Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp"
-              logo_url: "https://example.com/logo.png"
+              name: 'Công ty Cổ phần Công nghệ ABC'
+              description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
+              logo_url: 'https://example.com/logo.png'
               size: 100
               metadata:
-                website: "https://abc-tech.com"
-                industry: "Technology"
-                benefits: ["Health insurance", "Flexible working hours"]
+                website: 'https://abc-tech.com'
+                industry: 'Technology'
+                benefits: ['Health insurance', 'Flexible working hours']
       responses:
-        "201":
+        '201':
           description: Company profile created successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateCompanyResponse"
+                $ref: '#/components/schemas/CreateCompanyResponse'
               example:
-                message: "Create company success"
+                message: 'Create company success'
                 data:
-                  id: "123e4567-e89b-12d3-a456-426614174000"
-                  name: "Công ty Cổ phần Công nghệ ABC"
-                  description: "Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp"
-                  recruiter_id: "123e4567-e89b-12d3-a456-426614174001"
-                  logo_url: "https://example.com/logo.png"
+                  id: '123e4567-e89b-12d3-a456-426614174000'
+                  name: 'Công ty Cổ phần Công nghệ ABC'
+                  description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
+                  recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
+                  logo_url: 'https://example.com/logo.png'
                   size: 100
                   metadata:
-                    website: "https://abc-tech.com"
-                    industry: "Technology"
-                    benefits: ["Health insurance", "Flexible working hours"]
-                  created_at: "2024-01-01T00:00:00.000Z"
-                  updated_at: "2024-01-01T00:00:00.000Z"
-        "400":
+                    website: 'https://abc-tech.com'
+                    industry: 'Technology'
+                    benefits: ['Health insurance', 'Flexible working hours']
+                  created_at: '2024-01-01T00:00:00.000Z'
+                  updated_at: '2024-01-01T00:00:00.000Z'
+        '400':
           description: Bad request - Validation error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - Recruiter access required
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "409":
+                $ref: '#/components/schemas/Error'
+        '409':
           description: Conflict - Company already exists for this recruiter
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               example:
                 statusCode: 409
-                message: "Company already exists"
+                message: 'Company already exists'
 
   /companies/my-company:
     get:
@@ -948,48 +948,48 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: Company profile retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetCompanyResponse"
+                $ref: '#/components/schemas/GetCompanyResponse'
               example:
-                message: "Get company success"
+                message: 'Get company success'
                 data:
-                  id: "123e4567-e89b-12d3-a456-426614174000"
-                  name: "Công ty Cổ phần Công nghệ ABC"
-                  description: "Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp"
-                  recruiter_id: "123e4567-e89b-12d3-a456-426614174001"
-                  logo_url: "https://example.com/logo.png"
+                  id: '123e4567-e89b-12d3-a456-426614174000'
+                  name: 'Công ty Cổ phần Công nghệ ABC'
+                  description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
+                  recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
+                  logo_url: 'https://example.com/logo.png'
                   size: 100
                   metadata:
-                    website: "https://abc-tech.com"
-                    industry: "Technology"
-                    benefits: ["Health insurance", "Flexible working hours"]
-                  created_at: "2024-01-01T00:00:00.000Z"
-                  updated_at: "2024-01-01T00:00:00.000Z"
-        "401":
+                    website: 'https://abc-tech.com'
+                    industry: 'Technology'
+                    benefits: ['Health insurance', 'Flexible working hours']
+                  created_at: '2024-01-01T00:00:00.000Z'
+                  updated_at: '2024-01-01T00:00:00.000Z'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - Recruiter access required
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: Not found - Company profile not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               example:
                 statusCode: 404
-                message: "Company not found"
+                message: 'Company not found'
 
     patch:
       tags:
@@ -1007,59 +1007,59 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateCompanyRequest"
+              $ref: '#/components/schemas/UpdateCompanyRequest'
             example:
-              description: "Mô tả mới cập nhật về công ty"
-              logo_url: "https://new-logo-url.com/logo.png"
+              description: 'Mô tả mới cập nhật về công ty'
+              logo_url: 'https://new-logo-url.com/logo.png'
               size: 150
               metadata:
-                website: "https://abc-tech-updated.com"
+                website: 'https://abc-tech-updated.com'
                 remote_work: true
       responses:
-        "200":
+        '200':
           description: Company profile updated successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UpdateCompanyResponse"
+                $ref: '#/components/schemas/UpdateCompanyResponse'
               example:
-                message: "Update company success"
+                message: 'Update company success'
                 data:
-                  id: "123e4567-e89b-12d3-a456-426614174000"
-                  name: "Công ty Cổ phần Công nghệ ABC"
-                  description: "Mô tả mới cập nhật về công ty"
-                  recruiter_id: "123e4567-e89b-12d3-a456-426614174001"
-                  logo_url: "https://new-logo-url.com/logo.png"
+                  id: '123e4567-e89b-12d3-a456-426614174000'
+                  name: 'Công ty Cổ phần Công nghệ ABC'
+                  description: 'Mô tả mới cập nhật về công ty'
+                  recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
+                  logo_url: 'https://new-logo-url.com/logo.png'
                   size: 150
                   metadata:
-                    website: "https://abc-tech-updated.com"
+                    website: 'https://abc-tech-updated.com'
                     remote_work: true
-                  created_at: "2024-01-01T00:00:00.000Z"
-                  updated_at: "2024-01-01T12:00:00.000Z"
-        "400":
+                  created_at: '2024-01-01T00:00:00.000Z'
+                  updated_at: '2024-01-01T12:00:00.000Z'
+        '400':
           description: Bad request - Validation error or empty request body
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "401":
+                $ref: '#/components/schemas/Error'
+        '401':
           description: Unauthorized - Invalid or missing access token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "403":
+                $ref: '#/components/schemas/Error'
+        '403':
           description: Forbidden - Recruiter access required
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: Not found - Company profile not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /companies/{id}:
     get:
@@ -1078,44 +1078,44 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: '123e4567-e89b-12d3-a456-426614174000'
       responses:
-        "200":
+        '200':
           description: Company profile retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetCompanyResponse"
+                $ref: '#/components/schemas/GetCompanyResponse'
               example:
-                message: "Get company success"
+                message: 'Get company success'
                 data:
-                  id: "123e4567-e89b-12d3-a456-426614174000"
-                  name: "Công ty Cổ phần Công nghệ ABC"
-                  description: "Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp"
-                  recruiter_id: "123e4567-e89b-12d3-a456-426614174001"
-                  logo_url: "https://example.com/logo.png"
+                  id: '123e4567-e89b-12d3-a456-426614174000'
+                  name: 'Công ty Cổ phần Công nghệ ABC'
+                  description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
+                  recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
+                  logo_url: 'https://example.com/logo.png'
                   size: 100
                   metadata:
-                    website: "https://abc-tech.com"
-                    industry: "Technology"
-                    benefits: ["Health insurance", "Flexible working hours"]
-                  created_at: "2024-01-01T00:00:00.000Z"
-                  updated_at: "2024-01-01T00:00:00.000Z"
-        "400":
+                    website: 'https://abc-tech.com'
+                    industry: 'Technology'
+                    benefits: ['Health insurance', 'Flexible working hours']
+                  created_at: '2024-01-01T00:00:00.000Z'
+                  updated_at: '2024-01-01T00:00:00.000Z'
+        '400':
           description: Bad request - Invalid UUID format
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: Not found - Company not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
               example:
                 statusCode: 404
-                message: "Company not found"
+                message: 'Company not found'
 
 components:
   securitySchemes:
@@ -1137,7 +1137,7 @@ components:
           example: 200
         message:
           type: string
-          example: "Operation successful"
+          example: 'Operation successful'
       required:
         - statusCode
         - message
@@ -1151,7 +1151,7 @@ components:
           description: HTTP status code
         message:
           type: string
-          example: "Validation failed"
+          example: 'Validation failed'
           description: Error message describing what went wrong
         error:
           type: object
@@ -1160,8 +1160,8 @@ components:
             items:
               type: string
           example:
-            "body.email": ["Email must be valid"]
-            "body.password": ["Password is required"]
+            'body.email': ['Email must be valid']
+            'body.password': ['Password is required']
           description: Detailed validation errors (optional, only present for validation failures)
       required:
         - statusCode
@@ -1176,7 +1176,7 @@ components:
         - candidate
         - recruiter
         - admin
-      example: "candidate"
+      example: 'candidate'
       description: User role in the system
 
     # ============================================
@@ -1195,17 +1195,17 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          example: "John Doe"
+          example: 'John Doe'
           description: User's full name (1-100 characters)
         email:
           type: string
           format: email
-          example: "user@example.com"
+          example: 'user@example.com'
           description: User's email address
         password:
           type: string
           minLength: 6
-          example: "P@ssw0rd123"
+          example: 'P@ssw0rd123'
           description: |-
             Password must contain at least 6 characters with:
             - At least one uppercase letter
@@ -1215,12 +1215,12 @@ components:
         confirm_password:
           type: string
           minLength: 6
-          example: "P@ssw0rd123"
+          example: 'P@ssw0rd123'
           description: Must match the password field
         date_of_birth:
           type: string
           pattern: '^\d{4}-\d{2}-\d{2}$'
-          example: "1990-01-01"
+          example: '1990-01-01'
           description: Date of birth in YYYY-MM-DD format
 
     LoginRequest:
@@ -1232,10 +1232,10 @@ components:
         email:
           type: string
           format: email
-          example: "user@example.com"
+          example: 'user@example.com'
         password:
           type: string
-          example: "P@ssw0rd123"
+          example: 'P@ssw0rd123'
 
     RefreshTokenRequest:
       type: object
@@ -1244,7 +1244,7 @@ components:
       properties:
         refresh_token:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
 
     EmailRequest:
       type: object
@@ -1254,7 +1254,7 @@ components:
         email:
           type: string
           format: email
-          example: "user@example.com"
+          example: 'user@example.com'
 
     TokenRequest:
       type: object
@@ -1263,7 +1263,7 @@ components:
       properties:
         token:
           type: string
-          example: "verification-token-here"
+          example: 'verification-token-here'
 
     ChangePasswordRequest:
       type: object
@@ -1274,12 +1274,12 @@ components:
       properties:
         old_password:
           type: string
-          example: "OldP@ssw0rd123"
+          example: 'OldP@ssw0rd123'
           description: Current password
         new_password:
           type: string
           minLength: 6
-          example: "NewP@ssw0rd123"
+          example: 'NewP@ssw0rd123'
           description: |-
             New password must contain at least 6 characters with:
             - At least one uppercase letter
@@ -1289,7 +1289,7 @@ components:
         confirm_password:
           type: string
           minLength: 6
-          example: "NewP@ssw0rd123"
+          example: 'NewP@ssw0rd123'
           description: Must match the new password field
 
     ResetPasswordRequest:
@@ -1300,12 +1300,12 @@ components:
       properties:
         token:
           type: string
-          example: "verified-reset-token"
+          example: 'verified-reset-token'
           description: The verified reset token (also sent in Authorization header)
         new_password:
           type: string
           minLength: 6
-          example: "NewP@ssw0rd123"
+          example: 'NewP@ssw0rd123'
           description: |-
             New password must contain at least 6 characters with:
             - At least one uppercase letter
@@ -1321,49 +1321,49 @@ components:
       properties:
         access_token:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
         refresh_token:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
       required:
         - access_token
         - refresh_token
 
     RegisterResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/TokenData"
+              $ref: '#/components/schemas/TokenData'
 
     LoginResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/TokenData"
+              $ref: '#/components/schemas/TokenData'
 
     RefreshTokenResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/TokenData"
+              $ref: '#/components/schemas/TokenData'
 
     ResetPasswordResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/TokenData"
+              $ref: '#/components/schemas/TokenData'
 
     VerifyEmailResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
@@ -1371,7 +1371,7 @@ components:
               properties:
                 message:
                   type: string
-                  example: "Email verified successfully"
+                  example: 'Email verified successfully'
 
     # ============================================
     # User Request Schemas
@@ -1384,25 +1384,25 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          example: "John Doe"
+          example: 'John Doe'
           description: User's full name (1-100 characters)
         phone:
           type: string
           pattern: '^\+?[0-9\s\-().]{7,20}$'
-          example: "+1234567890"
+          example: '+1234567890'
           description: Phone number in international format
         location_id:
           type: string
           format: uuid
           nullable: true
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: '123e4567-e89b-12d3-a456-426614174000'
           description: Location ID (UUID) or null
         metadata:
           type: object
           additionalProperties: true
           example:
-            avatar: "https://example.com/avatar.jpg"
-            bio: "Software developer"
+            avatar: 'https://example.com/avatar.jpg'
+            bio: 'Software developer'
           description: Additional metadata as JSON object
 
     # ============================================
@@ -1414,13 +1414,13 @@ components:
         id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: '123e4567-e89b-12d3-a456-426614174000'
         email:
           type: string
           format: email
-          example: "john.doe@example.com"
+          example: 'john.doe@example.com'
         role:
-          $ref: "#/components/schemas/UserRole"
+          $ref: '#/components/schemas/UserRole'
         verified:
           type: boolean
           example: true
@@ -1431,16 +1431,16 @@ components:
             properties:
               name:
                 type: string
-                example: "John Doe"
+                example: 'John Doe'
               phone:
                 type: string
-                example: "+1234567890"
+                example: '+1234567890'
               metadata:
                 type: object
                 additionalProperties: true
                 example:
-                  avatar: "https://example.com/avatar.jpg"
-                  bio: "Software developer"
+                  avatar: 'https://example.com/avatar.jpg'
+                  bio: 'Software developer'
         companies:
           type: array
           items:
@@ -1468,7 +1468,7 @@ components:
                 type: object
                 additionalProperties: true
                 example:
-                  skills: ["JavaScript", "TypeScript"]
+                  skills: ['JavaScript', 'TypeScript']
                   experience_years: 5
               file_url:
                 type: string
@@ -1487,16 +1487,16 @@ components:
         name:
           type: string
           minLength: 3
-          example: "Công ty Cổ phần Công nghệ ABC"
+          example: 'Công ty Cổ phần Công nghệ ABC'
           description: Company name (minimum 3 characters)
         description:
           type: string
-          example: "Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp"
+          example: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
           description: Company description (optional)
         logo_url:
           type: string
           format: url
-          example: "https://example.com/logo.png"
+          example: 'https://example.com/logo.png'
           description: Company logo URL (optional)
         size:
           type: integer
@@ -1507,9 +1507,9 @@ components:
           type: object
           additionalProperties: true
           example:
-            website: "https://abc-tech.com"
-            industry: "Technology"
-            benefits: ["Health insurance", "Flexible working hours"]
+            website: 'https://abc-tech.com'
+            industry: 'Technology'
+            benefits: ['Health insurance', 'Flexible working hours']
           description: Additional company metadata as JSON object (optional)
 
     UpdateCompanyRequest:
@@ -1519,16 +1519,16 @@ components:
         name:
           type: string
           minLength: 3
-          example: "Công ty Cổ phần Công nghệ ABC"
+          example: 'Công ty Cổ phần Công nghệ ABC'
           description: Company name (minimum 3 characters)
         description:
           type: string
-          example: "Mô tả mới cập nhật về công ty"
+          example: 'Mô tả mới cập nhật về công ty'
           description: Company description
         logo_url:
           type: string
           format: url
-          example: "https://new-logo-url.com/logo.png"
+          example: 'https://new-logo-url.com/logo.png'
           description: Company logo URL
         size:
           type: integer
@@ -1539,7 +1539,7 @@ components:
           type: object
           additionalProperties: true
           example:
-            website: "https://abc-tech-updated.com"
+            website: 'https://abc-tech-updated.com'
             remote_work: true
           description: Additional company metadata as JSON object
 
@@ -1552,27 +1552,27 @@ components:
         id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: '123e4567-e89b-12d3-a456-426614174000'
           description: Company unique identifier
         name:
           type: string
-          example: "Công ty Cổ phần Công nghệ ABC"
+          example: 'Công ty Cổ phần Công nghệ ABC'
           description: Company name
         description:
           type: string
           nullable: true
-          example: "Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp"
+          example: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
           description: Company description
         recruiter_id:
           type: string
           format: uuid
           nullable: true
-          example: "123e4567-e89b-12d3-a456-426614174001"
+          example: '123e4567-e89b-12d3-a456-426614174001'
           description: ID of the recruiter who owns this company
         logo_url:
           type: string
           nullable: true
-          example: "https://example.com/logo.png"
+          example: 'https://example.com/logo.png'
           description: Company logo URL
         size:
           type: integer
@@ -1584,21 +1584,21 @@ components:
           additionalProperties: true
           nullable: true
           example:
-            website: "https://abc-tech.com"
-            industry: "Technology"
-            benefits: ["Health insurance", "Flexible working hours"]
+            website: 'https://abc-tech.com'
+            industry: 'Technology'
+            benefits: ['Health insurance', 'Flexible working hours']
           description: Additional company metadata as JSON object
         created_at:
           type: string
           format: date-time
           nullable: true
-          example: "2024-01-01T00:00:00.000Z"
+          example: '2024-01-01T00:00:00.000Z'
           description: Company creation timestamp
         updated_at:
           type: string
           format: date-time
           nullable: true
-          example: "2024-01-01T00:00:00.000Z"
+          example: '2024-01-01T00:00:00.000Z'
           description: Company last update timestamp
       required:
         - id
@@ -1606,27 +1606,27 @@ components:
 
     CreateCompanyResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/CompanyData"
+              $ref: '#/components/schemas/CompanyData'
 
     GetCompanyResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/CompanyData"
+              $ref: '#/components/schemas/CompanyData'
 
     UpdateCompanyResponse:
       allOf:
-        - $ref: "#/components/schemas/SuccessResponse"
+        - $ref: '#/components/schemas/SuccessResponse'
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/CompanyData"
+              $ref: '#/components/schemas/CompanyData'
           description: Resumes associated with the user (for candidates)
 
     UpdateProfileResponse:
@@ -1634,7 +1634,7 @@ components:
       properties:
         message:
           type: string
-          example: "Profile updated"
+          example: 'Profile updated'
         profile:
           type: object
           properties:
@@ -1670,7 +1670,7 @@ components:
       description: At least one field must be provided
       properties:
         role:
-          $ref: "#/components/schemas/UserRole"
+          $ref: '#/components/schemas/UserRole'
           description: Change user role
         verified:
           type: boolean
@@ -1679,7 +1679,7 @@ components:
         deleted:
           type: boolean
           example: false
-          description: "true to lock account (soft delete), false to unlock"
+          description: 'true to lock account (soft delete), false to unlock'
 
     # ============================================
     # Admin Response Schemas
@@ -1689,7 +1689,7 @@ components:
       properties:
         message:
           type: string
-          example: "Lấy danh sách người dùng thành công."
+          example: 'Lấy danh sách người dùng thành công.'
         data:
           type: object
           properties:
@@ -1705,7 +1705,7 @@ components:
                     type: string
                     format: email
                   role:
-                    $ref: "#/components/schemas/UserRole"
+                    $ref: '#/components/schemas/UserRole'
                   verified:
                     type: boolean
                   deleted:
@@ -1746,7 +1746,7 @@ components:
       properties:
         message:
           type: string
-          example: "Lấy thông tin chi tiết người dùng thành công."
+          example: 'Lấy thông tin chi tiết người dùng thành công.'
         data:
           type: object
           properties:
@@ -1757,7 +1757,7 @@ components:
               type: string
               format: email
             role:
-              $ref: "#/components/schemas/UserRole"
+              $ref: '#/components/schemas/UserRole'
             verified:
               type: boolean
             deleted:
@@ -1793,7 +1793,7 @@ components:
       properties:
         message:
           type: string
-          example: "Cập nhật tài khoản thành công."
+          example: 'Cập nhật tài khoản thành công.'
         data:
           type: object
           properties:
@@ -1804,7 +1804,7 @@ components:
               type: string
               format: email
             role:
-              $ref: "#/components/schemas/UserRole"
+              $ref: '#/components/schemas/UserRole'
             verified:
               type: boolean
             deleted:

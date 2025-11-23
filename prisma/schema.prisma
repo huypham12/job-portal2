@@ -73,21 +73,6 @@ model application_documents {
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model attachments {
-  id                String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  file_url          String
-  type              String?
-  owner_id          String                @db.Uuid
-  owner_type        attachment_owner_type
-  original_filename String?
-  mime_type         String?
-  size_bytes        BigInt?
-  created_at        DateTime?             @default(now()) @db.Timestamp(6)
-
-  @@index([owner_type, owner_id], map: "idx_attachments_owner")
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model audits {
   id         BigInt    @id @default(autoincrement())
   table_name String
@@ -309,6 +294,7 @@ model notifications {
 model profiles {
   id                  String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id             String                   @unique @db.Uuid
+  avatar_url          String?
   location_id         String?                  @db.Uuid
   created_at          DateTime                 @default(now())
   updated_at          DateTime                 @updatedAt
@@ -575,11 +561,6 @@ enum application_status {
   reviewed
   rejected
   accepted
-}
-
-enum attachment_owner_type {
-  user
-  company
 }
 
 enum job_status {

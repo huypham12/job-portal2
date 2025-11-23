@@ -12,7 +12,7 @@ import {
   updateCompanyDetailsValidator,
   companyBenefitValidator,
   updateCompanyBenefitValidator
-} from './company.dto'
+} from './company.validator'
 import { companyController } from './company.controller' // Giả định controller được import
 
 export const companyRouter = Router()

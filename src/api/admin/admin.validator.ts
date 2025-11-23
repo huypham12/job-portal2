@@ -130,3 +130,20 @@ export const adminUpdateUserBodySchema = z
   .refine((data) => Object.keys(data).length > 0, {
     message: 'Body không được rỗng. Cần ít nhất một trường để cập nhật.'
   })
+
+// --- Inferred Types từ Zod Schemas ---
+
+/**
+ * Type được suy ra từ userIdParamsSchema
+ */
+export type UserIdParams = z.infer<typeof userIdParamsSchema>
+
+/**
+ * Type được suy ra từ getAllUsersQuerySchema
+ */
+export type GetAllUsersQuery = z.infer<typeof getAllUsersQuerySchema>
+
+/**
+ * Type được suy ra từ adminUpdateUserBodySchema
+ */
+export type AdminUpdateUserBody = z.infer<typeof adminUpdateUserBodySchema>

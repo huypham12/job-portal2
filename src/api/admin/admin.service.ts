@@ -3,7 +3,7 @@ import { HttpError } from '@/shared/common/http-error'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'
 import { Prisma, user_role } from '@prisma/client'
-import { AdminUpdateUserBody } from './dto/admin.dto'
+import { AdminUpdateUserBody } from './admin.validator'
 
 // Định nghĩa kiểu dữ liệu cho queryOptions mà controller gửi xuống
 interface QueryOptions {

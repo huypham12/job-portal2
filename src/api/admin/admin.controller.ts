@@ -2,7 +2,7 @@ import { DeleteHandler, GetHandler, PatchHandler } from '@/types/controller-hand
 import { AdminService } from './admin.service'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'
-import { AdminUpdateUserBody, GetAllUsersQuery, UserIdParams } from './dto/admin.dto'
+import { AdminUpdateUserBody, GetAllUsersQuery, UserIdParams } from './admin.validator'
 
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}

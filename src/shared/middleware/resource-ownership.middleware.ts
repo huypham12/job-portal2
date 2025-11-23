@@ -8,7 +8,7 @@ import { UserRole } from '../constants/enums/user.enum'
 
 // Middleware kiểm tra user chỉ có thể truy cập data của chính họ
 export const checkResourceOwnership = (
-  resourceType: 'user' | 'profile' | 'resume' | 'application' | 'job' | 'company' | 'saved_job' | 'attachment'
+  resourceType: 'user' | 'profile' | 'resume' | 'application' | 'job' | 'company' | 'saved_job'
 ) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -157,42 +157,6 @@ export const checkResourceOwnership = (
           })
 
           if (!savedJob || savedJob.profiles.user_id !== user_id) {
-            return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
-          }
-          break
-        }
-
-        case 'attachment': {
-          // Kiểm tra attachment thuộc về user hoặc company của user
-          const attachment = await prisma.attachments.findUnique({
-            where: { id: resourceId },
-            select: {
-              owner_id: true,
-              owner_type: true
-            }
-          })
-
-          if (!attachment) {
-            return next(new HttpError('Attachment not found', HTTP_STATUS.NOT_FOUND))
-          }
-
-          let hasAccess = false
-
-          if (attachment.owner_type === 'user' && attachment.owner_id === user_id) {
-            hasAccess = true
-          } else if (attachment.owner_type === 'company' && role === UserRole.Recruiter) {
-            // Kiểm tra user có sở hữu company này không
-            const company = await prisma.companies.findUnique({
-              where: { id: attachment.owner_id },
-              select: { recruiter_id: true }
-            })
-
-            if (company?.recruiter_id === user_id) {
-              hasAccess = true
-            }
-          }
-
-          if (!hasAccess) {
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
           break
