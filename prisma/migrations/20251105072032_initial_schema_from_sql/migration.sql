@@ -1,0 +1,660 @@
+-- ========== Extensions ===========
+-- Thêm vào đầu file migration.sql
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+-- CreateEnum
+CREATE TYPE "application_status" AS ENUM ('pending', 'reviewed', 'rejected', 'accepted');
+
+-- CreateEnum
+CREATE TYPE "attachment_owner_type" AS ENUM ('user', 'company');
+
+-- CreateEnum
+CREATE TYPE "job_status" AS ENUM ('draft', 'approved', 'closed');
+
+-- CreateEnum
+CREATE TYPE "job_type" AS ENUM ('full_time', 'part_time', 'contract');
+
+-- CreateEnum
+CREATE TYPE "payment_status" AS ENUM ('pending', 'completed', 'failed');
+
+-- CreateEnum
+CREATE TYPE "report_target_type" AS ENUM ('job', 'user', 'company');
+
+-- CreateEnum
+CREATE TYPE "subscription_status" AS ENUM ('active', 'expired', 'cancelled', 'pending_payment');
+
+-- CreateEnum
+CREATE TYPE "user_role" AS ENUM ('candidate', 'recruiter', 'admin');
+
+-- CreateEnum
+CREATE TYPE "user_token_type" AS ENUM ('verify_email', 'reset_password');
+
+-- CreateTable
+CREATE TABLE "activity_logs" (
+    "id" BIGSERIAL NOT NULL,
+    "user_id" UUID,
+    "action" TEXT NOT NULL,
+    "details" JSONB,
+    "timestamp" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "activity_logs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "applications" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
+    "job_id" UUID NOT NULL,
+    "resume_id" UUID,
+    "status" "application_status" DEFAULT 'pending',
+    "applied_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "metadata" JSONB,
+    "version" INTEGER DEFAULT 1,
+
+    CONSTRAINT "applications_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "attachments" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "file_url" TEXT NOT NULL,
+    "type" TEXT,
+    "owner_id" UUID NOT NULL,
+    "owner_type" "attachment_owner_type" NOT NULL,
+    "original_filename" TEXT,
+    "mime_type" TEXT,
+    "size_bytes" BIGINT,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "attachments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "audits" (
+    "id" BIGSERIAL NOT NULL,
+    "table_name" TEXT NOT NULL,
+    "record_id" TEXT,
+    "action" TEXT NOT NULL,
+    "old_data" JSONB,
+    "new_data" JSONB,
+    "user_id" UUID,
+    "timestamp" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "audits_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "companies" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "recruiter_id" UUID,
+    "logo_url" TEXT,
+    "size" INTEGER,
+    "metadata" JSONB,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "companies_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "company_subscriptions" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "company_id" UUID NOT NULL,
+    "package_id" UUID NOT NULL,
+    "payment_id" UUID,
+    "start_date" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "end_date" TIMESTAMP(6),
+    "status" "subscription_status" NOT NULL DEFAULT 'pending_payment',
+    "auto_renew" BOOLEAN DEFAULT false,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "company_subscriptions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "job_posts_history" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "job_id" UUID NOT NULL,
+    "version" INTEGER NOT NULL,
+    "content" JSONB,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "job_posts_history_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "job_skills" (
+    "job_id" UUID NOT NULL,
+    "skill_id" UUID NOT NULL,
+
+    CONSTRAINT "job_skills_pkey" PRIMARY KEY ("job_id","skill_id")
+);
+
+-- CreateTable
+CREATE TABLE "job_tags" (
+    "job_id" UUID NOT NULL,
+    "tag_id" UUID NOT NULL,
+
+    CONSTRAINT "job_tags_pkey" PRIMARY KEY ("job_id","tag_id")
+);
+
+-- CreateTable
+CREATE TABLE "jobs" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "company_id" UUID,
+    "location_id" UUID,
+    "salary_range" JSONB,
+    "job_type" "job_type",
+    "experience_level" INTEGER,
+    "posted_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "expires_at" TIMESTAMP(6),
+    "status" "job_status" DEFAULT 'draft',
+    "metadata" JSONB,
+    "version" INTEGER DEFAULT 1,
+    "deleted" BOOLEAN DEFAULT false,
+
+    CONSTRAINT "jobs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "locations" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "city" TEXT,
+    "country" TEXT,
+    "latitude" DECIMAL(9,6),
+    "longitude" DECIMAL(9,6),
+
+    CONSTRAINT "locations_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "notifications" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
+    "type" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "sent_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "read" BOOLEAN DEFAULT false,
+
+    CONSTRAINT "notifications_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "payments" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
+    "company_id" UUID,
+    "related_to_entity_type" TEXT,
+    "related_to_entity_id" UUID,
+    "amount" DECIMAL(10,2) NOT NULL,
+    "currency" CHAR(3) NOT NULL DEFAULT 'USD',
+    "status" "payment_status" NOT NULL DEFAULT 'pending',
+    "gateway_transaction_id" TEXT,
+    "gateway_response" JSONB,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "payments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "profiles" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
+    "name" TEXT,
+    "phone" TEXT,
+    "location_id" UUID,
+    "experience_years" INTEGER,
+    "metadata" JSONB,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "profiles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "refresh_tokens" (
+    "id" BIGSERIAL NOT NULL,
+    "user_id" UUID NOT NULL,
+    "token_hash" TEXT NOT NULL,
+    "user_agent" TEXT,
+    "ip_address" INET,
+    "expires_at" TIMESTAMP(6) NOT NULL,
+    "revoked_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "refresh_tokens_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "reports" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "reporter_id" UUID,
+    "target_id" UUID NOT NULL,
+    "target_type" "report_target_type" NOT NULL,
+    "reason" TEXT NOT NULL,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "status" TEXT DEFAULT 'pending',
+
+    CONSTRAINT "reports_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "resumes" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
+    "content" JSONB,
+    "file_url" TEXT,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "resumes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "roles_permissions" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "role" "user_role" NOT NULL,
+    "permission" TEXT NOT NULL,
+
+    CONSTRAINT "roles_permissions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "saved_jobs" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
+    "job_id" UUID NOT NULL,
+    "saved_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "saved_jobs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "search_history" (
+    "id" BIGSERIAL NOT NULL,
+    "user_id" UUID NOT NULL,
+    "search_query" JSONB NOT NULL,
+    "search_type" TEXT NOT NULL,
+    "searched_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "search_history_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "service_packages" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "price" DECIMAL(10,2) NOT NULL,
+    "currency" CHAR(3) NOT NULL DEFAULT 'USD',
+    "duration_days" INTEGER,
+    "features" JSONB,
+    "is_active" BOOLEAN DEFAULT true,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "service_packages_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "skills" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+    "category" TEXT,
+
+    CONSTRAINT "skills_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "tags" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "tags_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user_follows" (
+    "follower_id" UUID NOT NULL,
+    "following_id" UUID NOT NULL,
+    "followed_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "user_follows_pkey" PRIMARY KEY ("follower_id","following_id")
+);
+
+-- CreateTable
+CREATE TABLE "user_skills" (
+    "user_id" UUID NOT NULL,
+    "skill_id" UUID NOT NULL,
+    "proficiency" INTEGER,
+
+    CONSTRAINT "user_skills_pkey" PRIMARY KEY ("user_id","skill_id")
+);
+
+-- CreateTable
+CREATE TABLE "user_tokens" (
+    "token_hash" TEXT NOT NULL,
+    "user_id" UUID NOT NULL,
+    "type" "user_token_type" NOT NULL,
+    "expires_at" TIMESTAMP(6) NOT NULL,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "user_tokens_pkey" PRIMARY KEY ("token_hash")
+);
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "email" TEXT NOT NULL,
+    "password_hash" TEXT NOT NULL,
+    "role" "user_role" NOT NULL,
+    "verified" BOOLEAN DEFAULT false,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN DEFAULT false,
+    "version" INTEGER DEFAULT 1,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE INDEX "idx_activity_logs_user" ON "activity_logs"("user_id");
+
+-- CreateIndex
+CREATE INDEX "idx_applications_job" ON "applications"("job_id");
+
+-- CreateIndex
+CREATE INDEX "idx_applications_user_job" ON "applications"("user_id", "job_id");
+
+-- CreateIndex
+CREATE INDEX "idx_attachments_owner" ON "attachments"("owner_type", "owner_id");
+
+-- CreateIndex
+CREATE INDEX "idx_audits_table_record" ON "audits"("table_name", "record_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "company_subscriptions_payment_id_key" ON "company_subscriptions"("payment_id");
+
+-- CreateIndex
+CREATE INDEX "idx_company_subscriptions_company" ON "company_subscriptions"("company_id", "status", "end_date");
+
+-- CreateIndex
+CREATE INDEX "idx_company_subscriptions_package" ON "company_subscriptions"("package_id");
+
+-- CreateIndex
+CREATE INDEX "idx_company_subscriptions_payment" ON "company_subscriptions"("payment_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "job_posts_history_job_id_version_key" ON "job_posts_history"("job_id", "version");
+
+-- CreateIndex
+CREATE INDEX "idx_jobs_company" ON "jobs"("company_id");
+
+-- CreateIndex
+CREATE INDEX "idx_jobs_location" ON "jobs"("location_id");
+
+-- CreateIndex
+CREATE INDEX "idx_jobs_posted_at" ON "jobs"("posted_at");
+
+-- CreateIndex
+CREATE INDEX "idx_jobs_status" ON "jobs"("status");
+
+-- CreateIndex
+CREATE INDEX "idx_notifications_user_read" ON "notifications"("user_id", "read", "sent_at" DESC);
+
+-- CreateIndex
+CREATE INDEX "idx_payments_user" ON "payments"("user_id");
+
+-- CreateIndex
+CREATE INDEX "gin_profiles_metadata" ON "profiles" USING GIN ("metadata" jsonb_path_ops);
+
+-- CreateIndex
+CREATE INDEX "idx_profiles_user" ON "profiles"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "refresh_tokens_token_hash_key" ON "refresh_tokens"("token_hash");
+
+-- CreateIndex
+CREATE INDEX "idx_refresh_tokens_user_id" ON "refresh_tokens"("user_id");
+
+-- CreateIndex
+CREATE INDEX "idx_resumes_user" ON "resumes"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "roles_permissions_role_permission_key" ON "roles_permissions"("role", "permission");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "saved_jobs_user_id_job_id_key" ON "saved_jobs"("user_id", "job_id");
+
+-- CreateIndex
+CREATE INDEX "idx_search_history_user_time" ON "search_history"("user_id", "searched_at" DESC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "service_packages_name_key" ON "service_packages"("name");
+
+-- CreateIndex
+CREATE INDEX "idx_service_packages_active" ON "service_packages"("is_active");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "skills_name_key" ON "skills"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tags_name_key" ON "tags"("name");
+
+-- CreateIndex
+CREATE INDEX "idx_user_follows_following" ON "user_follows"("following_id");
+
+-- CreateIndex
+CREATE INDEX "idx_user_tokens_expires_at" ON "user_tokens"("expires_at");
+
+-- CreateIndex
+CREATE INDEX "idx_user_tokens_user_id_type" ON "user_tokens"("user_id", "type");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE INDEX "trigram_users_email" ON "users" USING GIST ("email" gist_trgm_ops);
+
+-- AddForeignKey
+ALTER TABLE "applications" ADD CONSTRAINT "applications_job_id_fkey" FOREIGN KEY ("job_id") REFERENCES "jobs"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "applications" ADD CONSTRAINT "applications_resume_id_fkey" FOREIGN KEY ("resume_id") REFERENCES "resumes"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "applications" ADD CONSTRAINT "applications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "companies" ADD CONSTRAINT "companies_recruiter_id_fkey" FOREIGN KEY ("recruiter_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "company_subscriptions" ADD CONSTRAINT "company_subscriptions_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "company_subscriptions" ADD CONSTRAINT "company_subscriptions_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "service_packages"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "company_subscriptions" ADD CONSTRAINT "company_subscriptions_payment_id_fkey" FOREIGN KEY ("payment_id") REFERENCES "payments"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "job_posts_history" ADD CONSTRAINT "job_posts_history_job_id_fkey" FOREIGN KEY ("job_id") REFERENCES "jobs"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "job_skills" ADD CONSTRAINT "job_skills_job_id_fkey" FOREIGN KEY ("job_id") REFERENCES "jobs"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "job_skills" ADD CONSTRAINT "job_skills_skill_id_fkey" FOREIGN KEY ("skill_id") REFERENCES "skills"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "job_tags" ADD CONSTRAINT "job_tags_job_id_fkey" FOREIGN KEY ("job_id") REFERENCES "jobs"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "job_tags" ADD CONSTRAINT "job_tags_tag_id_fkey" FOREIGN KEY ("tag_id") REFERENCES "tags"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "locations"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "payments" ADD CONSTRAINT "payments_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "payments" ADD CONSTRAINT "payments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "profiles" ADD CONSTRAINT "profiles_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "locations"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "profiles" ADD CONSTRAINT "profiles_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "reports" ADD CONSTRAINT "reports_reporter_id_fkey" FOREIGN KEY ("reporter_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "resumes" ADD CONSTRAINT "resumes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "saved_jobs" ADD CONSTRAINT "saved_jobs_job_id_fkey" FOREIGN KEY ("job_id") REFERENCES "jobs"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "saved_jobs" ADD CONSTRAINT "saved_jobs_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "search_history" ADD CONSTRAINT "search_history_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "user_follows" ADD CONSTRAINT "user_follows_follower_id_fkey" FOREIGN KEY ("follower_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "user_follows" ADD CONSTRAINT "user_follows_following_id_fkey" FOREIGN KEY ("following_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "user_skills" ADD CONSTRAINT "user_skills_skill_id_fkey" FOREIGN KEY ("skill_id") REFERENCES "skills"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "user_skills" ADD CONSTRAINT "user_skills_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "user_tokens" ADD CONSTRAINT "user_tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+-- ======== Audit Trigger Function ========
+CREATE OR REPLACE FUNCTION audit_trigger() RETURNS TRIGGER AS $$
+DECLARE
+    app_user_id UUID;
+    v_record_id TEXT;
+BEGIN
+    -- Cố gắng lấy user_id từ cài đặt session, bỏ qua nếu không được set
+    BEGIN
+        app_user_id := current_setting('myapp.user_id', true)::UUID;
+    EXCEPTION WHEN OTHERS THEN
+        app_user_id := NULL;
+    END;
+
+    IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
+        v_record_id := NEW.id::text;
+    ELSIF (TG_OP = 'DELETE') THEN
+        v_record_id := OLD.id::text;
+    END IF;
+
+    IF (TG_OP = 'INSERT') THEN
+        INSERT INTO audits (table_name, record_id, action, old_data, new_data, user_id)
+        VALUES (TG_TABLE_NAME, v_record_id, TG_OP, NULL, row_to_json(NEW)::JSONB, app_user_id);
+        RETURN NEW;
+    ELSIF (TG_OP = 'UPDATE') THEN
+        IF OLD IS DISTINCT FROM NEW THEN
+             INSERT INTO audits (table_name, record_id, action, old_data, new_data, user_id)
+             VALUES (TG_TABLE_NAME, v_record_id, TG_OP, row_to_json(OLD)::JSONB, row_to_json(NEW)::JSONB, app_user_id);
+        END IF;
+        RETURN NEW;
+    ELSIF (TG_OP = 'DELETE') THEN
+        INSERT INTO audits (table_name, record_id, action, old_data, new_data, user_id)
+        VALUES (TG_TABLE_NAME, v_record_id, TG_OP, row_to_json(OLD)::JSONB, NULL, app_user_id);
+        RETURN OLD;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ======== Timestamp Trigger Function ========
+CREATE OR REPLACE FUNCTION trigger_set_timestamp() RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ======== Apply Audit Triggers ========
+CREATE TRIGGER audit_users_trigger AFTER INSERT OR UPDATE OR DELETE ON users FOR EACH ROW EXECUTE FUNCTION audit_trigger();
+CREATE TRIGGER audit_jobs_trigger AFTER INSERT OR UPDATE OR DELETE ON jobs FOR EACH ROW EXECUTE FUNCTION audit_trigger();
+CREATE TRIGGER audit_applications_trigger AFTER INSERT OR UPDATE OR DELETE ON applications FOR EACH ROW EXECUTE FUNCTION audit_trigger();
+CREATE TRIGGER audit_companies_trigger AFTER INSERT OR UPDATE OR DELETE ON companies FOR EACH ROW EXECUTE FUNCTION audit_trigger();
+
+-- ======== Apply Timestamp Triggers ========
+CREATE TRIGGER set_users_timestamp BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();
+CREATE TRIGGER set_profiles_timestamp BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();
+CREATE TRIGGER set_companies_timestamp BEFORE UPDATE ON companies FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();
+CREATE TRIGGER set_resumes_timestamp BEFORE UPDATE ON resumes FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();
+CREATE TRIGGER set_payments_timestamp BEFORE UPDATE ON payments FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();
+CREATE TRIGGER set_service_packages_timestamp BEFORE UPDATE ON service_packages FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();
+CREATE TRIGGER set_company_subscriptions_timestamp BEFORE UPDATE ON company_subscriptions FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();
+
+-- ======== Materialized Views ========
+CREATE MATERIALIZED VIEW IF NOT EXISTS mv_report_revenue_daily AS
+SELECT
+    DATE_TRUNC('day', p.created_at) AS report_day,
+    p.currency,
+    sp.name AS package_name,
+    COUNT(p.id) AS payments_count,
+    SUM(p.amount) AS total_revenue
+FROM payments p
+JOIN company_subscriptions cs ON p.id = cs.payment_id
+JOIN service_packages sp ON cs.package_id = sp.id
+WHERE p.status = 'completed'
+GROUP BY report_day, p.currency, sp.name;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_mv_report_revenue_day_pkg ON mv_report_revenue_daily (report_day, package_name, currency);
+
+---
+CREATE MATERIALIZED VIEW IF NOT EXISTS mv_report_job_performance AS
+SELECT
+    j.id AS job_id,
+    j.company_id,
+    j.title,
+    j.status,
+    COUNT(a.id) AS total_applications,
+    COUNT(CASE WHEN a.status = 'accepted' THEN 1 END) AS accepted_applications
+FROM jobs j
+LEFT JOIN applications a ON a.job_id = j.id
+GROUP BY j.id, j.company_id, j.title, j.status;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_mv_report_job_perf_job_id ON mv_report_job_performance (job_id);
+CREATE INDEX IF NOT EXISTS idx_mv_report_job_perf_company ON mv_report_job_performance (company_id);
+
+---
+CREATE MATERIALIZED VIEW IF NOT EXISTS mv_report_user_growth AS
+SELECT
+    DATE_TRUNC('day', created_at) AS registration_day,
+    role,
+    COUNT(id) AS new_users_count
+FROM users
+WHERE deleted = FALSE
+GROUP BY registration_day, role;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_mv_report_user_growth_day_role ON mv_report_user_growth (registration_day, role);

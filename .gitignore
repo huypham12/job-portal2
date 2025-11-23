@@ -1,4 +1,5 @@
 node_modules/
 dist/
-
-/generated/prisma
+.env
+notes/
+huypham2_accessKeys.csv

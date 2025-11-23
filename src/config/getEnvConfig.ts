@@ -50,7 +50,6 @@ interface EnvConfig {
       payments: string
       rolesPermissions: string
       activityLogs: string
-      attachments: string
       jobSkills: string
       userSkills: string
       jobTags: string
@@ -81,10 +80,13 @@ interface EnvConfig {
     emailVerify: string
     forgotPassword: string
   }
-  sendGrid: {
-    apiKey: string
+  aws: {
+    accessKeyId: string
+    secretAccessKey: string
+    region: string
+    sesFromAddress: string
+    s3BucketName: string
   }
-  resendApiKey: string
 }
 
 /**
@@ -124,7 +126,6 @@ const dbTables = {
   PAYMENTS: 'DB_PAYMENTS_TABLE',
   ROLES_PERMISSIONS: 'DB_ROLES_PERMISSIONS_TABLE',
   ACTIVITY_LOGS: 'DB_ACTIVITY_LOGS_TABLE',
-  ATTACHMENTS: 'DB_ATTACHMENTS_TABLE',
   JOB_SKILLS: 'DB_JOB_SKILLS_TABLE',
   USER_SKILLS: 'DB_USER_SKILLS_TABLE',
   JOB_TAGS: 'DB_JOB_TAGS_TABLE',
@@ -170,7 +171,6 @@ export const envConfig: EnvConfig = {
       payments: getEnvVar(dbTables.PAYMENTS, false, 'payments'),
       rolesPermissions: getEnvVar(dbTables.ROLES_PERMISSIONS, false, 'roles_permissions'),
       activityLogs: getEnvVar(dbTables.ACTIVITY_LOGS, false, 'activity_logs'),
-      attachments: getEnvVar(dbTables.ATTACHMENTS, false, 'attachments'),
       jobSkills: getEnvVar(dbTables.JOB_SKILLS, false, 'job_skills'),
       userSkills: getEnvVar(dbTables.USER_SKILLS, false, 'user_skills'),
       jobTags: getEnvVar(dbTables.JOB_TAGS, false, 'job_tags'),
@@ -201,10 +201,16 @@ export const envConfig: EnvConfig = {
     emailVerify: getEnvVar('EMAIL_VERIFY_TOKEN_EXPIRES_IN', true, '1d'),
     forgotPassword: getEnvVar('FORGOT_PASSWORD_TOKEN_EXPIRES_IN', true, '1h')
   },
-  sendGrid: {
-    apiKey: getEnvVar('SENDGRID_API_KEY', false)
-  },
-  resendApiKey: getEnvVar('RESEND_API_KEY', false)
+  aws: {
+    accessKeyId: getEnvVar('AWS_ACCESS_KEY_ID', false),
+    secretAccessKey: getEnvVar('AWS_SECRET_ACCESS_KEY', false),
+    region: getEnvVar('AWS_REGION', false, 'ap-southeast-1'),
+    sesFromAddress: getEnvVar('SES_FROM_ADDRESS', false),
+    s3BucketName: (process.env.S3_BUCKET_NAME || process.env.AWS_S3_BUCKET_NAME || 'job-portal-uploads').replace(
+      /^['"]|['"]$/g,
+      ''
+    )
+  }
 }
 
 // Self-invoking function to validate critical configurations on application start

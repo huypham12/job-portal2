@@ -1,0 +1,14 @@
+import { SuccessResponseDto } from '@/shared/common/success-response.dto'
+import { HTTP_STATUS } from '@/shared/constants/httpStatus'
+
+export class VerifyEmailBodyDto {
+  constructor(public token: string) {}
+}
+
+export class VerifyEmailResponseDto extends SuccessResponseDto<{
+  message: string
+}> {
+  constructor(message: string) {
+    super(HTTP_STATUS.OK, message)
+  }
+}
