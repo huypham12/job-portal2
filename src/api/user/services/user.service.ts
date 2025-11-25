@@ -239,6 +239,20 @@ export class UserService {
     })
   }
 
+  // Ensure we always work with an existing profile before mutating child tables
+  private getProfileIdOrThrow = async (userId: string) => {
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return profile.id
+  }
+
   // Tạo profile mới
   async createProfile(
     userId: string,
@@ -264,7 +278,7 @@ export class UserService {
     }
   ) {
     // Kiểm tra xem profile đã tồn tại chưa
-    const existing = await prisma.profiles.findFirst({
+    const existing = await prisma.profiles.findUnique({
       where: { user_id: userId }
     })
 
@@ -306,6 +320,7 @@ export class UserService {
         personal_website: true,
         linkedin_url: true,
         github_url: true,
+        avatar_url: true,
         location_id: true,
         location_text: true,
         bio: true,
@@ -343,9 +358,8 @@ export class UserService {
     // Lọc bỏ các field undefined để tránh overwrite ngoài ý muốn
     const cleaned = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined))
 
-    const existing = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      orderBy: { created_at: 'asc' }
+    const existing = await prisma.profiles.findUnique({
+      where: { user_id: userId }
     })
 
     if (existing) {
@@ -359,6 +373,7 @@ export class UserService {
           display_name: true,
           headline: true,
           phone_number: true,
+          avatar_url: true,
           location_id: true,
           location_text: true,
           bio: true,
@@ -388,6 +403,7 @@ export class UserService {
         display_name: true,
         headline: true,
         phone_number: true,
+        avatar_url: true,
         location_id: true,
         location_text: true,
         bio: true,
@@ -613,6 +629,7 @@ export class UserService {
               display_name: true,
               headline: true,
               phone_number: true,
+              avatar_url: true,
               location_text: true,
               is_looking_for_job: true
             }
@@ -636,19 +653,11 @@ export class UserService {
 
   // === PROFILE EXPERIENCE METHODS ===
   async createProfileExperience(userId: string, data: any) {
-    // Get profile ID first
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
+    const profileId = await this.getProfileIdOrThrow(userId)
 
     return await prisma.profile_experiences.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -664,20 +673,18 @@ export class UserService {
   }
 
   async updateProfileExperience(userId: string, experienceId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const experience = await prisma.profile_experiences.findFirst({
+      where: { id: experienceId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!experience) {
+      throw new Error('Experience not found')
     }
 
     return await prisma.profile_experiences.update({
-      where: {
-        id: experienceId,
-        profile_id: profile.id
-      },
+      where: { id: experience.id },
       data,
       select: {
         id: true,
@@ -692,37 +699,28 @@ export class UserService {
   }
 
   async deleteProfileExperience(userId: string, experienceId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const experience = await prisma.profile_experiences.findFirst({
+      where: { id: experienceId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!experience) {
+      throw new Error('Experience not found')
     }
 
     return await prisma.profile_experiences.delete({
-      where: {
-        id: experienceId,
-        profile_id: profile.id
-      }
+      where: { id: experience.id }
     })
   }
 
   // === PROFILE EDUCATION METHODS ===
   async createProfileEducation(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
+    const profileId = await this.getProfileIdOrThrow(userId)
 
     return await prisma.profile_educations.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -737,20 +735,18 @@ export class UserService {
   }
 
   async updateProfileEducation(userId: string, educationId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const education = await prisma.profile_educations.findFirst({
+      where: { id: educationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!education) {
+      throw new Error('Education not found')
     }
 
     return await prisma.profile_educations.update({
-      where: {
-        id: educationId,
-        profile_id: profile.id
-      },
+      where: { id: education.id },
       data,
       select: {
         id: true,
@@ -764,37 +760,28 @@ export class UserService {
   }
 
   async deleteProfileEducation(userId: string, educationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const education = await prisma.profile_educations.findFirst({
+      where: { id: educationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!education) {
+      throw new Error('Education not found')
     }
 
     return await prisma.profile_educations.delete({
-      where: {
-        id: educationId,
-        profile_id: profile.id
-      }
+      where: { id: education.id }
     })
   }
 
   // === PROFILE SKILL METHODS ===
   async createProfileSkill(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
+    const profileId = await this.getProfileIdOrThrow(userId)
 
     return await prisma.profile_skills.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -813,22 +800,22 @@ export class UserService {
   }
 
   async updateProfileSkill(userId: string, skillId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const where = {
+      profile_id_skill_id: {
+        profile_id: profileId,
+        skill_id: skillId
+      }
+    }
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    const existing = await prisma.profile_skills.findUnique({ where, select: { skill_id: true } })
+
+    if (!existing) {
+      throw new Error('Skill not found')
     }
 
     return await prisma.profile_skills.update({
-      where: {
-        profile_id_skill_id: {
-          profile_id: profile.id,
-          skill_id: skillId
-        }
-      },
+      where,
       data,
       select: {
         skill_id: true,
@@ -846,39 +833,30 @@ export class UserService {
   }
 
   async deleteProfileSkill(userId: string, skillId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const where = {
+      profile_id_skill_id: {
+        profile_id: profileId,
+        skill_id: skillId
+      }
     }
 
-    return await prisma.profile_skills.delete({
-      where: {
-        profile_id_skill_id: {
-          profile_id: profile.id,
-          skill_id: skillId
-        }
-      }
-    })
+    const existing = await prisma.profile_skills.findUnique({ where, select: { skill_id: true } })
+
+    if (!existing) {
+      throw new Error('Skill not found')
+    }
+
+    return await prisma.profile_skills.delete({ where })
   }
 
   // === PROFILE CERTIFICATION METHODS ===
   async createProfileCertification(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
+    const profileId = await this.getProfileIdOrThrow(userId)
 
     return await prisma.profile_certifications.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -899,20 +877,18 @@ export class UserService {
   }
 
   async updateProfileCertification(userId: string, certificationId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const certification = await prisma.profile_certifications.findFirst({
+      where: { id: certificationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!certification) {
+      throw new Error('Certification not found')
     }
 
     return await prisma.profile_certifications.update({
-      where: {
-        id: certificationId,
-        profile_id: profile.id
-      },
+      where: { id: certification.id },
       data,
       select: {
         id: true,
@@ -932,37 +908,28 @@ export class UserService {
   }
 
   async deleteProfileCertification(userId: string, certificationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const certification = await prisma.profile_certifications.findFirst({
+      where: { id: certificationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!certification) {
+      throw new Error('Certification not found')
     }
 
     return await prisma.profile_certifications.delete({
-      where: {
-        id: certificationId,
-        profile_id: profile.id
-      }
+      where: { id: certification.id }
     })
   }
 
   // === PROFILE AWARD METHODS ===
   async createProfileAward(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
+    const profileId = await this.getProfileIdOrThrow(userId)
 
     return await prisma.profile_awards.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -981,20 +948,18 @@ export class UserService {
   }
 
   async updateProfileAward(userId: string, awardId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const award = await prisma.profile_awards.findFirst({
+      where: { id: awardId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!award) {
+      throw new Error('Award not found')
     }
 
     return await prisma.profile_awards.update({
-      where: {
-        id: awardId,
-        profile_id: profile.id
-      },
+      where: { id: award.id },
       data,
       select: {
         id: true,
@@ -1012,20 +977,18 @@ export class UserService {
   }
 
   async deleteProfileAward(userId: string, awardId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const award = await prisma.profile_awards.findFirst({
+      where: { id: awardId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!award) {
+      throw new Error('Award not found')
     }
 
     return await prisma.profile_awards.delete({
-      where: {
-        id: awardId,
-        profile_id: profile.id
-      }
+      where: { id: award.id }
     })
   }
 
@@ -1047,6 +1010,7 @@ export class UserService {
             full_name: true,
             display_name: true,
             headline: true,
+            avatar_url: true,
             years_of_experience: true,
             is_looking_for_job: true,
             location_text: true
@@ -1058,7 +1022,7 @@ export class UserService {
 
   // Get complete profile data (for profile page)
   async getCompleteProfile(userId: string) {
-    return await prisma.profiles.findFirst({
+    return await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         id: true,
@@ -1072,6 +1036,7 @@ export class UserService {
         personal_website: true,
         linkedin_url: true,
         github_url: true,
+        avatar_url: true,
         location_text: true,
         location_id: true,
         bio: true,
@@ -1181,7 +1146,7 @@ export class UserService {
     const skip = (page - 1) * limit
 
     // Get profile first
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1248,7 +1213,7 @@ export class UserService {
     const skip = (page - 1) * limit
 
     // Get profile first
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1312,7 +1277,7 @@ export class UserService {
     const skip = (page - 1) * limit
 
     // Get profile for candidate interests
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1443,7 +1408,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         applications: {
@@ -1483,7 +1448,7 @@ export class UserService {
 
   // Get candidate resumes (moved from users to profiles)
   async getCandidateResumes(userId: string) {
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         resumes: {
@@ -1508,7 +1473,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         saved_jobs: {
@@ -1558,7 +1523,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         candidate_interests: {
@@ -1626,6 +1591,7 @@ export class UserService {
             id: true,
             display_name: true,
             headline: true,
+            avatar_url: true,
             location_id: true,
             location_text: true,
             is_looking_for_job: true,
@@ -1656,20 +1622,9 @@ export class UserService {
 
   // === GET INDIVIDUAL SUB-RESOURCES ===
   async getProfileExperience(userId: string, experienceId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_experiences.findFirst({
-      where: {
-        id: experienceId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const experience = await prisma.profile_experiences.findFirst({
+      where: { id: experienceId, profile_id: profileId },
       select: {
         id: true,
         company_name: true,
@@ -1680,23 +1635,18 @@ export class UserService {
         description: true
       }
     })
+
+    if (!experience) {
+      throw new Error('Experience not found')
+    }
+
+    return experience
   }
 
   async getProfileEducation(userId: string, educationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_educations.findFirst({
-      where: {
-        id: educationId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const education = await prisma.profile_educations.findFirst({
+      where: { id: educationId, profile_id: profileId },
       select: {
         id: true,
         school_name: true,
@@ -1706,23 +1656,18 @@ export class UserService {
         end_date: true
       }
     })
+
+    if (!education) {
+      throw new Error('Education not found')
+    }
+
+    return education
   }
 
   async getProfileSkill(userId: string, skillId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_skills.findFirst({
-      where: {
-        profile_id: profile.id,
-        skill_id: skillId
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const skill = await prisma.profile_skills.findFirst({
+      where: { profile_id: profileId, skill_id: skillId },
       select: {
         skill_id: true,
         proficiency: true,
@@ -1736,23 +1681,18 @@ export class UserService {
         }
       }
     })
+
+    if (!skill) {
+      throw new Error('Skill not found')
+    }
+
+    return skill
   }
 
   async getProfileCertification(userId: string, certificationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_certifications.findFirst({
-      where: {
-        id: certificationId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const certification = await prisma.profile_certifications.findFirst({
+      where: { id: certificationId, profile_id: profileId },
       select: {
         id: true,
         name: true,
@@ -1768,23 +1708,18 @@ export class UserService {
         updated_at: true
       }
     })
+
+    if (!certification) {
+      throw new Error('Certification not found')
+    }
+
+    return certification
   }
 
   async getProfileAward(userId: string, awardId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_awards.findFirst({
-      where: {
-        id: awardId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const award = await prisma.profile_awards.findFirst({
+      where: { id: awardId, profile_id: profileId },
       select: {
         id: true,
         title: true,
@@ -1798,6 +1733,12 @@ export class UserService {
         updated_at: true
       }
     })
+
+    if (!award) {
+      throw new Error('Award not found')
+    }
+
+    return award
   }
 
   // === GET COLLECTIONS WITH PAGINATION ===
@@ -1805,7 +1746,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1848,7 +1789,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1890,7 +1831,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1938,7 +1879,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1986,7 +1927,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
