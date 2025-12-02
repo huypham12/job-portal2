@@ -1,0 +1,71 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:18
+    container_name: job-portal-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_DATABASE:-job_portal}
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - job-portal-net
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.2
+    container_name: job-portal-elasticsearch
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: '${ELASTIC_ENABLE_SECURITY:-false}'
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME:-elastic}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-changeme}
+      ES_JAVA_OPTS: ${ES_JAVA_OPTS:--Xms1g -Xmx1g}
+    ports:
+      - '${ELASTICSEARCH_HTTP_PORT:-9200}:9200'
+      - '${ELASTICSEARCH_TCP_PORT:-9300}:9300'
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - job-portal-net
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9200']
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.2
+    container_name: job-portal-kibana
+    restart: unless-stopped
+    environment:
+      ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_HOSTS:-http://elasticsearch:9200}
+      ELASTICSEARCH_USERNAME: ${ELASTIC_USERNAME:-elastic}
+      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-changeme}
+      SERVER_PUBLICBASEURL: ${KIBANA_PUBLIC_URL:-http://localhost:5601}
+    ports:
+      - '${KIBANA_PORT:-5601}:5601'
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - job-portal-net
+
+networks:
+  job-portal-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  es_data:
+

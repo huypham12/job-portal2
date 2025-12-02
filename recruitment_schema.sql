@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict QClcTsXLEdqFHPDrSNRq53j82Kd2zAbjiJsKGzOWk9KTx3WLNib9AKuUd8mfs5Q
+\restrict Tz5EZZL55w9fKXElTLGr8NatXskgN162fSd3FmGArfXi6UmUtgI2dG7Uuphghha
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -41,18 +41,6 @@ CREATE TYPE recruitment.application_status AS ENUM (
 
 
 ALTER TYPE recruitment.application_status OWNER TO postgres;
-
---
--- Name: attachment_owner_type; Type: TYPE; Schema: recruitment; Owner: postgres
---
-
-CREATE TYPE recruitment.attachment_owner_type AS ENUM (
-    'user',
-    'company'
-);
-
-
-ALTER TYPE recruitment.attachment_owner_type OWNER TO postgres;
 
 --
 -- Name: job_status; Type: TYPE; Schema: recruitment; Owner: postgres
@@ -509,25 +497,6 @@ CREATE TABLE recruitment.applications (
 ALTER TABLE recruitment.applications OWNER TO postgres;
 
 --
--- Name: attachments; Type: TABLE; Schema: recruitment; Owner: postgres
---
-
-CREATE TABLE recruitment.attachments (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    file_url text NOT NULL,
-    type text,
-    owner_id uuid NOT NULL,
-    owner_type recruitment.attachment_owner_type NOT NULL,
-    original_filename text,
-    mime_type text,
-    size_bytes bigint,
-    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP
-);
-
-
-ALTER TABLE recruitment.attachments OWNER TO postgres;
-
---
 -- Name: audits; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
@@ -613,23 +582,6 @@ CREATE TABLE recruitment.company_benefits (
 ALTER TABLE recruitment.company_benefits OWNER TO postgres;
 
 --
--- Name: company_cultures; Type: TABLE; Schema: recruitment; Owner: postgres
---
-
-CREATE TABLE recruitment.company_cultures (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    company_id uuid NOT NULL,
-    culture_aspect character varying(50) NOT NULL,
-    rating integer,
-    description text,
-    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT check_culture_rating CHECK (((rating IS NULL) OR ((rating >= 1) AND (rating <= 5))))
-);
-
-
-ALTER TABLE recruitment.company_cultures OWNER TO postgres;
-
---
 -- Name: company_details; Type: TABLE; Schema: recruitment; Owner: postgres
 --
 
@@ -646,7 +598,8 @@ CREATE TABLE recruitment.company_details (
     revenue_range character varying(50),
     stock_symbol character varying(10),
     created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    culture_description text
 );
 
 
@@ -1129,7 +1082,8 @@ CREATE TABLE recruitment.profiles (
     location_text character varying(100),
     personal_website character varying(255),
     phone_number character varying(20),
-    years_of_experience integer DEFAULT 0
+    years_of_experience integer DEFAULT 0,
+    avatar_url text
 );
 
 
@@ -1347,14 +1301,6 @@ ALTER TABLE ONLY recruitment.applications
 
 
 --
--- Name: attachments attachments_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.attachments
-    ADD CONSTRAINT attachments_pkey PRIMARY KEY (id);
-
-
---
 -- Name: audits audits_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -1376,14 +1322,6 @@ ALTER TABLE ONLY recruitment.companies
 
 ALTER TABLE ONLY recruitment.company_benefits
     ADD CONSTRAINT company_benefits_pkey PRIMARY KEY (id);
-
-
---
--- Name: company_cultures company_cultures_pkey; Type: CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.company_cultures
-    ADD CONSTRAINT company_cultures_pkey PRIMARY KEY (id);
 
 
 --
@@ -1687,13 +1625,6 @@ CREATE INDEX idx_applications_profile_job ON recruitment.applications USING btre
 
 
 --
--- Name: idx_attachments_owner; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_attachments_owner ON recruitment.attachments USING btree (owner_type, owner_id);
-
-
---
 -- Name: idx_audits_table_record; Type: INDEX; Schema: recruitment; Owner: postgres
 --
 
@@ -1733,13 +1664,6 @@ CREATE INDEX idx_company_benefits_company ON recruitment.company_benefits USING 
 --
 
 CREATE INDEX idx_company_benefits_fulltext ON recruitment.company_benefits USING gin (to_tsvector('english'::regconfig, (((title)::text || ' '::text) || COALESCE(description, ''::text))));
-
-
---
--- Name: idx_company_cultures_company; Type: INDEX; Schema: recruitment; Owner: postgres
---
-
-CREATE INDEX idx_company_cultures_company ON recruitment.company_cultures USING btree (company_id);
 
 
 --
@@ -2275,14 +2199,6 @@ ALTER TABLE ONLY recruitment.company_benefits
 
 
 --
--- Name: company_cultures company_cultures_company_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
---
-
-ALTER TABLE ONLY recruitment.company_cultures
-    ADD CONSTRAINT company_cultures_company_id_fkey FOREIGN KEY (company_id) REFERENCES recruitment.companies(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
 -- Name: company_details company_details_company_id_fkey; Type: FK CONSTRAINT; Schema: recruitment; Owner: postgres
 --
 
@@ -2558,5 +2474,5 @@ ALTER TABLE ONLY recruitment.user_tokens
 -- PostgreSQL database dump complete
 --
 
-\unrestrict QClcTsXLEdqFHPDrSNRq53j82Kd2zAbjiJsKGzOWk9KTx3WLNib9AKuUd8mfs5Q
+\unrestrict Tz5EZZL55w9fKXElTLGr8NatXskgN162fSd3FmGArfXi6UmUtgI2dG7Uuphghha
 

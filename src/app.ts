@@ -2,11 +2,12 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { envConfig } from './config/getEnvConfig'
-import { authRouter, userRouter } from './api'
+import { authRouter, userRouter, searchRouter, resumeRouter } from './api'
 import { errorHandler } from './shared/middleware/error-handler.middleware'
 import adminRouter from './api/admin/admin.route'
 import { companyRouter } from './api/companies/company.route'
 import { uploadRouter } from './api/uploads/upload.route'
+// import { elasticsearchService } from './config/elasticsearch.service'
 import YAML from 'yaml'
 import swaggerUi from 'swagger-ui-express'
 import fs from 'fs'
@@ -53,9 +54,17 @@ const main = async () => {
     app.use('/api/admin', adminRouter)
     app.use('/api/companies', companyRouter)
     app.use('/api/uploads', uploadRouter)
+    app.use('/api/resumes', resumeRouter)
+    // app.use('/api/search', searchRouter)
     app.use(errorHandler)
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions, swaggerUiOptions))
+
+    // Khởi tạo Elasticsearch
+    // console.log('Initializing Elasticsearch...')
+    // // await elasticsearchService.checkConnection()
+    // // await elasticsearchService.initializeIndices()
+    // console.log('Elasticsearch initialized successfully')
 
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`)

@@ -168,16 +168,7 @@ export const registerValidator = validate(
           })
           .trim(),
         password: passwordSchema,
-        confirm_password: passwordSchema,
-        date_of_birth: z.string().refine(
-          (value) => {
-            const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-            if (!dateRegex.test(value)) return false
-            const date = new Date(value)
-            return !isNaN(date.getTime())
-          },
-          { message: MESSAGES.DATE_OF_BIRTH_MUST_BE_YYYY_MM_DD }
-        )
+        confirm_password: passwordSchema
       })
     })
     .refine((data) => data.body.password === data.body.confirm_password, {

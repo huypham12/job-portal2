@@ -425,16 +425,46 @@ model refresh_tokens {
 }
 
 model resumes {
-  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  content      Json?
-  file_url     String?
-  created_at   DateTime?      @default(now()) @db.Timestamp(6)
-  updated_at   DateTime?      @default(now()) @db.Timestamp(6)
-  profile_id   String         @db.Uuid
+  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id String @db.Uuid
+
+  // === Metadata ===
+  title String @db.VarChar(255)
+
+  // === Source Type ===
+  source_type resume_source @default(created)
+
+  // === Content (Data + Layout + Template Settings) ===
+  content Json?
+
+  // === File Management ===
+  file_url  String?
+  file_name String? @db.VarChar(255)
+  file_size Int?
+  mime_type String? @db.VarChar(100)
+
+  // === Status & Visibility ===
+  is_default Boolean @default(false)
+  is_public  Boolean @default(false)
+  status     String  @default("draft") @db.VarChar(20)
+
+  // === Timestamps ===
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  // === Relations ===
   applications applications[]
   profiles     profiles       @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@index([profile_id], map: "idx_resumes_profile")
+  @@index([profile_id])
+  @@index([profile_id, is_default])
+  @@index([profile_id, status])
+  @@index([profile_id, source_type])
+}
+
+enum resume_source {
+  created // Tạo từ profile, frontend render với template
+  uploaded // Upload file PDF từ máy
 }
 
 model roles_permissions {

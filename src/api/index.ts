@@ -1,3 +1,5 @@
 export { default as authRouter } from './auth/auth.route'
 export { default as userRouter } from './user/user.route'
 export { companyRouter } from './companies/company.route'
+export { default as searchRouter } from './searchs/search.routes'
+export { default as resumeRouter } from './resumes/resume.routes'

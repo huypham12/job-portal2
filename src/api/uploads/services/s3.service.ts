@@ -215,7 +215,11 @@ Possible solutions:
    */
   private getPublicUrl(key: string): string {
     const region = envConfig.aws.region || 'ap-southeast-1'
-    return `https://${this.bucketName}.s3.${region}.amazonaws.com/${key}`
+    const encodedKey = key
+      .split('/')
+      .map((segment) => encodeURIComponent(segment))
+      .join('/')
+    return `https://${this.bucketName}.s3.${region}.amazonaws.com/${encodedKey}`
   }
 
   /**
