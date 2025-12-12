@@ -4,7 +4,16 @@ import { authenticateAccessToken, verifiedUserValidator } from '@/shared/middlew
 import { wrapController } from '@/shared/utils/wrap-controller'
 import { adminOnly } from '@/shared/middleware/authorize.middleware'
 import { AdminService } from './admin.service'
-import { adminUpdateUserBodySchema, getAllUsersQuerySchema, userIdParamsSchema, validate } from './admin.validator'
+import {
+  adminUpdateUserBodySchema,
+  getAllJobsQuerySchema,
+  getAllUsersQuerySchema,
+  jobIdParamsSchema,
+  jobLabelBodySchema,
+  jobRejectBodySchema,
+  userIdParamsSchema,
+  validate
+} from './admin.validator'
 
 const adminRouter = Router()
 const adminService = new AdminService()
@@ -59,6 +68,130 @@ adminRouter.delete(
   adminOnly,
   validate({ params: userIdParamsSchema }), // <-- THAY THẾ
   wrapController(adminController.deleteUserByIdController)
+)
+
+// ========================== JOB MANAGEMENT ROUTES ==========================
+
+/**
+ * @route GET /api/admin/jobs
+ * @desc Lấy danh sách tất cả công việc với phân trang và bộ lọc
+ * @access Private (Admin only)
+ * @query page, limit, search, status, deleted
+ */
+adminRouter.get(
+  '/jobs',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({ query: getAllJobsQuerySchema }),
+  wrapController(adminController.getAllJobsController)
+)
+
+/**
+ * @route GET /api/admin/jobs/pending
+ * @desc Lấy danh sách tin chờ duyệt
+ * @access Private (Admin only)
+ * @query page, limit
+ */
+adminRouter.get(
+  '/jobs/pending',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({ query: getAllJobsQuerySchema }),
+  wrapController(adminController.getPendingJobsController)
+)
+
+/**
+ * @route GET /api/admin/jobs/:id
+ * @desc Lấy chi tiết một công việc (admin view)
+ * @access Private (Admin only)
+ */
+adminRouter.get(
+  '/jobs/:id',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({ params: jobIdParamsSchema }),
+  wrapController(adminController.getJobDetailsController)
+)
+
+/**
+ * @route PATCH /api/admin/jobs/:id/approve
+ * @desc Duyệt tin tuyển dụng → Sync ES
+ * @access Private (Admin only)
+ */
+adminRouter.patch(
+  '/jobs/:id/approve',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({ params: jobIdParamsSchema }),
+  wrapController(adminController.approveJobController)
+)
+
+/**
+ * @route PATCH /api/admin/jobs/:id/reject
+ * @desc Từ chối tin tuyển dụng
+ * @access Private (Admin only)
+ * @body reason
+ */
+adminRouter.patch(
+  '/jobs/:id/reject',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({
+    params: jobIdParamsSchema,
+    body: jobRejectBodySchema
+  }),
+  wrapController(adminController.rejectJobController)
+)
+
+/**
+ * @route PATCH /api/admin/jobs/:id/label
+ * @desc Gán nhãn cho tin (Hot/Urgent/Featured)
+ * @access Private (Admin only)
+ * @body hot?, urgent?, featured?
+ */
+adminRouter.patch(
+  '/jobs/:id/label',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({
+    params: jobIdParamsSchema,
+    body: jobLabelBodySchema
+  }),
+  wrapController(adminController.updateJobLabelsController)
+)
+
+/**
+ * @route DELETE /api/admin/jobs/:id/violation
+ * @desc Gỡ tin vi phạm (soft delete)
+ * @access Private (Admin only)
+ */
+adminRouter.delete(
+  '/jobs/:id/violation',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({ params: jobIdParamsSchema }),
+  wrapController(adminController.deleteJobForViolationController)
+)
+
+/**
+ * @route POST /api/admin/jobs/:id/restore
+ * @desc Khôi phục tin đã xóa
+ * @access Private (Admin only)
+ */
+adminRouter.post(
+  '/jobs/:id/restore',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({ params: jobIdParamsSchema }),
+  wrapController(adminController.restoreJobController)
 )
 
 export default adminRouter

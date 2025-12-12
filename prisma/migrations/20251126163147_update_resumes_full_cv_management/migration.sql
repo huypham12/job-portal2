@@ -6,8 +6,7 @@
   - Made the column `updated_at` on table `resumes` required. This step will fail if there are existing NULL values in that column.
 
 */
--- CreateEnum
-CREATE TYPE "resume_source" AS ENUM ('created', 'uploaded');
+-- Note: resume_source enum already exists from previous migration
 
 -- Step 1: Add new columns with temporary nullable/default values
 ALTER TABLE "resumes"

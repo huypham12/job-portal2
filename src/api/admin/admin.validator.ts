@@ -147,3 +147,82 @@ export type GetAllUsersQuery = z.infer<typeof getAllUsersQuerySchema>
  * Type được suy ra từ adminUpdateUserBodySchema
  */
 export type AdminUpdateUserBody = z.infer<typeof adminUpdateUserBodySchema>
+
+// ========================== JOB MANAGEMENT SCHEMAS ==========================
+
+/**
+ * 4. Schema cho :id (jobId) trong params
+ */
+export const jobIdParamsSchema = z.object({
+  id: z.string({ message: 'id là bắt buộc' }).uuid({ message: 'id phải là UUID' })
+})
+
+/**
+ * 5. Schema cho Query của GET /admin/jobs
+ */
+export const getAllJobsQuerySchema = z.object({
+  page: z
+    .string()
+    .optional()
+    .default('1')
+    .transform((val, ctx) => {
+      const num = parseInt(val, 10)
+      if (isNaN(num) || num <= 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Page phải là số nguyên dương'
+        })
+        return z.NEVER
+      }
+      return num
+    }),
+  limit: z
+    .string()
+    .optional()
+    .default('10')
+    .transform((val, ctx) => {
+      const num = parseInt(val, 10)
+      if (isNaN(num) || num <= 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Limit phải là số nguyên dương'
+        })
+        return z.NEVER
+      }
+      return num
+    }),
+  search: z.string().trim().optional().or(z.literal('')),
+  status: z.enum(['draft', 'approved', 'closed']).optional(),
+  deleted: z
+    .enum(['true', 'false'])
+    .optional()
+    .transform((val) => val === 'true')
+})
+
+/**
+ * 6. Schema cho Body của PATCH /admin/jobs/:id/label
+ */
+export const jobLabelBodySchema = z
+  .object({
+    hot: z.boolean().optional(),
+    urgent: z.boolean().optional(),
+    featured: z.boolean().optional()
+  })
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Body không được rỗng. Cần ít nhất một nhãn để cập nhật.'
+  })
+
+/**
+ * 7. Schema cho Body của PATCH /admin/jobs/:id/reject
+ */
+export const jobRejectBodySchema = z.object({
+  reason: z.string().min(10, 'Lý do từ chối phải có ít nhất 10 ký tự').max(500)
+})
+
+// --- Inferred Types từ Zod Schemas (Jobs) ---
+
+export type JobIdParams = z.infer<typeof jobIdParamsSchema>
+export type GetAllJobsQuery = z.infer<typeof getAllJobsQuerySchema>
+export type JobLabelBody = z.infer<typeof jobLabelBodySchema>
+export type JobRejectBody = z.infer<typeof jobRejectBodySchema>

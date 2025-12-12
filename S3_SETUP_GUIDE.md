@@ -8,6 +8,7 @@
 ## Cấu hình Bucket Policy để files có thể truy cập public
 
 ### Bước 1: Vào AWS S3 Console
+
 1. Đăng nhập AWS Console
 2. Vào S3 → Chọn bucket `job-portal-2025`
 3. Chọn tab **Permissions**
@@ -26,16 +27,8 @@ Trong phần **Bucket Policy**, paste policy sau (thay `YOUR_ACCOUNT_ID` bằng 
       "Principal": {
         "AWS": "arn:aws:iam::YOUR_ACCOUNT_ID:user/huypham2"
       },
-      "Action": [
-        "s3:PutObject",
-        "s3:GetObject",
-        "s3:DeleteObject",
-        "s3:ListBucket"
-      ],
-      "Resource": [
-        "arn:aws:s3:::job-portal-2025",
-        "arn:aws:s3:::job-portal-2025/*"
-      ]
+      "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::job-portal-2025", "arn:aws:s3:::job-portal-2025/*"]
     },
     {
       "Sid": "PublicReadGetObject",
@@ -49,6 +42,7 @@ Trong phần **Bucket Policy**, paste policy sau (thay `YOUR_ACCOUNT_ID` bằng 
 ```
 
 **Lưu ý**:
+
 - Statement đầu cho phép IAM user `huypham2` upload/delete files
 - Statement thứ hai cho phép mọi người (public) đọc files
 
@@ -63,6 +57,7 @@ Trong phần **Bucket Policy**, paste policy sau (thay `YOUR_ACCOUNT_ID` bằng 
 ### Bước 4: Kiểm tra
 
 Sau khi cấu hình:
+
 - ✅ IAM user có thể upload files
 - ✅ Mọi người có thể truy cập files qua public URL
 - ✅ Files được tổ chức theo cấu trúc thư mục rõ ràng
@@ -92,6 +87,7 @@ job-portal-2025/
 ## Lấy AWS Account ID
 
 Để lấy AWS Account ID:
+
 1. Click vào tên user ở góc trên bên phải AWS Console
 2. Account ID sẽ hiển thị ở đó
 3. Hoặc dùng AWS CLI: `aws sts get-caller-identity`
@@ -99,25 +95,24 @@ job-portal-2025/
 ## Nếu muốn files private (chỉ truy cập qua authentication)
 
 Nếu không muốn files public, có thể:
+
 1. Bỏ statement "PublicReadGetObject" trong Bucket Policy
 2. Sử dụng presigned URLs (cần implement thêm trong code)
 3. Files chỉ có thể truy cập bởi IAM user hoặc qua presigned URLs
 
 # cấu hình quyền truy cập
-``` json
+
+```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "PublicReadGetObject",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": [
-                "s3:GetObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::job-portal-2025/*"
-            ]
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": ["s3:GetObject"],
+      "Resource": ["arn:aws:s3:::job-portal-2025/*"]
+    }
+  ]
 }
+```

@@ -240,7 +240,13 @@ const profileAwardBody = z.object({
 // Update profile sub-entities (for PATCH operations)
 const updateProfileExperienceBody = profileExperienceBody.partial()
 const updateProfileEducationBody = profileEducationBody.partial()
-const updateProfileSkillBody = profileSkillBody.partial()
+// For skills, only allow updating proficiency and level, not skill_id
+const updateProfileSkillBody = z
+  .object({
+    proficiency: z.number().int().min(1).max(5).optional(),
+    level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional()
+  })
+  .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
 const updateProfileCertificationBody = profileCertificationBody.partial()
 const updateProfileAwardBody = profileAwardBody.partial()
 
@@ -250,6 +256,7 @@ const educationIdParam = z.object({ educationId: z.string().uuid() })
 const skillIdParam = z.object({ skillId: z.string().uuid() })
 const certificationIdParam = z.object({ certificationId: z.string().uuid() })
 const awardIdParam = z.object({ awardId: z.string().uuid() })
+const profileIdParam = z.object({ id: z.string().uuid('Invalid profile ID format') })
 
 // Combined param validators (userId + sub-entity ID)
 const userExperienceParam = z.object({
@@ -367,6 +374,11 @@ export const getProfileAwardValidator = zodValidate({ params: awardIdParam })
 // Pagination validators
 export const paginationValidator = zodValidate({
   query: paginationQuery
+})
+
+// Profile ID validator for public profile
+export const profileIdValidator = zodValidate({
+  params: profileIdParam
 })
 
 // Export generated types from Zod schemas

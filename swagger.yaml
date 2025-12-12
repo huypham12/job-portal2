@@ -13,8 +13,10 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
+  - url: http://localhost:4000/api
+    description: Local development server
   - url: http://localhost:3000/api
-    description: Development server
+    description: Frontend dev proxy (if applicable)
   - url: https://api.jobportal.com/api
     description: Production server
 
@@ -27,6 +29,20 @@ tags:
     description: Administrative operations (user management, system administration)
   - name: companies
     description: Company profile management operations
+  - name: jobs
+    description: Job postings and listings (public + recruiter)
+  - name: saved-jobs
+    description: Candidate saved jobs
+  - name: skills
+    description: Public skill search and categories
+  - name: uploads
+    description: File uploads (avatar, company logo, resume, application docs)
+  - name: resumes
+    description: Candidate resume management
+  - name: applications
+    description: Job applications (candidate + recruiter workflows)
+  - name: connection-interests
+    description: Connection interest between recruiters and candidates
 
 paths:
   # ============================================
@@ -550,6 +566,100 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /user/profiles/{id}/public:
+    get:
+      tags:
+        - user
+      summary: Get public profile of candidate (Recruiter only)
+      description: |-
+        Get public profile information of a candidate by profile ID.
+        This endpoint allows recruiters to view candidate profiles for recruitment purposes.
+        Sensitive information like phone number and email are excluded from the response.
+      operationId: getPublicProfile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Profile ID (UUID)
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174000'
+      responses:
+        '200':
+          description: Public profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PublicProfileResponse'
+              example:
+                success: true
+                message: 'Profile retrieved successfully'
+                data:
+                  id: '123e4567-e89b-12d3-a456-426614174000'
+                  full_name: 'John Doe'
+                  display_name: 'John'
+                  headline: 'Senior Software Engineer'
+                  avatar_url: 'https://example.com/avatar.jpg'
+                  bio: 'Experienced software developer'
+                  years_of_experience: 5
+                  desired_job_title: 'Full Stack Developer'
+                  desired_salary_min: 20000000
+                  desired_currency: 'VND'
+                  desired_job_type: ['full_time', 'remote']
+                  is_looking_for_job: true
+                  location_text: 'Ho Chi Minh City'
+                  personal_website: 'https://johndoe.dev'
+                  linkedin_url: 'https://linkedin.com/in/johndoe'
+                  github_url: 'https://github.com/johndoe'
+                  role: 'candidate'
+                  location:
+                    id: '123e4567-e89b-12d3-a456-426614174001'
+                    name: 'Ho Chi Minh City'
+                    type: 'city'
+                  experiences: []
+                  educations: []
+                  skills: []
+                  certifications: []
+                  awards: []
+        '401':
+          description: Unauthorized - Invalid or missing access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter access required or profile not available for public viewing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                message: 'This profile is not available for public viewing'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                message: 'Profile not found'
+        '422':
+          description: Unprocessable Entity - Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   # ============================================
   # ADMIN ENDPOINTS
   # ============================================
@@ -936,7 +1046,7 @@ paths:
                 statusCode: 409
                 message: 'Company already exists'
 
-  /companies/my-company:
+  /companies/me:
     get:
       tags:
         - companies
@@ -1116,6 +1226,1411 @@ paths:
               example:
                 statusCode: 404
                 message: 'Company not found'
+
+  /companies/me/details:
+    get:
+      tags:
+        - companies
+      summary: Get my company details (Recruiter only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Company details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - companies
+      summary: Create my company details (Recruiter only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyDetailsRequest'
+      responses:
+        '201':
+          description: Details created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+        - companies
+      summary: Update my company details (Recruiter only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompanyDetailsRequest'
+      responses:
+        '200':
+          description: Details updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - companies
+      summary: Delete my company details (Recruiter only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Details deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /companies/me/benefits:
+    get:
+      tags:
+        - companies
+      summary: Get my company benefits (Recruiter only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Benefits retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - companies
+      summary: Add company benefit (Recruiter only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyBenefitRequest'
+      responses:
+        '201':
+          description: Benefit added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /companies/me/benefits/{id}:
+    patch:
+      tags:
+        - companies
+      summary: Update company benefit (Recruiter only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompanyBenefitRequest'
+      responses:
+        '200':
+          description: Benefit updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ============================================
+  # JOB ENDPOINTS
+  # ============================================
+  /jobs:
+    get:
+      tags: [jobs]
+      summary: List jobs (public)
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: company_id
+          schema: { type: string, format: uuid }
+        - in: query
+          name: location_id
+          schema: { type: string, format: uuid }
+        - in: query
+          name: job_type
+          schema: { $ref: '#/components/schemas/JobType' }
+        - in: query
+          name: experience_level
+          schema: { type: integer }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/JobStatus' }
+        - in: query
+          name: salary_min
+          schema: { type: integer }
+        - in: query
+          name: salary_max
+          schema: { type: integer }
+        - in: query
+          name: sort_by
+          schema: { type: string, enum: [posted_at, title, salary_min, expires_at], default: posted_at }
+        - in: query
+          name: sort_order
+          schema: { type: string, enum: [asc, desc], default: desc }
+      responses:
+        '200': { description: Jobs listed, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessResponse' } } } }
+    post:
+      tags: [jobs]
+      summary: Create job (Recruiter only)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJobRequest'
+      responses:
+        '201': { description: Job created, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessResponse' } } } }
+        '400': { description: Validation error, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '401': { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '403': { description: Forbidden - Recruiter only, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+
+  /jobs/featured:
+    get:
+      tags: [jobs]
+      summary: Get featured jobs (public)
+      responses:
+        '200': { description: OK }
+
+  /jobs/latest:
+    get:
+      tags: [jobs]
+      summary: Get latest jobs (public)
+      responses:
+        '200': { description: OK }
+
+  /jobs/{id}/public:
+    get:
+      tags: [jobs]
+      summary: Get job detail public
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+
+  /jobs/{id}/view:
+    post:
+      tags: [jobs]
+      summary: Track job view
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+
+  /jobs/my-jobs:
+    get:
+      tags: [jobs]
+      summary: List my jobs (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/JobStatus' }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /jobs/{id}/manage:
+    get:
+      tags: [jobs]
+      summary: Get job detail for management (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+        '404': { description: Not found }
+
+  /jobs/{id}/stats:
+    get:
+      tags: [jobs]
+      summary: Get job statistics (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+        '404': { description: Not found }
+
+  /jobs/{id}:
+    put:
+      tags: [jobs]
+      summary: Update job (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateJobRequest'
+      responses:
+        '200': { description: Updated }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+    delete:
+      tags: [jobs]
+      summary: Delete job (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Deleted }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /jobs/{id}/status:
+    patch:
+      tags: [jobs]
+      summary: Update job status (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateJobStatusRequest'
+      responses:
+        '200': { description: Updated }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  # ============================================
+  # SAVED JOB ENDPOINTS
+  # ============================================
+  /saved-jobs:
+    post:
+      tags: [saved-jobs]
+      summary: Save a job (Candidate)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveJobRequest'
+      responses:
+        '201': { description: Saved }
+        '401': { description: Unauthorized }
+    get:
+      tags: [saved-jobs]
+      summary: List saved jobs (Candidate)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 10 }
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: job_type
+          schema: { type: string }
+        - in: query
+          name: location_id
+          schema: { type: string, format: uuid }
+        - in: query
+          name: sort_by
+          schema: { type: string, enum: [saved_at, salary, created_at], default: saved_at }
+        - in: query
+          name: order
+          schema: { type: string, enum: [asc, desc], default: desc }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  /saved-jobs/{jobId}:
+    delete:
+      tags: [saved-jobs]
+      summary: Unsave a job (Candidate)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Removed }
+        '401': { description: Unauthorized }
+
+  /saved-jobs/check/{jobId}:
+    get:
+      tags: [saved-jobs]
+      summary: Check if job is saved (Candidate)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  # ============================================
+  # SKILL ENDPOINTS
+  # ============================================
+  /skills:
+    get:
+      tags: [skills]
+      summary: Search skills (public)
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+
+  /skills/categories:
+    get:
+      tags: [skills]
+      summary: Get skill categories (public)
+      responses:
+        '200': { description: OK }
+
+  # ============================================
+  # UPLOAD ENDPOINTS
+  # ============================================
+  /uploads/avatar:
+    post:
+      tags: [uploads]
+      summary: Upload avatar (Candidate)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200': { description: Uploaded }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /uploads/company-logo/{companyId}:
+    post:
+      tags: [uploads]
+      summary: Upload company logo (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200': { description: Uploaded }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /uploads/resume/{profileId}:
+    post:
+      tags: [uploads]
+      summary: Upload resume file (Candidate)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: profileId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200': { description: Uploaded }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /uploads/application-document/{applicationId}:
+    post:
+      tags: [uploads]
+      summary: Upload application document (Candidate)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: applicationId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                document_type:
+                  type: string
+                  enum: [resume, cover_letter, certificate, portfolio, other]
+      responses:
+        '200': { description: Uploaded }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  # ============================================
+  # RESUME ENDPOINTS
+  # ============================================
+  /resumes/themes:
+    get:
+      tags: [resumes]
+      summary: List resume themes (Candidate)
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  /resumes/from-profile:
+    post:
+      tags: [resumes]
+      summary: Create resume from profile (Candidate)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResumeFromProfileRequest'
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+
+  /resumes:
+    post:
+      tags: [resumes]
+      summary: Create resume (manual)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResumeRequest'
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+    get:
+      tags: [resumes]
+      summary: List resumes (Candidate)
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  /resumes/{id}:
+    get:
+      tags: [resumes]
+      summary: Get resume by id
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '404': { description: Not found }
+    put:
+      tags: [resumes]
+      summary: Update resume
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResumeRequest'
+      responses:
+        '200': { description: Updated }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+    delete:
+      tags: [resumes]
+      summary: Delete resume
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Deleted }
+        '401': { description: Unauthorized }
+
+  /resumes/{id}/default:
+    patch:
+      tags: [resumes]
+      summary: Set resume as default
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Updated }
+        '401': { description: Unauthorized }
+
+  /resumes/upload:
+    post:
+      tags: [resumes]
+      summary: Upload resume file with auto-parse
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                auto_parse:
+                  type: boolean
+                is_default:
+                  type: boolean
+      responses:
+        '200': { description: Uploaded }
+        '401': { description: Unauthorized }
+
+  /resumes/{id}/download:
+    get:
+      tags: [resumes]
+      summary: Download resume file
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: File stream }
+        '401': { description: Unauthorized }
+
+  /resumes/{id}/export:
+    post:
+      tags: [resumes]
+      summary: Export resume to PDF/HTML
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportResumeRequest'
+      responses:
+        '200': { description: Exported }
+        '401': { description: Unauthorized }
+
+  /resumes/{id}/preview:
+    get:
+      tags: [resumes]
+      summary: Preview resume HTML
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  # ============================================
+  # APPLICATION ENDPOINTS (Candidate)
+  # ============================================
+  /applications:
+    post:
+      tags: [applications]
+      summary: Create application (Candidate)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationRequest'
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+    get:
+      tags: [applications]
+      summary: List my applications
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/ApplicationStatus' }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  /applications/{id}:
+    get:
+      tags: [applications]
+      summary: Get application by id
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '404': { description: Not found }
+    delete:
+      tags: [applications]
+      summary: Withdraw application
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Withdrawn }
+        '401': { description: Unauthorized }
+
+  /applications/{id}/stages:
+    get:
+      tags: [applications]
+      summary: Get application stages
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  /applications/{id}/documents:
+    get:
+      tags: [applications]
+      summary: Get application documents
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+    post:
+      tags: [applications]
+      summary: Upload application document
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                document_type:
+                  type: string
+                  maxLength: 50
+      responses:
+        '200': { description: Uploaded }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+
+  # ============================================
+  # APPLICATION ENDPOINTS (Recruiter)
+  # ============================================
+  /applications/job/{jobId}:
+    get:
+      tags: [applications]
+      summary: List applications for a job (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string, format: uuid }
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/ApplicationStatus' }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /applications/job/{jobId}/stats:
+    get:
+      tags: [applications]
+      summary: Get job application stats (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /applications/bulk-update:
+    post:
+      tags: [applications]
+      summary: Bulk update applications (Recruiter)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkUpdateApplicationsRequest'
+      responses:
+        '200': { description: Updated }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /applications/{id}/cv:
+    get:
+      tags: [applications]
+      summary: View application CV (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /applications/{id}/status:
+    patch:
+      tags: [applications]
+      summary: Update application status (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApplicationStatusRequest'
+      responses:
+        '200': { description: Updated }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /applications/{id}/stage:
+    patch:
+      tags: [applications]
+      summary: Update application stage (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApplicationStageRequest'
+      responses:
+        '200': { description: Updated }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+    post:
+      tags: [applications]
+      summary: Create application stage (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationStageRequest'
+      responses:
+        '201': { description: Created }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /applications/{id}/notes:
+    post:
+      tags: [applications]
+      summary: Add application note (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddApplicationNoteRequest'
+      responses:
+        '201': { description: Created }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /applications/{id}/contact:
+    post:
+      tags: [applications]
+      summary: Contact candidate (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactCandidateRequest'
+      responses:
+        '200': { description: Sent }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  # ============================================
+  # CONNECTION INTEREST ENDPOINTS
+  # ============================================
+  /connection-interests/stats:
+    get:
+      tags: [connection-interests]
+      summary: Get connection interest stats
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  /connection-interests:
+    post:
+      tags: [connection-interests]
+      summary: Create connection interest (Recruiter)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConnectionInterestRequest'
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+    get:
+      tags: [connection-interests]
+      summary: List connection interests
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: status
+          schema: { type: string, enum: [pending, accepted, rejected, expired] }
+        - in: query
+          name: interest_type
+          schema: { type: string, enum: [job_invitation, profile_view, network_connection] }
+        - in: query
+          name: role
+          schema: { type: string, enum: [sent, received] }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+
+  /connection-interests/{id}:
+    get:
+      tags: [connection-interests]
+      summary: Get connection interest by id
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '404': { description: Not found }
+    delete:
+      tags: [connection-interests]
+      summary: Delete connection interest (Recruiter)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Deleted }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /connection-interests/{id}/respond:
+    patch:
+      tags: [connection-interests]
+      summary: Respond to connection interest (Candidate)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RespondConnectionInterestRequest'
+      responses:
+        '200': { description: Updated }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  # ============================================
+  # ADMIN JOB ENDPOINTS
+  # ============================================
+  /admin/jobs:
+    get:
+      tags: [admin]
+      summary: List jobs (Admin)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 10 }
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string, enum: [draft, approved, closed] }
+        - in: query
+          name: deleted
+          schema: { type: string, enum: ['true','false'] }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /admin/jobs/pending:
+    get:
+      tags: [admin]
+      summary: List pending jobs (Admin)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 10 }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /admin/jobs/{id}:
+    get:
+      tags: [admin]
+      summary: Get job details (Admin)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+        '404': { description: Not found }
+
+  /admin/jobs/{id}/approve:
+    patch:
+      tags: [admin]
+      summary: Approve job
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Approved }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /admin/jobs/{id}/reject:
+    patch:
+      tags: [admin]
+      summary: Reject job
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectJobRequest'
+      responses:
+        '200': { description: Rejected }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /admin/jobs/{id}/label:
+    patch:
+      tags: [admin]
+      summary: Update job labels
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelJobRequest'
+      responses:
+        '200': { description: Updated }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /admin/jobs/{id}/violation:
+    delete:
+      tags: [admin]
+      summary: Remove violation job
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Deleted }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /admin/jobs/{id}/restore:
+    post:
+      tags: [admin]
+      summary: Restore deleted job
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Restored }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+    delete:
+      tags:
+        - companies
+      summary: Delete company benefit (Recruiter only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Benefit deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Recruiter only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   securitySchemes:
@@ -1662,6 +3177,242 @@ components:
               type: string
               format: date-time
 
+    PublicProfileResponse:
+      type: object
+      description: Public profile information for recruiters (excludes sensitive data like phone and email)
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        full_name:
+          type: string
+          example: 'John Doe'
+        display_name:
+          type: string
+          nullable: true
+          example: 'John'
+        headline:
+          type: string
+          nullable: true
+          example: 'Senior Software Engineer'
+        avatar_url:
+          type: string
+          nullable: true
+          example: 'https://example.com/avatar.jpg'
+        bio:
+          type: string
+          nullable: true
+          example: 'Experienced software developer'
+        years_of_experience:
+          type: integer
+          nullable: true
+          example: 5
+        desired_job_title:
+          type: string
+          nullable: true
+          example: 'Full Stack Developer'
+        desired_salary_min:
+          type: integer
+          nullable: true
+          example: 20000000
+        desired_currency:
+          type: string
+          nullable: true
+          example: 'VND'
+        desired_job_type:
+          type: array
+          items:
+            type: string
+          nullable: true
+          example: ['full_time', 'remote']
+        is_looking_for_job:
+          type: boolean
+          nullable: true
+          example: true
+        location_text:
+          type: string
+          nullable: true
+          example: 'Ho Chi Minh City'
+        personal_website:
+          type: string
+          nullable: true
+          example: 'https://johndoe.dev'
+        linkedin_url:
+          type: string
+          nullable: true
+          example: 'https://linkedin.com/in/johndoe'
+        github_url:
+          type: string
+          nullable: true
+          example: 'https://github.com/johndoe'
+        role:
+          type: string
+          example: 'candidate'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        location:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            type:
+              type: string
+            parent:
+              type: object
+              nullable: true
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+                type:
+                  type: string
+        experiences:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              company_name:
+                type: string
+              position:
+                type: string
+              start_date:
+                type: string
+                format: date-time
+              end_date:
+                type: string
+                format: date-time
+                nullable: true
+              is_current:
+                type: boolean
+              description:
+                type: string
+                nullable: true
+        educations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              school_name:
+                type: string
+              degree:
+                type: string
+                nullable: true
+              field_of_study:
+                type: string
+                nullable: true
+              start_date:
+                type: string
+                format: date-time
+              end_date:
+                type: string
+                format: date-time
+                nullable: true
+        skills:
+          type: array
+          items:
+            type: object
+            properties:
+              skill_id:
+                type: string
+                format: uuid
+              proficiency:
+                type: integer
+                nullable: true
+              level:
+                type: string
+                nullable: true
+                enum: [beginner, intermediate, advanced, expert]
+              skills:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  category:
+                    type: string
+                    nullable: true
+        certifications:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              issuing_org:
+                type: string
+              credential_id:
+                type: string
+                nullable: true
+              credential_url:
+                type: string
+                nullable: true
+              issue_date:
+                type: string
+                format: date-time
+              expiry_date:
+                type: string
+                format: date-time
+                nullable: true
+              never_expires:
+                type: boolean
+              description:
+                type: string
+                nullable: true
+              skills_acquired:
+                type: string
+                nullable: true
+        awards:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              title:
+                type: string
+              issuer:
+                type: string
+              date:
+                type: string
+                format: date-time
+              description:
+                type: string
+                nullable: true
+              url:
+                type: string
+                nullable: true
+              category:
+                type: string
+                nullable: true
+                enum: [academic, professional, competition, volunteer, other]
+              level:
+                type: string
+                nullable: true
+                enum: [international, national, regional, local, organizational]
+
     # ============================================
     # Admin Request Schemas
     # ============================================
@@ -1812,3 +3563,295 @@ components:
             updated_at:
               type: string
               format: date-time
+
+    # ============================================
+    # Company Detail/Benefit Schemas
+    # ============================================
+    CompanyDetailsRequest:
+      type: object
+      properties:
+        industry: { type: string, maxLength: 100 }
+        founded_year: { type: integer, minimum: 1800 }
+        employee_count_min: { type: integer, minimum: 1 }
+        employee_count_max: { type: integer, minimum: 1 }
+        website_url: { type: string, format: url }
+        headquarters_location_id: { type: string, format: uuid }
+        company_type: { type: string, maxLength: 50 }
+        revenue_range: { type: string, maxLength: 50 }
+        stock_symbol: { type: string, maxLength: 10 }
+        culture_description: { type: string }
+
+    UpdateCompanyDetailsRequest:
+      allOf:
+        - $ref: '#/components/schemas/CompanyDetailsRequest'
+
+    CompanyBenefitRequest:
+      type: object
+      required: [benefit_type, title]
+      properties:
+        benefit_type: { type: string, maxLength: 50 }
+        title: { type: string, maxLength: 255 }
+        description: { type: string }
+        is_featured: { type: boolean, default: false }
+
+    UpdateCompanyBenefitRequest:
+      allOf:
+        - $ref: '#/components/schemas/CompanyBenefitRequest'
+
+    # ============================================
+    # Job Schemas
+    # ============================================
+    JobType:
+      type: string
+      enum: [full_time, part_time, contract, internship, freelance, remote, hybrid]
+    JobStatus:
+      type: string
+      enum: [draft, approved, closed]
+
+    SalaryRange:
+      type: object
+      properties:
+        min: { type: integer, minimum: 0 }
+        max: { type: integer, minimum: 0 }
+        currency: { type: string, default: VND }
+      required: [min, max]
+
+    JobRequirement:
+      type: object
+      properties:
+        requirement_type: { type: string, maxLength: 50 }
+        title: { type: string, maxLength: 255 }
+        description: { type: string }
+        is_required: { type: boolean, default: true }
+        level: { type: string, maxLength: 50 }
+        years_experience: { type: integer, minimum: 0 }
+
+    JobBenefit:
+      type: object
+      properties:
+        benefit_type: { type: string, maxLength: 50 }
+        title: { type: string, maxLength: 255 }
+        description: { type: string }
+        value_amount: { type: string }
+        value_currency: { type: string, maxLength: 10, default: VND }
+
+    WorkArrangements:
+      type: object
+      properties:
+        is_remote_allowed: { type: boolean, default: false }
+        remote_percentage: { type: integer, minimum: 0, maximum: 100, default: 0 }
+        flexible_hours: { type: boolean, default: false }
+        travel_requirement: { type: string, maxLength: 50 }
+        overtime_expected: { type: boolean, default: false }
+        shift_type: { type: string, maxLength: 50 }
+
+    CreateJobRequest:
+      type: object
+      required: [title, description, company_id, job_type]
+      properties:
+        title: { type: string, minLength: 10, maxLength: 255 }
+        description: { type: string, minLength: 50 }
+        company_id: { type: string, format: uuid }
+        location_id: { type: string, format: uuid, nullable: true }
+        salary_range: { $ref: '#/components/schemas/SalaryRange' }
+        job_type: { $ref: '#/components/schemas/JobType' }
+        experience_level: { type: integer, minimum: 0, maximum: 30, nullable: true }
+        expires_at: { type: string, format: date-time }
+        metadata: { type: object, additionalProperties: true }
+        requirements:
+          type: array
+          items: { $ref: '#/components/schemas/JobRequirement' }
+        benefits:
+          type: array
+          items: { $ref: '#/components/schemas/JobBenefit' }
+        skill_ids:
+          type: array
+          items: { type: string, format: uuid }
+        tag_ids:
+          type: array
+          items: { type: string, format: uuid }
+        work_arrangements:
+          $ref: '#/components/schemas/WorkArrangements'
+
+    UpdateJobRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreateJobRequest'
+
+    UpdateJobStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [approved, closed]
+
+    SaveJobRequest:
+      type: object
+      required: [job_id]
+      properties:
+        job_id: { type: string, format: uuid }
+
+    # ============================================
+    # Resume Schemas
+    # ============================================
+    CreateResumeRequest:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string, maxLength: 255 }
+        content: { type: object, additionalProperties: true }
+        is_default: { type: boolean, default: false }
+        is_public: { type: boolean, default: false }
+        status: { type: string, enum: [draft, active, archived], default: draft }
+
+    UpdateResumeRequest:
+      type: object
+      properties:
+        title: { type: string, maxLength: 255 }
+        content: { type: object, additionalProperties: true }
+        layout_settings:
+          type: object
+          properties:
+            sections_order: { type: array, items: { type: string } }
+            theme: { type: string }
+            custom_css: { type: object, additionalProperties: true }
+        is_public: { type: boolean }
+        status: { type: string, enum: [draft, active, archived] }
+
+    CreateResumeFromProfileRequest:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string, maxLength: 255 }
+        theme:
+          type: string
+          enum: [default, professional, creative, modern, elegant, blue, purple, green, orange, red]
+          default: default
+        is_default: { type: boolean, default: false }
+        is_public: { type: boolean, default: false }
+
+    ExportResumeRequest:
+      type: object
+      properties:
+        template:
+          type: string
+          enum: [modern, classic, minimal, professional]
+          default: modern
+        format:
+          type: string
+          enum: [pdf, html]
+          default: pdf
+
+    # ============================================
+    # Application Schemas
+    # ============================================
+    ApplicationStatus:
+      type: string
+      enum: [pending, reviewed, accepted, rejected, withdrawn]
+
+    CreateApplicationRequest:
+      type: object
+      required: [job_id]
+      properties:
+        job_id: { type: string, format: uuid }
+        resume_id: { type: string, format: uuid }
+        metadata: { type: object, additionalProperties: true }
+
+    UpdateApplicationStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [pending, reviewed, accepted, rejected] }
+        reason: { type: string }
+
+    UpdateApplicationStageRequest:
+      type: object
+      required: [stage_id, status]
+      properties:
+        stage_id: { type: string, format: uuid }
+        status: { type: string, maxLength: 50 }
+        feedback: { type: string }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        interviewer_notes: { type: string }
+        completed_at: { type: string, format: date-time }
+
+    CreateApplicationStageRequest:
+      type: object
+      required: [stage_name, stage_order]
+      properties:
+        stage_name: { type: string, maxLength: 100 }
+        stage_order: { type: integer, minimum: 1 }
+        scheduled_at: { type: string, format: date-time }
+        interviewer_notes: { type: string }
+
+    AddApplicationNoteRequest:
+      type: object
+      required: [note]
+      properties:
+        note: { type: string, minLength: 1 }
+
+    ContactCandidateRequest:
+      type: object
+      required: [subject, message]
+      properties:
+        subject: { type: string }
+        message: { type: string }
+        send_email: { type: boolean, default: false }
+
+    BulkUpdateApplicationsRequest:
+      type: object
+      required: [application_ids, action]
+      properties:
+        application_ids:
+          type: array
+          items: { type: string, format: uuid }
+          minItems: 1
+        action:
+          type: string
+          enum: [reject, accept, review]
+        reason: { type: string }
+
+    # ============================================
+    # Connection Interest Schemas
+    # ============================================
+    CreateConnectionInterestRequest:
+      type: object
+      required: [candidate_id, interest_type]
+      properties:
+        candidate_id: { type: string, format: uuid }
+        job_id: { type: string, format: uuid }
+        interest_type:
+          type: string
+          enum: [job_invitation, profile_view, network_connection]
+        message: { type: string }
+        contact_info:
+          type: object
+          properties:
+            email: { type: string, format: email }
+            phone: { type: string }
+
+    RespondConnectionInterestRequest:
+      type: object
+      required: [action]
+      properties:
+        action:
+          type: string
+          enum: [accept, reject]
+        message: { type: string }
+
+    # ============================================
+    # Admin Job Schemas
+    # ============================================
+    RejectJobRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason: { type: string, minLength: 10, maxLength: 500 }
+
+    LabelJobRequest:
+      type: object
+      properties:
+        hot: { type: boolean }
+        urgent: { type: boolean }
+        featured: { type: boolean }
+      description: At least one of hot/urgent/featured should be provided

@@ -250,7 +250,12 @@ export const changePasswordValidator = validate(
           .string({ message: MESSAGES.OLD_PASSWORD_MUST_BE_STRING })
           .min(1, MESSAGES.OLD_PASSWORD_IS_REQUIRED),
         new_password: passwordSchema,
-        confirm_password: z.string().min(1, MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED)
+        confirm_password: z.string().min(1, MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED),
+        logout_all_devices: z
+          .boolean({
+            message: 'logout_all_devices must be a boolean'
+          })
+          .optional()
       })
     })
     .refine((data) => data.body.new_password === data.body.confirm_password, {

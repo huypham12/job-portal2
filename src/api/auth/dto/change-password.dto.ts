@@ -6,7 +6,8 @@ export class ChangePasswordBodyDto {
   constructor(
     public old_password: string,
     public new_password: string,
-    public user_id: string
+    public user_id: string,
+    public logout_all_devices?: boolean
   ) {}
 }
 

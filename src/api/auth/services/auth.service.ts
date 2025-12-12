@@ -746,11 +746,15 @@ export class AuthService {
   changePassword = async ({
     old_password,
     new_password,
-    user_id
+    user_id,
+    logout_all_devices,
+    current_refresh_token
   }: {
     old_password: string
     new_password: string
     user_id: string
+    logout_all_devices?: boolean
+    current_refresh_token?: string
   }): Promise<ChangePasswordResponseDto> => {
     // 1. [THAY ĐỔI] Tìm user bằng id (UUID string)
     const user = await prisma.users.findUnique({
@@ -771,12 +775,38 @@ export class AuthService {
     // 3. Hash mật khẩu mới (Giữ nguyên)
     const hashedPassword = await generateHash(new_password)
 
-    // 4. [THAY ĐỔI] Cập nhật CSDL
-    await prisma.users.update({
-      where: { id: user_id },
-      data: {
-        password_hash: hashedPassword, // Cập nhật cột 'password_hash'
-        version: { increment: 1 } // Kích hoạt trigger 'updated_at'
+    // 4. [THAY ĐỔI] Cập nhật CSDL với transaction
+    await prisma.$transaction(async (tx) => {
+      // Cập nhật mật khẩu
+      await tx.users.update({
+        where: { id: user_id },
+        data: {
+          password_hash: hashedPassword, // Cập nhật cột 'password_hash'
+          version: { increment: 1 } // Kích hoạt trigger 'updated_at'
+        }
+      })
+
+      // Nếu logout_all_devices = true, xóa tất cả refresh tokens
+      if (logout_all_devices) {
+        if (current_refresh_token) {
+          // Xóa tất cả tokens trừ token hiện tại (giữ session hiện tại)
+          const currentTokenHash = await generateHash(current_refresh_token)
+          await tx.refresh_tokens.deleteMany({
+            where: {
+              user_id: user_id,
+              NOT: {
+                token_hash: currentTokenHash
+              }
+            }
+          })
+        } else {
+          // Xóa tất cả refresh tokens (đăng xuất khỏi tất cả thiết bị)
+          await tx.refresh_tokens.deleteMany({
+            where: {
+              user_id: user_id
+            }
+          })
+        }
       }
     })
 

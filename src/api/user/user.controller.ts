@@ -451,4 +451,37 @@ export class UserController {
     const result = await this.userService.getProfileAwards(userId, { page, limit })
     res.json({ success: true, data: result.awards, pagination: result.pagination })
   }
+
+  /**
+   * GET /profiles/:id/public
+   * Get public profile information (for recruiters)
+   */
+  getPublicProfile: GetHandler = async (req, res) => {
+    const { id: profileId } = req.params
+
+    try {
+      const profile = await this.userService.getPublicProfile(profileId)
+      res.json({
+        success: true,
+        message: 'Profile retrieved successfully',
+        data: profile
+      })
+    } catch (error: any) {
+      if (error.message === 'Profile not found') {
+        res.status(404).json({
+          success: false,
+          message: 'Profile not found'
+        })
+        return
+      }
+      if (error.message === 'Profile is not available for public viewing') {
+        res.status(403).json({
+          success: false,
+          message: 'This profile is not available for public viewing'
+        })
+        return
+      }
+      throw error
+    }
+  }
 }

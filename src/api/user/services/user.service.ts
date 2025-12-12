@@ -779,6 +779,31 @@ export class UserService {
   async createProfileSkill(userId: string, data: any) {
     const profileId = await this.getProfileIdOrThrow(userId)
 
+    // Validate skill exists
+    const skillExists = await prisma.skills.findUnique({
+      where: { id: data.skill_id },
+      select: { id: true }
+    })
+
+    if (!skillExists) {
+      throw new Error('Skill not found. Please select a valid skill from the list.')
+    }
+
+    // Check if skill already added to profile
+    const existingSkill = await prisma.profile_skills.findUnique({
+      where: {
+        profile_id_skill_id: {
+          profile_id: profileId,
+          skill_id: data.skill_id
+        }
+      },
+      select: { skill_id: true }
+    })
+
+    if (existingSkill) {
+      throw new Error('This skill has already been added to your profile.')
+    }
+
     return await prisma.profile_skills.create({
       data: {
         profile_id: profileId,
@@ -811,8 +836,11 @@ export class UserService {
     const existing = await prisma.profile_skills.findUnique({ where, select: { skill_id: true } })
 
     if (!existing) {
-      throw new Error('Skill not found')
+      throw new Error('Skill not found in your profile.')
     }
+
+    // Only validate data fields, not skill_id (can't change skill_id in update)
+    // Just update proficiency and level
 
     return await prisma.profile_skills.update({
       where,
@@ -844,7 +872,7 @@ export class UserService {
     const existing = await prisma.profile_skills.findUnique({ where, select: { skill_id: true } })
 
     if (!existing) {
-      throw new Error('Skill not found')
+      throw new Error('Skill not found in your profile.')
     }
 
     return await prisma.profile_skills.delete({ where })
@@ -1966,6 +1994,145 @@ export class UserService {
         total,
         totalPages: Math.ceil(total / limit)
       }
+    }
+  }
+
+  /**
+   * Get public profile information for recruiters to view candidate profiles
+   * Excludes sensitive information like phone_number, email
+   */
+  async getPublicProfile(profileId: string) {
+    const profile = await prisma.profiles.findUnique({
+      where: { id: profileId },
+      select: {
+        id: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        avatar_url: true,
+        bio: true,
+        years_of_experience: true,
+        desired_job_title: true,
+        desired_salary_min: true,
+        desired_currency: true,
+        desired_job_type: true,
+        is_looking_for_job: true,
+        location_text: true,
+        personal_website: true,
+        linkedin_url: true,
+        github_url: true,
+        created_at: true,
+        updated_at: true,
+        // Location with hierarchy
+        location: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            parent: {
+              select: {
+                id: true,
+                name: true,
+                type: true
+              }
+            }
+          }
+        },
+        // Public profile sub-entities
+        experiences: {
+          select: {
+            id: true,
+            company_name: true,
+            position: true,
+            start_date: true,
+            end_date: true,
+            is_current: true,
+            description: true
+          },
+          orderBy: { start_date: 'desc' }
+        },
+        educations: {
+          select: {
+            id: true,
+            school_name: true,
+            degree: true,
+            field_of_study: true,
+            start_date: true,
+            end_date: true
+          },
+          orderBy: { start_date: 'desc' }
+        },
+        skills: {
+          select: {
+            skill_id: true,
+            proficiency: true,
+            level: true,
+            skills: {
+              select: {
+                id: true,
+                name: true,
+                category: true
+              }
+            }
+          },
+          orderBy: {
+            skills: { name: 'asc' }
+          }
+        },
+        certifications: {
+          select: {
+            id: true,
+            name: true,
+            issuing_org: true,
+            credential_id: true,
+            credential_url: true,
+            issue_date: true,
+            expiry_date: true,
+            never_expires: true,
+            description: true,
+            skills_acquired: true
+          },
+          orderBy: { issue_date: 'desc' }
+        },
+        awards: {
+          select: {
+            id: true,
+            title: true,
+            issuer: true,
+            date: true,
+            description: true,
+            url: true,
+            category: true,
+            level: true
+          },
+          orderBy: { date: 'desc' }
+        },
+        // Basic user info (without email)
+        users: {
+          select: {
+            id: true,
+            role: true,
+            verified: true
+          }
+        }
+      }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    // Only return profiles of candidates
+    if (profile.users?.role !== 'candidate') {
+      throw new Error('Profile is not available for public viewing')
+    }
+
+    // Remove users object from response, only keep role info if needed
+    const { users, ...publicProfile } = profile
+
+    return {
+      ...publicProfile,
+      role: users?.role
     }
   }
 }

@@ -4,7 +4,7 @@ import { UserService } from './services/user.service'
 import { wrapController } from '@/shared/utils/wrap-controller'
 import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
 import { accessTokenValidator } from '../auth/auth.validator'
-import { candidate } from '@/shared/middleware/authorize.middleware'
+import { candidate, recruiter } from '@/shared/middleware/authorize.middleware'
 import {
   createProfileValidator,
   updateProfileValidator,
@@ -29,7 +29,8 @@ import {
   createProfileAwardValidator,
   updateProfileAwardValidator,
   deleteProfileAwardValidator,
-  getProfileAwardValidator
+  getProfileAwardValidator,
+  profileIdValidator
 } from './user.validator'
 
 const userRouter = Router()
@@ -42,6 +43,17 @@ const candidateAuth = [accessTokenValidator, authenticateAccessToken, candidate]
 // === MAIN USER DATA ===
 // Basic user info (optimized for dashboard)
 userRouter.get('/me', accessTokenValidator, authenticateAccessToken, wrapController(userController.getMe))
+
+// === PUBLIC PROFILE (Recruiter only) ===
+// Get public profile of candidate (for recruiters to view)
+userRouter.get(
+  '/profiles/:id/public',
+  accessTokenValidator,
+  authenticateAccessToken,
+  recruiter,
+  profileIdValidator,
+  wrapController(userController.getPublicProfile)
+)
 
 // Complete profile with all sub-entities
 userRouter.get('/me/profile', ...candidateAuth, wrapController(userController.getProfile))

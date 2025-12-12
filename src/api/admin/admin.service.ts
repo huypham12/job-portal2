@@ -183,4 +183,396 @@ export class AdminService {
   }
 
   // Chúng ta sẽ thêm các phương thức khác như getUserById, lockUser... vào đây
+
+  // ========================== JOB MANAGEMENT METHODS ==========================
+
+  /**
+   * @description Lấy danh sách tất cả công việc với phân trang và bộ lọc
+   * @param options - Tùy chọn tìm kiếm và lọc
+   */
+  public async getAllJobs(options: {
+    pagination: { page: number; limit: number }
+    search?: string
+    filters: {
+      status?: 'draft' | 'approved' | 'closed'
+      deleted?: boolean
+    }
+  }) {
+    const { pagination, search, filters } = options
+    const { page, limit } = pagination
+    const skip = (page - 1) * limit
+
+    const where: Prisma.jobsWhereInput = {}
+
+    // Lọc theo search (title hoặc description)
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }
+      ]
+    }
+
+    // Lọc theo status
+    if (filters.status) {
+      where.status = filters.status
+    }
+
+    // Lọc theo deleted
+    if (filters.deleted !== undefined) {
+      where.deleted = filters.deleted
+    }
+
+    const [jobs, total] = await Promise.all([
+      prisma.jobs.findMany({
+        where,
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          company_id: true,
+          location_id: true,
+          salary_range: true,
+          job_type: true,
+          experience_level: true,
+          posted_at: true,
+          expires_at: true,
+          status: true,
+          metadata: true,
+          deleted: true,
+          updated_at: true,
+          companies: {
+            select: {
+              id: true,
+              name: true,
+              logo_url: true
+            }
+          },
+          locations: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        },
+        orderBy: {
+          posted_at: 'desc'
+        }
+      }),
+      prisma.jobs.count({ where })
+    ])
+
+    const totalPages = Math.ceil(total / limit)
+
+    return {
+      jobs,
+      total,
+      page,
+      limit,
+      totalPages
+    }
+  }
+
+  /**
+   * @description Lấy danh sách tin chờ duyệt (status = draft)
+   */
+  public async getPendingJobs(options: { pagination: { page: number; limit: number } }) {
+    const { pagination } = options
+    const { page, limit } = pagination
+    const skip = (page - 1) * limit
+
+    const where: Prisma.jobsWhereInput = {
+      status: 'draft',
+      deleted: false
+    }
+
+    const [jobs, total] = await Promise.all([
+      prisma.jobs.findMany({
+        where,
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          company_id: true,
+          location_id: true,
+          salary_range: true,
+          job_type: true,
+          experience_level: true,
+          posted_at: true,
+          expires_at: true,
+          status: true,
+          metadata: true,
+          updated_at: true,
+          companies: {
+            select: {
+              id: true,
+              name: true,
+              logo_url: true
+            }
+          },
+          locations: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        },
+        orderBy: {
+          posted_at: 'desc'
+        }
+      }),
+      prisma.jobs.count({ where })
+    ])
+
+    const totalPages = Math.ceil(total / limit)
+
+    return {
+      jobs,
+      total,
+      page,
+      limit,
+      totalPages
+    }
+  }
+
+  /**
+   * @description Lấy chi tiết một công việc (admin view - bao gồm cả tin đã xóa)
+   * @param jobId - ID của job cần xem
+   */
+  public async getJobDetailsById(jobId: string) {
+    const job = await prisma.jobs.findUnique({
+      where: { id: jobId },
+      include: {
+        companies: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            logo_url: true,
+            size: true,
+            contact_email: true,
+            contact_phone: true
+          }
+        },
+        locations: {
+          select: {
+            id: true,
+            name: true,
+            parent_id: true
+          }
+        },
+        job_skills: {
+          include: {
+            skills: {
+              select: {
+                id: true,
+                name: true,
+                category: true
+              }
+            }
+          }
+        },
+        job_requirements: true,
+        job_benefits: true,
+        job_tags: {
+          include: {
+            tags: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
+        job_work_arrangements: true,
+        _count: {
+          select: {
+            applications: true,
+            saved_jobs: true,
+            job_views: true
+          }
+        }
+      }
+    })
+
+    return job
+  }
+
+  /**
+   * @description (Admin) Duyệt tin tuyển dụng
+   * @param jobId - ID của job cần duyệt
+   */
+  public async approveJob(jobId: string) {
+    try {
+      const updatedJob = await prisma.jobs.update({
+        where: { id: jobId },
+        data: {
+          status: 'approved',
+          updated_at: new Date()
+        },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          updated_at: true
+        }
+      })
+      // TODO: Đồng bộ với Elasticsearch
+      return updatedJob
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+      throw error
+    }
+  }
+
+  /**
+   * @description (Admin) Từ chối tin tuyển dụng
+   * @param jobId - ID của job cần từ chối
+   * @param reason - Lý do từ chối
+   */
+  public async rejectJob(jobId: string, reason: string) {
+    try {
+      const updatedJob = await prisma.jobs.update({
+        where: { id: jobId },
+        data: {
+          status: 'closed',
+          metadata: {
+            rejection_reason: reason,
+            rejected_at: new Date().toISOString()
+          } as any,
+          updated_at: new Date()
+        },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          metadata: true,
+          updated_at: true
+        }
+      })
+      return updatedJob
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+      throw error
+    }
+  }
+
+  /**
+   * @description (Admin) Gán nhãn cho tin (Hot/Urgent/Featured)
+   * @param jobId - ID của job cần gán nhãn
+   * @param labels - Các nhãn cần gán
+   */
+  public async updateJobLabels(jobId: string, labels: { hot?: boolean; urgent?: boolean; featured?: boolean }) {
+    try {
+      // Lấy metadata hiện tại
+      const currentJob = await prisma.jobs.findUnique({
+        where: { id: jobId },
+        select: { metadata: true }
+      })
+
+      if (!currentJob) {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+
+      // Merge metadata cũ với labels mới
+      const currentMetadata = (currentJob.metadata as any) || {}
+      const updatedMetadata = {
+        ...currentMetadata,
+        labels: {
+          ...(currentMetadata.labels || {}),
+          ...labels
+        }
+      }
+
+      const updatedJob = await prisma.jobs.update({
+        where: { id: jobId },
+        data: {
+          metadata: updatedMetadata as any,
+          updated_at: new Date()
+        },
+        select: {
+          id: true,
+          title: true,
+          metadata: true,
+          updated_at: true
+        }
+      })
+
+      // TODO: Đồng bộ với Elasticsearch
+      return updatedJob
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+      throw error
+    }
+  }
+
+  /**
+   * @description (Admin) Gỡ tin vi phạm (soft delete)
+   * @param jobId - ID của job cần gỡ
+   */
+  public async deleteJobForViolation(jobId: string) {
+    try {
+      const updatedJob = await prisma.jobs.update({
+        where: { id: jobId },
+        data: {
+          deleted: true,
+          status: 'closed',
+          updated_at: new Date()
+        },
+        select: {
+          id: true,
+          title: true,
+          deleted: true,
+          status: true,
+          updated_at: true
+        }
+      })
+      // TODO: Xóa khỏi Elasticsearch
+      return updatedJob
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+      throw error
+    }
+  }
+
+  /**
+   * @description (Admin) Khôi phục tin đã xóa
+   * @param jobId - ID của job cần khôi phục
+   */
+  public async restoreJob(jobId: string) {
+    try {
+      const updatedJob = await prisma.jobs.update({
+        where: { id: jobId },
+        data: {
+          deleted: false,
+          updated_at: new Date()
+        },
+        select: {
+          id: true,
+          title: true,
+          deleted: true,
+          status: true,
+          updated_at: true
+        }
+      })
+      // TODO: Đồng bộ lại với Elasticsearch nếu status = approved
+      return updatedJob
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+      throw error
+    }
+  }
 }
