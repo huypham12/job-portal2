@@ -158,7 +158,11 @@ export class JobService {
       throw new HttpError('You must have a company to view your jobs', HTTP_STATUS.NOT_FOUND)
     }
 
-    const skip = (page - 1) * limit
+    // Ensure page and limit are numbers
+    const pageNum = typeof page === 'string' ? parseInt(page, 10) : page
+    const limitNum = typeof limit === 'string' ? parseInt(limit, 10) : limit
+
+    const skip = (pageNum - 1) * limitNum
 
     const where: Prisma.jobsWhereInput = {
       company_id: company.id,
@@ -170,7 +174,7 @@ export class JobService {
       prisma.jobs.findMany({
         where,
         skip,
-        take: limit,
+        take: limitNum,
         orderBy: { [sort_by]: sort_order },
         include: {
           companies: {
@@ -201,10 +205,10 @@ export class JobService {
     return {
       data: jobs,
       pagination: {
-        page,
-        limit,
+        page: pageNum,
+        limit: limitNum,
         total,
-        total_pages: Math.ceil(total / limit)
+        total_pages: Math.ceil(total / limitNum)
       }
     }
   }
@@ -498,7 +502,11 @@ export class JobService {
       sort_order
     } = query
 
-    const skip = (page - 1) * limit
+    // Ensure page and limit are numbers
+    const pageNum = typeof page === 'string' ? parseInt(page, 10) : page
+    const limitNum = typeof limit === 'string' ? parseInt(limit, 10) : limit
+
+    const skip = (pageNum - 1) * limitNum
 
     const where: Prisma.jobsWhereInput = {
       deleted: false,
@@ -537,7 +545,7 @@ export class JobService {
       prisma.jobs.findMany({
         where,
         skip,
-        take: limit,
+        take: limitNum,
         orderBy: { [sort_by]: sort_order },
         include: {
           companies: {
@@ -578,10 +586,10 @@ export class JobService {
     return {
       data: jobs,
       pagination: {
-        page,
-        limit,
+        page: pageNum,
+        limit: limitNum,
         total,
-        total_pages: Math.ceil(total / limit)
+        total_pages: Math.ceil(total / limitNum)
       }
     }
   }

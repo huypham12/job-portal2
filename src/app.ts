@@ -50,21 +50,66 @@ const main = async () => {
       'http://localhost:3000',
       'http://localhost:5173',
       'http://localhost:5174',
+      'http://127.0.0.1:3000',
       'http://127.0.0.1:5173',
       'http://127.0.0.1:5174',
-      envConfig.app.host?.replace(/\/$/, '')
+      envConfig.app.host?.replace(/\/$/, ''),
+      ...(envConfig.cors?.origin || [])
     ].filter(Boolean)
 
+    // CORS configuration with dynamic origin checking
     app.use(
       cors({
-        origin: allowedOrigins,
+        origin: (origin, callback) => {
+          // Allow requests with no origin (like mobile apps, Postman, or same-origin requests)
+          if (!origin) {
+            return callback(null, true)
+          }
+
+          // Check if origin is in allowed list
+          if (allowedOrigins.includes(origin)) {
+            return callback(null, true)
+          }
+
+          // In development, allow any localhost origin
+          if (process.env.NODE_ENV !== 'production') {
+            if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+              return callback(null, true)
+            }
+          }
+
+          // Reject other origins
+          callback(new Error('Not allowed by CORS'))
+        },
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+        exposedHeaders: ['Content-Range', 'X-Content-Range'],
+        preflightContinue: false,
+        optionsSuccessStatus: 204
       })
     )
 
     app.use(express.json())
+
+    // Health check endpoint
+    app.get('/health', (req: Request, res: Response) => {
+      res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+      })
+    })
+
+    // Root endpoint
+    app.get('/', (req: Request, res: Response) => {
+      res.status(200).json({
+        message: 'Job Portal API',
+        version: '1.0.0',
+        docs: '/api-docs'
+      })
+    })
+
     app.use('/api/auth', authRouter)
     app.use('/api/user', userRouter)
     app.use('/api/admin', adminRouter)

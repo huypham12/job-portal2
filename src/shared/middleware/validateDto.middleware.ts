@@ -29,12 +29,16 @@ export const validateDto = (schemas: ValidationSchemas) => {
 
       // Validate params nếu schema params được cung cấp
       if (schemas.params) {
-        req.params = (await schemas.params.parseAsync(req.params)) as any
+        const parsedParams = await schemas.params.parseAsync(req.params)
+        // Cannot directly assign to req.params (read-only), use Object.assign
+        Object.assign(req.params, parsedParams)
       }
 
       // Validate query nếu schema query được cung cấp
       if (schemas.query) {
-        req.query = (await schemas.query.parseAsync(req.query)) as any
+        const parsedQuery = await schemas.query.parseAsync(req.query)
+        // Cannot directly assign to req.query (read-only), use Object.assign
+        Object.assign(req.query, parsedQuery)
       }
 
       // Nếu tất cả đều thành công, đi tiếp

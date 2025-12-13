@@ -65,7 +65,8 @@ export class SavedJobController {
     try {
       const userId = req.decoded_authorization!.user_id
       // Query has been validated and transformed by validator middleware
-      const query: GetSavedJobsDTO = req.query as GetSavedJobsDTO
+      // Object.assign() in validator merges validated data into req.query
+      const query = req.query as unknown as GetSavedJobsDTO
 
       // Get user's profile
       const profile = await this.getProfileByUserId(userId)

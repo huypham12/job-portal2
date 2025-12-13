@@ -8,39 +8,64 @@ type SchemaParts = {
 }
 
 const zodValidate = (parts: SchemaParts): RequestHandler => {
-  const schema = z.object({
-    body: parts.body ?? z.any(),
-    query: parts.query ?? z.any(),
-    params: parts.params ?? z.any()
-  })
-
   return (req, res, next) => {
-    const parsed = schema.safeParse({
-      body: req.body,
-      query: req.query,
-      params: req.params
-    })
-    if (!parsed.success) {
-      res.status(400).json({
-        message: 'Validation error',
-        errors: parsed.error.issues.map((i) => ({
-          path: i.path.join('.'),
-          message: i.message
-        }))
-      })
-      return
-    }
+    try {
+      // Validate each part separately to ensure proper type coercion
+      if (parts.body) {
+        const result = parts.body.safeParse(req.body)
+        if (!result.success) {
+          res.status(400).json({
+            message: 'Validation error',
+            errors: result.error.issues.map((i) => ({
+              path: i.path.join('.'),
+              message: i.message
+            }))
+          })
+          return
+        }
+        req.body = result.data
+      }
 
-    // Safely assign parsed data
-    // Note: Express allows direct assignment for body, query, and params
-    if (parts.body) req.body = parsed.data.body
-    if (parts.query) {
-      req.query = parsed.data.query as any
+      if (parts.query) {
+        const result = parts.query.safeParse(req.query)
+        if (!result.success) {
+          res.status(400).json({
+            message: 'Validation error',
+            errors: result.error.issues.map((i) => ({
+              path: i.path.join('.'),
+              message: i.message
+            }))
+          })
+          return
+        }
+        // Clear existing query and assign validated data
+        Object.keys(req.query).forEach((key) => delete (req.query as any)[key])
+        Object.assign(req.query, result.data)
+      }
+
+      if (parts.params) {
+        const result = parts.params.safeParse(req.params)
+        if (!result.success) {
+          res.status(400).json({
+            message: 'Validation error',
+            errors: result.error.issues.map((i) => ({
+              path: i.path.join('.'),
+              message: i.message
+            }))
+          })
+          return
+        }
+        // Clear existing params and assign validated data
+        Object.keys(req.params).forEach((key) => delete (req.params as any)[key])
+        Object.assign(req.params, result.data)
+      }
+
+      next()
+    } catch (error) {
+      res.status(500).json({
+        message: 'Internal validation error'
+      })
     }
-    if (parts.params) {
-      req.params = parsed.data.params as any
-    }
-    next()
   }
 }
 
@@ -66,55 +91,42 @@ export const jobIdValidator = zodValidate({
 
 // ==================== GET SAVED JOBS SCHEMA ====================
 const getSavedJobsQuery = z.object({
-  page: z.preprocess(
-    (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      const num = Number(val)
-      return isNaN(num) ? undefined : num
-    },
-    z.number().int().min(1, 'Page must be greater than 0').default(1)
-  ),
-  limit: z.preprocess(
-    (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      const num = Number(val)
-      return isNaN(num) ? undefined : num
-    },
-    z.number().int().min(1, 'Limit must be at least 1').max(100, 'Limit must be at most 100').default(10)
-  ),
-  search: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.string().optional()
-  ),
-  job_type: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.string().optional()
-  ),
-  location_id: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.string().uuid('Invalid location ID').optional()
-  ),
+  page: z.preprocess((val) => {
+    // Handle empty string or invalid values as undefined to use default
+    if (val === undefined || val === null || val === '') return undefined
+    const num = Number(val)
+    return isNaN(num) ? undefined : num
+  }, z.number().int().min(1, 'Page must be greater than 0').default(1)),
+  limit: z.preprocess((val) => {
+    // Handle empty string or invalid values as undefined to use default
+    if (val === undefined || val === null || val === '') return undefined
+    const num = Number(val)
+    return isNaN(num) ? undefined : num
+  }, z.number().int().min(1, 'Limit must be at least 1').max(100, 'Limit must be at most 100').default(10)),
+  search: z.preprocess((val) => {
+    // Handle empty string as undefined
+    if (val === undefined || val === null || val === '') return undefined
+    return val
+  }, z.string().optional()),
+  job_type: z.preprocess((val) => {
+    // Handle empty string as undefined
+    if (val === undefined || val === null || val === '') return undefined
+    return val
+  }, z.string().optional()),
+  location_id: z.preprocess((val) => {
+    // Handle empty string as undefined
+    if (val === undefined || val === null || val === '') return undefined
+    return val
+  }, z.string().uuid('Invalid location ID').optional()),
   sort_by: z.preprocess(
     (val) => {
       // Handle empty string as undefined to use default
       if (val === undefined || val === null || val === '') return undefined
       return val
     },
-    z.enum(['saved_at', 'salary', 'created_at'], { errorMap: () => ({ message: 'sort_by must be one of: saved_at, salary, created_at' }) }).default('saved_at')
+    z
+      .enum(['saved_at', 'salary', 'created_at'], { message: 'sort_by must be one of: saved_at, salary, created_at' })
+      .default('saved_at')
   ),
   order: z.preprocess(
     (val) => {
@@ -122,7 +134,7 @@ const getSavedJobsQuery = z.object({
       if (val === undefined || val === null || val === '') return undefined
       return val
     },
-    z.enum(['asc', 'desc'], { errorMap: () => ({ message: 'order must be either asc or desc' }) }).default('desc')
+    z.enum(['asc', 'desc'], { message: 'order must be either asc or desc' }).default('desc')
   )
 })
 

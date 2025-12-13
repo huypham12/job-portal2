@@ -9,46 +9,64 @@ type SchemaParts = {
 }
 
 const zodValidate = (parts: SchemaParts): RequestHandler => {
-  const schema = z.object({
-    body: parts.body ?? z.any(),
-    query: parts.query ?? z.any(),
-    params: parts.params ?? z.any()
-  })
-
   return (req, res, next) => {
-    const parsed = schema.safeParse({
-      body: req.body,
-      query: req.query,
-      params: req.params
-    })
-    if (!parsed.success) {
-      res.status(400).json({
-        message: 'Validation error',
-        errors: parsed.error.issues.map((i) => ({
-          path: i.path.join('.'),
-          message: i.message
-        }))
-      })
-      return
-    }
+    try {
+      // Validate each part separately to ensure proper type coercion
+      if (parts.body) {
+        const result = parts.body.safeParse(req.body)
+        if (!result.success) {
+          res.status(400).json({
+            message: 'Validation error',
+            errors: result.error.issues.map((i) => ({
+              path: i.path.join('.'),
+              message: i.message
+            }))
+          })
+          return
+        }
+        req.body = result.data
+      }
 
-    // Safely assign parsed data
-    if (parts.body) req.body = parsed.data.body
-    if (parts.query) {
-      try {
-        Object.assign(req.query, parsed.data.query)
-      } catch {
-        req.query = parsed.data.query
+      if (parts.query) {
+        const result = parts.query.safeParse(req.query)
+        if (!result.success) {
+          res.status(400).json({
+            message: 'Validation error',
+            errors: result.error.issues.map((i) => ({
+              path: i.path.join('.'),
+              message: i.message
+            }))
+          })
+          return
+        }
+        // Clear existing query and assign validated data
+        Object.keys(req.query).forEach((key) => delete (req.query as any)[key])
+        Object.assign(req.query, result.data)
       }
-    }
-    if (parts.params) {
-      try {
-        Object.assign(req.params, parsed.data.params)
-      } catch {
-        req.params = parsed.data.params
+
+      if (parts.params) {
+        const result = parts.params.safeParse(req.params)
+        if (!result.success) {
+          res.status(400).json({
+            message: 'Validation error',
+            errors: result.error.issues.map((i) => ({
+              path: i.path.join('.'),
+              message: i.message
+            }))
+          })
+          return
+        }
+        // Clear existing params and assign validated data
+        Object.keys(req.params).forEach((key) => delete (req.params as any)[key])
+        Object.assign(req.params, result.data)
       }
+
+      next()
+    } catch (error) {
+      res.status(500).json({
+        message: 'Internal validation error'
+      })
     }
-    next()
   }
 }
 
