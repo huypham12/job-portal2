@@ -35,18 +35,12 @@ const zodValidate = (parts: SchemaParts): RequestHandler => {
     // Safely assign parsed data
     if (parts.body) req.body = parsed.data.body
     if (parts.query) {
-      try {
-        Object.assign(req.query, parsed.data.query)
-      } catch {
-        req.query = parsed.data.query
-      }
+      // Direct assignment - Express allows this for query
+      req.query = parsed.data.query as any
     }
     if (parts.params) {
-      try {
-        Object.assign(req.params, parsed.data.params)
-      } catch {
-        req.params = parsed.data.params
-      }
+      // Direct assignment - Express allows this for params
+      req.params = parsed.data.params as any
     }
     next()
   }

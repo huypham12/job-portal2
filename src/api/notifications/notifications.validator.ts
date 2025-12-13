@@ -5,36 +5,47 @@ import { NotificationType } from '@/shared/constants/notification-types'
  * Get notifications query validation
  */
 export const getNotificationsQuerySchema = z.object({
-  page: z
-    .string()
-    .optional()
-    .default('1')
-    .transform((val) => parseInt(val, 10))
-    .pipe(z.number().int().positive()),
-  limit: z
-    .string()
-    .optional()
-    .default('20')
-    .transform((val) => parseInt(val, 10))
-    .pipe(z.number().int().positive().max(100)),
-  read: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined) return undefined
-      return val === 'true'
-    })
-    .pipe(z.boolean().optional()),
-  type: z
-    .string()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true
-        return Object.values(NotificationType).includes(val as NotificationType)
-      },
-      { message: 'Invalid notification type' }
-    )
+  page: z.preprocess(
+    (val) => {
+      // Handle empty string or invalid values as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      const num = Number(val)
+      return isNaN(num) ? undefined : num
+    },
+    z.number().int().min(1).default(1)
+  ),
+  limit: z.preprocess(
+    (val) => {
+      // Handle empty string or invalid values as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      const num = Number(val)
+      return isNaN(num) ? undefined : num
+    },
+    z.number().int().min(1).max(100).default(20)
+  ),
+  read: z.preprocess(
+    (val) => {
+      // Handle empty string as undefined
+      if (val === undefined || val === null || val === '') return undefined
+      // Coerce to boolean
+      return val === 'true' || val === '1'
+    },
+    z.boolean().optional()
+  ),
+  type: z.preprocess(
+    (val) => {
+      // Handle empty string as undefined
+      if (val === undefined || val === null || val === '') return undefined
+      return val
+    },
+    z
+      .string()
+      .refine(
+        (val) => Object.values(NotificationType).includes(val as NotificationType),
+        { message: 'Invalid notification type' }
+      )
+      .optional()
+  )
 })
 
 /**
