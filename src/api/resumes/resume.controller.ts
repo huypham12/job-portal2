@@ -233,15 +233,29 @@ export class ResumeController {
    * Preview CV
    */
   previewResume = async (req: Request, res: Response) => {
+    console.log('🎯 previewResume controller called')
     const { user_id } = req.decoded_authorization as TokenPayload
     const { id } = req.params
+    console.log('📋 Request params:', { user_id, resume_id: id })
 
-    const result = await this.resumeService.previewResume(user_id, id)
+    try {
+      const result = await this.resumeService.previewResume(user_id, id)
+      console.log('✅ Preview result generated, content length:', result.content?.length)
 
-    res.setHeader('Content-Type', 'text/html')
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('X-Content-Type-Options', 'nosniff')
-    res.status(HTTP_STATUS.OK).send(result.content)
+      // Tắt ETag caching để đảm bảo preview luôn được generate mới
+      res.setHeader('ETag', '')
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+      res.setHeader('Pragma', 'no-cache')
+      res.setHeader('Expires', '0')
+      
+      res.setHeader('Content-Type', 'text/html')
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader('X-Content-Type-Options', 'nosniff')
+      res.status(HTTP_STATUS.OK).send(result.content)
+    } catch (error) {
+      console.error('❌ Preview error:', error)
+      throw error
+    }
   }
 
   /**

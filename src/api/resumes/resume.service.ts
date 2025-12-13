@@ -204,7 +204,12 @@ export class ResumeService {
             full_name: profile.full_name,
             email: profile.users?.email,
             phone: profile.phone_number,
-            bio: profile.bio
+            bio: profile.bio,
+            location: profile.location_text,
+            headline: profile.headline,
+            linkedin_url: profile.linkedin_url,
+            website: profile.personal_website,
+            date_of_birth: profile.date_of_birth
           }
         },
         skills: {
@@ -319,7 +324,12 @@ export class ResumeService {
         full_name: profile.full_name,
         email: profile.users?.email,
         phone: profile.phone_number,
-        bio: profile.bio
+        bio: profile.bio,
+        location: profile.location_text,
+        headline: profile.headline,
+        linkedin_url: profile.linkedin_url,
+        website: profile.personal_website,
+        date_of_birth: profile.date_of_birth
       }
     }
 
@@ -856,10 +866,24 @@ export class ResumeService {
   private generateResumeHtml(resume: any, profile: any, template: string): string {
     const content = resume.content || this.buildResumeContent(profile)
     const layoutSettings = content.layout_settings || {}
-    const theme = layoutSettings.theme || 'default'
+    const theme = layoutSettings.theme || 'professional'
 
-    // Get theme colors
-    const themeColors = this.getThemeColors(theme)
+    // Route to appropriate template generator
+    // Note: Backend templates are for PDF export only, frontend uses React components
+    switch (theme) {
+      case 'timeline':
+      case 'compact':
+      case 'professional':
+      default:
+        return this.generateModernTemplate(resume, content)
+    }
+  }
+
+  /**
+   * Helper: Generate Modern Template (Sidebar Layout)
+   */
+  private generateModernTemplate(resume: any, content: any): string {
+    const themeColors = this.getThemeColors('modern')
 
     return `
       <!DOCTYPE html>
