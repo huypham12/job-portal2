@@ -32,20 +32,13 @@ const zodValidate = (parts: SchemaParts): RequestHandler => {
     }
 
     // Safely assign parsed data
+    // Note: Express allows direct assignment for body, query, and params
     if (parts.body) req.body = parsed.data.body
     if (parts.query) {
-      try {
-        Object.assign(req.query, parsed.data.query)
-      } catch {
-        req.query = parsed.data.query
-      }
+      req.query = parsed.data.query as any
     }
     if (parts.params) {
-      try {
-        Object.assign(req.params, parsed.data.params)
-      } catch {
-        req.params = parsed.data.params
-      }
+      req.params = parsed.data.params as any
     }
     next()
   }
@@ -73,21 +66,64 @@ export const jobIdValidator = zodValidate({
 
 // ==================== GET SAVED JOBS SCHEMA ====================
 const getSavedJobsQuery = z.object({
-  page: z
-    .string()
-    .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 1))
-    .refine((val) => val > 0, { message: 'Page must be greater than 0' }),
-  limit: z
-    .string()
-    .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 10))
-    .refine((val) => val > 0 && val <= 100, { message: 'Limit must be between 1 and 100' }),
-  search: z.string().optional(),
-  job_type: z.string().optional(),
-  location_id: z.string().uuid('Invalid location ID').optional(),
-  sort_by: z.enum(['saved_at', 'salary', 'created_at']).optional().default('saved_at'),
-  order: z.enum(['asc', 'desc']).optional().default('desc')
+  page: z.preprocess(
+    (val) => {
+      // Handle empty string or invalid values as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      const num = Number(val)
+      return isNaN(num) ? undefined : num
+    },
+    z.number().int().min(1, 'Page must be greater than 0').default(1)
+  ),
+  limit: z.preprocess(
+    (val) => {
+      // Handle empty string or invalid values as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      const num = Number(val)
+      return isNaN(num) ? undefined : num
+    },
+    z.number().int().min(1, 'Limit must be at least 1').max(100, 'Limit must be at most 100').default(10)
+  ),
+  search: z.preprocess(
+    (val) => {
+      // Handle empty string as undefined
+      if (val === undefined || val === null || val === '') return undefined
+      return val
+    },
+    z.string().optional()
+  ),
+  job_type: z.preprocess(
+    (val) => {
+      // Handle empty string as undefined
+      if (val === undefined || val === null || val === '') return undefined
+      return val
+    },
+    z.string().optional()
+  ),
+  location_id: z.preprocess(
+    (val) => {
+      // Handle empty string as undefined
+      if (val === undefined || val === null || val === '') return undefined
+      return val
+    },
+    z.string().uuid('Invalid location ID').optional()
+  ),
+  sort_by: z.preprocess(
+    (val) => {
+      // Handle empty string as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      return val
+    },
+    z.enum(['saved_at', 'salary', 'created_at'], { errorMap: () => ({ message: 'sort_by must be one of: saved_at, salary, created_at' }) }).default('saved_at')
+  ),
+  order: z.preprocess(
+    (val) => {
+      // Handle empty string as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      return val
+    },
+    z.enum(['asc', 'desc'], { errorMap: () => ({ message: 'order must be either asc or desc' }) }).default('desc')
+  )
 })
 
 export type GetSavedJobsDTO = z.infer<typeof getSavedJobsQuery>

@@ -23,16 +23,30 @@ const GetApplicationsQuerySchema = z.object({
   page: z
     .string()
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 1))
-    .refine((val) => val > 0, { message: 'Page must be greater than 0' }),
+    .transform((val) => {
+      if (!val || val.trim() === '') return 1
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 1 : parsed
+    })
+    .pipe(z.number().int().positive({ message: 'Page must be greater than 0' })),
   limit: z
     .string()
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 20))
-    .refine((val) => val > 0 && val <= 100, { message: 'Limit must be between 1 and 100' }),
+    .transform((val) => {
+      if (!val || val.trim() === '') return 20
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 20 : parsed
+    })
+    .pipe(z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must not exceed 100' })),
   status: z.nativeEnum(application_status).optional(),
-  sort_by: z.enum(['applied_at', 'status']).optional().default('applied_at'),
-  order: z.enum(['asc', 'desc']).optional().default('desc')
+  sort_by: z
+    .enum(['applied_at', 'status'])
+    .optional()
+    .default('applied_at'),
+  order: z
+    .enum(['asc', 'desc'])
+    .optional()
+    .default('desc')
 })
 
 export const GetApplicationsSchema = {

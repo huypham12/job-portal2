@@ -12,17 +12,31 @@ const GetApplicationsByJobQuerySchema = z.object({
   page: z
     .string()
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 1))
-    .refine((val) => val > 0, { message: 'Page must be greater than 0' }),
+    .transform((val) => {
+      if (!val || val.trim() === '') return 1
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 1 : parsed
+    })
+    .pipe(z.number().int().positive({ message: 'Page must be greater than 0' })),
   limit: z
     .string()
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 20))
-    .refine((val) => val > 0 && val <= 100, { message: 'Limit must be between 1 and 100' }),
+    .transform((val) => {
+      if (!val || val.trim() === '') return 20
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 20 : parsed
+    })
+    .pipe(z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must not exceed 100' })),
   status: z.nativeEnum(application_status).optional(),
   stage: z.string().optional(),
-  sort_by: z.enum(['applied_at', 'rating', 'name']).optional().default('applied_at'),
-  order: z.enum(['asc', 'desc']).optional().default('desc')
+  sort_by: z
+    .enum(['applied_at', 'rating', 'name'])
+    .optional()
+    .default('applied_at'),
+  order: z
+    .enum(['asc', 'desc'])
+    .optional()
+    .default('desc')
 })
 
 export const GetApplicationsByJobSchema = {
@@ -79,9 +93,32 @@ const UpdateStageBodySchema = z.object({
   stage_id: z.string().uuid({ message: 'Stage ID must be a valid UUID' }),
   status: z.string().min(1).max(50),
   feedback: z.string().optional(),
-  rating: z.number().int().min(1).max(5).optional(),
+  rating: z
+    .union([
+      z.number().int().min(1).max(5),
+      z.string().transform((val) => {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed)) {
+          throw new Error('Rating must be a number between 1 and 5')
+        }
+        return parsed
+      })
+    ])
+    .refine((val) => Number.isInteger(val) && val >= 1 && val <= 5, {
+      message: 'Rating must be an integer between 1 and 5'
+    })
+    .optional(),
   interviewer_notes: z.string().optional(),
-  completed_at: z.string().datetime().optional()
+  completed_at: z
+    .string()
+    .refine(
+      (val) => {
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      },
+      { message: 'Invalid datetime format. Use ISO 8601 format.' }
+    )
+    .optional()
 })
 
 export const UpdateStageSchema = {
@@ -103,8 +140,30 @@ const CreateStageParamsSchema = z.object({
 
 const CreateStageBodySchema = z.object({
   stage_name: z.string().min(1).max(100),
-  stage_order: z.number().int().positive(),
-  scheduled_at: z.string().datetime().optional(),
+  stage_order: z
+    .union([
+      z.number().int().positive(),
+      z.string().transform((val) => {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed <= 0) {
+          throw new Error('Stage order must be a positive integer')
+        }
+        return parsed
+      })
+    ])
+    .refine((val) => Number.isInteger(val) && val > 0, {
+      message: 'Stage order must be a positive integer'
+    }),
+  scheduled_at: z
+    .string()
+    .refine(
+      (val) => {
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      },
+      { message: 'Invalid datetime format. Use ISO 8601 format.' }
+    )
+    .optional(),
   interviewer_notes: z.string().optional()
 })
 
@@ -149,7 +208,20 @@ const ContactCandidateParamsSchema = z.object({
 const ContactCandidateBodySchema = z.object({
   subject: z.string().min(1, { message: 'Subject is required' }),
   message: z.string().min(1, { message: 'Message is required' }),
-  send_email: z.boolean().optional().default(false)
+  send_email: z
+    .union([
+      z.boolean(),
+      z.string().transform((val) => {
+        if (val === 'true' || val === '1') return true
+        if (val === 'false' || val === '0' || val === '') return false
+        return Boolean(val)
+      })
+    ])
+    .refine((val) => typeof val === 'boolean', {
+      message: 'send_email must be a boolean value'
+    })
+    .optional()
+    .default(false)
 })
 
 export const ContactCandidateSchema = {

@@ -26,16 +26,24 @@ export type CreateInterestDTO = z.infer<typeof CreateInterestBodySchema>
  * Validator for getting connection interests list
  */
 const GetInterestsQuerySchema = z.object({
-  page: z
-    .string()
-    .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 1))
-    .refine((val) => val > 0, { message: 'Page must be greater than 0' }),
-  limit: z
-    .string()
-    .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 20))
-    .refine((val) => val > 0 && val <= 100, { message: 'Limit must be between 1 and 100' }),
+  page: z.preprocess(
+    (val) => {
+      // Handle empty string or invalid values as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      const num = Number(val)
+      return isNaN(num) ? undefined : num
+    },
+    z.number().int().min(1, { message: 'Page must be greater than 0' }).default(1)
+  ),
+  limit: z.preprocess(
+    (val) => {
+      // Handle empty string or invalid values as undefined to use default
+      if (val === undefined || val === null || val === '') return undefined
+      const num = Number(val)
+      return isNaN(num) ? undefined : num
+    },
+    z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must be at most 100' }).default(20)
+  ),
   status: z.enum(['pending', 'accepted', 'rejected', 'expired']).optional(),
   interest_type: z.enum(['job_invitation', 'profile_view', 'network_connection']).optional(),
   role: z.enum(['sent', 'received']).optional()

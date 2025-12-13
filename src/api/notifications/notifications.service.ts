@@ -1,5 +1,7 @@
 import { prisma } from '@/config/database.service'
 import { NotificationType } from '@/shared/constants/notification-types'
+import { HttpError } from '@/shared/common/http-error'
+import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import {
   CreateNotificationData,
   NotificationQueryParams,
@@ -110,11 +112,11 @@ export class NotificationService {
     })
 
     if (!notification) {
-      throw new Error('Notification not found')
+      throw new HttpError('Notification not found', HTTP_STATUS.NOT_FOUND)
     }
 
     if (notification.user_id !== userId) {
-      throw new Error('Unauthorized')
+      throw new HttpError('Unauthorized', HTTP_STATUS.FORBIDDEN)
     }
 
     const updated = await prisma.notifications.update({
@@ -159,11 +161,11 @@ export class NotificationService {
     })
 
     if (!notification) {
-      throw new Error('Notification not found')
+      throw new HttpError('Notification not found', HTTP_STATUS.NOT_FOUND)
     }
 
     if (notification.user_id !== userId) {
-      throw new Error('Unauthorized')
+      throw new HttpError('Unauthorized', HTTP_STATUS.FORBIDDEN)
     }
 
     await prisma.notifications.delete({

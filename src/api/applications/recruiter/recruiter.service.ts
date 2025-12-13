@@ -48,7 +48,16 @@ export class RecruiterApplicationService {
           }
         }
       },
-      select: { id: true, job_id: true, profile_id: true }
+      select: {
+        id: true,
+        job_id: true,
+        profile_id: true,
+        profiles: {
+          select: {
+            user_id: true
+          }
+        }
+      }
     })
 
     if (!application) {
@@ -485,12 +494,12 @@ export class RecruiterApplicationService {
       where: { id: applicationId },
       data: {
         status,
-        metadata: reason
+        metadata: reason && reason.trim() !== ''
           ? ({
               ...currentMetadata,
-              status_reason: reason
+              status_reason: reason.trim()
             } as any)
-          : undefined
+          : currentMetadata
       },
       include: {
         jobs: {
@@ -502,15 +511,17 @@ export class RecruiterApplicationService {
     })
 
     // Send notification to candidate
-    try {
-      await NotificationHelper.notifyApplicationStatusChanged({
-        candidateId: app.profile_id,
-        jobTitle: updatedApplication.jobs.title,
-        status: status,
-        applicationId: applicationId
-      })
-    } catch (error) {
-      console.error('Failed to send notification:', error)
+    if (app.profiles?.user_id) {
+      try {
+        await NotificationHelper.notifyApplicationStatusChanged({
+          candidateId: app.profiles.user_id,
+          jobTitle: updatedApplication.jobs.title,
+          status: status,
+          applicationId: applicationId
+        })
+      } catch (error) {
+        console.error('Failed to send notification:', error)
+      }
     }
 
     return {
@@ -591,9 +602,9 @@ export class RecruiterApplicationService {
           }
         })
 
-        if (application) {
+        if (application && app.profiles?.user_id) {
           await NotificationHelper.notifyInterviewScheduled({
-            candidateId: app.profile_id,
+            candidateId: app.profiles.user_id,
             jobTitle: application.jobs.title,
             scheduledAt: scheduled_at,
             applicationId: applicationId,
@@ -657,6 +668,10 @@ export class RecruiterApplicationService {
     // Verify access
     const app = await this.verifyApplicationAccess(applicationId, recruiterId)
 
+    if (!app.profiles?.user_id) {
+      throw new HttpError('Candidate user not found', HTTP_STATUS.NOT_FOUND)
+    }
+
     const { subject, message, send_email } = data
 
     // Create notification
@@ -665,7 +680,7 @@ export class RecruiterApplicationService {
     try {
       await prisma.notifications.create({
         data: {
-          user_id: app.profile_id,
+          user_id: app.profiles.user_id,
           type: 'application_contact',
           content: notificationContent,
           read: false
@@ -704,6 +719,11 @@ export class RecruiterApplicationService {
       select: {
         id: true,
         profile_id: true,
+        profiles: {
+          select: {
+            user_id: true
+          }
+        },
         jobs: {
           select: {
             title: true
@@ -747,15 +767,17 @@ export class RecruiterApplicationService {
 
     // Send notifications to all candidates
     for (const app of applications) {
-      try {
-        await NotificationHelper.notifyApplicationStatusChanged({
-          candidateId: app.profile_id,
-          jobTitle: app.jobs.title,
-          status: status,
-          applicationId: app.id
-        })
-      } catch (error) {
-        console.error(`Failed to send notification for application ${app.id}:`, error)
+      if (app.profiles?.user_id) {
+        try {
+          await NotificationHelper.notifyApplicationStatusChanged({
+            candidateId: app.profiles.user_id,
+            jobTitle: app.jobs.title,
+            status: status,
+            applicationId: app.id
+          })
+        } catch (error) {
+          console.error(`Failed to send notification for application ${app.id}:`, error)
+        }
       }
     }
 
