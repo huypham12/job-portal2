@@ -92,17 +92,37 @@ export class CompanyService {
       const company = await prisma.companies.findUnique({
         where: { id: companyId },
         include: {
-          company_details: true,
+          company_details: {
+            include: {
+              headquarters_location: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              }
+            }
+          },
           company_benefits: true,
           jobs: {
             where: { status: 'approved', deleted: false },
             select: {
               id: true,
               title: true,
+              description: true,
               posted_at: true,
               expires_at: true,
               job_type: true,
-              salary_range: true
+              experience_level: true,
+              salary_range: true,
+              location_id: true,
+              locations: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              }
             }
           }
         }

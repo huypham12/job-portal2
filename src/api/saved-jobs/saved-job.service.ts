@@ -105,7 +105,10 @@ export class SavedJobService {
   async getSavedJobs(profileId: string, query: GetSavedJobsDTO) {
     const { page = 1, limit = 10, search, job_type, location_id, sort_by = 'saved_at', order = 'desc' } = query
 
-    const skip = (page - 1) * limit
+    // Ensure page and limit are numbers (in case they come as strings from query params)
+    const pageNum = typeof page === 'number' ? page : parseInt(String(page), 10) || 1
+    const limitNum = typeof limit === 'number' ? limit : parseInt(String(limit), 10) || 10
+    const skip = (pageNum - 1) * limitNum
 
     // Build where clause for jobs filter
     const jobWhere: Prisma.jobsWhereInput = {
@@ -156,7 +159,7 @@ export class SavedJobService {
     const savedJobs = await prisma.saved_jobs.findMany({
       where,
       skip,
-      take: limit,
+      take: limitNum,
       orderBy,
       include: {
         jobs: {
@@ -197,7 +200,7 @@ export class SavedJobService {
       }
     })
 
-    const totalPages = Math.ceil(total / limit)
+    const totalPages = Math.ceil(total / limitNum)
 
     return {
       data: savedJobs.map((saved) => ({
@@ -212,15 +215,19 @@ export class SavedJobService {
           experience_level: saved.jobs.experience_level,
           posted_at: saved.jobs.posted_at,
           expires_at: saved.jobs.expires_at,
-          company: saved.jobs.companies,
-          location: saved.jobs.locations,
-          skills: saved.jobs.job_skills.map((js: any) => js.skills),
-          application_count: saved.jobs._count.applications
+          companies: saved.jobs.companies,
+          locations: saved.jobs.locations,
+          job_skills: saved.jobs.job_skills.map((js: any) => ({
+            skills: js.skills
+          })),
+          _count: {
+            applications: saved.jobs._count.applications
+          }
         }
       })),
       pagination: {
-        page,
-        limit,
+        page: pageNum,
+        limit: limitNum,
         total,
         totalPages
       }

@@ -35,8 +35,9 @@ const zodValidate = (parts: SchemaParts): RequestHandler => {
     // Safely assign parsed data
     if (parts.body) req.body = parsed.data.body
     if (parts.query) {
-      // Direct assignment - Express allows this for query
-      req.query = parsed.data.query as any
+      // Merge parsed data into existing query object instead of direct assignment
+      // This avoids the "Cannot set property query" error in newer Express/Node versions
+      Object.assign(req.query, parsed.data.query)
     }
     if (parts.params) {
       // Direct assignment - Express allows this for params
@@ -203,6 +204,8 @@ const filterJobsQuery = z.object({
 
   // Search
   search: z.string().trim().optional(),
+  skill_names: z.string().trim().optional(), // Comma-separated or space-separated skill names
+  location_name: z.string().trim().optional(), // Location name to search in locations table
 
   // Filters
   company_id: z.string().uuid().optional(),

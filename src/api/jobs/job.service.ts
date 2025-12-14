@@ -148,6 +148,10 @@ export class JobService {
   async getMyJobs(userId: string, query: MyJobsDTO) {
     const { page, limit, status, sort_by, sort_order } = query
 
+    // Ensure page and limit are numbers
+    const pageNum = typeof page === 'string' ? parseInt(page, 10) : Number(page)
+    const limitNum = typeof limit === 'string' ? parseInt(limit, 10) : Number(limit)
+
     // Get company of the user
     const company = await prisma.companies.findUnique({
       where: { recruiter_id: userId },
@@ -158,7 +162,7 @@ export class JobService {
       throw new HttpError('You must have a company to view your jobs', HTTP_STATUS.NOT_FOUND)
     }
 
-    const skip = (page - 1) * limit
+    const skip = (pageNum - 1) * limitNum
 
     const where: Prisma.jobsWhereInput = {
       company_id: company.id,
@@ -170,7 +174,7 @@ export class JobService {
       prisma.jobs.findMany({
         where,
         skip,
-        take: limit,
+        take: limitNum,
         orderBy: { [sort_by]: sort_order },
         include: {
           companies: {
@@ -201,10 +205,10 @@ export class JobService {
     return {
       data: jobs,
       pagination: {
-        page,
-        limit,
+        page: pageNum,
+        limit: limitNum,
         total,
-        total_pages: Math.ceil(total / limit)
+        total_pages: Math.ceil(total / limitNum)
       }
     }
   }
@@ -485,6 +489,8 @@ export class JobService {
       page,
       limit,
       search,
+      skill_names,
+      location_name,
       company_id,
       location_id,
       job_type,
@@ -498,15 +504,24 @@ export class JobService {
       sort_order
     } = query
 
-    const skip = (page - 1) * limit
+    // Ensure page and limit are numbers (in case they come as strings from query params)
+    const pageNum = typeof page === 'number' ? page : parseInt(String(page), 10) || 1
+    const limitNum = typeof limit === 'number' ? limit : parseInt(String(limit), 10) || 20
+    const skip = (pageNum - 1) * limitNum
 
+    // Ensure experience_level is a number if provided
+    const experienceLevelNum = experience_level !== undefined && experience_level !== null
+      ? (typeof experience_level === 'number' ? experience_level : parseInt(String(experience_level), 10))
+      : undefined
+
+    // Build base where clause
     const where: Prisma.jobsWhereInput = {
       deleted: false,
       status: status || job_status.approved, // Default to approved jobs only
       ...(company_id && { company_id }),
       ...(location_id && { location_id }),
       ...(job_type && { job_type }),
-      ...(experience_level !== undefined && { experience_level }),
+      ...(experienceLevelNum !== undefined && !isNaN(experienceLevelNum) && { experience_level: experienceLevelNum }),
       ...(posted_after && { posted_at: { gte: posted_after } }),
       ...(posted_before && { posted_at: { lte: posted_before } }),
 
@@ -518,27 +533,100 @@ export class JobService {
         ]
       }),
 
-      // Salary range filter
-      ...(salary_min && {
-        salary_range: {
-          path: ['min'],
-          gte: salary_min
+      // Filter by skill names (search in job_skills relation)
+      // Support multiple skills separated by space or comma
+      ...(skill_names && (() => {
+        const skillNameList = skill_names
+          .trim()
+          .split(/[\s,]+/)
+          .filter(s => s.length > 0)
+          .map(s => s.trim())
+        
+        if (skillNameList.length === 0) return {}
+        
+        return {
+          job_skills: {
+            some: {
+              skills: {
+                OR: skillNameList.map(skillName => ({
+                  name: {
+                    contains: skillName,
+                    mode: 'insensitive' as const
+                  }
+                }))
+              }
+            }
+          }
         }
-      }),
-      ...(salary_max && {
-        salary_range: {
-          path: ['max'],
-          lte: salary_max
+      })()),
+
+      // Filter by location name (search in locations relation)
+      ...(location_name && location_name.trim() && {
+        locations: {
+          name: {
+            contains: location_name.trim(),
+            mode: 'insensitive' as const
+          }
         }
       })
     }
 
-    const [jobs, total] = await Promise.all([
+    // Handle salary range filter
+    // Use Prisma JSON filter - if it doesn't work, we'll filter after fetch
+    if (salary_min || salary_max) {
+      const salaryConditions: any[] = []
+      
+      if (salary_min) {
+        // Job's max salary should be >= requested min (overlap condition)
+        salaryConditions.push({
+          salary_range: {
+            path: ['max'],
+            gte: salary_min
+          }
+        })
+      }
+      
+      if (salary_max) {
+        // Job's min salary should be <= requested max (overlap condition)
+        salaryConditions.push({
+          salary_range: {
+            path: ['min'],
+            lte: salary_max
+          }
+        })
+      }
+      
+      if (salaryConditions.length > 0) {
+        const existingAnd = Array.isArray(where.AND) ? where.AND : (where.AND ? [where.AND] : [])
+        where.AND = [...existingAnd, ...salaryConditions]
+      }
+    }
+
+    // Remove salary filter from where clause temporarily to fetch all matching jobs
+    // We'll filter salary in memory as Prisma JSON filter may not work correctly
+    const whereWithoutSalary = { ...where }
+    if (whereWithoutSalary.AND) {
+      whereWithoutSalary.AND = (whereWithoutSalary.AND as any[]).filter(
+        (condition: any) => !condition.salary_range
+      )
+      if (whereWithoutSalary.AND.length === 0) {
+        delete whereWithoutSalary.AND
+      }
+    }
+
+    // Determine orderBy - if sorting by salary, we'll sort in memory
+    // For other fields, use Prisma orderBy
+    const orderByField = sort_by === 'salary_min' ? 'posted_at' : sort_by
+    const orderByDirection = sort_by === 'salary_min' ? 'desc' : sort_order
+
+    const [allJobs, totalBeforeFilter] = await Promise.all([
       prisma.jobs.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { [sort_by]: sort_order },
+        where: whereWithoutSalary,
+        skip: 0, // Fetch all to filter in memory (needed for salary filter)
+        take: 10000, // Large limit to get all matching jobs
+        orderBy: sort_by === 'salary_min' 
+          ? { posted_at: 'desc' } // Temporary sort, will be re-sorted by salary
+          : { [sort_by]: sort_order },
         include: {
           companies: {
             select: {
@@ -572,16 +660,64 @@ export class JobService {
           }
         }
       }),
-      prisma.jobs.count({ where })
+      prisma.jobs.count({ where: whereWithoutSalary })
     ])
 
+    // Filter by salary in memory
+    let filteredJobs = allJobs
+    if (salary_min || salary_max) {
+      filteredJobs = allJobs.filter((job: any) => {
+        if (!job.salary_range || typeof job.salary_range !== 'object') {
+          return false // Exclude jobs without salary range
+        }
+        
+        const jobMin = job.salary_range?.min
+        const jobMax = job.salary_range?.max
+        
+        // Check overlap: job range overlaps with requested range if:
+        // job.max >= requested.min AND job.min <= requested.max
+        if (salary_min !== undefined && salary_min !== null) {
+          if (jobMax === null || jobMax === undefined || jobMax < salary_min) {
+            return false
+          }
+        }
+        
+        if (salary_max !== undefined && salary_max !== null) {
+          if (jobMin === null || jobMin === undefined || jobMin > salary_max) {
+            return false
+          }
+        }
+        
+        return true
+      })
+    }
+
+    // Sort by salary if needed (in memory)
+    if (sort_by === 'salary_min') {
+      filteredJobs.sort((a: any, b: any) => {
+        const aMin = a.salary_range?.min ?? a.salary_range?.max ?? 0
+        const bMin = b.salary_range?.min ?? b.salary_range?.max ?? 0
+        
+        if (sort_order === 'asc') {
+          return aMin - bMin
+        } else {
+          return bMin - aMin
+        }
+      })
+    }
+
+    // Apply pagination after filtering and sorting
+    const skipCount = (pageNum - 1) * limitNum
+    const paginatedJobs = filteredJobs.slice(skipCount, skipCount + limitNum)
+    const total = filteredJobs.length
+
     return {
-      data: jobs,
+      data: paginatedJobs,
       pagination: {
-        page,
-        limit,
+        page: pageNum,
+        limit: limitNum,
         total,
-        total_pages: Math.ceil(total / limit)
+        total_pages: Math.ceil(total / limitNum)
       }
     }
   }
@@ -590,6 +726,8 @@ export class JobService {
    * Get featured jobs
    */
   async getFeaturedJobs(limit = 10) {
+    // Ensure limit is a number
+    const limitNum = typeof limit === 'number' ? limit : parseInt(String(limit), 10) || 10
     const jobs = await prisma.jobs.findMany({
       where: {
         deleted: false,
@@ -601,7 +739,7 @@ export class JobService {
           equals: true
         }
       },
-      take: limit,
+      take: limitNum,
       orderBy: { posted_at: 'desc' },
       include: {
         companies: {
@@ -639,13 +777,15 @@ export class JobService {
    * Get latest jobs
    */
   async getLatestJobs(limit = 20) {
+    // Ensure limit is a number
+    const limitNum = typeof limit === 'number' ? limit : parseInt(String(limit), 10) || 20
     const jobs = await prisma.jobs.findMany({
       where: {
         deleted: false,
         status: job_status.approved,
         expires_at: { gt: new Date() }
       },
-      take: limit,
+      take: limitNum,
       orderBy: { posted_at: 'desc' },
       include: {
         companies: {

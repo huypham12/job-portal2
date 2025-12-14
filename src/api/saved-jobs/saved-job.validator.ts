@@ -32,12 +32,14 @@ const zodValidate = (parts: SchemaParts): RequestHandler => {
     }
 
     // Safely assign parsed data
-    // Note: Express allows direct assignment for body, query, and params
     if (parts.body) req.body = parsed.data.body
     if (parts.query) {
-      req.query = parsed.data.query as any
+      // Merge parsed data into existing query object instead of direct assignment
+      // This avoids the "Cannot set property query" error in newer Express/Node versions
+      Object.assign(req.query, parsed.data.query)
     }
     if (parts.params) {
+      // Direct assignment - Express allows this for params
       req.params = parsed.data.params as any
     }
     next()
