@@ -1,0 +1,578 @@
+[
+  {
+    "slug": "techvision-jsc",
+    "name": "Tech Vision JSC",
+    "description": "Công ty sản phẩm công nghệ chuyên xây dựng nền tảng tuyển dụng và giải pháp HR SaaS cho doanh nghiệp vừa và lớn.",
+    "industry": "Technology",
+    "company_type": "startup",
+    "size": 150,
+    "contact_email": "hr@techvision.vn",
+    "contact_phone": "+84 24 3789 1234",
+    "contact_address": "Tầng 8, Toà nhà ABC, Cầu Giấy, Hà Nội",
+    "website_url": "https://techvision.vn",
+    "linkedin_url": "https://www.linkedin.com/company/techvision-jsc",
+    "headquarters_province": "Hà Nội",
+    "founded_year": 2018,
+    "employee_count_min": 100,
+    "employee_count_max": 200,
+    "revenue_range": "1M-10M",
+    "culture_description": "Môi trường product-first, ưu tiên chất lượng kỹ thuật, trao quyền mạnh cho đội ngũ kỹ sư, chú trọng học hỏi và chia sẻ nội bộ.",
+    "benefits": [
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm sức khoẻ mở rộng",
+        "description": "BHYT, BHXH đầy đủ và bảo hiểm sức khoẻ mở rộng cho nhân viên chính thức.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "remote",
+        "title": "Làm việc hybrid",
+        "description": "Linh hoạt làm việc 2–3 ngày/tuần tại nhà tuỳ theo team.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "salary",
+        "title": "Lương tháng 13 và thưởng cuối năm",
+        "description": "Đảm bảo lương tháng 13 và thưởng hiệu suất cuối năm dựa trên kết quả công ty.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "training",
+        "title": "Ngân sách đào tạo 10 triệu/năm",
+        "description": "Mỗi nhân viên có ngân sách riêng để tham gia khóa học, hội thảo và lấy chứng chỉ chuyên môn.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "equipment",
+        "title": "Laptop và thiết bị cao cấp",
+        "description": "MacBook Pro hoặc máy trạm theo nhu cầu công việc, màn hình 4K, bàn phím cơ.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "15 ngày phép năm",
+        "description": "12 ngày phép năm + 3 ngày nghỉ sinh nhật và ngày vào công ty.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "food",
+        "title": "Hỗ trợ ăn trưa",
+        "description": "Trợ cấp ăn trưa 1 triệu/tháng hoặc suất ăn tại văn phòng.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "finpay-vietnam",
+    "name": "FinPay Việt Nam",
+    "description": "Startup fintech cung cấp ví điện tử và cổng thanh toán cho các nền tảng thương mại điện tử.",
+    "industry": "FinTech",
+    "company_type": "startup",
+    "size": 80,
+    "contact_email": "talent@finpay.vn",
+    "contact_phone": "+84 28 3620 5566",
+    "contact_address": "Tầng 10, Toà nhà XYZ, Quận 1, TP. Hồ Chí Minh",
+    "website_url": "https://finpay.vn",
+    "linkedin_url": "https://www.linkedin.com/company/finpay-vietnam",
+    "headquarters_province": "TP. Hồ Chí Minh",
+    "founded_year": 2019,
+    "employee_count_min": 50,
+    "employee_count_max": 100,
+    "revenue_range": "0-1M",
+    "culture_description": "Đội ngũ trẻ, mục tiêu mở rộng sản phẩm nhanh nhưng vẫn đảm bảo chất lượng, sẵn sàng thử nghiệm và đo lường liên tục.",
+    "benefits": [
+      {
+        "benefit_type": "bonus",
+        "title": "Thưởng hiệu suất hàng quý",
+        "description": "Thưởng theo kết quả kinh doanh và đánh giá OKR của từng cá nhân.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "training",
+        "title": "Ngân sách học tập",
+        "description": "Mỗi nhân viên có ngân sách riêng cho khoá học, chứng chỉ chuyên môn.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "stock",
+        "title": "Quyền chọn mua cổ phần (ESOP)",
+        "description": "Cơ hội sở hữu cổ phần công ty với mức giá ưu đãi cho nhân viên lâu năm.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm sức khỏe Bảo Việt",
+        "description": "Gói bảo hiểm sức khỏe toàn diện cho nhân viên và người thân.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "14 ngày phép năm",
+        "description": "12 ngày phép năm cơ bản + 2 ngày wellness leave.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "remote",
+        "title": "WFH linh hoạt",
+        "description": "Chính sách làm việc từ xa 1-2 ngày/tuần.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "vietcareer-platform",
+    "name": "VietCareer Platform",
+    "description": "Nền tảng kết nối nhà tuyển dụng và ứng viên white-collar trên toàn quốc.",
+    "industry": "Technology",
+    "company_type": "startup",
+    "size": 60,
+    "contact_email": "hr@vietcareer.vn",
+    "contact_phone": "+84 24 3939 8686",
+    "contact_address": "Hoàn Kiếm, Hà Nội",
+    "website_url": "https://vietcareer.vn",
+    "linkedin_url": "https://www.linkedin.com/company/vietcareer",
+    "headquarters_province": "Hà Nội",
+    "founded_year": 2017,
+    "employee_count_min": 40,
+    "employee_count_max": 80,
+    "revenue_range": "1M-10M",
+    "culture_description": "Tập trung vào trải nghiệm người dùng, khuyến khích các thử nghiệm UX, A/B testing, data-driven.",
+    "benefits": [
+      {
+        "benefit_type": "vacation",
+        "title": "Nghỉ phép linh hoạt",
+        "description": "Nghỉ phép năm linh hoạt, có thể đổi sang remote day khi cần.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "salary",
+        "title": "Review lương 2 lần/năm",
+        "description": "Xem xét điều chỉnh lương mỗi 6 tháng dựa trên hiệu suất.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "health",
+        "title": "Khám sức khỏe định kỳ",
+        "description": "Khám sức khỏe tổng quát 1 lần/năm tại bệnh viện đối tác.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "equipment",
+        "title": "Setup làm việc tại nhà",
+        "description": "Hỗ trợ 5 triệu cho thiết bị làm việc tại nhà.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "training",
+        "title": "Tech talk nội bộ hàng tuần",
+        "description": "Chia sẻ kiến thức và kinh nghiệm giữa các team member.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "smartretail-solutions",
+    "name": "SmartRetail Solutions",
+    "description": "Cung cấp giải pháp phần mềm quản lý bán lẻ, POS, và loyalty cho chuỗi cửa hàng.",
+    "industry": "Retail Technology",
+    "company_type": "corporation",
+    "size": 220,
+    "contact_email": "recruitment@smartretail.vn",
+    "contact_phone": "+84 28 3636 9090",
+    "contact_address": "Bình Thạnh, TP. Hồ Chí Minh",
+    "website_url": "https://smartretail.vn",
+    "linkedin_url": "https://www.linkedin.com/company/smartretail",
+    "headquarters_province": "TP. Hồ Chí Minh",
+    "founded_year": 2014,
+    "employee_count_min": 150,
+    "employee_count_max": 300,
+    "revenue_range": "10M-100M",
+    "culture_description": "Môi trường ổn định, có quy trình rõ ràng, chú trọng đến việc tối ưu vận hành và nâng cấp hệ thống hiện tại.",
+    "benefits": [
+      {
+        "benefit_type": "insurance",
+        "title": "Bảo hiểm mở rộng cho gia đình",
+        "description": "Hỗ trợ bảo hiểm sức khoẻ cho người thân tuỳ cấp bậc.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "salary",
+        "title": "Lương tháng 13, 14",
+        "description": "Đảm bảo lương tháng 13 và 14 cho toàn bộ nhân viên.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "bonus",
+        "title": "Thưởng dự án",
+        "description": "Thưởng khi hoàn thành dự án lớn theo mức độ đóng góp.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "training",
+        "title": "Khóa học nâng cao",
+        "description": "Hỗ trợ 100% học phí các khóa học chuyên môn.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "16 ngày phép năm",
+        "description": "12 ngày phép cơ bản + 4 ngày senior leave.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "food",
+        "title": "Suất ăn trưa miễn phí",
+        "description": "Buffet trưa tại văn phòng với thực đơn đa dạng.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "eduspace",
+    "name": "EduSpace",
+    "description": "Nền tảng EdTech cung cấp khoá học online cho sinh viên và người đi làm.",
+    "industry": "Education",
+    "company_type": "startup",
+    "size": 40,
+    "contact_email": "jobs@eduspace.vn",
+    "contact_phone": "+84 24 3777 1122",
+    "contact_address": "Thanh Xuân, Hà Nội",
+    "website_url": "https://eduspace.vn",
+    "linkedin_url": "https://www.linkedin.com/company/eduspace-vn",
+    "headquarters_province": "Hà Nội",
+    "founded_year": 2020,
+    "employee_count_min": 30,
+    "employee_count_max": 60,
+    "revenue_range": "0-1M",
+    "culture_description": "Ưu tiên remote, nhiều bạn trẻ, làm việc cross-functional giữa tech, content và marketing.",
+    "benefits": [
+      {
+        "benefit_type": "remote",
+        "title": "Remote 100%",
+        "description": "Chính sách làm việc hoàn toàn từ xa với các buổi offsite định kỳ.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "equipment",
+        "title": "Laptop MacBook mới",
+        "description": "MacBook Air/Pro tùy vị trí, tặng khi full-time 2 năm.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "training",
+        "title": "Khóa học miễn phí",
+        "description": "Truy cập miễn phí tất cả khóa học trên nền tảng EduSpace.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "Offsite quý",
+        "description": "Du lịch/team building mỗi quý 1 lần.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm PVI",
+        "description": "Gói bảo hiểm sức khỏe cơ bản cho nhân viên.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "logixpress",
+    "name": "LogiXpress",
+    "description": "Giải pháp quản lý vận hành logistics và last-mile delivery cho doanh nghiệp.",
+    "industry": "Logistics",
+    "company_type": "corporation",
+    "size": 300,
+    "contact_email": "talent@logixpress.vn",
+    "contact_phone": "+84 28 3899 7788",
+    "contact_address": "Thủ Đức, TP. Hồ Chí Minh",
+    "website_url": "https://logixpress.vn",
+    "linkedin_url": "https://www.linkedin.com/company/logixpress",
+    "headquarters_province": "TP. Hồ Chí Minh",
+    "founded_year": 2013,
+    "employee_count_min": 250,
+    "employee_count_max": 400,
+    "revenue_range": "10M-100M",
+    "culture_description": "Định hướng enterprise, nhiều dự án lớn với khách hàng logistics và e-commerce, yêu cầu kỷ luật cao.",
+    "benefits": [
+      {
+        "benefit_type": "bonus",
+        "title": "Thưởng KPI cá nhân và team",
+        "description": "Đánh giá kết quả theo quý, thưởng cho cả cá nhân và team.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "salary",
+        "title": "Lương cạnh tranh top ngành",
+        "description": "Mức lương thuộc top 25% thị trường logistics tech.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm sức khỏe Prudential",
+        "description": "Gói platinum cho nhân viên và gia đình (vợ/chồng, con).",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "18 ngày phép năm",
+        "description": "Phép năm cao hơn mức trung bình ngành.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "training",
+        "title": "Đào tạo quốc tế",
+        "description": "Cơ hội tham gia training tại Singapore, Bangkok.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "food",
+        "title": "Phụ cấp ăn uống 1.5 triệu/tháng",
+        "description": "Hỗ trợ chi phí ăn uống hàng ngày.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "healthlink-care",
+    "name": "HealthLink Care",
+    "description": "Nền tảng quản lý phòng khám và hồ sơ bệnh án điện tử cho hệ thống phòng khám tư nhân.",
+    "industry": "Healthcare",
+    "company_type": "startup",
+    "size": 55,
+    "contact_email": "hr@healthlink.vn",
+    "contact_phone": "+84 24 3999 2211",
+    "contact_address": "Đống Đa, Hà Nội",
+    "website_url": "https://healthlink.vn",
+    "linkedin_url": "https://www.linkedin.com/company/healthlink-vn",
+    "headquarters_province": "Hà Nội",
+    "founded_year": 2016,
+    "employee_count_min": 40,
+    "employee_count_max": 70,
+    "revenue_range": "1M-10M",
+    "culture_description": "Tập trung vào tính ổn định và bảo mật của hệ thống, quy trình release cẩn trọng, hợp tác chặt với domain expert y tế.",
+    "benefits": [
+      {
+        "benefit_type": "health",
+        "title": "Gói khám sức khỏe định kỳ",
+        "description": "Khám sức khỏe tổng quát tại bệnh viện đối tác mỗi năm.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm sức khỏe cao cấp",
+        "description": "Gói bảo hiểm y tế quốc tế với quyền lợi lên đến 2 tỷ.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "training",
+        "title": "Chứng chỉ healthcare IT",
+        "description": "Hỗ trợ học và thi các chứng chỉ HL7, FHIR.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "remote",
+        "title": "Hybrid 3 ngày WFH",
+        "description": "Làm việc linh hoạt 3 ngày/tuần tại nhà.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "15 ngày phép năm",
+        "description": "12 ngày phép + 3 ngày sick leave có lương.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "salary",
+        "title": "Thưởng tháng 13",
+        "description": "Đảm bảo lương tháng 13 cho toàn bộ nhân viên.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "greenhome-iot",
+    "name": "GreenHome IoT",
+    "description": "Công ty sản xuất thiết bị IoT và phần mềm quản lý nhà thông minh.",
+    "industry": "IoT",
+    "company_type": "startup",
+    "size": 45,
+    "contact_email": "jobs@greenhome.vn",
+    "contact_phone": "+84 28 3456 7788",
+    "contact_address": "Quận 7, TP. Hồ Chí Minh",
+    "website_url": "https://greenhome.vn",
+    "linkedin_url": "https://www.linkedin.com/company/greenhome-iot",
+    "headquarters_province": "TP. Hồ Chí Minh",
+    "founded_year": 2018,
+    "employee_count_min": 30,
+    "employee_count_max": 60,
+    "revenue_range": "0-1M",
+    "culture_description": "Môi trường R&D mạnh, kết hợp giữa hardware và software, nhiều bài toán real-time, embedded.",
+    "benefits": [
+      {
+        "benefit_type": "training",
+        "title": "Ngân sách hội thảo tech",
+        "description": "Hỗ trợ tham gia hội thảo, meetup về IoT và Embedded.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "equipment",
+        "title": "Thiết bị R&D miễn phí",
+        "description": "Cung cấp board mạch, sensor, thiết bị thử nghiệm.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "stock",
+        "title": "Employee Stock Option",
+        "description": "Cổ phần ưu đãi cho key members sau 1 năm.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "bonus",
+        "title": "Thưởng sáng kiến kỹ thuật",
+        "description": "Thưởng cho các ý tưởng cải tiến sản phẩm được áp dụng.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm Bảo Minh",
+        "description": "Gói bảo hiểm sức khỏe cơ bản cho nhân viên.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "13 ngày phép năm",
+        "description": "Phép năm cơ bản theo luật lao động.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "cityfood-delivery",
+    "name": "CityFood Delivery",
+    "description": "Nền tảng đặt đồ ăn và giao nhận nội thành với mạng lưới đối tác rộng.",
+    "industry": "FoodTech",
+    "company_type": "corporation",
+    "size": 400,
+    "contact_email": "talent@cityfood.vn",
+    "contact_phone": "+84 28 3666 8899",
+    "contact_address": "Quận 3, TP. Hồ Chí Minh",
+    "website_url": "https://cityfood.vn",
+    "linkedin_url": "https://www.linkedin.com/company/cityfood",
+    "headquarters_province": "TP. Hồ Chí Minh",
+    "founded_year": 2015,
+    "employee_count_min": 350,
+    "employee_count_max": 500,
+    "revenue_range": "10M-100M",
+    "culture_description": "Tốc độ cao, nhiều đội cross-functional, tập trung tối ưu trải nghiệm người dùng cuối và đối tác nhà hàng.",
+    "benefits": [
+      {
+        "benefit_type": "vacation",
+        "title": "Teambuilding hàng năm",
+        "description": "Du lịch team/company 1–2 lần/năm.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "food",
+        "title": "Ăn uống không giới hạn",
+        "description": "Miễn phí đặt món qua app, voucher 200k/ngày.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "salary",
+        "title": "Lương tháng 13 + KPI",
+        "description": "Lương tháng 13 và thưởng KPI theo quý.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm MIC",
+        "description": "Gói bảo hiểm tai nạn và sức khỏe toàn diện.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "equipment",
+        "title": "MacBook Pro cho dev",
+        "description": "Trang bị MacBook Pro M-series cho developer.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "training",
+        "title": "Tech conference abroad",
+        "description": "Cơ hội tham gia hội nghị công nghệ ở nước ngoài.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "bonus",
+        "title": "Thưởng tăng trưởng",
+        "description": "Bonus khi đạt target tăng trưởng user/revenue.",
+        "is_featured": false
+      }
+    ]
+  },
+  {
+    "slug": "datainsight-labs",
+    "name": "DataInsight Labs",
+    "description": "Công ty tư vấn và triển khai giải pháp phân tích dữ liệu, BI cho ngân hàng và bán lẻ.",
+    "industry": "Data & Analytics",
+    "company_type": "consulting",
+    "size": 70,
+    "contact_email": "careers@datainsight.vn",
+    "contact_phone": "+84 24 3131 7979",
+    "contact_address": "Cầu Giấy, Hà Nội",
+    "website_url": "https://datainsight.vn",
+    "linkedin_url": "https://www.linkedin.com/company/datainsight-labs",
+    "headquarters_province": "Hà Nội",
+    "founded_year": 2012,
+    "employee_count_min": 50,
+    "employee_count_max": 90,
+    "revenue_range": "1M-10M",
+    "culture_description": "Data-driven 'đúng nghĩa', làm việc nhiều với khách hàng enterprise, yêu cầu khả năng giao tiếp và trình bày tốt.",
+    "benefits": [
+      {
+        "benefit_type": "training",
+        "title": "Chứng chỉ chuyên môn",
+        "description": "Hỗ trợ thi chứng chỉ cloud, BI, data analytics.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "training",
+        "title": "Khóa học Coursera/Udacity",
+        "description": "Tài khoản premium cho các nền tảng học tập online.",
+        "is_featured": true
+      },
+      {
+        "benefit_type": "salary",
+        "title": "Lương theo năng lực",
+        "description": "Review lương 2 lần/năm, tăng theo skill matrix.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "bonus",
+        "title": "Thưởng dự án khách hàng",
+        "description": "Chia sẻ 10-15% doanh thu dự án cho team thực hiện.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "equipment",
+        "title": "Laptop cao cấp",
+        "description": "ThinkPad X1 hoặc MacBook Pro theo yêu cầu.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "health",
+        "title": "Bảo hiểm Manulife",
+        "description": "Gói gold cho nhân viên và người phụ thuộc.",
+        "is_featured": false
+      },
+      {
+        "benefit_type": "vacation",
+        "title": "15 ngày phép + 3 ngày study leave",
+        "description": "Phép năm cộng thêm ngày nghỉ học tập.",
+        "is_featured": false
+      }
+    ]
+  }
+]

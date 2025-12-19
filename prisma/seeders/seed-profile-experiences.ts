@@ -1,25 +1,28 @@
 // prisma/seeders/seed-profile-experiences.ts
 
 import { PrismaClient } from '@prisma/client'
-import { faker } from '@faker-js/faker'
+import * as fs from 'fs'
+import * as path from 'path'
+
+interface ExperienceData {
+  company_name: string
+  position: string
+  start_date: string
+  end_date: string | null
+  is_current: boolean
+  description: string
+}
 
 export async function seedProfileExperiences(prisma: PrismaClient) {
-  console.log('  Bắt đầu seed dữ liệu Profile Experiences...')
+  console.log('  Bắt đầu seed dữ liệu Profile Experiences từ profile-experiences.json...')
 
   try {
-    // 1. Lấy danh sách profiles của candidates
-    const candidateProfiles = await prisma.profiles.findMany({
-      where: {
-        users: {
-          role: 'candidate'
-        }
-      },
-      select: { id: true, years_of_experience: true },
-      take: 100 // Chỉ lấy 100 profiles đầu tiên
-    })
+    // 1. Đọc dữ liệu từ profile-experiences.json
+    const experiencesPath = path.join(__dirname, 'data', 'profile-experiences.json')
+    const experiencesData: Record<string, ExperienceData[]> = JSON.parse(fs.readFileSync(experiencesPath, 'utf-8'))
 
-    if (candidateProfiles.length === 0) {
-      console.warn('  ⚠️ Không có candidate profiles. Bỏ qua seed profile_experiences.')
+    if (!experiencesData || Object.keys(experiencesData).length === 0) {
+      console.warn('  ⚠️ File profile-experiences.json không có dữ liệu. Bỏ qua seed profile_experiences.')
       return
     }
 
@@ -27,130 +30,45 @@ export async function seedProfileExperiences(prisma: PrismaClient) {
     await prisma.profile_experiences.deleteMany({})
     console.log('  Đã xóa dữ liệu profile_experiences cũ.')
 
-    // 3. Tạo experiences cho mỗi candidate profile
-    console.log(`  Đang tạo experiences cho ${candidateProfiles.length} candidate profiles...`)
+    // 3. Tạo experiences cho mỗi candidate từ JSON data
+    console.log(`  Đang tạo experiences từ JSON data...`)
 
-    const companies = [
-      'FPT Software',
-      'Viettel',
-      'VNG Corporation',
-      'Tiki',
-      'Shopee Vietnam',
-      'Grab Vietnam',
-      'VinTech',
-      'Samsung Vietnam',
-      'Intel Vietnam',
-      'Microsoft Vietnam',
-      'Google Vietnam',
-      'Facebook Vietnam',
-      'Zalo',
-      'MoMo',
-      'VPBank',
-      'Techcombank',
-      'VNPAY',
-      'Sendo',
-      'Sapo',
-      'Base.vn',
-      'KMS Technology',
-      'Nashtech',
-      'TMA Solutions',
-      'Axon Active',
-      'Orient Software'
-    ]
+    let createdCount = 0
 
-    const positions = [
-      'Software Developer',
-      'Frontend Developer',
-      'Backend Developer',
-      'Full Stack Developer',
-      'Mobile Developer',
-      'DevOps Engineer',
-      'QA Engineer',
-      'Business Analyst',
-      'Project Manager',
-      'Product Manager',
-      'UI/UX Designer',
-      'Data Analyst',
-      'System Administrator',
-      'Technical Lead',
-      'Senior Developer',
-      'Junior Developer'
-    ]
+    for (const [email, experiences] of Object.entries(experiencesData)) {
+      // Lấy profile từ DB dựa vào email
+      const user = await prisma.users.findUnique({
+        where: { email },
+        select: { profiles: { select: { id: true } } }
+      })
 
-    for (let i = 0; i < candidateProfiles.length; i++) {
-      const profile = candidateProfiles[i]
-      const yearsOfExp = profile.years_of_experience || 0
-
-      // Số lượng experiences dựa vào years_of_experience
-      let numberOfExperiences = 0
-      if (yearsOfExp === 0)
-        numberOfExperiences = 0 // Fresh graduate
-      else if (yearsOfExp <= 2) numberOfExperiences = faker.number.int({ min: 1, max: 2 })
-      else if (yearsOfExp <= 5) numberOfExperiences = faker.number.int({ min: 2, max: 3 })
-      else numberOfExperiences = faker.number.int({ min: 3, max: 5 })
-
-      const experiencesData = []
-      let currentDate = new Date()
-
-      for (let j = 0; j < numberOfExperiences; j++) {
-        const isCurrentJob = j === 0 && faker.datatype.boolean(0.3) // 30% chance for current job
-
-        let startDate: Date
-        let endDate: Date | null = null
-
-        if (j === 0) {
-          // Most recent job
-          if (isCurrentJob) {
-            startDate = faker.date.between({
-              from: new Date(currentDate.getFullYear() - 2, 0, 1),
-              to: currentDate
-            })
-            endDate = null
-          } else {
-            endDate = faker.date.between({
-              from: new Date(currentDate.getFullYear() - 1, 0, 1),
-              to: currentDate
-            })
-            startDate = faker.date.between({
-              from: new Date(endDate.getFullYear() - 3, 0, 1),
-              to: endDate
-            })
-          }
-        } else {
-          // Previous jobs
-          const previousEndDate = experiencesData[j - 1].start_date
-          endDate = faker.date.between({
-            from: new Date(previousEndDate.getFullYear() - 1, 0, 1),
-            to: previousEndDate
-          })
-          startDate = faker.date.between({
-            from: new Date(endDate.getFullYear() - 3, 0, 1),
-            to: endDate
-          })
-        }
-
-        experiencesData.push({
-          profile_id: profile.id,
-          company_name: faker.helpers.arrayElement(companies),
-          position: faker.helpers.arrayElement(positions),
-          start_date: startDate,
-          end_date: endDate,
-          is_current: isCurrentJob,
-          description: faker.lorem.paragraphs(2, '\n\n')
-        })
-
-        currentDate = startDate
+      if (!user || !user.profiles) {
+        console.warn(`  ⚠️ Không tìm thấy profile cho email: ${email}`)
+        continue
       }
 
-      // Insert experiences for this profile
-      if (experiencesData.length > 0) {
+      const profileId = user.profiles.id
+
+      // Tạo experiences cho profile này
+      const experiencesToCreate = experiences.map((exp) => ({
+        profile_id: profileId,
+        company_name: exp.company_name,
+        position: exp.position,
+        start_date: new Date(exp.start_date),
+        end_date: exp.end_date ? new Date(exp.end_date) : null,
+        is_current: exp.is_current,
+        description: exp.description
+      }))
+
+      if (experiencesToCreate.length > 0) {
         await prisma.profile_experiences.createMany({
-          data: experiencesData
+          data: experiencesToCreate
         })
+        createdCount++
       }
 
-      if ((i + 1) % 20 === 0) {
-        console.log(`    ... Đã tạo experiences cho ${i + 1} / ${candidateProfiles.length} profiles`)
+      if (createdCount % 10 === 0) {
+        console.log(`    ... Đã tạo experiences cho ${createdCount} profiles`)
       }
     }
 
