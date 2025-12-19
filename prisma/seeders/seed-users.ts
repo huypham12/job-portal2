@@ -23,6 +23,12 @@ interface ProfileJson {
   desired_salary_min?: number
   bio?: string
   skills?: string[]
+  avatar_url?: string
+  date_of_birth?: string
+  phone_number?: string
+  github_url?: string
+  linkedin_url?: string
+  personal_website?: string
 }
 
 interface CompanyJson {
@@ -37,6 +43,11 @@ interface CompanyJson {
   contact_address: string
   website_url: string
   linkedin_url: string
+  facebook_url?: string
+  twitter_url?: string
+  tax_code?: string
+  business_license?: string
+  stock_symbol?: string | null
   headquarters_province: string
   founded_year: number
   employee_count_min: number
@@ -211,8 +222,13 @@ async function seedRecruiters(prisma: PrismaClient, hashedPassword: string) {
           contact_phone: companyData.contact_phone,
           contact_address: companyData.contact_address,
           linkedin_url: companyData.linkedin_url,
+          facebook_url: companyData.facebook_url,
+          twitter_url: companyData.twitter_url,
+          tax_code: companyData.tax_code,
+          business_license: companyData.business_license,
           logo_url: `https://logo.clearbit.com/${companyData.website_url.replace('https://', '')}`,
           is_verified: true,
+          verification_date: new Date(),
           status: 'active',
           recruiter_id: recruiterUser.id,
           // Tạo company_details lồng nhau
@@ -225,6 +241,7 @@ async function seedRecruiters(prisma: PrismaClient, hashedPassword: string) {
               website_url: companyData.website_url,
               company_type: companyData.company_type,
               revenue_range: companyData.revenue_range,
+              stock_symbol: companyData.stock_symbol,
               culture_description: companyData.culture_description,
               headquarters_location_id: locationId
             }
@@ -303,7 +320,13 @@ async function seedCandidatesFromJson(prisma: PrismaClient, hashedPassword: stri
               ) as job_type[]) ?? [job_type.full_time],
               is_looking_for_job: true,
               location_id: locationId,
-              location_text: profile.location_province || null
+              location_text: profile.location_province || null,
+              avatar_url: profile.avatar_url || null,
+              date_of_birth: profile.date_of_birth ? new Date(profile.date_of_birth) : null,
+              phone_number: profile.phone_number?.substring(0, 20) || null,
+              github_url: profile.github_url?.substring(0, 255) || null,
+              linkedin_url: profile.linkedin_url?.substring(0, 255) || null,
+              personal_website: profile.personal_website?.substring(0, 255) || null
             }
           }
         }

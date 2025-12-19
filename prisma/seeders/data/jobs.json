@@ -8,9 +8,25 @@
     "level": "Senior",
     "experience_years_min": 4,
     "experience_years_max": 7,
-    "salary": { "min": 40, "max": 60, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Backend", "Node.js", "Microservices"],
-    "skills": ["Node.js", "TypeScript", "PostgreSQL", "Redis", "Docker", "AWS"],
+    "salary": {
+      "min": 40,
+      "max": 60,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Backend",
+      "Node.js",
+      "Microservices"
+    ],
+    "skills": [
+      "Node.js",
+      "TypeScript",
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+      "AWS"
+    ],
     "description": [
       "Tham gia phát triển các dịch vụ backend cho nền tảng tuyển dụng và quản lý quy trình tuyển dụng của khách hàng.",
       "Thiết kế, tối ưu hoá kiến trúc microservices, API nội bộ và public API.",
@@ -46,7 +62,9 @@
       {
         "benefit_type": "bonus",
         "title": "Thưởng hiệu suất",
-        "description": "Thưởng theo kết quả đánh giá hàng quý và hiệu quả dự án."
+        "description": "Thưởng theo kết quả đánh giá hàng quý và hiệu quả dự án.",
+        "value_amount": 5000000,
+        "value_currency": "VND"
       },
       {
         "benefit_type": "remote",
@@ -72,9 +90,21 @@
     "level": "Mid-Senior",
     "experience_years_min": 3,
     "experience_years_max": 6,
-    "salary": { "min": 35, "max": 50, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Product", "HR Tech"],
-    "skills": ["Product Management", "Agile/Scrum", "SQL"],
+    "salary": {
+      "min": 35,
+      "max": 50,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Product",
+      "HR Tech"
+    ],
+    "skills": [
+      "Product Management",
+      "Agile/Scrum",
+      "SQL"
+    ],
     "description": [
       "Làm việc trực tiếp với khách hàng và nội bộ để thu thập yêu cầu nghiệp vụ về tuyển dụng và quản trị nhân sự.",
       "Xây dựng, ưu tiên và quản lý product backlog cho một hoặc nhiều squad.",
@@ -102,7 +132,9 @@
       {
         "benefit_type": "training",
         "title": "Ngân sách học tập",
-        "description": "Hỗ trợ khoá học về Product, UX, Data."
+        "description": "Hỗ trợ khoá học về Product, UX, Data.",
+        "value_amount": 5000000,
+        "value_currency": "VND"
       }
     ],
     "work_arrangement": {
@@ -123,9 +155,21 @@
     "level": "Junior-Mid",
     "experience_years_min": 1,
     "experience_years_max": 3,
-    "salary": { "min": 18, "max": 30, "currency": "triệu VND", "unit": "month" },
-    "tags": ["QA", "Manual Testing"],
-    "skills": ["Manual Testing", "API Testing", "Postman"],
+    "salary": {
+      "min": 18,
+      "max": 30,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "QA",
+      "Manual Testing"
+    ],
+    "skills": [
+      "Manual Testing",
+      "API Testing",
+      "Postman"
+    ],
     "description": [
       "Tham gia phân tích yêu cầu, xây dựng test case cho các tính năng mới.",
       "Thực hiện test manual cho web và mobile web, kiểm thử API cơ bản.",
@@ -166,9 +210,23 @@
     "level": "Senior",
     "experience_years_min": 4,
     "experience_years_max": 8,
-    "salary": { "min": 45, "max": 70, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Mobile", "React Native", "FinTech"],
-    "skills": ["React Native", "TypeScript", "Redux", "REST API"],
+    "salary": {
+      "min": 45,
+      "max": 70,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Mobile",
+      "React Native",
+      "FinTech"
+    ],
+    "skills": [
+      "React Native",
+      "TypeScript",
+      "Redux",
+      "REST API"
+    ],
     "description": [
       "Phát triển và tối ưu ứng dụng mobile ví điện tử trên nền tảng React Native.",
       "Làm việc chặt chẽ với backend để tích hợp các API thanh toán, KYC, loyalty.",
@@ -188,7 +246,9 @@
       {
         "benefit_type": "bonus",
         "title": "ESOP cho key member",
-        "description": "Có chính sách ESOP với nhân sự chủ chốt."
+        "description": "Có chính sách ESOP với nhân sự chủ chốt.",
+        "value_amount": 3000000,
+        "value_currency": "VND"
       }
     ],
     "work_arrangement": {
@@ -209,9 +269,22 @@
     "level": "Mid-Senior",
     "experience_years_min": 3,
     "experience_years_max": 6,
-    "salary": { "min": 40, "max": 55, "currency": "triệu VND", "unit": "month" },
-    "tags": ["DevOps", "AWS"],
-    "skills": ["AWS", "Docker", "Kubernetes", "CI/CD"],
+    "salary": {
+      "min": 40,
+      "max": 55,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "DevOps",
+      "AWS"
+    ],
+    "skills": [
+      "AWS",
+      "Docker",
+      "Kubernetes",
+      "CI/CD"
+    ],
     "description": [
       "Thiết kế và vận hành hạ tầng cloud trên AWS cho hệ thống thanh toán.",
       "Xây dựng pipeline CI/CD, logging, monitoring và alerting.",
@@ -252,9 +325,21 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 28, "max": 40, "currency": "triệu VND", "unit": "month" },
-    "tags": ["BA", "Payment"],
-    "skills": ["Business Analysis", "Payment Domain", "UML/BPMN"],
+    "salary": {
+      "min": 28,
+      "max": 40,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "BA",
+      "Payment"
+    ],
+    "skills": [
+      "Business Analysis",
+      "Payment Domain",
+      "UML/BPMN"
+    ],
     "description": [
       "Phân tích yêu cầu nghiệp vụ liên quan đến thanh toán, ví điện tử, đối soát.",
       "Viết BRD, SRS, user story, mô tả flow thanh toán.",
@@ -280,7 +365,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "vietcareer-platform",
     "title": "Full-stack Developer (React/Node)",
@@ -290,9 +374,23 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 28, "max": 40, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Full-stack", "React", "Node.js"],
-    "skills": ["React", "Node.js", "TypeScript", "PostgreSQL"],
+    "salary": {
+      "min": 28,
+      "max": 40,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Full-stack",
+      "React",
+      "Node.js"
+    ],
+    "skills": [
+      "React",
+      "Node.js",
+      "TypeScript",
+      "PostgreSQL"
+    ],
     "description": [
       "Tham gia phát triển các tính năng mới cho nền tảng tuyển dụng.",
       "Làm việc full-stack: frontend React và backend Node.js/TypeScript.",
@@ -327,9 +425,21 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 5,
-    "salary": { "min": 25, "max": 38, "currency": "triệu VND", "unit": "month" },
-    "tags": ["UI/UX", "Product Design"],
-    "skills": ["Figma", "User Research", "Prototyping"],
+    "salary": {
+      "min": 25,
+      "max": 38,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "UI/UX",
+      "Product Design"
+    ],
+    "skills": [
+      "Figma",
+      "User Research",
+      "Prototyping"
+    ],
     "description": [
       "Thiết kế giao diện và trải nghiệm người dùng cho web app và mobile web.",
       "Làm việc với Product Owner để xác định vấn đề người dùng và đề xuất giải pháp UX.",
@@ -355,9 +465,22 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 30, "max": 42, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Data Analyst", "Product Analytics"],
-    "skills": ["SQL", "Excel", "Tableau", "Product Analytics"],
+    "salary": {
+      "min": 30,
+      "max": 42,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Data Analyst",
+      "Product Analytics"
+    ],
+    "skills": [
+      "SQL",
+      "Excel",
+      "Tableau",
+      "Product Analytics"
+    ],
     "description": [
       "Phân tích hành vi người dùng ứng viên/nhà tuyển dụng trên nền tảng.",
       "Xây dựng dashboard theo dõi funnel và hiệu quả chiến dịch growth.",
@@ -374,7 +497,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "smartretail-solutions",
     "title": "Senior .NET Developer (Retail POS)",
@@ -384,9 +506,21 @@
     "level": "Senior",
     "experience_years_min": 5,
     "experience_years_max": 8,
-    "salary": { "min": 45, "max": 65, "currency": "triệu VND", "unit": "month" },
-    "tags": [".NET", "Retail"],
-    "skills": [".NET", "SQL Server", "Microservices"],
+    "salary": {
+      "min": 45,
+      "max": 65,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      ".NET",
+      "Retail"
+    ],
+    "skills": [
+      ".NET",
+      "SQL Server",
+      "Microservices"
+    ],
     "description": [
       "Phát triển và bảo trì hệ thống POS và backend cho các chuỗi bán lẻ.",
       "Tối ưu hiệu năng hệ thống, xử lý transaction volume lớn.",
@@ -412,9 +546,21 @@
     "level": "Mid",
     "experience_years_min": 3,
     "experience_years_max": 5,
-    "salary": { "min": 30, "max": 45, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Implementation", "Retail"],
-    "skills": ["SQL", "Communication", "Problem Solving"],
+    "salary": {
+      "min": 30,
+      "max": 45,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Implementation",
+      "Retail"
+    ],
+    "skills": [
+      "SQL",
+      "Communication",
+      "Problem Solving"
+    ],
     "description": [
       "Triển khai giải pháp phần mềm bán lẻ cho khách hàng chuỗi cửa hàng.",
       "Khảo sát nghiệp vụ, cấu hình hệ thống và đào tạo người dùng.",
@@ -440,9 +586,20 @@
     "level": "Mid",
     "experience_years_min": 3,
     "experience_years_max": 6,
-    "salary": { "min": 28, "max": 40, "currency": "triệu VND", "unit": "month" },
-    "tags": ["System Admin", "Windows Server"],
-    "skills": ["Windows Server", "Networking"],
+    "salary": {
+      "min": 28,
+      "max": 40,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "System Admin",
+      "Windows Server"
+    ],
+    "skills": [
+      "Windows Server",
+      "Networking"
+    ],
     "description": [
       "Quản trị hệ thống server, AD, mạng nội bộ cho công ty và khách hàng.",
       "Đảm bảo uptime hệ thống và thực hiện sao lưu định kỳ.",
@@ -459,7 +616,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "eduspace",
     "title": "Frontend Developer (Next.js)",
@@ -469,9 +625,22 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 25, "max": 38, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Frontend", "Next.js"],
-    "skills": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+    "salary": {
+      "min": 25,
+      "max": 38,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Frontend",
+      "Next.js"
+    ],
+    "skills": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS"
+    ],
     "description": [
       "Xây dựng giao diện web cho nền tảng khoá học online sử dụng Next.js.",
       "Tối ưu SEO, performance và trải nghiệm người dùng.",
@@ -497,9 +666,21 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 18, "max": 30, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Marketing", "Content"],
-    "skills": ["Content Marketing", "SEO", "Social Media"],
+    "salary": {
+      "min": 18,
+      "max": 30,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Marketing",
+      "Content"
+    ],
+    "skills": [
+      "Content Marketing",
+      "SEO",
+      "Social Media"
+    ],
     "description": [
       "Lên kế hoạch và sản xuất nội dung cho blog, social, email.",
       "Làm việc với giảng viên để xây dựng nội dung giới thiệu khoá học.",
@@ -525,9 +706,20 @@
     "level": "Senior",
     "experience_years_min": 4,
     "experience_years_max": 7,
-    "salary": { "min": 40, "max": 60, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Product", "EdTech"],
-    "skills": ["Product Management", "Agile/Scrum"],
+    "salary": {
+      "min": 40,
+      "max": 60,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Product",
+      "EdTech"
+    ],
+    "skills": [
+      "Product Management",
+      "Agile/Scrum"
+    ],
     "description": [
       "Xây dựng roadmap sản phẩm nền tảng học tập online.",
       "Làm việc chặt chẽ với team kỹ thuật, nội dung và marketing.",
@@ -544,7 +736,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "logixpress",
     "title": "Backend Engineer (Java/Spring)",
@@ -554,9 +745,22 @@
     "level": "Mid-Senior",
     "experience_years_min": 3,
     "experience_years_max": 6,
-    "salary": { "min": 35, "max": 50, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Backend", "Java", "Logistics"],
-    "skills": ["Java", "Spring Boot", "Kafka"],
+    "salary": {
+      "min": 35,
+      "max": 50,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Backend",
+      "Java",
+      "Logistics"
+    ],
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "Kafka"
+    ],
     "description": [
       "Phát triển dịch vụ backend cho hệ thống quản lý vận đơn và định tuyến giao hàng.",
       "Tối ưu performance cho các batch job và real-time tracking.",
@@ -582,9 +786,20 @@
     "level": "Senior",
     "experience_years_min": 5,
     "experience_years_max": 8,
-    "salary": { "min": 40, "max": 60, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Project Manager", "Logistics"],
-    "skills": ["Project Management", "Agile"],
+    "salary": {
+      "min": 40,
+      "max": 60,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Project Manager",
+      "Logistics"
+    ],
+    "skills": [
+      "Project Management",
+      "Agile"
+    ],
     "description": [
       "Quản lý các dự án triển khai hệ thống cho khách hàng logistics lớn.",
       "Điều phối team kỹ thuật, BA, QA và làm việc với stakeholder phía khách hàng.",
@@ -610,9 +825,20 @@
     "level": "Mid",
     "experience_years_min": 3,
     "experience_years_max": 5,
-    "salary": { "min": 35, "max": 48, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Data Engineer"],
-    "skills": ["SQL", "ETL", "BigQuery"],
+    "salary": {
+      "min": 35,
+      "max": 48,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Data Engineer"
+    ],
+    "skills": [
+      "SQL",
+      "ETL",
+      "BigQuery"
+    ],
     "description": [
       "Xây dựng pipeline dữ liệu phục vụ báo cáo vận hành và tối ưu tuyến giao hàng.",
       "Làm việc với các nguồn dữ liệu vận đơn, tracking thiết bị, đơn hàng.",
@@ -629,7 +855,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "healthlink-care",
     "title": "Backend Developer (Healthcare)",
@@ -639,9 +864,21 @@
     "level": "Mid",
     "experience_years_min": 3,
     "experience_years_max": 5,
-    "salary": { "min": 30, "max": 42, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Backend", "Healthcare"],
-    "skills": ["Node.js", "PostgreSQL", "REST API"],
+    "salary": {
+      "min": 30,
+      "max": 42,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Backend",
+      "Healthcare"
+    ],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "REST API"
+    ],
     "description": [
       "Phát triển backend cho hệ thống quản lý hồ sơ bệnh án điện tử.",
       "Đảm bảo bảo mật dữ liệu bệnh nhân và tuân thủ các yêu cầu pháp lý.",
@@ -667,9 +904,20 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 25, "max": 35, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Implementation", "Healthcare"],
-    "skills": ["Communication", "Problem Solving"],
+    "salary": {
+      "min": 25,
+      "max": 35,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Implementation",
+      "Healthcare"
+    ],
+    "skills": [
+      "Communication",
+      "Problem Solving"
+    ],
     "description": [
       "Triển khai hệ thống cho các phòng khám: khảo sát, cấu hình, đào tạo.",
       "Hỗ trợ nhân viên y tế trong giai đoạn đầu sử dụng phần mềm.",
@@ -695,9 +943,19 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 25, "max": 35, "currency": "triệu VND", "unit": "month" },
-    "tags": ["QA"],
-    "skills": ["Manual Testing", "SQL"],
+    "salary": {
+      "min": 25,
+      "max": 35,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "QA"
+    ],
+    "skills": [
+      "Manual Testing",
+      "SQL"
+    ],
     "description": [
       "Kiểm thử tính năng hệ thống, chú trọng tính chính xác dữ liệu và quy trình nghiệp vụ y tế.",
       "Viết test case, test scenario chi tiết.",
@@ -714,7 +972,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "greenhome-iot",
     "title": "Embedded Engineer (IoT)",
@@ -724,9 +981,20 @@
     "level": "Mid-Senior",
     "experience_years_min": 3,
     "experience_years_max": 6,
-    "salary": { "min": 35, "max": 50, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Embedded", "IoT"],
-    "skills": ["C/C++", "Embedded Systems"],
+    "salary": {
+      "min": 35,
+      "max": 50,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Embedded",
+      "IoT"
+    ],
+    "skills": [
+      "C/C++",
+      "Embedded Systems"
+    ],
     "description": [
       "Phát triển firmware cho thiết bị nhà thông minh.",
       "Làm việc với các giao thức MQTT, Zigbee, Wi-Fi.",
@@ -752,9 +1020,19 @@
     "level": "Mid",
     "experience_years_min": 2,
     "experience_years_max": 4,
-    "salary": { "min": 28, "max": 40, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Mobile"],
-    "skills": ["Flutter", "REST API"],
+    "salary": {
+      "min": 28,
+      "max": 40,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Mobile"
+    ],
+    "skills": [
+      "Flutter",
+      "REST API"
+    ],
     "description": [
       "Phát triển ứng dụng mobile điều khiển nhà thông minh.",
       "Tích hợp với backend và thiết bị IoT qua API.",
@@ -780,9 +1058,18 @@
     "level": "Junior-Mid",
     "experience_years_min": 1,
     "experience_years_max": 3,
-    "salary": { "min": 18, "max": 28, "currency": "triệu VND", "unit": "month" },
-    "tags": ["QA"],
-    "skills": ["Manual Testing"],
+    "salary": {
+      "min": 18,
+      "max": 28,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "QA"
+    ],
+    "skills": [
+      "Manual Testing"
+    ],
     "description": [
       "Kiểm thử tính năng giữa app, backend và thiết bị IoT.",
       "Viết test case cho các kịch bản sử dụng phổ biến.",
@@ -799,7 +1086,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "cityfood-delivery",
     "title": "Senior Backend Engineer (Golang)",
@@ -809,9 +1095,21 @@
     "level": "Senior",
     "experience_years_min": 4,
     "experience_years_max": 7,
-    "salary": { "min": 45, "max": 65, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Backend", "Golang"],
-    "skills": ["Golang", "Microservices", "Redis"],
+    "salary": {
+      "min": 45,
+      "max": 65,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Backend",
+      "Golang"
+    ],
+    "skills": [
+      "Golang",
+      "Microservices",
+      "Redis"
+    ],
     "description": [
       "Phát triển hệ thống backend cho nền tảng đặt đồ ăn và giao nhận.",
       "Xử lý lượng request lớn, tối ưu latency và độ ổn định.",
@@ -837,9 +1135,20 @@
     "level": "Senior",
     "experience_years_min": 5,
     "experience_years_max": 8,
-    "salary": { "min": 40, "max": 60, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Marketing", "Growth"],
-    "skills": ["Digital Marketing", "Performance Marketing"],
+    "salary": {
+      "min": 40,
+      "max": 60,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Marketing",
+      "Growth"
+    ],
+    "skills": [
+      "Digital Marketing",
+      "Performance Marketing"
+    ],
     "description": [
       "Xây dựng chiến lược growth cho cả user và merchant.",
       "Quản lý ngân sách marketing performance nhiều kênh.",
@@ -865,9 +1174,21 @@
     "level": "Senior",
     "experience_years_min": 4,
     "experience_years_max": 7,
-    "salary": { "min": 45, "max": 65, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Data Science", "ML"],
-    "skills": ["Machine Learning", "Python", "Recommendation Systems"],
+    "salary": {
+      "min": 45,
+      "max": 65,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Data Science",
+      "ML"
+    ],
+    "skills": [
+      "Machine Learning",
+      "Python",
+      "Recommendation Systems"
+    ],
     "description": [
       "Xây dựng mô hình gợi ý món ăn và nhà hàng cá nhân hoá.",
       "Làm việc với dữ liệu hành vi người dùng, đơn hàng và feedback.",
@@ -884,7 +1205,6 @@
       "shift_type": "day"
     }
   },
-
   {
     "company_slug": "datainsight-labs",
     "title": "BI Developer",
@@ -894,9 +1214,21 @@
     "level": "Mid-Senior",
     "experience_years_min": 3,
     "experience_years_max": 6,
-    "salary": { "min": 35, "max": 50, "currency": "triệu VND", "unit": "month" },
-    "tags": ["BI", "Data"],
-    "skills": ["SQL", "Power BI", "Data Modeling"],
+    "salary": {
+      "min": 35,
+      "max": 50,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "BI",
+      "Data"
+    ],
+    "skills": [
+      "SQL",
+      "Power BI",
+      "Data Modeling"
+    ],
     "description": [
       "Thiết kế và xây dựng báo cáo BI cho khách hàng ngân hàng và bán lẻ.",
       "Làm việc với business user để hiểu yêu cầu và mô hình hoá dữ liệu.",
@@ -922,9 +1254,19 @@
     "level": "Senior",
     "experience_years_min": 4,
     "experience_years_max": 7,
-    "salary": { "min": 40, "max": 60, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Data Engineer"],
-    "skills": ["ETL", "Cloud Data Warehouse"],
+    "salary": {
+      "min": 40,
+      "max": 60,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Data Engineer"
+    ],
+    "skills": [
+      "ETL",
+      "Cloud Data Warehouse"
+    ],
     "description": [
       "Thiết kế kiến trúc dữ liệu trên cloud cho các dự án enterprise.",
       "Xây dựng pipeline ETL/ELT từ nhiều nguồn dữ liệu.",
@@ -950,9 +1292,20 @@
     "level": "Mid-Senior",
     "experience_years_min": 3,
     "experience_years_max": 6,
-    "salary": { "min": 35, "max": 48, "currency": "triệu VND", "unit": "month" },
-    "tags": ["Consulting", "Analytics"],
-    "skills": ["SQL", "Business Analysis"],
+    "salary": {
+      "min": 35,
+      "max": 48,
+      "currency": "triệu VND",
+      "unit": "month"
+    },
+    "tags": [
+      "Consulting",
+      "Analytics"
+    ],
+    "skills": [
+      "SQL",
+      "Business Analysis"
+    ],
     "description": [
       "Tư vấn giải pháp phân tích dữ liệu cho khách hàng enterprise.",
       "Chuẩn bị tài liệu, workshop và training cho người dùng business.",
@@ -970,5 +1323,3 @@
     }
   }
 ]
-
-

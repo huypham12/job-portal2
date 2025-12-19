@@ -17,6 +17,8 @@ interface JobBenefitJson {
   benefit_type: string
   title: string
   description?: string | null
+  value_amount?: number | null
+  value_currency?: string
 }
 
 interface JobWorkArrangementJson {
@@ -320,8 +322,8 @@ export async function seedJobs(prisma: PrismaClient) {
             benefit_type: b.benefit_type,
             title: b.title,
             description: b.description || null,
-            value_amount: null
-            // value_currency sẽ dùng default "VND"
+            value_amount: b.value_amount ?? null,
+            value_currency: b.value_currency || 'VND'
           }))
         })
       }
@@ -341,6 +343,28 @@ export async function seedJobs(prisma: PrismaClient) {
           }
         })
       }
+
+      // 5.6. Seed job_posts_history - lưu phiên bản đầu tiên của job
+      await prisma.job_posts_history.create({
+        data: {
+          job_id: createdJob.id,
+          version: 1,
+          content: JSON.parse(
+            JSON.stringify({
+              title: job.title,
+              description: (job.description || []).join('\n'),
+              salary: job.salary || null,
+              job_type: job.job_type || null,
+              location_province: job.location_province || null,
+              requirements: job.requirements || [],
+              benefits: job.benefits || [],
+              work_arrangement: job.work_arrangement || null,
+              tags: job.tags || [],
+              skills: job.skills || []
+            })
+          )
+        }
+      })
 
       if ((i + 1) % 10 === 0 || i === jobsJson.length - 1) {
         console.log(`    ... Đã tạo ${i + 1} / ${jobsJson.length} jobs`)
