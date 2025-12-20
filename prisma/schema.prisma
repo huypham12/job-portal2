@@ -27,6 +27,18 @@ model applications {
   metadata              Json?
   version               Int?                    @default(1)
   profile_id            String                  @db.Uuid
+  cover_letter          String?                 @db.Text
+  is_withdrawn          Boolean                 @default(false)
+  withdrawn_at          DateTime?               @db.Timestamp(6)
+  withdrawn_reason      String?                 @db.VarChar(255)
+  first_viewed_at       DateTime?               @db.Timestamp(6)
+  last_viewed_at        DateTime?               @db.Timestamp(6)
+  view_count            Int                     @default(0)
+  rejected_at           DateTime?               @db.Timestamp(6)
+  rejected_reason       String?                 @db.Text
+  offer_sent_at         DateTime?               @db.Timestamp(6)
+  offer_accepted_at     DateTime?               @db.Timestamp(6)
+  offer_declined_at     DateTime?               @db.Timestamp(6)
   application_documents application_documents[]
   application_stages    application_stages[]
   jobs                  jobs                    @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -37,24 +49,36 @@ model applications {
   @@index([profile_id, job_id], map: "idx_applications_profile_job")
   @@index([job_id, status, applied_at], map: "idx_applications_pipeline")
   @@index([job_id, status, applied_at(sort: Desc)], map: "idx_applications_dashboard")
+  @@index([is_withdrawn, status], map: "idx_applications_withdrawn")
+  @@index([job_id, is_withdrawn], map: "idx_applications_job_withdrawn")
+  @@index([profile_id, is_withdrawn], map: "idx_applications_profile_withdrawn")
 }
 
 model application_stages {
-  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  application_id    String       @db.Uuid
-  stage_name        String       @db.VarChar(100)
-  stage_order       Int
-  status            String       @db.VarChar(50)
-  scheduled_at      DateTime?    @db.Timestamp(6)
-  completed_at      DateTime?    @db.Timestamp(6)
-  feedback          String?
-  rating            Int?
-  interviewer_notes String?
-  created_at        DateTime     @default(now()) @db.Timestamp(6)
-  applications      applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
+  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  application_id     String       @db.Uuid
+  stage_name         String       @db.VarChar(100)
+  stage_order        Int
+  status             String       @db.VarChar(50)
+  scheduled_at       DateTime?    @db.Timestamp(6)
+  completed_at       DateTime?    @db.Timestamp(6)
+  feedback           String?
+  rating             Int?
+  interviewer_notes  String?
+  created_at         DateTime     @default(now()) @db.Timestamp(6)
+  location           String?      @db.VarChar(255)
+  meeting_link       String?      @db.VarChar(500)
+  meeting_password   String?      @db.VarChar(50)
+  interviewer_id     String?      @db.Uuid
+  duration_minutes   Int?
+  result             String?      @db.VarChar(50)
+  candidate_feedback String?      @db.Text
+  applications       applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
 
   @@index([application_id, stage_order], map: "idx_application_stages_order")
   @@index([status, scheduled_at], map: "idx_application_stages_scheduling")
+  @@index([scheduled_at], map: "idx_stages_calendar")
+  @@index([interviewer_id], map: "idx_stages_interviewer")
 }
 
 model application_documents {
@@ -279,15 +303,23 @@ model locations {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model notifications {
-  id      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id String    @db.Uuid
-  type    String
-  content String
-  sent_at DateTime? @default(now()) @db.Timestamp(6)
-  read    Boolean?  @default(false)
-  users   users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String    @db.Uuid
+  type        String
+  content     String
+  sent_at     DateTime? @default(now()) @db.Timestamp(6)
+  read        Boolean?  @default(false)
+  title       String?   @db.VarChar(255)
+  action_url  String?   @db.VarChar(500)
+  action_text String?   @db.VarChar(50)
+  category    String?   @default("info") @db.VarChar(20)
+  metadata    Json?
+  read_at     DateTime? @db.Timestamp(6)
+  users       users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([user_id, read, sent_at(sort: Desc)], map: "idx_notifications_user_read")
+  @@index([user_id, category], map: "idx_notifications_category")
+  @@index([type], map: "idx_notifications_type")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -488,20 +520,21 @@ model tags {
 }
 
 model connection_interests {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  candidate_id  String    @db.Uuid
-  recruiter_id  String    @db.Uuid
-  job_id        String?   @db.Uuid
-  interest_type String
-  status        String    @default("pending")
-  message       String?
-  contact_info  Json?
-  created_at    DateTime? @default(now()) @db.Timestamp(6)
-  expires_at    DateTime? @db.Timestamp(6)
-  responded_at  DateTime? @db.Timestamp(6)
-  candidate     profiles  @relation("CandidateInterests", fields: [candidate_id], references: [id], onDelete: Cascade)
-  jobs          jobs?     @relation(fields: [job_id], references: [id], onDelete: Cascade)
-  recruiter     users     @relation("RecruiterInterests", fields: [recruiter_id], references: [id], onDelete: Cascade)
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  candidate_id      String    @db.Uuid
+  recruiter_id      String    @db.Uuid
+  job_id            String?   @db.Uuid
+  interest_type     String
+  status            String    @default("pending")
+  message           String?
+  contact_info      Json?
+  suggested_job_ids Json? // Array of job IDs suggested with this connection
+  created_at        DateTime? @default(now()) @db.Timestamp(6)
+  expires_at        DateTime? @db.Timestamp(6)
+  responded_at      DateTime? @db.Timestamp(6)
+  candidate         profiles  @relation("CandidateInterests", fields: [candidate_id], references: [id], onDelete: Cascade)
+  jobs              jobs?     @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  recruiter         users     @relation("RecruiterInterests", fields: [recruiter_id], references: [id], onDelete: Cascade)
 
   @@unique([candidate_id, recruiter_id, job_id, interest_type])
   @@index([candidate_id, status, created_at(sort: Desc)], map: "idx_connection_interests_candidate_status")
@@ -559,13 +592,18 @@ model users {
 enum application_status {
   pending
   reviewed
-  rejected
+  interviewing
+  offered
   accepted
+  rejected
+  withdrawn
 }
 
 enum job_status {
   draft
+  pending
   approved
+  rejected
   closed
 }
 
@@ -573,25 +611,6 @@ enum job_type {
   full_time
   part_time
   contract
-}
-
-enum payment_status {
-  pending
-  completed
-  failed
-}
-
-enum report_target_type {
-  job
-  user
-  company
-}
-
-enum subscription_status {
-  active
-  expired
-  cancelled
-  pending_payment
 }
 
 enum user_role {
