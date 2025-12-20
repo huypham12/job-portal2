@@ -84,8 +84,8 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
       interest_type: data.interest_type,
       message: data.message,
       contact_info: data.contact_info || {},
-      suggested_job_ids: data.suggested_job_ids && data.suggested_job_ids.length > 0 
-        ? (data.suggested_job_ids as any) 
+      suggested_job_ids: data.suggested_job_ids && data.suggested_job_ids.length > 0
+        ? (data.suggested_job_ids as any)
         : null,
       status: 'pending',
       expires_at: expiresAt
