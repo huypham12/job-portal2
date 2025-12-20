@@ -33,6 +33,32 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
     }
   }
 
+  // Validate suggested_job_ids if provided
+  if (data.suggested_job_ids && data.suggested_job_ids.length > 0) {
+    if (data.suggested_job_ids.length > 10) {
+      throw new HttpError('Maximum 10 suggested jobs allowed', HTTP_STATUS.BAD_REQUEST)
+    }
+
+    // Verify all suggested jobs belong to recruiter and are approved
+    const suggestedJobs = await prisma.jobs.findMany({
+      where: {
+        id: { in: data.suggested_job_ids },
+        companies: {
+          recruiter_id: recruiter_id
+        },
+        status: 'approved'
+      },
+      select: { id: true }
+    })
+
+    if (suggestedJobs.length !== data.suggested_job_ids.length) {
+      throw new HttpError(
+        'Some suggested jobs not found, not approved, or you do not have permission',
+        HTTP_STATUS.BAD_REQUEST
+      )
+    }
+  }
+
   // Check for duplicate interest
   const existingInterest = await prisma.connection_interests.findFirst({
     where: {
@@ -62,6 +88,7 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
       interest_type: data.interest_type,
       message: data.message,
       contact_info: data.contact_info || {},
+      suggested_job_ids: data.suggested_job_ids ? (data.suggested_job_ids as any) : null,
       status: 'pending',
       expires_at: expiresAt
     }
@@ -106,6 +133,39 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
     }
   })
 
+  // Fetch suggested jobs if any
+  let suggestedJobs: any[] = []
+  if (interest?.suggested_job_ids && Array.isArray(interest.suggested_job_ids) && interest.suggested_job_ids.length > 0) {
+    suggestedJobs = await prisma.jobs.findMany({
+      where: {
+        id: { in: interest.suggested_job_ids as string[] },
+        status: 'approved'
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        job_type: true,
+        salary_range: true,
+        location_id: true,
+        companies: {
+          select: {
+            id: true,
+            name: true,
+            logo_url: true
+          }
+        },
+        locations: {
+          select: {
+            id: true,
+            name: true,
+            type: true
+          }
+        }
+      }
+    })
+  }
+
   if (!interest) {
     throw new HttpError('Failed to create connection interest', HTTP_STATUS.INTERNAL_SERVER_ERROR)
   }
@@ -115,10 +175,14 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
     candidateId: interest.candidate.users.id,
     recruiterName: interest.recruiter.profiles?.full_name || interest.recruiter.email,
     interestId: interest.id,
-    jobId: interest.jobs?.id
+    jobId: interest.jobs?.id,
+    suggestedJobIds: interest.suggested_job_ids ? (interest.suggested_job_ids as string[]) : undefined
   })
 
-  return interest
+  return {
+    ...interest,
+    suggested_jobs: suggestedJobs
+  }
 }
 
 /**
@@ -225,8 +289,53 @@ export const getConnectionInterests = async (
     })
   ])
 
+  // Fetch suggested jobs for all interests
+  const interestsWithSuggestedJobs = await Promise.all(
+    interests.map(async (interest) => {
+      let suggestedJobs: any[] = []
+      if (
+        interest.suggested_job_ids &&
+        Array.isArray(interest.suggested_job_ids) &&
+        interest.suggested_job_ids.length > 0
+      ) {
+        suggestedJobs = await prisma.jobs.findMany({
+          where: {
+            id: { in: interest.suggested_job_ids as string[] },
+            status: 'approved'
+          },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            job_type: true,
+            salary_range: true,
+            location_id: true,
+            companies: {
+              select: {
+                id: true,
+                name: true,
+                logo_url: true
+              }
+            },
+            locations: {
+              select: {
+                id: true,
+                name: true,
+                type: true
+              }
+            }
+          }
+        })
+      }
+      return {
+        ...interest,
+        suggested_jobs: suggestedJobs
+      }
+    })
+  )
+
   return {
-    data: interests,
+    data: interestsWithSuggestedJobs,
     total,
     page,
     limit
@@ -293,6 +402,39 @@ export const getConnectionInterestById = async (
     throw new HttpError('Connection interest not found', HTTP_STATUS.NOT_FOUND)
   }
 
+  // Fetch suggested jobs if any
+  let suggestedJobs: any[] = []
+  if (interest.suggested_job_ids && Array.isArray(interest.suggested_job_ids) && interest.suggested_job_ids.length > 0) {
+    suggestedJobs = await prisma.jobs.findMany({
+      where: {
+        id: { in: interest.suggested_job_ids as string[] },
+        status: 'approved'
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        job_type: true,
+        salary_range: true,
+        location_id: true,
+        companies: {
+          select: {
+            id: true,
+            name: true,
+            logo_url: true
+          }
+        },
+        locations: {
+          select: {
+            id: true,
+            name: true,
+            type: true
+          }
+        }
+      }
+    })
+  }
+
   // Verify access
   if (role === 'recruiter') {
     if (interest.recruiter_id !== user_id) {
@@ -309,7 +451,10 @@ export const getConnectionInterestById = async (
     }
   }
 
-  return interest
+  return {
+    ...interest,
+    suggested_jobs: suggestedJobs
+  }
 }
 
 /**

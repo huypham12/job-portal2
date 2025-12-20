@@ -91,3 +91,97 @@ export type UploadDocumentDTO = {
   params: z.infer<typeof UploadDocumentParamsSchema>
   body: z.infer<typeof UploadDocumentBodySchema>
 }
+
+/**
+ * Validator for getting offers
+ */
+const GetOffersQuerySchema = z.object({
+  page: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (!val || val.trim() === '') return 1
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 1 : parsed
+    })
+    .pipe(z.number().int().positive({ message: 'Page must be greater than 0' })),
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (!val || val.trim() === '') return 20
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 20 : parsed
+    })
+    .pipe(z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must not exceed 100' }))
+})
+
+export const GetOffersSchema = {
+  query: GetOffersQuerySchema
+}
+
+export type GetOffersDTO = z.infer<typeof GetOffersQuerySchema>
+
+/**
+ * Validator for accepting offer
+ */
+const AcceptOfferParamsSchema = z.object({
+  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+})
+
+const AcceptOfferBodySchema = z.object({
+  message: z.string().optional()
+})
+
+export const AcceptOfferSchema = {
+  params: AcceptOfferParamsSchema,
+  body: AcceptOfferBodySchema
+}
+
+export type AcceptOfferDTO = {
+  params: z.infer<typeof AcceptOfferParamsSchema>
+  body: z.infer<typeof AcceptOfferBodySchema>
+}
+
+/**
+ * Validator for declining offer
+ */
+const DeclineOfferParamsSchema = z.object({
+  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+})
+
+const DeclineOfferBodySchema = z.object({
+  reason: z.string().min(1, { message: 'Reason is required when declining offer' })
+})
+
+export const DeclineOfferSchema = {
+  params: DeclineOfferParamsSchema,
+  body: DeclineOfferBodySchema
+}
+
+export type DeclineOfferDTO = {
+  params: z.infer<typeof DeclineOfferParamsSchema>
+  body: z.infer<typeof DeclineOfferBodySchema>
+}
+
+/**
+ * Validator for submitting candidate feedback for interview stage
+ */
+const StageFeedbackParamsSchema = z.object({
+  id: z.string().uuid({ message: 'Application ID must be a valid UUID' }),
+  stageId: z.string().uuid({ message: 'Stage ID must be a valid UUID' })
+})
+
+const StageFeedbackBodySchema = z.object({
+  candidate_feedback: z.string().min(1, { message: 'Candidate feedback is required' })
+})
+
+export const StageFeedbackSchema = {
+  params: StageFeedbackParamsSchema,
+  body: StageFeedbackBodySchema
+}
+
+export type StageFeedbackDTO = {
+  params: z.infer<typeof StageFeedbackParamsSchema>
+  body: z.infer<typeof StageFeedbackBodySchema>
+}

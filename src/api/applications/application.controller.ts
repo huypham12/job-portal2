@@ -165,4 +165,93 @@ export class ApplicationController {
       next(error)
     }
   }
+
+  /**
+   * GET /api/applications/offers
+   * Get list of offers for candidate
+   */
+  getOffers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { profile_id } = req.decoded_authorization as TokenPayload
+      const filters = req.query as any
+
+      const result = await this.applicationService.getOffers(profile_id, {
+        page: filters.page ? parseInt(filters.page) : 1,
+        limit: filters.limit ? parseInt(filters.limit) : 20
+      })
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        ...result
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * PATCH /api/applications/:id/offer/accept
+   * Accept offer
+   */
+  acceptOffer = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { profile_id } = req.decoded_authorization as TokenPayload
+      const { id } = req.params
+      const { message } = req.body
+
+      const application = await this.applicationService.acceptOffer(profile_id, id, message)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: application,
+        message: 'Offer accepted successfully'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * PATCH /api/applications/:id/offer/decline
+   * Decline offer
+   */
+  declineOffer = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { profile_id } = req.decoded_authorization as TokenPayload
+      const { id } = req.params
+      const { reason } = req.body
+
+      const application = await this.applicationService.declineOffer(profile_id, id, reason)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: application,
+        message: 'Offer declined successfully'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * PATCH /api/applications/:id/stages/:stageId/feedback
+   * Submit candidate feedback for interview stage
+   */
+  submitStageFeedback = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { profile_id } = req.decoded_authorization as TokenPayload
+      const { id, stageId } = req.params
+      const { candidate_feedback } = req.body
+
+      const stage = await this.applicationService.submitStageFeedback(profile_id, id, stageId, candidate_feedback)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: stage,
+        message: 'Feedback submitted successfully'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
 }

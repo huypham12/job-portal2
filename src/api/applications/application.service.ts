@@ -76,7 +76,9 @@ export class ApplicationService {
         resume_id,
         status: application_status.pending,
         metadata: metadata as any,
-        version: 1
+        version: 1,
+        view_count: 0,
+        is_withdrawn: false
       },
       include: {
         jobs: {
@@ -318,11 +320,58 @@ export class ApplicationService {
         feedback: true,
         rating: true,
         interviewer_notes: true,
+        candidate_feedback: true,
+        location: true,
+        meeting_link: true,
+        meeting_password: true,
+        interviewer_id: true,
+        duration_minutes: true,
+        result: true,
         created_at: true
       }
     })
 
     return stages
+  }
+
+  /**
+   * Submit candidate feedback for interview stage
+   */
+  async submitStageFeedback(profileId: string, applicationId: string, stageId: string, feedback: string) {
+    // Verify application belongs to user
+    const application = await prisma.applications.findFirst({
+      where: {
+        id: applicationId,
+        profile_id: profileId
+      },
+      select: { id: true }
+    })
+
+    if (!application) {
+      throw new HttpError('Application not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    // Verify stage belongs to application
+    const stage = await prisma.application_stages.findFirst({
+      where: {
+        id: stageId,
+        application_id: applicationId
+      }
+    })
+
+    if (!stage) {
+      throw new HttpError('Stage not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    // Update stage with candidate feedback
+    const updatedStage = await prisma.application_stages.update({
+      where: { id: stageId },
+      data: {
+        candidate_feedback: feedback
+      }
+    })
+
+    return updatedStage
   }
 
   /**
@@ -410,6 +459,44 @@ export class ApplicationService {
       }
     })
 
+    // Get application and job info for notification
+    const applicationWithJob = await prisma.applications.findUnique({
+      where: { id: applicationId },
+      include: {
+        jobs: {
+          select: {
+            title: true,
+            companies: {
+              select: {
+                recruiter_id: true
+              }
+            }
+          }
+        },
+        profiles: {
+          select: {
+            full_name: true
+          }
+        }
+      }
+    })
+
+    // Send notification to recruiter
+    if (applicationWithJob?.jobs.companies?.recruiter_id && applicationWithJob.profiles?.full_name) {
+      try {
+        await NotificationHelper.notifyApplicationDocumentUploaded({
+          recruiterId: applicationWithJob.jobs.companies.recruiter_id,
+          candidateName: applicationWithJob.profiles.full_name,
+          jobTitle: applicationWithJob.jobs.title,
+          applicationId: applicationId,
+          documentId: document.id,
+          documentType: documentType
+        })
+      } catch (error) {
+        console.error('Failed to send notification:', error)
+      }
+    }
+
     return document
   }
 
@@ -446,16 +533,22 @@ export class ApplicationService {
       throw new HttpError('Application not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    // Check if already rejected - use a custom status field to track withdrawals
+    // Check if already withdrawn or rejected
+    if (application.is_withdrawn || application.status === application_status.withdrawn) {
+      throw new HttpError('Application has already been withdrawn', HTTP_STATUS.BAD_REQUEST)
+    }
+
     if (application.status === application_status.rejected) {
       throw new HttpError('Cannot withdraw rejected application', HTTP_STATUS.BAD_REQUEST)
     }
 
-    // Update status to rejected (representing withdrawn by candidate)
+    // Update status to withdrawn
     const updatedApplication = await prisma.applications.update({
       where: { id: applicationId },
       data: {
-        status: application_status.rejected
+        status: application_status.withdrawn,
+        is_withdrawn: true,
+        withdrawn_at: new Date()
       }
     })
 
@@ -471,6 +564,189 @@ export class ApplicationService {
       } catch (error) {
         console.error('Failed to send notification:', error)
         // Don't throw error, notification failure shouldn't block withdrawal
+      }
+    }
+
+    return updatedApplication
+  }
+
+  /**
+   * Get offers for candidate
+   */
+  async getOffers(profileId: string, filters: { page?: number; limit?: number }) {
+    const { page = 1, limit = 20 } = filters
+    const skip = (page - 1) * limit
+
+    const [total, applications] = await Promise.all([
+      prisma.applications.count({
+        where: {
+          profile_id: profileId,
+          status: application_status.offered,
+          is_withdrawn: false
+        }
+      }),
+      prisma.applications.findMany({
+        where: {
+          profile_id: profileId,
+          status: application_status.offered,
+          is_withdrawn: false
+        },
+        orderBy: { offer_sent_at: 'desc' },
+        skip,
+        take: limit,
+        include: {
+          jobs: {
+            select: {
+              id: true,
+              title: true,
+              companies: {
+                select: {
+                  id: true,
+                  name: true,
+                  logo_url: true
+                }
+              }
+            }
+          }
+        }
+      })
+    ])
+
+    return {
+      offers: applications,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    }
+  }
+
+  /**
+   * Accept offer
+   */
+  async acceptOffer(profileId: string, applicationId: string, message?: string) {
+    // Verify application belongs to user
+    const application = await prisma.applications.findFirst({
+      where: {
+        id: applicationId,
+        profile_id: profileId,
+        status: application_status.offered
+      },
+      include: {
+        jobs: {
+          select: {
+            title: true,
+            companies: {
+              select: {
+                recruiter_id: true
+              }
+            }
+          }
+        },
+        profiles: {
+          select: {
+            full_name: true
+          }
+        }
+      }
+    })
+
+    if (!application) {
+      throw new HttpError('Offer not found or already processed', HTTP_STATUS.NOT_FOUND)
+    }
+
+    // Update application
+    const currentMetadata = (application.metadata as any) || {}
+    const updatedApplication = await prisma.applications.update({
+      where: { id: applicationId },
+      data: {
+        status: application_status.accepted,
+        offer_accepted_at: new Date(),
+        metadata: {
+          ...currentMetadata,
+          acceptance_message: message
+        } as any
+      }
+    })
+
+    // Send notification to recruiter
+    if (application.jobs.companies?.recruiter_id && application.profiles?.full_name) {
+      try {
+        await NotificationHelper.notifyOfferAccepted({
+          recruiterId: application.jobs.companies.recruiter_id,
+          candidateName: application.profiles.full_name,
+          jobTitle: application.jobs.title,
+          applicationId: applicationId
+        })
+      } catch (error) {
+        console.error('Failed to send notification:', error)
+      }
+    }
+
+    return updatedApplication
+  }
+
+  /**
+   * Decline offer
+   */
+  async declineOffer(profileId: string, applicationId: string, reason: string) {
+    // Verify application belongs to user
+    const application = await prisma.applications.findFirst({
+      where: {
+        id: applicationId,
+        profile_id: profileId,
+        status: application_status.offered
+      },
+      include: {
+        jobs: {
+          select: {
+            title: true,
+            companies: {
+              select: {
+                recruiter_id: true
+              }
+            }
+          }
+        },
+        profiles: {
+          select: {
+            full_name: true
+          }
+        }
+      }
+    })
+
+    if (!application) {
+      throw new HttpError('Offer not found or already processed', HTTP_STATUS.NOT_FOUND)
+    }
+
+    // Update application
+    const currentMetadata = (application.metadata as any) || {}
+    const updatedApplication = await prisma.applications.update({
+      where: { id: applicationId },
+      data: {
+        status: application_status.rejected,
+        offer_declined_at: new Date(),
+        rejected_reason: reason,
+        metadata: {
+          ...currentMetadata,
+          decline_reason: reason
+        } as any
+      }
+    })
+
+    // Send notification to recruiter
+    if (application.jobs.companies?.recruiter_id && application.profiles?.full_name) {
+      try {
+        await NotificationHelper.notifyOfferDeclined({
+          recruiterId: application.jobs.companies.recruiter_id,
+          candidateName: application.profiles.full_name,
+          jobTitle: application.jobs.title,
+          applicationId: applicationId,
+          reason
+        })
+      } catch (error) {
+        console.error('Failed to send notification:', error)
       }
     }
 

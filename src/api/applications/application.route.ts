@@ -5,7 +5,11 @@ import {
   CreateApplicationSchema,
   GetApplicationsSchema,
   UUIDParamSchema,
-  UploadDocumentSchema
+  UploadDocumentSchema,
+  GetOffersSchema,
+  AcceptOfferSchema,
+  DeclineOfferSchema,
+  StageFeedbackSchema
 } from './application.validator'
 import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
 import { candidate } from '@/shared/middleware/authorize.middleware'
@@ -73,5 +77,29 @@ router.post(
  * Withdraw application
  */
 router.delete('/:id', validateDto(UUIDParamSchema), applicationController.withdrawApplication)
+
+/**
+ * GET /api/applications/offers
+ * Get list of offers for candidate
+ */
+router.get('/offers', validateDto(GetOffersSchema), applicationController.getOffers)
+
+/**
+ * PATCH /api/applications/:id/offer/accept
+ * Accept offer
+ */
+router.patch('/:id/offer/accept', validateDto(AcceptOfferSchema), applicationController.acceptOffer)
+
+/**
+ * PATCH /api/applications/:id/offer/decline
+ * Decline offer
+ */
+router.patch('/:id/offer/decline', validateDto(DeclineOfferSchema), applicationController.declineOffer)
+
+/**
+ * PATCH /api/applications/:id/stages/:stageId/feedback
+ * Submit candidate feedback for interview stage
+ */
+router.patch('/:id/stages/:stageId/feedback', validateDto(StageFeedbackSchema), applicationController.submitStageFeedback)
 
 export default router

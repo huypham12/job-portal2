@@ -47,8 +47,14 @@ export class NotificationService {
       id: notification.id,
       type: notification.type as NotificationType,
       content: notification.content,
+      title: notification.title || undefined,
+      action_url: notification.action_url || undefined,
+      action_text: notification.action_text || undefined,
+      metadata: notification.metadata ? (notification.metadata as Record<string, any>) : undefined,
+      category: notification.category || undefined,
       sent_at: notification.sent_at!,
-      read: notification.read ?? false
+      read: notification.read ?? false,
+      read_at: notification.read_at || undefined
     }))
 
     // Calculate pagination metadata
@@ -121,7 +127,10 @@ export class NotificationService {
 
     const updated = await prisma.notifications.update({
       where: { id: notificationId },
-      data: { read: true }
+      data: {
+        read: true,
+        read_at: new Date()
+      }
     })
 
     return {
@@ -129,7 +138,7 @@ export class NotificationService {
       notification: {
         id: updated.id,
         read: updated.read ?? false,
-        read_at: new Date()
+        read_at: updated.read_at || new Date()
       }
     }
   }
@@ -188,6 +197,11 @@ export class NotificationService {
         user_id: data.user_id,
         type: data.type,
         content: data.content,
+        title: data.title || null,
+        action_url: data.action_url || null,
+        action_text: data.action_text || null,
+        metadata: data.metadata ? (data.metadata as any) : null,
+        category: data.category || null,
         read: false,
         sent_at: new Date()
       }
@@ -197,6 +211,11 @@ export class NotificationService {
       id: notification.id,
       type: notification.type as NotificationType,
       content: notification.content,
+      title: notification.title || undefined,
+      action_url: notification.action_url || undefined,
+      action_text: notification.action_text || undefined,
+      metadata: notification.metadata ? (notification.metadata as Record<string, any>) : undefined,
+      category: notification.category || undefined,
       sent_at: notification.sent_at!
     }
   }
@@ -211,6 +230,11 @@ export class NotificationService {
         user_id: n.user_id,
         type: n.type,
         content: n.content,
+        title: n.title || null,
+        action_url: n.action_url || null,
+        action_text: n.action_text || null,
+        metadata: n.metadata ? (n.metadata as any) : null,
+        category: n.category || null,
         read: false,
         sent_at: new Date()
       }))

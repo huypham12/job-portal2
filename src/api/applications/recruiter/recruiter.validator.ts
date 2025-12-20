@@ -164,6 +164,25 @@ const CreateStageBodySchema = z.object({
       { message: 'Invalid datetime format. Use ISO 8601 format.' }
     )
     .optional(),
+  location: z.string().max(255).optional(),
+  meeting_link: z.string().url().max(500).optional(),
+  meeting_password: z.string().max(100).optional(),
+  interviewer_id: z.string().uuid().optional(),
+  duration_minutes: z
+    .union([
+      z.number().int().positive(),
+      z.string().transform((val) => {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed <= 0) {
+          throw new Error('Duration must be a positive integer')
+        }
+        return parsed
+      })
+    ])
+    .refine((val) => Number.isInteger(val) && val > 0, {
+      message: 'Duration must be a positive integer'
+    })
+    .optional(),
   interviewer_notes: z.string().optional()
 })
 
@@ -259,3 +278,72 @@ export const ApplicationIdParamSchema = {
 }
 
 export type ApplicationIdParamDTO = z.infer<(typeof ApplicationIdParamSchema)['params']>
+
+/**
+ * Validator for sending offer
+ */
+const SendOfferParamsSchema = z.object({
+  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+})
+
+const SendOfferBodySchema = z.object({
+  salary: z.object({
+    min: z.number().positive(),
+    max: z.number().positive(),
+    currency: z.string().default('VND')
+  }),
+  start_date: z.string().refine(
+    (val) => {
+      const date = new Date(val)
+      return !isNaN(date.getTime())
+    },
+    { message: 'Invalid date format. Use ISO 8601 format.' }
+  ),
+  message: z.string().optional(),
+  metadata: z.record(z.string(), z.any()).optional()
+})
+
+export const SendOfferSchema = {
+  params: SendOfferParamsSchema,
+  body: SendOfferBodySchema
+}
+
+export type SendOfferDTO = {
+  params: z.infer<typeof SendOfferParamsSchema>
+  body: z.infer<typeof SendOfferBodySchema>
+}
+
+/**
+ * Validator for accepting/declining offer
+ */
+const RespondOfferParamsSchema = z.object({
+  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+})
+
+const AcceptOfferBodySchema = z.object({
+  message: z.string().optional()
+})
+
+const DeclineOfferBodySchema = z.object({
+  reason: z.string().min(1, { message: 'Reason is required when declining offer' })
+})
+
+export const AcceptOfferSchema = {
+  params: RespondOfferParamsSchema,
+  body: AcceptOfferBodySchema
+}
+
+export const DeclineOfferSchema = {
+  params: RespondOfferParamsSchema,
+  body: DeclineOfferBodySchema
+}
+
+export type AcceptOfferDTO = {
+  params: z.infer<typeof RespondOfferParamsSchema>
+  body: z.infer<typeof AcceptOfferBodySchema>
+}
+
+export type DeclineOfferDTO = {
+  params: z.infer<typeof RespondOfferParamsSchema>
+  body: z.infer<typeof DeclineOfferBodySchema>
+}

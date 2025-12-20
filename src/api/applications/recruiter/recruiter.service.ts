@@ -301,6 +301,26 @@ export class RecruiterApplicationService {
     // Verify access
     const app = await this.verifyApplicationAccess(applicationId, recruiterId)
 
+    // Update view tracking
+    const currentApp = await prisma.applications.findUnique({
+      where: { id: applicationId },
+      select: { view_count: true, first_viewed_at: true }
+    })
+
+    const updateData: any = {
+      last_viewed_at: new Date(),
+      view_count: { increment: 1 }
+    }
+
+    if (!currentApp?.first_viewed_at) {
+      updateData.first_viewed_at = new Date()
+    }
+
+    await prisma.applications.update({
+      where: { id: applicationId },
+      data: updateData
+    })
+
     // Get full application details
     const application = await prisma.applications.findUnique({
       where: { id: applicationId },
@@ -513,11 +533,21 @@ export class RecruiterApplicationService {
     // Send notification to candidate
     if (app.profiles?.user_id) {
       try {
+        const statusDisplayMap: Record<string, string> = {
+          reviewed: 'Đã xem',
+          rejected: 'Đã từ chối',
+          interviewing: 'Đang phỏng vấn',
+          offered: 'Đã gửi offer',
+          accepted: 'Đã chấp nhận'
+        }
+
         await NotificationHelper.notifyApplicationStatusChanged({
           candidateId: app.profiles.user_id,
           jobTitle: updatedApplication.jobs.title,
           status: status,
-          applicationId: applicationId
+          applicationId: applicationId,
+          statusDisplay: statusDisplayMap[status] || status,
+          reason: data.reason
         })
       } catch (error) {
         console.error('Failed to send notification:', error)
@@ -574,7 +604,17 @@ export class RecruiterApplicationService {
     // Verify access
     const app = await this.verifyApplicationAccess(applicationId, recruiterId)
 
-    const { stage_name, stage_order, scheduled_at, interviewer_notes } = data
+    const {
+      stage_name,
+      stage_order,
+      scheduled_at,
+      location,
+      meeting_link,
+      meeting_password,
+      interviewer_id,
+      duration_minutes,
+      interviewer_notes
+    } = data
 
     // Create stage
     const newStage = await prisma.application_stages.create({
@@ -584,7 +624,20 @@ export class RecruiterApplicationService {
         stage_order,
         status: scheduled_at ? 'scheduled' : 'pending',
         scheduled_at: scheduled_at ? new Date(scheduled_at) : null,
+        location: location || null,
+        meeting_link: meeting_link || null,
+        meeting_password: meeting_password || null,
+        interviewer_id: interviewer_id || null,
+        duration_minutes: duration_minutes || null,
         interviewer_notes
+      }
+    })
+
+    // Update application status to interviewing if not already
+    await prisma.applications.update({
+      where: { id: applicationId },
+      data: {
+        status: application_status.interviewing
       }
     })
 
@@ -784,6 +837,127 @@ export class RecruiterApplicationService {
     return {
       updated_count: applications.length,
       failed: []
+    }
+  }
+
+  /**
+   * Send offer to candidate
+   */
+  async sendOffer(recruiterId: string, applicationId: string, data: any) {
+    // Verify access
+    const app = await this.verifyApplicationAccess(applicationId, recruiterId)
+
+    const { salary, start_date, message, metadata } = data
+
+    // Get application with job info
+    const application = await prisma.applications.findUnique({
+      where: { id: applicationId },
+      include: {
+        jobs: {
+          select: {
+            title: true,
+            companies: {
+              select: {
+                name: true
+              }
+            }
+          }
+        },
+        profiles: {
+          select: {
+            user_id: true
+          }
+        }
+      }
+    })
+
+    if (!application) {
+      throw new HttpError('Application not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    // Update application with offer details
+    const currentMetadata = (application.metadata as any) || {}
+    const updatedApplication = await prisma.applications.update({
+      where: { id: applicationId },
+      data: {
+        status: application_status.offered,
+        offer_sent_at: new Date(),
+        metadata: {
+          ...currentMetadata,
+          offer_details: {
+            salary,
+            start_date,
+            message
+          }
+        } as any
+      }
+    })
+
+    // Send notification to candidate
+    if (application.profiles?.user_id) {
+      try {
+        await NotificationHelper.notifyOfferReceived({
+          candidateId: application.profiles.user_id,
+          jobTitle: application.jobs.title,
+          companyName: application.jobs.companies?.name || '',
+          applicationId: applicationId
+        })
+      } catch (error) {
+        console.error('Failed to send notification:', error)
+      }
+    }
+
+    return updatedApplication
+  }
+
+  /**
+   * Get offers for candidate (used by candidate endpoint)
+   */
+  async getOffers(profileId: string, filters: { page?: number; limit?: number }) {
+    const { page = 1, limit = 20 } = filters
+    const skip = (page - 1) * limit
+
+    const [total, applications] = await Promise.all([
+      prisma.applications.count({
+        where: {
+          profile_id: profileId,
+          status: application_status.offered,
+          is_withdrawn: false
+        }
+      }),
+      prisma.applications.findMany({
+        where: {
+          profile_id: profileId,
+          status: application_status.offered,
+          is_withdrawn: false
+        },
+        orderBy: { offer_sent_at: 'desc' },
+        skip,
+        take: limit,
+        include: {
+          jobs: {
+            select: {
+              id: true,
+              title: true,
+              companies: {
+                select: {
+                  id: true,
+                  name: true,
+                  logo_url: true
+                }
+              }
+            }
+          }
+        }
+      })
+    ])
+
+    return {
+      offers: applications,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
     }
   }
 }

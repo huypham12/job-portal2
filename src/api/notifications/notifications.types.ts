@@ -17,8 +17,14 @@ export interface NotificationResponse {
   id: string
   type: NotificationType
   content: string
+  title?: string
+  action_url?: string
+  action_text?: string
+  metadata?: Record<string, any>
+  category?: string
   sent_at: Date
   read: boolean
+  read_at?: Date
 }
 
 /**
@@ -56,6 +62,11 @@ export interface CreateNotificationData {
   user_id: string
   type: NotificationType
   content: string
+  title?: string
+  action_url?: string
+  action_text?: string
+  metadata?: Record<string, any>
+  category?: string
 }
 
 /**
@@ -100,6 +111,11 @@ export interface SocketNotificationData {
   id: string
   type: NotificationType
   content: string
+  title?: string
+  action_url?: string
+  action_text?: string
+  metadata?: Record<string, any>
+  category?: string
   sent_at: Date
 }
 

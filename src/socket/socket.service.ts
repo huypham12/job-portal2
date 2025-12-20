@@ -122,7 +122,18 @@ export class SocketService {
   /**
    * Send a new notification to a user in real-time
    */
-  async sendNotification(userId: string, type: NotificationType, content: string, metadata?: Record<string, any>) {
+  async sendNotification(
+    userId: string,
+    type: NotificationType,
+    content: string,
+    options?: {
+      title?: string
+      action_url?: string
+      action_text?: string
+      metadata?: Record<string, any>
+      category?: string
+    }
+  ) {
     if (!this.io) {
       console.error('Socket.IO not initialized')
       return
@@ -132,7 +143,12 @@ export class SocketService {
     const notification = await notificationService.createNotification({
       user_id: userId,
       type,
-      content
+      content,
+      title: options?.title,
+      action_url: options?.action_url,
+      action_text: options?.action_text,
+      metadata: options?.metadata,
+      category: options?.category
     })
 
     // Send to all connected sockets of the user
@@ -140,6 +156,11 @@ export class SocketService {
       id: notification.id,
       type: notification.type,
       content: notification.content,
+      title: notification.title,
+      action_url: notification.action_url,
+      action_text: notification.action_text,
+      metadata: notification.metadata,
+      category: notification.category,
       sent_at: notification.sent_at
     })
 

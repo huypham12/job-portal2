@@ -6,6 +6,10 @@ import { z } from 'zod'
 const CreateInterestBodySchema = z.object({
   candidate_id: z.string().uuid({ message: 'Candidate ID must be a valid UUID' }),
   job_id: z.string().uuid({ message: 'Job ID must be a valid UUID' }).optional(),
+  suggested_job_ids: z
+    .array(z.string().uuid({ message: 'Each job ID must be a valid UUID' }))
+    .max(10, { message: 'Maximum 10 suggested jobs allowed' })
+    .optional(),
   interest_type: z.enum(['job_invitation', 'profile_view', 'network_connection']),
   message: z.string().optional(),
   contact_info: z
