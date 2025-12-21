@@ -59,24 +59,27 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
     }
   }
 
-  // Check for duplicate interest
+  // Check for duplicate interest (within last 7 days)
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
   const existingInterest = await prisma.connection_interests.findFirst({
     where: {
       candidate_id: data.candidate_id,
       recruiter_id,
       job_id: data.job_id || null,
       interest_type: data.interest_type,
-      status: {
-        in: ['pending', 'accepted']
+      created_at: {
+        gte: sevenDaysAgo
       }
     }
   })
 
   if (existingInterest) {
-    throw new HttpError('You already have an active interest with this candidate', HTTP_STATUS.CONFLICT)
+    throw new HttpError('You already sent an invitation to this candidate recently', HTTP_STATUS.CONFLICT)
   }
 
-  // Create connection interest with expiry in 7 days
+  // Create connection invitation (no status needed - it's just an invitation)
   const expiresAt = new Date()
   expiresAt.setDate(expiresAt.getDate() + 7)
 
@@ -89,7 +92,6 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
       message: data.message,
       contact_info: data.contact_info || {},
       suggested_job_ids: data.suggested_job_ids ? (data.suggested_job_ids as any) : null,
-      status: 'pending',
       expires_at: expiresAt
     }
   })
@@ -170,7 +172,7 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
     throw new HttpError('Failed to create connection interest', HTTP_STATUS.INTERNAL_SERVER_ERROR)
   }
 
-  // Send notification to candidate
+  // Send notification to candidate (invitation, not connection request)
   await NotificationHelper.notifyConnectionInterestReceived({
     candidateId: interest.candidate.users.id,
     recruiterName: interest.recruiter.profiles?.full_name || interest.recruiter.email,
@@ -229,11 +231,14 @@ export const getConnectionInterests = async (
   }
 
   // Add additional filters
-  if (status) {
-    whereClause.status = status
-  }
+  // Note: status filter removed - invitations are just records, no accept/reject status
   if (interest_type) {
     whereClause.interest_type = interest_type
+  }
+  
+  // Filter out expired invitations
+  whereClause.expires_at = {
+    gte: new Date()
   }
 
   const [total, interests] = await Promise.all([
@@ -457,124 +462,6 @@ export const getConnectionInterestById = async (
   }
 }
 
-/**
- * Respond to connection interest (accept/reject)
- */
-export const respondToInterest = async (
-  user_id: string,
-  interest_id: string,
-  action: 'accept' | 'reject',
-  message?: string
-) => {
-  // Get candidate profile
-  const profile = await prisma.profiles.findFirst({
-    where: { user_id }
-  })
-
-  if (!profile) {
-    throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
-  }
-
-  const interest = await prisma.connection_interests.findUnique({
-    where: { id: interest_id },
-    include: {
-      candidate: true,
-      recruiter: {
-        select: {
-          id: true,
-          email: true,
-          profiles: {
-            select: {
-              full_name: true
-            }
-          }
-        }
-      },
-      jobs: {
-        select: {
-          id: true,
-          title: true
-        }
-      }
-    }
-  })
-
-  if (!interest) {
-    throw new HttpError('Connection interest not found', HTTP_STATUS.NOT_FOUND)
-  }
-
-  // Verify this interest is for the current candidate
-  if (interest.candidate_id !== profile.id) {
-    throw new HttpError('You do not have permission to respond to this interest', HTTP_STATUS.FORBIDDEN)
-  }
-
-  // Check if already responded or expired
-  if (interest.status !== 'pending') {
-    throw new HttpError(`This interest has already been ${interest.status}`, HTTP_STATUS.BAD_REQUEST)
-  }
-
-  const newStatus = action === 'accept' ? 'accepted' : 'rejected'
-
-  // Update interest
-  const updatedInterest = await prisma.connection_interests.update({
-    where: { id: interest_id },
-    data: {
-      status: newStatus,
-      responded_at: new Date(),
-      message: message || interest.message
-    },
-    include: {
-      candidate: {
-        select: {
-          id: true,
-          full_name: true,
-          avatar_url: true,
-          users: {
-            select: {
-              id: true,
-              email: true
-            }
-          }
-        }
-      },
-      recruiter: {
-        select: {
-          id: true,
-          email: true,
-          profiles: {
-            select: {
-              full_name: true,
-              avatar_url: true
-            }
-          }
-        }
-      },
-      jobs: {
-        select: {
-          id: true,
-          title: true
-        }
-      }
-    }
-  })
-
-  // Send notification to recruiter
-  if (action === 'accept') {
-    await NotificationHelper.notifyConnectionInterestAccepted({
-      recruiterId: updatedInterest.recruiter_id,
-      candidateName: updatedInterest.candidate.full_name,
-      interestId: updatedInterest.id
-    })
-  } else {
-    await NotificationHelper.notifyConnectionInterestRejected({
-      recruiterId: updatedInterest.recruiter_id,
-      candidateName: updatedInterest.candidate.full_name,
-      interestId: updatedInterest.id
-    })
-  }
-
-  return updatedInterest
-}
 
 /**
  * Delete connection interest

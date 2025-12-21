@@ -48,7 +48,7 @@ const GetInterestsQuerySchema = z.object({
     },
     z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must be at most 100' }).default(20)
   ),
-  status: z.enum(['pending', 'accepted', 'rejected', 'expired']).optional(),
+  // Status filter removed - invitations don't have accept/reject status
   interest_type: z.enum(['job_invitation', 'profile_view', 'network_connection']).optional(),
   role: z.enum(['sent', 'received']).optional()
 })
@@ -72,24 +72,3 @@ export const InterestIdSchema = {
 
 export type InterestIdDTO = z.infer<typeof InterestIdParamSchema>
 
-/**
- * Validator for responding to interest
- */
-const RespondInterestParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Interest ID must be a valid UUID' })
-})
-
-const RespondInterestBodySchema = z.object({
-  action: z.enum(['accept', 'reject']),
-  message: z.string().optional()
-})
-
-export const RespondInterestSchema = {
-  params: RespondInterestParamsSchema,
-  body: RespondInterestBodySchema
-}
-
-export type RespondInterestDTO = {
-  params: z.infer<typeof RespondInterestParamsSchema>
-  body: z.infer<typeof RespondInterestBodySchema>
-}

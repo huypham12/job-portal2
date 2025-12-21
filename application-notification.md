@@ -150,11 +150,8 @@ INSERT INTO application_documents (
 ```
 
 **Notification:**
-- Gửi cho Recruiter: `application_document_uploaded`
-  - Title: "Tài liệu mới: {job_title}"
-  - Action URL: `/recruiter/applications/{application_id}/documents`
-  - Metadata: `{application_id, document_id, document_type, candidate_name, job_title}`
-  - Category: `application`
+- ❌ Không có notification riêng
+- Recruiter sẽ thấy documents mới khi xem application detail
 
 #### Bước 3.3: Xem Trạng Thái Application
 **Endpoint:** `GET /api/applications` hoặc `GET /api/applications/:id`
@@ -324,146 +321,13 @@ UPDATE application_stages SET
 
 ---
 
-### 1.6. GIAI ĐOẠN 6: OFFER VÀ KẾT QUẢ
-
-#### Bước 6.1: Recruiter Gửi Offer
-**Endpoint:** `POST /api/applications/:id/offer`
-**Body:**
-```json
-{
-  "salary": {
-    "min": 20000000,
-    "max": 30000000,
-    "currency": "VND"
-  },
-  "start_date": "2025-02-01",
-  "message": "Chúc mừng! Chúng tôi muốn mời bạn...",
-  "metadata": {}
-}
-```
-
-**Database:**
-```sql
-UPDATE applications SET
-  status = 'offered',
-  offer_sent_at = NOW(),
-  metadata = jsonb_set(
-    metadata,
-    '{offer_details}',
-    '{"salary": {...}, "start_date": "...", "message": "..."}'
-  )
-```
-
-**Notification:**
-- Gửi cho Candidate: `offer_received`
-  - Title: "Chúc mừng! Bạn đã nhận được offer: {job_title}"
-  - Action URL: `/candidate/applications/{application_id}/offer`
-  - Metadata: `{application_id, job_title, company_name}`
-  - Category: `offer`
-
-#### Bước 6.2: Candidate Xem Offers
-**Endpoint:** `GET /api/applications/offers?page=1&limit=20`
-
-**Database:**
-```sql
-SELECT * FROM applications
-WHERE profile_id = ?
-  AND status = 'offered'
-  AND is_withdrawn = false
-ORDER BY offer_sent_at DESC
-```
-
-**Response:**
-```json
-{
-  "offers": [
-    {
-      "id": "uuid",
-      "status": "offered",
-      "offer_sent_at": "...",
-      "metadata": {
-        "offer_details": {
-          "salary": {...},
-          "start_date": "...",
-          "message": "..."
-        }
-      },
-      "jobs": {
-        "id": "uuid",
-        "title": "...",
-        "companies": {...}
-      }
-    }
-  ],
-  "total": 5,
-  "page": 1,
-  "limit": 20,
-  "totalPages": 1
-}
-```
-
-#### Bước 6.3: Candidate Accept Offer
-**Endpoint:** `PATCH /api/applications/:id/offer/accept`
-**Body:**
-```json
-{
-  "message": "Tôi rất vui được nhận offer này!"
-}
-```
-
-**Database:**
-```sql
-UPDATE applications SET
-  status = 'accepted',
-  offer_accepted_at = NOW(),
-  metadata = jsonb_set(
-    metadata,
-    '{acceptance_message}',
-    '"Tôi rất vui được nhận offer này!"'
-  )
-```
-
-**Notification:**
-- Gửi cho Recruiter: `offer_accepted`
-  - Title: "{candidate_name} đã chấp nhận offer: {job_title}"
-  - Action URL: `/recruiter/applications/{application_id}`
-  - Metadata: `{application_id, candidate_name, job_title}`
-  - Category: `offer`
-
-#### Bước 6.4: Candidate Decline Offer
-**Endpoint:** `PATCH /api/applications/:id/offer/decline`
-**Body:**
-```json
-{
-  "reason": "Tôi đã nhận offer khác"
-}
-```
-
-**Database:**
-```sql
-UPDATE applications SET
-  status = 'rejected',
-  offer_declined_at = NOW(),
-  rejected_reason = 'Tôi đã nhận offer khác',
-  metadata = jsonb_set(
-    metadata,
-    '{decline_reason}',
-    '"Tôi đã nhận offer khác"'
-  )
-```
-
-**Notification:**
-- Gửi cho Recruiter: `offer_declined`
-  - Title: "{candidate_name} đã từ chối offer: {job_title}"
-  - Action URL: `/recruiter/applications/{application_id}`
-  - Metadata: `{application_id, candidate_name, job_title, reason}`
-  - Category: `offer`
+**Lưu ý:** Sau giai đoạn phỏng vấn, việc trao đổi offer và kết quả cuối cùng sẽ diễn ra offline (email, phone) giữa hai bên. Platform không track các trạng thái `offered`, `accepted` sau phỏng vấn.
 
 ---
 
-### 1.7. GIAI ĐOẠN 7: CANDIDATE RÚT ĐƠN (WITHDRAW)
+### 1.6. GIAI ĐOẠN 6: CANDIDATE RÚT ĐƠN (WITHDRAW)
 
-#### Bước 7.1: Candidate Withdraw Application
+#### Bước 6.1: Candidate Withdraw Application
 **Endpoint:** `DELETE /api/applications/:id`
 
 **Database:**
@@ -576,114 +440,44 @@ INSERT INTO connection_interests (
 
 ---
 
-### 2.2. GIAI ĐOẠN 2: CANDIDATE PHẢN HỒI CONNECTION REQUEST
+### 2.2. GIAI ĐOẠN 2: CANDIDATE XEM VÀ QUYẾT ĐỊNH
 
-#### Bước 2.1: Candidate Xem Connection Requests
-**Endpoint:** `GET /api/connection-interests?status=pending&role=received`
+#### Bước 2.1: Candidate Xem Invitations
+**Endpoint:** `GET /api/connection-interests?role=received`
 
 **Database:**
 ```sql
 SELECT * FROM connection_interests
 WHERE candidate_id = ?
-  AND status = 'pending'
+  AND expires_at > NOW()
 ORDER BY created_at DESC
 ```
 
 **Response:** Bao gồm `suggested_jobs` (full details) nếu có
 
-#### Bước 2.2: Candidate Accept Connection
-**Endpoint:** `PATCH /api/connection-interests/:id/respond`
-**Body:**
-```json
-{
-  "action": "accept",
-  "message": "optional"
-}
-```
+#### Bước 2.2: Candidate Quyết Định
+Candidate có thể:
+- **Apply jobs** được đính kèm → Sử dụng API apply bình thường
+- **View jobs** để xem chi tiết
+- **Ignore** invitation
 
-**Database:**
-```sql
-UPDATE connection_interests SET
-  status = 'accepted',
-  responded_at = NOW(),
-  message = COALESCE(?, message)
-```
-
-**Notification:**
-- Gửi cho Recruiter: `connection_interest_accepted`
-  - Title: "{candidate_name} đã chấp nhận kết nối"
-  - Action URL: `/recruiter/connections/{interest_id}`
-  - Metadata: `{interest_id, candidate_name}`
-  - Category: `connection`
-
-#### Bước 2.3: Candidate Reject Connection
-**Endpoint:** `PATCH /api/connection-interests/:id/respond`
-**Body:**
-```json
-{
-  "action": "reject",
-  "message": "optional"
-}
-```
-
-**Database:**
-```sql
-UPDATE connection_interests SET
-  status = 'rejected',
-  responded_at = NOW()
-```
-
-**Notification:**
-- Gửi cho Recruiter: `connection_interest_rejected`
-  - Title: "{candidate_name} đã từ chối kết nối"
-  - Action URL: `/recruiter/connections/{interest_id}`
-  - Metadata: `{interest_id, candidate_name}`
-  - Category: `connection`
+**Lưu ý:**
+- ❌ Không cần accept/reject connection
+- ❌ Không có status tracking cho connection
+- ✅ Chỉ cần quyết định apply job hay không
 
 ---
 
-### 2.3. GIAI ĐOẠN 3: CANDIDATE EXPRESS INTEREST
+### 2.3. GIAI ĐOẠN 3: QUẢN LÝ INVITATIONS
 
-#### Bước 3.1: Candidate Quan Tâm Đến Job/Recruiter
-**Endpoint:** `POST /api/connection-interests`
-**Body:**
-```json
-{
-  "recruiter_id": "uuid",  // từ jobs.companies.recruiter_id
-  "job_id": "uuid",
-  "interest_type": "job_invitation",  // candidate_interest
-  "message": "Tôi quan tâm đến vị trí này..."
-}
-```
+#### Bước 3.1: Xem Danh Sách Invitations
+**Endpoint:** `GET /api/connection-interests`
 
 **Database:**
-```sql
-INSERT INTO connection_interests (
-  candidate_id, recruiter_id, job_id,
-  interest_type = 'job_invitation',
-  status = 'pending',
-  message
-)
-```
-
-**Notification:**
-- Gửi cho Recruiter: `connection_interest_received`
-  - Title: "Có ứng viên quan tâm đến job"
-  - Action URL: `/recruiter/connections/{interest_id}`
-  - Metadata: `{interest_id, candidate_name, job_id}`
-  - Category: `connection`
-
----
-
-### 2.4. GIAI ĐOẠN 4: QUẢN LÝ CONNECTIONS ĐÃ CHẤP NHẬN
-
-#### Bước 4.1: Xem Danh Sách Connections
-**Endpoint:** `GET /api/connection-interests?status=accepted`
-
-**Database:**
-- SELECT từ `connection_interests` với `status = 'accepted'`
+- SELECT từ `connection_interests` với `expires_at > NOW()`
 - JOIN `profiles`, `users`, `jobs`, `companies`
 - Include `suggested_jobs` (full details)
+- Không filter theo status (không có accept/reject status)
 
 **Response:**
 ```json
@@ -691,7 +485,6 @@ INSERT INTO connection_interests (
   "data": [
     {
       "id": "uuid",
-      "status": "accepted",
       "job_id": "uuid",
       "suggested_job_ids": ["uuid1", "uuid2"],
       "suggested_jobs": [  // ✅ Full job details
@@ -704,7 +497,9 @@ INSERT INTO connection_interests (
       ],
       "candidate": {...},
       "recruiter": {...},
-      "jobs": {...}
+      "jobs": {...},
+      "created_at": "...",
+      "expires_at": "..."
     }
   ],
   "total": 10,
@@ -713,17 +508,17 @@ INSERT INTO connection_interests (
 }
 ```
 
-#### Bước 4.2: Xem Connection Detail
+#### Bước 3.2: Xem Invitation Detail
 **Endpoint:** `GET /api/connection-interests/:id`
 
 **Response:** Bao gồm `suggested_jobs` (full details)
 
-#### Bước 4.3: Connection Stats
+#### Bước 3.3: Invitation Stats
 **Endpoint:** `GET /api/connection-interests/stats`
 
 **Database:**
-- COUNT theo `status`, `interest_type`
-- Tính conversion rate: connections → applications → hires
+- COUNT theo `interest_type`
+- Tính conversion rate: invitations → applications
 
 ---
 
@@ -757,10 +552,10 @@ INSERT INTO connection_interests (
 | `pending` | `applied_at` | → Recruiter: `application_received` |
 | `reviewed` | `last_viewed_at` | → Candidate: `application_status_changed` |
 | `interviewing` | (auto khi có stage) | → Candidate: `interview_scheduled` |
-| `offered` | `offer_sent_at`, `metadata.offer_details` | → Candidate: `offer_received` |
-| `accepted` | `offer_accepted_at` | → Recruiter: `offer_accepted` |
 | `rejected` | `rejected_at`, `rejected_reason` | → Candidate: `application_status_changed` |
 | `withdrawn` | `is_withdrawn = true`, `withdrawn_at`, `status = 'withdrawn'` | → Recruiter: `application_withdrawn` |
+
+**Lưu ý:** Sau `interviewing`, platform không track `offered`, `accepted` - việc này diễn ra offline.
 
 ---
 
@@ -770,16 +565,18 @@ INSERT INTO connection_interests (
 
 ```
 ┌─────────┐
-│ pending │ ← Recruiter gửi hoặc Candidate express interest
+│ created │ ← Recruiter gửi invitation
 └────┬────┘
      │
-     ├─→ accepted ✅ (Candidate/Recruiter accept)
-     │     └─→ Connection established
-     │
-     ├─→ rejected ❌ (Candidate/Recruiter reject)
+     ├─→ Candidate xem invitation
+     │     │
+     │     ├─→ Apply jobs (nếu quan tâm)
+     │     └─→ Ignore (nếu không quan tâm)
      │
      └─→ expired ⏰ (Hết hạn sau 7 ngày)
 ```
+
+**Lưu ý:** Không có status `accepted`/`rejected` - invitation chỉ là thông báo, candidate tự quyết định apply hay không.
 
 ### Database Fields:
 
@@ -788,9 +585,10 @@ INSERT INTO connection_interests (
 | `job_id` | Job chính (nếu có) - nullable |
 | `suggested_job_ids` | ✅ Array of job IDs (JSONB) - tối đa 10 jobs |
 | `interest_type` | `'job_invitation'`, `'profile_view'`, `'network_connection'` |
-| `status` | `'pending'`, `'accepted'`, `'rejected'`, `'expired'` |
+| `status` | ❌ Không sử dụng - chỉ là invitation record |
 | `contact_info` | JSON: `{email, phone}` |
 | `expires_at` | Tự động set = created_at + 7 days |
+| `responded_at` | ❌ Không sử dụng |
 
 ---
 
@@ -804,19 +602,21 @@ INSERT INTO connection_interests (
 | Status → reviewed | `application_status_changed` | Candidate | `/candidate/applications/{id}` | `{application_id, status, status_display}` |
 | Status → rejected | `application_status_changed` | Candidate | `/candidate/applications/{id}` | `{application_id, status, status_display, reason}` |
 | Interview scheduled | `interview_scheduled` | Candidate | `/candidate/applications/{id}/stages/{stageId}` | `{application_id, stage_id, scheduled_at}` |
-| Document uploaded | `application_document_uploaded` | Recruiter | `/recruiter/applications/{id}/documents` | `{application_id, document_id, document_type}` |
 | Application withdrawn | `application_withdrawn` | Recruiter | `/recruiter/applications/{id}` | `{application_id, candidate_name, job_title}` |
-| Offer received | `offer_received` | Candidate | `/candidate/applications/{id}/offer` | `{application_id, job_title, company_name}` |
-| Offer accepted | `offer_accepted` | Recruiter | `/recruiter/applications/{id}` | `{application_id, candidate_name, job_title}` |
-| Offer declined | `offer_declined` | Recruiter | `/recruiter/applications/{id}` | `{application_id, candidate_name, job_title, reason}` |
+
+**Lưu ý:**
+- ❌ Không có notification khi upload document (recruiter xem trong application detail)
+- ❌ Không có notification offer (sau interview là offline conversation)
 
 ### 5.2. Connection Notifications
 
 | Event | Type | Gửi Cho | Action URL | Metadata |
 |-------|------|---------|------------|----------|
-| Connection received | `connection_interest_received` | Candidate/Recruiter | `/candidate/connections/{id}` | `{interest_id, recruiter_name, job_id, suggested_job_ids}` |
-| Connection accepted | `connection_interest_accepted` | Recruiter | `/recruiter/connections/{id}` | `{interest_id, candidate_name}` |
-| Connection rejected | `connection_interest_rejected` | Recruiter | `/recruiter/connections/{id}` | `{interest_id, candidate_name}` |
+| Invitation received | `connection_interest_received` | Candidate | `/candidate/connections/{id}` | `{interest_id, recruiter_name, job_id, suggested_job_ids}` |
+
+**Lưu ý:**
+- ❌ Không có accept/reject notification (candidate tự quyết định apply hay không)
+- ❌ Không có candidate express interest (chỉ 1 chiều: Recruiter → Candidate)
 
 ### 5.3. Notification Schema
 
@@ -857,10 +657,11 @@ INSERT INTO connection_interests (
 - `DELETE /api/applications/:id` - Withdraw
 
 **Connections:**
-- `GET /api/connection-interests` - List connections
+- `GET /api/connection-interests` - List invitations (received)
 - `GET /api/connection-interests/:id` - Detail
-- `PATCH /api/connection-interests/:id/respond` - Accept/Reject
 - `GET /api/connection-interests/stats` - Statistics
+
+**Lưu ý:** Không có endpoint accept/reject - candidate tự quyết định apply jobs hay không.
 
 ### 6.2. Recruiter Endpoints
 
@@ -877,11 +678,13 @@ INSERT INTO connection_interests (
 - `POST /api/applications/bulk-update` - Bulk update
 
 **Connections:**
-- `POST /api/connection-interests` - Create connection (với suggested_job_ids)
-- `GET /api/connection-interests` - List connections
+- `POST /api/connection-interests` - Create invitation (với suggested_job_ids) - Recruiter only
+- `GET /api/connection-interests` - List invitations
 - `GET /api/connection-interests/:id` - Detail
-- `DELETE /api/connection-interests/:id` - Delete
+- `DELETE /api/connection-interests/:id` - Delete - Recruiter only
 - `GET /api/connection-interests/stats` - Statistics
+
+**Lưu ý:** Chỉ Recruiter có thể tạo invitation. Candidate chỉ xem và quyết định apply.
 
 ---
 
@@ -1003,8 +806,15 @@ Hệ thống đã hỗ trợ đầy đủ:
    - Candidate feedback
    - Status tracking
 
-5. Offer Management: 100%
-   - Send, Accept, Decline với tracking đầy đủ
-   - Metadata lưu offer details
+5. Connection Invitations: 100%
+   - Recruiter gửi invitation với suggested jobs
+   - Candidate nhận notification và tự quyết định apply
+   - Không có accept/reject connection (đơn giản hóa flow)
 
-Hệ thống sẵn sàng cho production.
+**Thay đổi chính:**
+- ✅ Đơn giản hóa Application Status: Chỉ track đến `interviewing`
+- ✅ Bỏ notification document upload (recruiter xem trong detail)
+- ✅ Bỏ Offer Management (sau interview là offline)
+- ✅ Đơn giản hóa Connection Flow: Chỉ 1 chiều, không có accept/reject
+
+Hệ thống sẵn sàng cho production với flow đơn giản và phù hợp với bản chất job portal.

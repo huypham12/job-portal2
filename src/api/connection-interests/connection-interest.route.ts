@@ -3,8 +3,7 @@ import * as ConnectionInterestController from './connection-interest.controller'
 import {
   CreateInterestSchema,
   GetInterestsSchema,
-  InterestIdSchema,
-  RespondInterestSchema
+  InterestIdSchema
 } from './connection-interest.validator'
 import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
 import { authorize, recruiter, candidate } from '@/shared/middleware/authorize.middleware'
@@ -56,18 +55,6 @@ router.get(
   authorize([UserRole.Candidate, UserRole.Recruiter]),
   validateDto(InterestIdSchema),
   ConnectionInterestController.getConnectionInterestById
-)
-
-/**
- * PATCH /api/connection-interests/:id/respond
- * Respond to connection interest (accept/reject)
- * Accessible by: Candidate only
- */
-router.patch(
-  '/:id/respond',
-  candidate,
-  validateDto(RespondInterestSchema),
-  ConnectionInterestController.respondToInterest
 )
 
 /**

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import * as ConnectionInterestService from './connection-interest.service'
-import { CreateInterestDTO, GetInterestsDTO, InterestIdDTO, RespondInterestDTO } from './connection-interest.validator'
+import { CreateInterestDTO, GetInterestsDTO, InterestIdDTO } from './connection-interest.validator'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { TokenPayload } from '@/types/token-payload.type'
 
@@ -72,29 +72,6 @@ export const getConnectionInterestById = async (req: Request, res: Response, nex
 
     res.status(HTTP_STATUS.OK).json({
       success: true,
-      data: interest
-    })
-  } catch (error) {
-    next(error)
-  }
-}
-
-/**
- * Respond to connection interest (accept/reject)
- * PATCH /api/connection-interests/:id/respond
- * Role: Candidate
- */
-export const respondToInterest = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { user_id } = req.decoded_authorization as TokenPayload
-    const { id } = req.params
-    const { action, message } = req.body
-
-    const interest = await ConnectionInterestService.respondToInterest(user_id, id, action, message)
-
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      message: `Connection interest ${action}ed successfully`,
       data: interest
     })
   } catch (error) {

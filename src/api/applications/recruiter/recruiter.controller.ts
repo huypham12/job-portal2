@@ -211,25 +211,4 @@ export class RecruiterApplicationController {
     }
   }
 
-  /**
-   * POST /api/applications/:id/offer
-   * Send offer to candidate
-   */
-  sendOffer = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
-      const data = req.body
-
-      const application = await this.recruiterService.sendOffer(user_id, id, data)
-
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        data: application,
-        message: 'Offer sent successfully'
-      })
-    } catch (error) {
-      next(error)
-    }
-  }
 }

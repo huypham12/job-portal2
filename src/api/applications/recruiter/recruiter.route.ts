@@ -10,8 +10,7 @@ import {
   CreateStageSchema,
   AddNotesSchema,
   ContactCandidateSchema,
-  BulkUpdateSchema,
-  SendOfferSchema
+  BulkUpdateSchema
 } from './recruiter.validator'
 import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
 import { recruiter } from '@/shared/middleware/authorize.middleware'
@@ -78,11 +77,5 @@ router.post('/:id/notes', validateDto(AddNotesSchema), recruiterController.addAp
  * Contact candidate via email/notification
  */
 router.post('/:id/contact', validateDto(ContactCandidateSchema), recruiterController.contactCandidate)
-
-/**
- * POST /api/applications/:id/offer
- * Send offer to candidate
- */
-router.post('/:id/offer', validateDto(SendOfferSchema), recruiterController.sendOffer)
 
 export default router
