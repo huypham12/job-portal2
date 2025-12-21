@@ -11,7 +11,8 @@ import {
   skillRouter,
   savedJobRouter,
   applicationRouter,
-  connectionInterestRouter
+  connectionInterestRouter,
+  locationRouter
 } from './api'
 import { errorHandler } from './shared/middleware/error-handler.middleware'
 import adminRouter from './api/admin/admin.route'
@@ -78,6 +79,7 @@ const main = async () => {
     app.use('/api/applications', applicationRouter)
     app.use('/api/connection-interests', connectionInterestRouter)
     app.use('/api/notifications', notificationRouter)
+    app.use('/api/locations', locationRouter)
     app.use(errorHandler)
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions, swaggerUiOptions))

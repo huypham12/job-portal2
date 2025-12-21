@@ -5,6 +5,7 @@ import { CreateApplicationDTO, GetApplicationsDTO } from './application.validato
 import { Prisma, application_status } from '@prisma/client'
 import { NotificationHelper } from '@/shared/helpers/notification.helper'
 import { S3Service } from '../uploads/services/s3.service'
+import { ResumeService } from '../resumes/resume.service'
 
 export class ApplicationService {
   /**
@@ -57,6 +58,26 @@ export class ApplicationService {
 
       if (!resume) {
         throw new HttpError('Resume not found or does not belong to you', HTTP_STATUS.NOT_FOUND)
+      }
+
+      // Nếu resume được tạo từ profile và chưa có file_url → auto-generate PDF
+      if (resume.source_type === 'created' && !resume.file_url) {
+        try {
+          const resumeService = new ResumeService()
+          // Lấy user_id từ profile để generate PDF
+          const profile = await prisma.profiles.findUnique({
+            where: { id: profileId },
+            select: { user_id: true }
+          })
+
+          if (profile) {
+            await resumeService.ensureResumePdfForApplication(profile.user_id, resume_id)
+          }
+        } catch (error) {
+          // Log error nhưng không block application creation
+          // PDF sẽ được generate khi recruiter xem hoặc user download
+          console.error('Failed to auto-generate resume PDF during application:', error)
+        }
       }
     }
 

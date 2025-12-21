@@ -54,6 +54,7 @@ export interface UploadResumeDto {
 export interface ExportResumeDto {
   template?: 'modern' | 'classic' | 'minimal' | 'professional'
   format?: 'pdf' | 'html'
+  html?: string // HTML từ frontend (optional, nếu có thì dùng HTML này thay vì generate từ template backend)
 }
 
 export class ResumeService {
@@ -657,6 +658,7 @@ export class ResumeService {
 
   /**
    * Download CV file
+   * Auto-generate PDF nếu resume chưa có file_url
    */
   async downloadResume(userId: string, resumeId: string) {
     const profile = await prisma.profiles.findFirst({
@@ -678,12 +680,18 @@ export class ResumeService {
       throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    if (!resume.file_url) {
+    // Nếu chưa có file_url → auto-generate PDF và lưu
+    let fileUrl = resume.file_url
+    if (!fileUrl || (resume.source_type === 'created' && !fileUrl)) {
+      fileUrl = await this.ensureResumeHasPdf(userId, resumeId)
+    }
+
+    if (!fileUrl) {
       throw new HttpError('Resume file not found', HTTP_STATUS.NOT_FOUND)
     }
 
     return {
-      url: resume.file_url,
+      url: fileUrl,
       filename: resume.file_name || 'resume.pdf'
     }
   }
@@ -720,8 +728,8 @@ export class ResumeService {
       throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    // Generate HTML từ template
-    const html = this.generateResumeHtml(resume, profile, dto.template || 'modern')
+    // Nếu có HTML từ frontend thì dùng, không thì generate từ template backend
+    const html = dto.html || this.generateResumeHtml(resume, profile, dto.template || 'modern')
 
     if (dto.format === 'html') {
       return {
@@ -743,6 +751,17 @@ export class ResumeService {
       } as Express.Multer.File,
       folder: `resumes/${profile.id}/exports`,
       filename: `${uuidv4()}-${resume.title}.pdf`
+    })
+
+    // Lưu file_url vào database để cache
+    await prisma.resumes.update({
+      where: { id: resumeId },
+      data: {
+        file_url: uploadResult.url,
+        file_name: `${resume.title}.pdf`,
+        file_size: pdfBuffer.length,
+        mime_type: 'application/pdf'
+      }
     })
 
     return {
@@ -1467,6 +1486,111 @@ export class ResumeService {
     if (!date) return ''
     const d = new Date(date)
     return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  }
+
+  /**
+   * Generate PDF và upload lên S3, lưu vào resume.file_url
+   * @param html - HTML từ frontend (optional, nếu có thì dùng HTML này)
+   * @returns file_url của PDF đã upload
+   */
+  private async generateAndSaveResumePdf(
+    resume: any,
+    profile: any,
+    template: string = 'modern',
+    html?: string
+  ): Promise<string> {
+    // Nếu có HTML từ frontend thì dùng, không thì generate từ template backend
+    const finalHtml = html || this.generateResumeHtml(resume, profile, template)
+
+    // Generate PDF từ HTML
+    const pdfBuffer = await this.generatePdfFromHtml(finalHtml)
+
+    // Upload PDF lên S3
+    const uploadResult = await this.s3Service.uploadFile({
+      file: {
+        buffer: pdfBuffer,
+        originalname: `${resume.title}.pdf`,
+        mimetype: 'application/pdf',
+        size: pdfBuffer.length
+      } as Express.Multer.File,
+      folder: `resumes/${profile.id}/generated`,
+      filename: `${resume.id}-${Date.now()}.pdf`
+    })
+
+    // Update resume với file_url
+    await prisma.resumes.update({
+      where: { id: resume.id },
+      data: {
+        file_url: uploadResult.url,
+        file_name: `${resume.title}.pdf`,
+        file_size: pdfBuffer.length,
+        mime_type: 'application/pdf'
+      }
+    })
+
+    return uploadResult.url
+  }
+
+  /**
+   * Đảm bảo resume có file_url (generate nếu chưa có)
+   * @param html - HTML từ frontend (optional, nếu có thì dùng HTML này)
+   */
+  private async ensureResumeHasPdf(
+    userId: string,
+    resumeId: string,
+    template?: string,
+    html?: string
+  ): Promise<string> {
+    const profile = await prisma.profiles.findFirst({
+      where: { user_id: userId },
+      include: {
+        skills: {
+          include: { skills: true }
+        },
+        experiences: true,
+        educations: true,
+        certifications: true,
+        awards: true
+      }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const resume = await prisma.resumes.findFirst({
+      where: {
+        id: resumeId,
+        profile_id: profile.id
+      }
+    })
+
+    if (!resume) {
+      throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    // Nếu đã có file_url và source_type là 'uploaded' → dùng luôn
+    if (resume.file_url && resume.source_type === 'uploaded') {
+      return resume.file_url
+    }
+
+    // Nếu đã có file_url và source_type là 'created' → kiểm tra content có thay đổi không
+    // (Có thể thêm content_hash để check chính xác hơn)
+    if (resume.file_url && resume.source_type === 'created') {
+      // Tạm thời dùng lại file cũ, có thể cải thiện bằng content hash
+      return resume.file_url
+    }
+
+    // Chưa có file_url → generate mới
+    return await this.generateAndSaveResumePdf(resume, profile, template || 'modern', html)
+  }
+
+  /**
+   * Public method để ensure resume có PDF (dùng khi ứng tuyển)
+   * @param html - HTML từ frontend (optional)
+   */
+  async ensureResumePdfForApplication(userId: string, resumeId: string, html?: string): Promise<void> {
+    await this.ensureResumeHasPdf(userId, resumeId, undefined, html)
   }
 
   /**
