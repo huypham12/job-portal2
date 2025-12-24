@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import { z } from 'zod'
-import { job_type, user_role } from '@prisma/client'
+import { job_type, user_role, availability_status } from '@prisma/client'
 
 type SchemaParts = {
   body?: z.ZodTypeAny
@@ -58,6 +58,7 @@ const urlRegex = /^https?:\/\/.+\..+/
 // Enum values from Prisma
 const jobTypeEnum = z.nativeEnum(job_type)
 const userRoleEnum = z.nativeEnum(user_role)
+const availabilityStatusEnum = z.nativeEnum(availability_status)
 
 // Updated profile fields matching current schema
 const updateProfileBody = z
@@ -92,7 +93,7 @@ const updateProfileBody = z
     desired_salary_min: z.number().int().min(0).optional(),
     desired_currency: z.string().max(10).default('VND').optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
-    is_looking_for_job: z.boolean().optional()
+    availability_status: availabilityStatusEnum.optional()
   })
   .strict()
   .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
@@ -130,7 +131,7 @@ const createProfileBody = z
     desired_salary_min: z.number().int().min(0).optional(),
     desired_currency: z.string().max(10).default('VND').optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
-    is_looking_for_job: z.boolean().optional()
+    availability_status: availabilityStatusEnum.optional()
   })
   .strict()
 
@@ -381,6 +382,17 @@ export const profileIdValidator = zodValidate({
   params: profileIdParam
 })
 
+// Profile visibility validator
+const updateProfileVisibilityBody = z.object({
+  is_public: z.boolean()
+})
+
+export const updateProfileVisibilityValidator = zodValidate({
+  body: updateProfileVisibilityBody
+})
+
+// Profile completeness - no validator needed (GET endpoint with no params)
+
 // Export generated types from Zod schemas
 export type GetUsersQuery = z.infer<typeof getUsersQuery>
 export type PaginationQuery = z.infer<typeof paginationQuery>
@@ -397,3 +409,4 @@ export type CreateCertificationDto = z.infer<typeof profileCertificationBody>
 export type UpdateCertificationDto = z.infer<typeof updateProfileCertificationBody>
 export type CreateAwardDto = z.infer<typeof profileAwardBody>
 export type UpdateAwardDto = z.infer<typeof updateProfileAwardBody>
+export type UpdateProfileVisibilityDto = z.infer<typeof updateProfileVisibilityBody>

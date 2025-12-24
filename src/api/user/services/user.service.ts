@@ -1,5 +1,5 @@
 import { prisma } from '@/config/database.service'
-import { job_type } from '@prisma/client'
+import { job_type, availability_status } from '@prisma/client'
 export class UserService {
   getUserById = async (userId: string) => {
     return await prisma.users.findUnique({
@@ -38,7 +38,7 @@ export class UserService {
             desired_salary_min: true,
             desired_currency: true,
             desired_job_type: true,
-            is_looking_for_job: true,
+            availability_status: true,
             created_at: true,
             updated_at: true,
             // Location với parent hierarchy
@@ -274,7 +274,7 @@ export class UserService {
       desired_salary_min?: number
       desired_currency?: string
       desired_job_type?: job_type[]
-      is_looking_for_job?: boolean
+      availability_status?: availability_status
     }
   ) {
     // Kiểm tra xem profile đã tồn tại chưa
@@ -306,7 +306,7 @@ export class UserService {
         desired_salary_min: data.desired_salary_min,
         desired_currency: data.desired_currency || 'VND',
         desired_job_type: data.desired_job_type || [],
-        is_looking_for_job: data.is_looking_for_job ?? true
+        availability_status: data.availability_status ?? 'OPEN'
       },
       select: {
         id: true,
@@ -329,7 +329,7 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        is_looking_for_job: true,
+        availability_status: true,
         created_at: true,
         updated_at: true
       }
@@ -352,7 +352,7 @@ export class UserService {
       desired_salary_min?: number
       desired_currency?: string
       desired_job_type?: job_type[]
-      is_looking_for_job?: boolean
+      availability_status?: availability_status
     }
   ) {
     // Lọc bỏ các field undefined để tránh overwrite ngoài ý muốn
@@ -382,7 +382,7 @@ export class UserService {
           desired_salary_min: true,
           desired_currency: true,
           desired_job_type: true,
-          is_looking_for_job: true,
+          availability_status: true,
           updated_at: true,
           created_at: true
         }
@@ -412,7 +412,7 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        is_looking_for_job: true,
+        availability_status: true,
         updated_at: true,
         created_at: true
       }
@@ -451,7 +451,7 @@ export class UserService {
             desired_salary_min: true,
             desired_currency: true,
             desired_job_type: true,
-            is_looking_for_job: true,
+            availability_status: true,
             created_at: true,
             updated_at: true,
             location: {
@@ -1040,7 +1040,7 @@ export class UserService {
             headline: true,
             avatar_url: true,
             years_of_experience: true,
-            is_looking_for_job: true,
+            availability_status: true,
             location_text: true
           }
         }
@@ -1073,7 +1073,7 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        is_looking_for_job: true,
+        availability_status: true,
         created_at: true,
         updated_at: true,
         // Location with hierarchy
@@ -1622,7 +1622,7 @@ export class UserService {
             avatar_url: true,
             location_id: true,
             location_text: true,
-            is_looking_for_job: true,
+            availability_status: true,
             location: {
               select: {
                 name: true,
@@ -2016,7 +2016,7 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        is_looking_for_job: true,
+        availability_status: true,
         location_text: true,
         personal_website: true,
         linkedin_url: true,
@@ -2134,5 +2134,221 @@ export class UserService {
       ...publicProfile,
       role: users?.role
     }
+  }
+
+  /**
+   * Update profile visibility (public/private)
+   */
+  async updateProfileVisibility(userId: string, isPublic: boolean) {
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true, is_public: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    const updatedProfile = await prisma.profiles.update({
+      where: { id: profile.id },
+      data: { is_public: isPublic },
+      select: {
+        id: true,
+        user_id: true,
+        is_public: true,
+        updated_at: true
+      }
+    })
+
+    return updatedProfile
+  }
+
+  /**
+   * Calculate and return profile completeness percentage
+   */
+  async getProfileCompleteness(userId: string) {
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: {
+        id: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        avatar_url: true,
+        bio: true,
+        date_of_birth: true,
+        gender: true,
+        phone_number: true,
+        personal_website: true,
+        linkedin_url: true,
+        github_url: true,
+        location_text: true,
+        location_id: true,
+        years_of_experience: true,
+        desired_job_title: true,
+        desired_salary_min: true,
+        desired_job_type: true,
+        availability_status: true,
+        experiences: {
+          select: { id: true }
+        },
+        educations: {
+          select: { id: true }
+        },
+        skills: {
+          select: { skill_id: true }
+        },
+        certifications: {
+          select: { id: true }
+        },
+        awards: {
+          select: { id: true }
+        }
+      }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    // Define completeness criteria
+    const criteria = {
+      // Basic info (required) - 40% total
+      basicInfo: {
+        full_name: !!profile.full_name?.trim(),
+        display_name: !!profile.display_name?.trim(),
+        headline: !!profile.headline?.trim(),
+        avatar_url: !!profile.avatar_url,
+        bio: !!profile.bio?.trim()
+      },
+
+      // Contact info (optional but recommended) - 20% total
+      contactInfo: {
+        phone_number: !!profile.phone_number,
+        personal_website: !!profile.personal_website,
+        linkedin_url: !!profile.linkedin_url,
+        github_url: !!profile.github_url
+      },
+
+      // Professional info (recommended) - 20% total
+      professionalInfo: {
+        date_of_birth: !!profile.date_of_birth,
+        gender: !!profile.gender,
+        location_text: !!profile.location_text || !!profile.location_id,
+        years_of_experience: !!profile.years_of_experience,
+        desired_job_title: !!profile.desired_job_title,
+        desired_salary_min: !!profile.desired_salary_min,
+        desired_job_type: !!profile.desired_job_type && profile.desired_job_type.length > 0,
+        availability_status: profile.availability_status !== null
+      },
+
+      // Career data (optional but valuable) - 20% total
+      careerData: {
+        experiences: (profile.experiences?.length || 0) > 0,
+        educations: (profile.educations?.length || 0) > 0,
+        skills: (profile.skills?.length || 0) > 0,
+        certifications: (profile.certifications?.length || 0) > 0,
+        awards: (profile.awards?.length || 0) > 0
+      }
+    }
+
+    // Calculate completion percentages
+    const basicInfoComplete =
+      Object.values(criteria.basicInfo).filter(Boolean).length / Object.keys(criteria.basicInfo).length
+    const contactInfoComplete =
+      Object.values(criteria.contactInfo).filter(Boolean).length / Object.keys(criteria.contactInfo).length
+    const professionalInfoComplete =
+      Object.values(criteria.professionalInfo).filter(Boolean).length / Object.keys(criteria.professionalInfo).length
+    const careerDataComplete =
+      Object.values(criteria.careerData).filter(Boolean).length / Object.keys(criteria.careerData).length
+
+    // Weighted total percentage
+    const totalPercentage = Math.round(
+      (basicInfoComplete * 0.4 +
+        contactInfoComplete * 0.2 +
+        professionalInfoComplete * 0.2 +
+        careerDataComplete * 0.2) *
+        100
+    )
+
+    // Return detailed completeness info
+    return {
+      percentage: totalPercentage,
+      completed: totalPercentage >= 100,
+      sections: {
+        basicInfo: {
+          percentage: Math.round(basicInfoComplete * 100),
+          completed: Object.values(criteria.basicInfo).filter(Boolean).length,
+          total: Object.keys(criteria.basicInfo).length,
+          items: criteria.basicInfo
+        },
+        contactInfo: {
+          percentage: Math.round(contactInfoComplete * 100),
+          completed: Object.values(criteria.contactInfo).filter(Boolean).length,
+          total: Object.keys(criteria.contactInfo).length,
+          items: criteria.contactInfo
+        },
+        professionalInfo: {
+          percentage: Math.round(professionalInfoComplete * 100),
+          completed: Object.values(criteria.professionalInfo).filter(Boolean).length,
+          total: Object.keys(criteria.professionalInfo).length,
+          items: criteria.professionalInfo
+        },
+        careerData: {
+          percentage: Math.round(careerDataComplete * 100),
+          completed: Object.values(criteria.careerData).filter(Boolean).length,
+          total: Object.keys(criteria.careerData).length,
+          items: {
+            experiences: profile.experiences?.length || 0,
+            educations: profile.educations?.length || 0,
+            skills: profile.skills?.length || 0,
+            certifications: profile.certifications?.length || 0,
+            awards: profile.awards?.length || 0
+          }
+        }
+      },
+      recommendations: this.getCompletenessRecommendations(totalPercentage, criteria)
+    }
+  }
+
+  /**
+   * Generate recommendations based on profile completeness
+   */
+  private getCompletenessRecommendations(percentage: number, criteria: any) {
+    const recommendations = []
+
+    if (percentage < 100) {
+      // Basic info recommendations
+      if (!criteria.basicInfo.full_name) recommendations.push('Add your full name')
+      if (!criteria.basicInfo.display_name) recommendations.push('Add a display name')
+      if (!criteria.basicInfo.headline) recommendations.push('Add a professional headline')
+      if (!criteria.basicInfo.avatar_url) recommendations.push('Upload a profile picture')
+      if (!criteria.basicInfo.bio) recommendations.push('Write a professional bio')
+
+      // Contact info recommendations
+      if (!criteria.contactInfo.phone_number) recommendations.push('Add your phone number')
+      if (!criteria.contactInfo.personal_website) recommendations.push('Add your personal website')
+      if (!criteria.contactInfo.linkedin_url) recommendations.push('Add your LinkedIn profile')
+      if (!criteria.contactInfo.github_url) recommendations.push('Add your GitHub profile')
+
+      // Professional info recommendations
+      if (!criteria.professionalInfo.date_of_birth) recommendations.push('Add your date of birth')
+      if (!criteria.professionalInfo.gender) recommendations.push('Specify your gender')
+      if (!criteria.professionalInfo.location_text && !criteria.professionalInfo.location_id)
+        recommendations.push('Add your location')
+      if (!criteria.professionalInfo.years_of_experience) recommendations.push('Add your years of experience')
+      if (!criteria.professionalInfo.desired_job_title) recommendations.push('Add your desired job title')
+      if (!criteria.professionalInfo.desired_salary_min) recommendations.push('Add your desired salary range')
+      if (!criteria.professionalInfo.desired_job_type) recommendations.push('Specify your preferred job types')
+
+      // Career data recommendations
+      if (!criteria.careerData.experiences) recommendations.push('Add your work experience')
+      if (!criteria.careerData.educations) recommendations.push('Add your education background')
+      if (!criteria.careerData.skills) recommendations.push('Add your skills')
+      if (!criteria.careerData.certifications) recommendations.push('Add your certifications')
+      if (!criteria.careerData.awards) recommendations.push('Add your awards and achievements')
+    }
+
+    return recommendations.slice(0, 5) // Return top 5 recommendations
   }
 }

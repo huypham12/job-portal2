@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+// Availability status enum for filtering
+const availabilityStatusEnum = z.enum(['OPEN', 'PASSIVE', 'NOT_LOOKING'])
+
 /**
  * Validator for creating connection interest
  */
@@ -46,11 +49,17 @@ const GetInterestsQuerySchema = z.object({
       const num = Number(val)
       return isNaN(num) ? undefined : num
     },
-    z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must be at most 100' }).default(20)
+    z
+      .number()
+      .int()
+      .min(1, { message: 'Limit must be at least 1' })
+      .max(100, { message: 'Limit must be at most 100' })
+      .default(20)
   ),
   // Status filter removed - invitations don't have accept/reject status
   interest_type: z.enum(['job_invitation', 'profile_view', 'network_connection']).optional(),
-  role: z.enum(['sent', 'received']).optional()
+  role: z.enum(['sent', 'received']).optional(),
+  availability_status: availabilityStatusEnum.optional()
 })
 
 export const GetInterestsSchema = {
@@ -71,4 +80,3 @@ export const InterestIdSchema = {
 }
 
 export type InterestIdDTO = z.infer<typeof InterestIdParamSchema>
-

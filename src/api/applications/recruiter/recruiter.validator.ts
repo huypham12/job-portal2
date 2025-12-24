@@ -26,17 +26,83 @@ const GetApplicationsByJobQuerySchema = z.object({
       const parsed = parseInt(val, 10)
       return isNaN(parsed) ? 20 : parsed
     })
-    .pipe(z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must not exceed 100' })),
+    .pipe(
+      z
+        .number()
+        .int()
+        .min(1, { message: 'Limit must be at least 1' })
+        .max(100, { message: 'Limit must not exceed 100' })
+    ),
   status: z.nativeEnum(application_status).optional(),
   stage: z.string().optional(),
-  sort_by: z
-    .enum(['applied_at', 'rating', 'name'])
+  // Advanced filters
+  skills: z
+    .union([
+      z.string().transform((val) =>
+        val
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      ),
+      z.array(z.string())
+    ])
+    .optional(),
+  experience_min: z
+    .string()
     .optional()
-    .default('applied_at'),
-  order: z
-    .enum(['asc', 'desc'])
+    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .pipe(z.number().int().min(0).optional()),
+  experience_max: z
+    .string()
     .optional()
-    .default('desc')
+    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .pipe(z.number().int().min(0).optional()),
+  education_level: z
+    .union([
+      z.string().transform((val) =>
+        val
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      ),
+      z.array(z.string())
+    ])
+    .optional(),
+  location: z.string().optional(),
+  salary_min: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .pipe(z.number().int().min(0).optional()),
+  salary_max: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .pipe(z.number().int().min(0).optional()),
+  has_rating: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (val === 'true' || val === '1') return true
+      if (val === 'false' || val === '0') return false
+      return undefined
+    })
+    .pipe(z.boolean().optional()),
+  rating_min: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .pipe(z.number().int().min(1).max(5).optional()),
+  applied_after: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), { message: 'Invalid date format. Use ISO 8601 format.' }),
+  applied_before: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), { message: 'Invalid date format. Use ISO 8601 format.' }),
+  sort_by: z.enum(['applied_at', 'rating', 'name', 'experience', 'salary']).optional().default('applied_at'),
+  order: z.enum(['asc', 'desc']).optional().default('desc')
 })
 
 export const GetApplicationsByJobSchema = {
@@ -278,3 +344,86 @@ export const ApplicationIdParamSchema = {
 }
 
 export type ApplicationIdParamDTO = z.infer<(typeof ApplicationIdParamSchema)['params']>
+
+/**
+ * Validator for comparing multiple candidates
+ */
+const CompareCandidatesBodySchema = z.object({
+  application_ids: z
+    .array(z.string().uuid())
+    .min(2, { message: 'At least 2 applications are required for comparison' })
+    .max(10, { message: 'Maximum 10 applications can be compared at once' }),
+  criteria: z
+    .array(z.enum(['skills', 'experience', 'education', 'certifications', 'awards', 'salary_expectation', 'location']))
+    .optional()
+    .default(['skills', 'experience', 'education', 'certifications'])
+})
+
+export const CompareCandidatesSchema = {
+  body: CompareCandidatesBodySchema
+}
+
+export type CompareCandidatesDTO = z.infer<typeof CompareCandidatesBodySchema>
+
+/**
+ * Validator for shortlisting candidates
+ */
+const ShortlistCandidateBodySchema = z.object({
+  application_id: z.string().uuid({ message: 'Application ID must be a valid UUID' }),
+  action: z.enum(['add', 'remove']),
+  note: z.string().optional()
+})
+
+export const ShortlistCandidateSchema = {
+  body: ShortlistCandidateBodySchema
+}
+
+export type ShortlistCandidateDTO = z.infer<typeof ShortlistCandidateBodySchema>
+
+/**
+ * Validator for getting shortlisted candidates
+ */
+const GetShortlistedQuerySchema = z.object({
+  job_id: z.string().uuid().optional(),
+  page: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (!val || val.trim() === '') return 1
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 1 : parsed
+    })
+    .pipe(z.number().int().positive({ message: 'Page must be greater than 0' })),
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (!val || val.trim() === '') return 20
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) ? 20 : parsed
+    })
+    .pipe(
+      z
+        .number()
+        .int()
+        .min(1, { message: 'Limit must be at least 1' })
+        .max(100, { message: 'Limit must not exceed 100' })
+    )
+})
+
+export const GetShortlistedSchema = {
+  query: GetShortlistedQuerySchema
+}
+
+export type GetShortlistedDTO = z.infer<typeof GetShortlistedQuerySchema>
+
+/**
+ * Validator for getting application timeline
+ */
+export const GetApplicationTimelineSchema = {
+  params: z.object({
+    id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  })
+}
+
+export type GetApplicationTimelineDTO = z.infer<(typeof GetApplicationTimelineSchema)['params']>

@@ -12,5 +12,3 @@ export async function eventsController(req: Request, res: Response) {
   await searchService.logEvent(parsed)
   return res.json({ status: 'ok' })
 }
-
-

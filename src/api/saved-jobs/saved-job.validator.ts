@@ -68,55 +68,40 @@ export const jobIdValidator = zodValidate({
 
 // ==================== GET SAVED JOBS SCHEMA ====================
 const getSavedJobsQuery = z.object({
-  page: z.preprocess(
-    (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      const num = Number(val)
-      return isNaN(num) ? undefined : num
-    },
-    z.number().int().min(1, 'Page must be greater than 0').default(1)
-  ),
-  limit: z.preprocess(
-    (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      const num = Number(val)
-      return isNaN(num) ? undefined : num
-    },
-    z.number().int().min(1, 'Limit must be at least 1').max(100, 'Limit must be at most 100').default(10)
-  ),
-  search: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.string().optional()
-  ),
-  job_type: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.string().optional()
-  ),
-  location_id: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.string().uuid('Invalid location ID').optional()
-  ),
+  page: z.preprocess((val) => {
+    // Handle empty string or invalid values as undefined to use default
+    if (val === undefined || val === null || val === '') return undefined
+    const num = Number(val)
+    return isNaN(num) ? undefined : num
+  }, z.number().int().min(1, 'Page must be greater than 0').default(1)),
+  limit: z.preprocess((val) => {
+    // Handle empty string or invalid values as undefined to use default
+    if (val === undefined || val === null || val === '') return undefined
+    const num = Number(val)
+    return isNaN(num) ? undefined : num
+  }, z.number().int().min(1, 'Limit must be at least 1').max(100, 'Limit must be at most 100').default(10)),
+  search: z.preprocess((val) => {
+    // Handle empty string as undefined
+    if (val === undefined || val === null || val === '') return undefined
+    return val
+  }, z.string().optional()),
+  job_type: z.preprocess((val) => {
+    // Handle empty string as undefined
+    if (val === undefined || val === null || val === '') return undefined
+    return val
+  }, z.string().optional()),
+  location_id: z.preprocess((val) => {
+    // Handle empty string as undefined
+    if (val === undefined || val === null || val === '') return undefined
+    return val
+  }, z.string().uuid('Invalid location ID').optional()),
   sort_by: z.preprocess(
     (val) => {
       // Handle empty string as undefined to use default
       if (val === undefined || val === null || val === '') return undefined
       return val
     },
-    z.enum(['saved_at', 'salary', 'created_at'], { errorMap: () => ({ message: 'sort_by must be one of: saved_at, salary, created_at' }) }).default('saved_at')
+    z.enum(['saved_at', 'salary', 'created_at']).default('saved_at')
   ),
   order: z.preprocess(
     (val) => {
@@ -124,7 +109,7 @@ const getSavedJobsQuery = z.object({
       if (val === undefined || val === null || val === '') return undefined
       return val
     },
-    z.enum(['asc', 'desc'], { errorMap: () => ({ message: 'order must be either asc or desc' }) }).default('desc')
+    z.enum(['asc', 'desc']).default('desc')
   )
 })
 

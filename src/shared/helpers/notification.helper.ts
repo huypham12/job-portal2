@@ -306,6 +306,86 @@ export class NotificationHelper {
   }
 
   /**
+   * Send job recommendation notification
+   */
+  static async notifyJobRecommendation(data: { userId: string; jobId: string; jobTitle: string; companyName: string }) {
+    const content = NotificationTemplates[NotificationType.JOB_RECOMMENDATION](data)
+
+    await socketService.sendNotification(data.userId, NotificationType.JOB_RECOMMENDATION, content, {
+      title: `Công việc phù hợp: ${data.jobTitle}`,
+      action_url: `/jobs/${data.jobId}`,
+      action_text: 'Xem chi tiết',
+      metadata: {
+        job_id: data.jobId,
+        job_title: data.jobTitle,
+        company_name: data.companyName
+      },
+      category: 'recommendation'
+    })
+  }
+
+  /**
+   * Send popular job alert
+   */
+  static async notifyPopularJob(data: { userId: string; jobId: string; jobTitle: string; viewCount: number }) {
+    const content = NotificationTemplates[NotificationType.POPULAR_JOB_ALERT](data)
+
+    await socketService.sendNotification(data.userId, NotificationType.POPULAR_JOB_ALERT, content, {
+      title: `Công việc hot: ${data.jobTitle}`,
+      action_url: `/jobs/${data.jobId}`,
+      action_text: 'Xem ngay',
+      metadata: {
+        job_id: data.jobId,
+        job_title: data.jobTitle,
+        view_count: data.viewCount
+      },
+      category: 'trending'
+    })
+  }
+
+  /**
+   * Send location-based job alert
+   */
+  static async notifyLocationJobAlert(data: {
+    userId: string
+    locationId: string
+    locationName: string
+    jobCount: number
+  }) {
+    const content = NotificationTemplates[NotificationType.LOCATION_JOB_ALERT](data)
+
+    await socketService.sendNotification(data.userId, NotificationType.LOCATION_JOB_ALERT, content, {
+      title: `Việc làm mới ở ${data.locationName}`,
+      action_url: `/jobs?location=${data.locationId}`,
+      action_text: 'Xem tất cả',
+      metadata: {
+        location_id: data.locationId,
+        location_name: data.locationName,
+        job_count: data.jobCount
+      },
+      category: 'location'
+    })
+  }
+
+  /**
+   * Send search-based job alert
+   */
+  static async notifySearchBasedAlert(data: { userId: string; searchQuery: string; jobCount: number }) {
+    const content = NotificationTemplates[NotificationType.SEARCH_BASED_ALERT](data)
+
+    await socketService.sendNotification(data.userId, NotificationType.SEARCH_BASED_ALERT, content, {
+      title: 'Việc làm mới phù hợp với tìm kiếm của bạn',
+      action_url: `/jobs?q=${encodeURIComponent(data.searchQuery)}`,
+      action_text: 'Xem kết quả',
+      metadata: {
+        search_query: data.searchQuery,
+        job_count: data.jobCount
+      },
+      category: 'search'
+    })
+  }
+
+  /**
    * Send system announcement to all users
    */
   static async broadcastSystemAnnouncement(message: string) {

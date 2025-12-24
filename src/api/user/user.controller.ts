@@ -15,7 +15,8 @@ import {
   CreateCertificationDto,
   UpdateCertificationDto,
   CreateAwardDto,
-  UpdateAwardDto
+  UpdateAwardDto,
+  UpdateProfileVisibilityDto
 } from './user.validator'
 
 export class UserController {
@@ -478,6 +479,67 @@ export class UserController {
         res.status(403).json({
           success: false,
           message: 'This profile is not available for public viewing'
+        })
+        return
+      }
+      throw error
+    }
+  }
+
+  /**
+   * PUT /me/profile/visibility
+   * Update profile visibility (public/private)
+   */
+  updateProfileVisibility: PutHandler<UpdateProfileVisibilityDto> = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    const { is_public } = req.body
+
+    try {
+      const profile = await this.userService.updateProfileVisibility(userId, is_public)
+      res.json({
+        success: true,
+        message: `Profile visibility updated to ${is_public ? 'public' : 'private'}`,
+        data: profile
+      })
+    } catch (error: any) {
+      if (error.message === 'Profile not found') {
+        res.status(404).json({
+          success: false,
+          message: 'Profile not found'
+        })
+        return
+      }
+      throw error
+    }
+  }
+
+  /**
+   * GET /me/profile/completeness
+   * Get profile completeness percentage
+   */
+  getProfileCompleteness: GetHandler = async (req, res) => {
+    const userId = req.decoded_authorization?.user_id
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' })
+      return
+    }
+
+    try {
+      const completeness = await this.userService.getProfileCompleteness(userId)
+      res.json({
+        success: true,
+        data: completeness
+      })
+    } catch (error: any) {
+      if (error.message === 'Profile not found') {
+        res.status(404).json({
+          success: false,
+          message: 'Profile not found'
         })
         return
       }

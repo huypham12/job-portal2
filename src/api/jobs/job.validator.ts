@@ -196,6 +196,40 @@ const updateJobStatusBody = z
   })
   .strict()
 
+// ==================== PUBLISH JOB SCHEMA ====================
+// Publish job from draft to approved (no body required)
+const publishJobBody = z.object({}).strict()
+
+// ==================== BULK JOB ACTIONS SCHEMA ====================
+const bulkJobActionsBody = z
+  .object({
+    action: z.enum(['close', 'delete', 'publish']),
+    job_ids: z.array(z.string().uuid()).min(1, 'At least one job ID is required').max(50, 'Maximum 50 jobs per request')
+  })
+  .strict()
+
+// ==================== BULK EXTEND EXPIRY SCHEMA ====================
+const bulkExtendExpiryBody = z
+  .object({
+    job_ids: z
+      .array(z.string().uuid())
+      .min(1, 'At least one job ID is required')
+      .max(50, 'Maximum 50 jobs per request'),
+    new_expires_at: z
+      .string()
+      .datetime()
+      .transform((str) => new Date(str))
+      .refine((date) => date > new Date(), {
+        message: 'New expiry date must be in the future'
+      })
+  })
+  .strict()
+
+// ==================== SUGGESTED CANDIDATES QUERY SCHEMA ====================
+const suggestedCandidatesQuery = z.object({
+  size: z.coerce.number().int().min(1).max(50).default(20)
+})
+
 // ==================== FILTER JOBS SCHEMA ====================
 const filterJobsQuery = z.object({
   // Pagination
@@ -253,6 +287,10 @@ const jobIdParams = z.object({
 export type CreateJobDTO = z.infer<typeof createJobBody>
 export type UpdateJobDTO = z.infer<typeof updateJobBody>
 export type UpdateJobStatusDTO = z.infer<typeof updateJobStatusBody>
+export type PublishJobDTO = z.infer<typeof publishJobBody>
+export type BulkJobActionsDTO = z.infer<typeof bulkJobActionsBody>
+export type BulkExtendExpiryDTO = z.infer<typeof bulkExtendExpiryBody>
+export type SuggestedCandidatesDTO = z.infer<typeof suggestedCandidatesQuery>
 export type FilterJobsDTO = z.infer<typeof filterJobsQuery>
 export type MyJobsDTO = z.infer<typeof myJobsQuery>
 export type JobIdParams = z.infer<typeof jobIdParams>
@@ -261,6 +299,10 @@ export type JobIdParams = z.infer<typeof jobIdParams>
 export const createJobValidator = zodValidate({ body: createJobBody })
 export const updateJobValidator = zodValidate({ body: updateJobBody, params: jobIdParams })
 export const updateJobStatusValidator = zodValidate({ body: updateJobStatusBody, params: jobIdParams })
+export const publishJobValidator = zodValidate({ body: publishJobBody, params: jobIdParams })
+export const bulkJobActionsValidator = zodValidate({ body: bulkJobActionsBody })
+export const bulkExtendExpiryValidator = zodValidate({ body: bulkExtendExpiryBody })
+export const suggestedCandidatesValidator = zodValidate({ query: suggestedCandidatesQuery, params: jobIdParams })
 export const filterJobsValidator = zodValidate({ query: filterJobsQuery })
 export const myJobsValidator = zodValidate({ query: myJobsQuery })
 export const jobIdValidator = zodValidate({ params: jobIdParams })

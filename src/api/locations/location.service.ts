@@ -156,4 +156,3 @@ export class LocationService {
     return locations
   }
 }
-

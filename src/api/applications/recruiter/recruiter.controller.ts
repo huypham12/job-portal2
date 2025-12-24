@@ -8,7 +8,11 @@ import {
   CreateStageDTO,
   AddNotesDTO,
   ContactCandidateDTO,
-  BulkUpdateDTO
+  BulkUpdateDTO,
+  CompareCandidatesDTO,
+  ShortlistCandidateDTO,
+  GetShortlistedDTO,
+  GetApplicationTimelineDTO
 } from './recruiter.validator'
 import { TokenPayload } from '@/types/token-payload.type'
 
@@ -54,6 +58,26 @@ export class RecruiterApplicationController {
       res.status(HTTP_STATUS.OK).json({
         success: true,
         data: stats
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * GET /api/applications/:id/timeline
+   * Get full application timeline with all stages
+   */
+  getApplicationTimeline = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { id } = req.params
+
+      const timeline = await this.recruiterService.getApplicationTimeline(user_id, id)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: timeline
       })
     } catch (error) {
       next(error)
@@ -211,4 +235,64 @@ export class RecruiterApplicationController {
     }
   }
 
+  /**
+   * POST /api/applications/shortlist
+   * Add or remove candidate from shortlist
+   */
+  shortlistCandidate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const data = req.body as ShortlistCandidateDTO
+
+      const result = await this.recruiterService.shortlistCandidate(user_id, data)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: result,
+        message: data.action === 'add' ? 'Candidate added to shortlist' : 'Candidate removed from shortlist'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * GET /api/applications/shortlisted
+   * Get shortlisted candidates
+   */
+  getShortlistedCandidates = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const filters = req.query as unknown as GetShortlistedDTO
+
+      const result = await this.recruiterService.getShortlistedCandidates(user_id, filters)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        ...result
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * POST /api/applications/compare
+   * Compare multiple candidates side-by-side
+   */
+  compareCandidates = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const data = req.body as CompareCandidatesDTO
+
+      const result = await this.recruiterService.compareCandidates(user_id, data)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: result
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
 }

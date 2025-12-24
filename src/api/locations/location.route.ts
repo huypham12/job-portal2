@@ -35,4 +35,3 @@ router.get('/search', locationController.searchLocations)
 router.get('/:id', locationController.getLocationById)
 
 export default router
-

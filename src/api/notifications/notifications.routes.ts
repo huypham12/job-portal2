@@ -1,6 +1,13 @@
 import { Router } from 'express'
 import { notificationController } from './notifications.controller'
+import { EnhancedNotificationsController } from './enhanced-notifications.controller'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import {
+  sendJobRecommendationsValidator,
+  sendPopularJobAlertsValidator,
+  sendLocationBasedAlertsValidator,
+  sendSearchBasedAlertsValidator
+} from '../../shared/validators/enhanced-features.validator'
 
 const router = Router()
 
@@ -40,5 +47,53 @@ router.patch('/:id/read', notificationController.markAsRead.bind(notificationCon
  * Delete a notification
  */
 router.delete('/:id', notificationController.deleteNotification.bind(notificationController))
+
+// ==================== ENHANCED NOTIFICATIONS ====================
+
+/**
+ * POST /api/notifications/send-job-recommendations
+ * Send personalized job recommendations
+ */
+router.post(
+  '/send-job-recommendations',
+  sendJobRecommendationsValidator,
+  EnhancedNotificationsController.sendJobRecommendations
+)
+
+/**
+ * POST /api/notifications/send-popular-job-alerts
+ * Send alerts about trending/popular jobs
+ */
+router.post(
+  '/send-popular-job-alerts',
+  sendPopularJobAlertsValidator,
+  EnhancedNotificationsController.sendPopularJobAlerts
+)
+
+/**
+ * POST /api/notifications/send-location-based-alerts
+ * Send job alerts based on user's preferred locations
+ */
+router.post(
+  '/send-location-based-alerts',
+  sendLocationBasedAlertsValidator,
+  EnhancedNotificationsController.sendLocationBasedAlerts
+)
+
+/**
+ * POST /api/notifications/send-search-based-alerts
+ * Send job alerts based on user's saved searches
+ */
+router.post(
+  '/send-search-based-alerts',
+  sendSearchBasedAlertsValidator,
+  EnhancedNotificationsController.sendSearchBasedAlerts
+)
+
+/**
+ * GET /api/notifications/enhanced-stats
+ * Get statistics about enhanced notifications
+ */
+router.get('/enhanced-stats', EnhancedNotificationsController.getEnhancedStats)
 
 export default router

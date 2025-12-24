@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 // Import 'z' (hoặc 'Schema') thay vì 'AnyZodObject'
 import { z, ZodError } from 'zod'
-import { HttpError } from '../common/http-error'
-import { HTTP_STATUS } from '../constants/httpStatus'
+import { HttpError } from '../shared/common/http-error'
+import { HTTP_STATUS } from '../shared/constants/httpStatus'
 
 // Thay đổi AnyZodObject thành z.Schema
 type ValidationSchemas = {

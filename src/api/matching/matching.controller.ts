@@ -15,5 +15,3 @@ export async function matchJobsController(req: Request, res: Response) {
   const resp = await matchingService.matchJobsForProfile(profileId, params.size)
   return res.json(resp)
 }
-
-

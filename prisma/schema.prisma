@@ -338,6 +338,8 @@ model profiles {
   github_url          String?                  @db.VarChar(255)
   headline            String?                  @db.VarChar(255)
   is_looking_for_job  Boolean                  @default(true)
+  availability_status  availability_status?     @default(OPEN)
+  is_public            Boolean                  @default(true)
   linkedin_url        String?                  @db.VarChar(255)
   location_text       String?                  @db.VarChar(100)
   personal_website    String?                  @db.VarChar(255)
@@ -672,4 +674,10 @@ enum LocationType {
   district
 
   @@map("location_type")
+}
+
+enum availability_status {
+  OPEN
+  PASSIVE
+  NOT_LOOKING
 }

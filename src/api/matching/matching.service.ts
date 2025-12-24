@@ -40,20 +40,25 @@ export const matchingService = {
         textScore: textScoreNorm,
         requiredSkills: (jobPayload as any).skills ?? [],
         candidateSkills: src.skills ?? [],
-        locationMatch: (jobPayload as any).location_id && src.location_id && (jobPayload as any).location_id === src.location_id ? 1 : 0,
+        locationMatch:
+          (jobPayload as any).location_id && src.location_id && (jobPayload as any).location_id === src.location_id
+            ? 1
+            : 0,
         experienceYears: src.years_of_experience ?? 0,
         expectedExperience: (jobPayload as any).experience_level ?? 0,
         postedAtMs: (jobPayload as any).posted_at ? new Date((jobPayload as any).posted_at).getTime() : undefined,
         lastActiveAtMs: src.last_active_at ? new Date(src.last_active_at).getTime() : undefined,
+        availabilityStatus: src.availability_status ?? 'OPEN'
       })
 
       const weightedRaw =
-        (components.text * DEFAULT_SCORE_WEIGHTS.text) +
-        (components.skills * DEFAULT_SCORE_WEIGHTS.skills) +
-        (components.location * DEFAULT_SCORE_WEIGHTS.location) +
-        (components.experience * DEFAULT_SCORE_WEIGHTS.experience) +
-        (components.recency * DEFAULT_SCORE_WEIGHTS.recency) +
-        (components.activity * DEFAULT_SCORE_WEIGHTS.activity)
+        components.text * DEFAULT_SCORE_WEIGHTS.text +
+        components.skills * DEFAULT_SCORE_WEIGHTS.skills +
+        components.location * DEFAULT_SCORE_WEIGHTS.location +
+        components.experience * DEFAULT_SCORE_WEIGHTS.experience +
+        components.recency * DEFAULT_SCORE_WEIGHTS.recency +
+        components.activity * DEFAULT_SCORE_WEIGHTS.activity +
+        components.availability * DEFAULT_SCORE_WEIGHTS.availability
 
       const score_percent = normalizeScore(weightedRaw)
       const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
@@ -62,7 +67,7 @@ export const matchingService = {
         id: h.id,
         score_percent,
         explanation,
-        _source: src,
+        _source: src
       }
     })
 
@@ -99,20 +104,28 @@ export const matchingService = {
         textScore: textScoreNorm,
         requiredSkills: src.skills ?? [],
         candidateSkills: (profilePayload as any).skills ?? [],
-        locationMatch: src.location_id && (profilePayload as any).location_id && src.location_id === (profilePayload as any).location_id ? 1 : 0,
+        locationMatch:
+          src.location_id &&
+          (profilePayload as any).location_id &&
+          src.location_id === (profilePayload as any).location_id
+            ? 1
+            : 0,
         experienceYears: (profilePayload as any).years_of_experience ?? 0,
         expectedExperience: src.experience_level ?? 0,
         postedAtMs: src.posted_at ? new Date(src.posted_at).getTime() : undefined,
-        lastActiveAtMs: (profilePayload as any).last_active_at ? new Date((profilePayload as any).last_active_at).getTime() : undefined,
+        lastActiveAtMs: (profilePayload as any).last_active_at
+          ? new Date((profilePayload as any).last_active_at).getTime()
+          : undefined
       })
 
       const weightedRaw =
-        (components.text * DEFAULT_SCORE_WEIGHTS.text) +
-        (components.skills * DEFAULT_SCORE_WEIGHTS.skills) +
-        (components.location * DEFAULT_SCORE_WEIGHTS.location) +
-        (components.experience * DEFAULT_SCORE_WEIGHTS.experience) +
-        (components.recency * DEFAULT_SCORE_WEIGHTS.recency) +
-        (components.activity * DEFAULT_SCORE_WEIGHTS.activity)
+        components.text * DEFAULT_SCORE_WEIGHTS.text +
+        components.skills * DEFAULT_SCORE_WEIGHTS.skills +
+        components.location * DEFAULT_SCORE_WEIGHTS.location +
+        components.experience * DEFAULT_SCORE_WEIGHTS.experience +
+        components.recency * DEFAULT_SCORE_WEIGHTS.recency +
+        components.activity * DEFAULT_SCORE_WEIGHTS.activity +
+        components.availability * DEFAULT_SCORE_WEIGHTS.availability
 
       const score_percent = normalizeScore(weightedRaw)
       const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
@@ -121,13 +134,11 @@ export const matchingService = {
         id: h.id,
         score_percent,
         explanation,
-        _source: src,
+        _source: src
       }
     })
 
     const sorted = results.sort((a, b) => b.score_percent - a.score_percent).slice(0, size)
     return { profileId, total: results.length, jobs: sorted }
-  },
+  }
 }
-
-

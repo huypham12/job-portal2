@@ -30,7 +30,8 @@ import {
   updateProfileAwardValidator,
   deleteProfileAwardValidator,
   getProfileAwardValidator,
-  profileIdValidator
+  profileIdValidator,
+  updateProfileVisibilityValidator
 } from './user.validator'
 
 const userRouter = Router()
@@ -244,5 +245,17 @@ userRouter.delete(
   deleteProfileAwardValidator,
   wrapController(userController.deleteAward)
 )
+
+// === PROFILE VISIBILITY & COMPLETENESS ===
+// Update profile visibility (public/private)
+userRouter.put(
+  '/me/profile/visibility',
+  ...candidateAuth,
+  updateProfileVisibilityValidator,
+  wrapController(userController.updateProfileVisibility)
+)
+
+// Get profile completeness percentage
+userRouter.get('/me/profile/completeness', ...candidateAuth, wrapController(userController.getProfileCompleteness))
 
 export default userRouter

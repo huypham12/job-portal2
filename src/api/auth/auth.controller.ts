@@ -129,7 +129,7 @@ export class AuthController {
   changePassword: PatchHandler<ChangePasswordBodyDto, ChangePasswordResponseDto> = async (req, res) => {
     const { old_password, new_password, logout_all_devices } = req.body
     const { user_id } = req.decoded_authorization as TokenPayload
-    const refresh_token = req.body.refresh_token // Lấy refresh_token nếu muốn giữ session hiện tại
+    const refresh_token = (req.body as any).refresh_token // Lấy refresh_token nếu muốn giữ session hiện tại
     const result = await this.authService.changePassword({
       old_password,
       new_password,

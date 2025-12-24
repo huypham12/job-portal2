@@ -5,33 +5,24 @@ import { NotificationType } from '@/shared/constants/notification-types'
  * Get notifications query validation
  */
 export const getNotificationsQuerySchema = z.object({
-  page: z.preprocess(
-    (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      const num = Number(val)
-      return isNaN(num) ? undefined : num
-    },
-    z.number().int().min(1).default(1)
-  ),
-  limit: z.preprocess(
-    (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      const num = Number(val)
-      return isNaN(num) ? undefined : num
-    },
-    z.number().int().min(1).max(100).default(20)
-  ),
-  read: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined
-      if (val === undefined || val === null || val === '') return undefined
-      // Coerce to boolean
-      return val === 'true' || val === '1'
-    },
-    z.boolean().optional()
-  ),
+  page: z.preprocess((val) => {
+    // Handle empty string or invalid values as undefined to use default
+    if (val === undefined || val === null || val === '') return undefined
+    const num = Number(val)
+    return isNaN(num) ? undefined : num
+  }, z.number().int().min(1).default(1)),
+  limit: z.preprocess((val) => {
+    // Handle empty string or invalid values as undefined to use default
+    if (val === undefined || val === null || val === '') return undefined
+    const num = Number(val)
+    return isNaN(num) ? undefined : num
+  }, z.number().int().min(1).max(100).default(20)),
+  read: z.preprocess((val) => {
+    // Handle empty string as undefined
+    if (val === undefined || val === null || val === '') return undefined
+    // Coerce to boolean
+    return val === 'true' || val === '1'
+  }, z.boolean().optional()),
   type: z.preprocess(
     (val) => {
       // Handle empty string as undefined
@@ -40,10 +31,9 @@ export const getNotificationsQuerySchema = z.object({
     },
     z
       .string()
-      .refine(
-        (val) => Object.values(NotificationType).includes(val as NotificationType),
-        { message: 'Invalid notification type' }
-      )
+      .refine((val) => Object.values(NotificationType).includes(val as NotificationType), {
+        message: 'Invalid notification type'
+      })
       .optional()
   )
 })

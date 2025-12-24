@@ -19,7 +19,5 @@ export const metrics = {
       const elapsed = Date.now() - start
       this.timing(metric, elapsed)
     }
-  },
+  }
 }
-
-

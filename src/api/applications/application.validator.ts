@@ -37,16 +37,16 @@ const GetApplicationsQuerySchema = z.object({
       const parsed = parseInt(val, 10)
       return isNaN(parsed) ? 20 : parsed
     })
-    .pipe(z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must not exceed 100' })),
+    .pipe(
+      z
+        .number()
+        .int()
+        .min(1, { message: 'Limit must be at least 1' })
+        .max(100, { message: 'Limit must not exceed 100' })
+    ),
   status: z.nativeEnum(application_status).optional(),
-  sort_by: z
-    .enum(['applied_at', 'status'])
-    .optional()
-    .default('applied_at'),
-  order: z
-    .enum(['asc', 'desc'])
-    .optional()
-    .default('desc')
+  sort_by: z.enum(['applied_at', 'status']).optional().default('applied_at'),
+  order: z.enum(['asc', 'desc']).optional().default('desc')
 })
 
 export const GetApplicationsSchema = {

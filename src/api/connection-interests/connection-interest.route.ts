@@ -1,10 +1,6 @@
 import { Router } from 'express'
 import * as ConnectionInterestController from './connection-interest.controller'
-import {
-  CreateInterestSchema,
-  GetInterestsSchema,
-  InterestIdSchema
-} from './connection-interest.validator'
+import { CreateInterestSchema, GetInterestsSchema, InterestIdSchema } from './connection-interest.validator'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { authorize, recruiter, candidate } from '@/middleware/authorize.middleware'
 import { validateDto } from '@/middleware/validateDto.middleware'

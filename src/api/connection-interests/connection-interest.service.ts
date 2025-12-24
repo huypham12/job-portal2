@@ -137,7 +137,11 @@ export const createConnectionInterest = async (recruiter_id: string, data: Creat
 
   // Fetch suggested jobs if any
   let suggestedJobs: any[] = []
-  if (interest?.suggested_job_ids && Array.isArray(interest.suggested_job_ids) && interest.suggested_job_ids.length > 0) {
+  if (
+    interest?.suggested_job_ids &&
+    Array.isArray(interest.suggested_job_ids) &&
+    interest.suggested_job_ids.length > 0
+  ) {
     suggestedJobs = await prisma.jobs.findMany({
       where: {
         id: { in: interest.suggested_job_ids as string[] },
@@ -195,7 +199,7 @@ export const getConnectionInterests = async (
   role: 'candidate' | 'recruiter',
   filters: GetInterestsDTO
 ) => {
-  const { page = 1, limit = 20, status, interest_type, role: filterRole } = filters
+  const { page = 1, limit = 20, interest_type, role: filterRole, availability_status } = filters
 
   const skip = (page - 1) * limit
 
@@ -235,7 +239,15 @@ export const getConnectionInterests = async (
   if (interest_type) {
     whereClause.interest_type = interest_type
   }
-  
+
+  // Filter by candidate availability status
+  if (availability_status) {
+    whereClause.candidate = {
+      ...whereClause.candidate,
+      availability_status: availability_status
+    }
+  }
+
   // Filter out expired invitations
   whereClause.expires_at = {
     gte: new Date()
@@ -409,7 +421,11 @@ export const getConnectionInterestById = async (
 
   // Fetch suggested jobs if any
   let suggestedJobs: any[] = []
-  if (interest.suggested_job_ids && Array.isArray(interest.suggested_job_ids) && interest.suggested_job_ids.length > 0) {
+  if (
+    interest.suggested_job_ids &&
+    Array.isArray(interest.suggested_job_ids) &&
+    interest.suggested_job_ids.length > 0
+  ) {
     suggestedJobs = await prisma.jobs.findMany({
       where: {
         id: { in: interest.suggested_job_ids as string[] },
@@ -461,7 +477,6 @@ export const getConnectionInterestById = async (
     suggested_jobs: suggestedJobs
   }
 }
-
 
 /**
  * Delete connection interest

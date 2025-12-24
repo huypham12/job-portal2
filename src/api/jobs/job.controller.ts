@@ -1,7 +1,17 @@
 import { Request, Response, NextFunction } from 'express'
 import { JobService } from './job.service'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
-import { CreateJobDTO, UpdateJobDTO, UpdateJobStatusDTO, FilterJobsDTO, MyJobsDTO } from './job.validator'
+import {
+  CreateJobDTO,
+  UpdateJobDTO,
+  UpdateJobStatusDTO,
+  PublishJobDTO,
+  BulkJobActionsDTO,
+  BulkExtendExpiryDTO,
+  SuggestedCandidatesDTO,
+  FilterJobsDTO,
+  MyJobsDTO
+} from './job.validator'
 import { prisma } from '@/config/database.service'
 
 export class JobController {
@@ -124,6 +134,78 @@ export class JobController {
       const result = await this.jobService.updateJobStatus(id, userId, status)
 
       res.status(HTTP_STATUS.OK).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * PATCH /api/jobs/:id/publish
+   * Publish a draft job (change status to approved)
+   */
+  publishJob = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params
+      const userId = req.decoded_authorization!.user_id
+
+      const result = await this.jobService.publishJob(id, userId)
+
+      res.status(HTTP_STATUS.OK).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * POST /api/jobs/bulk-actions
+   * Perform bulk actions on multiple jobs (close, delete, publish)
+   */
+  bulkJobActions = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.decoded_authorization!.user_id
+      const { action, job_ids }: BulkJobActionsDTO = req.body
+
+      const result = await this.jobService.bulkJobActions(userId, action, job_ids)
+
+      res.status(HTTP_STATUS.OK).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * PATCH /api/jobs/bulk-extend
+   * Bulk extend job expiry dates
+   */
+  bulkExtendExpiry = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.decoded_authorization!.user_id
+      const { job_ids, new_expires_at }: BulkExtendExpiryDTO = req.body
+
+      const result = await this.jobService.bulkExtendExpiry(userId, job_ids, new_expires_at)
+
+      res.status(HTTP_STATUS.OK).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * GET /api/jobs/:id/suggested-candidates
+   * Get suggested candidates for a job
+   */
+  getSuggestedCandidates = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params
+      const userId = req.decoded_authorization!.user_id
+      const { size }: SuggestedCandidatesDTO = req.query as any
+
+      const result = await this.jobService.getSuggestedCandidates(id, userId, size)
+
+      res.status(HTTP_STATUS.OK).json({
+        message: 'Suggested candidates retrieved successfully',
+        data: result
+      })
     } catch (error) {
       next(error)
     }

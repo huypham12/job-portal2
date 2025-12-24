@@ -10,5 +10,3 @@ router.post('/job/:jobId/candidates', matchCandidatesController)
 router.post('/profile/:profileId/jobs', matchJobsController)
 
 export default router
-
-

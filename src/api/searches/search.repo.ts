@@ -2,7 +2,7 @@
  * Repository stub for search-related Postgres lookups / enrichments.
  * Keep ES-specific logic in `elasticsearch.service`.
  */
-import { prisma } from '../../src/config/database.service'
+import { prisma } from '../../config/database.service'
 
 export const searchRepo = {
   async getCompaniesByIds(ids: string[]): Promise<Record<string, unknown>[]> {
@@ -13,8 +13,8 @@ export const searchRepo = {
         id: true,
         name: true,
         logo_url: true,
-        description: true,
-      },
+        description: true
+      }
     })
     return companies as unknown as Record<string, unknown>[]
   },
@@ -30,9 +30,9 @@ export const searchRepo = {
             query: event.query ?? null,
             position: event.position ?? null,
             filters: event.filters ?? null,
-            timestamp_ms: event.timestamp_ms ?? Date.now(),
-          },
-        },
+            timestamp_ms: event.timestamp_ms ?? Date.now()
+          }
+        }
       })
     } catch (e) {
       // Non-fatal: surface to caller by rethrowing if needed; for now, log and continue.
@@ -40,7 +40,5 @@ export const searchRepo = {
       console.error('searchRepo.saveEvent error', e)
       throw e
     }
-  },
+  }
 }
-
-

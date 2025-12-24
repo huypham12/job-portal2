@@ -5,7 +5,7 @@ import {
   MatchCandidatesRequestDto,
   MatchCandidatesResponseDto,
   MatchJobsRequestDto,
-  MatchJobsResponseDto,
+  MatchJobsResponseDto
 } from './matching.dto'
 import { computeScoreComponents, normalizeScore } from '../../shared/utils/scoring.util'
 import { formatBreakdown } from '../../shared/utils/explain.util'
@@ -17,7 +17,7 @@ const defaultWeights = {
   location: 0.15,
   experience: 0.1,
   recency: 0.05,
-  activity: 0.05,
+  activity: 0.05
 }
 
 /**
@@ -54,7 +54,7 @@ export const matchingService = {
     }, {})
 
     // normalize text score based on top hit score (simple heuristic)
-    const maxScore = Math.max(1, ...esHits.map((h: any) => (h._score ?? 0)))
+    const maxScore = Math.max(1, ...esHits.map((h: any) => h._score ?? 0))
 
     const candidates = esHits
       .map((h: any) => {
@@ -80,7 +80,7 @@ export const matchingService = {
           experienceYears: profile.yearsOfExperience ?? 0,
           expectedExperience: job.experienceLevel ?? 0,
           postedAtMs: job.postedAtMs,
-          lastActiveAtMs: profile.lastActiveAtMs,
+          lastActiveAtMs: profile.lastActiveAtMs
         })
 
         const raw =
@@ -99,7 +99,7 @@ export const matchingService = {
           id: profile.id,
           score_percent: percent,
           explanation: breakdown,
-          _source: profile,
+          _source: profile
         }
       })
       .filter(Boolean)
@@ -110,7 +110,7 @@ export const matchingService = {
     return {
       job_id: jobId,
       total: candidates.length,
-      candidates: candidates as any[],
+      candidates: candidates as any[]
     }
   },
   /**
@@ -151,7 +151,7 @@ export const matchingService = {
       return acc
     }, {})
 
-    const maxScore = Math.max(1, ...esHits.map((h: any) => (h._score ?? 0)))
+    const maxScore = Math.max(1, ...esHits.map((h: any) => h._score ?? 0))
 
     const result = esHits
       .map((h: any) => {
@@ -176,7 +176,7 @@ export const matchingService = {
           experienceYears: profile.yearsOfExperience ?? 0,
           expectedExperience: job.experienceLevel ?? 0,
           postedAtMs: job.postedAtMs,
-          lastActiveAtMs: profile.lastActiveAtMs,
+          lastActiveAtMs: profile.lastActiveAtMs
         })
 
         const raw =
@@ -195,7 +195,7 @@ export const matchingService = {
           id: job.id,
           score_percent: percent,
           explanation: breakdown,
-          _source: job,
+          _source: job
         }
       })
       .filter(Boolean)
@@ -206,9 +206,7 @@ export const matchingService = {
     return {
       profile_id: profileId,
       total: result.length,
-      jobs: result as any[],
+      jobs: result as any[]
     }
-  },
+  }
 }
-
-

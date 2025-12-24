@@ -1,9 +1,4 @@
-import {
-  JobSearchRequestDto,
-  JobSearchResponseDto,
-  SuggestionRequestDto,
-  SuggestionResponseDto,
-} from './search.dto'
+import { JobSearchRequestDto, JobSearchResponseDto, SuggestionRequestDto, SuggestionResponseDto } from './search.dto'
 import { elasticsearchService } from '../../config/elasticsearch.service'
 import { searchRepo } from './search.repo'
 import { redisService } from '../../config/redis.service'
@@ -30,8 +25,8 @@ export const searchService = {
           query: q,
           fields: ['title^4', 'skills^3', 'company_name^2', 'description'],
           fuzziness: 'AUTO',
-          operator: 'and',
-        },
+          operator: 'and'
+        }
       })
     } else {
       must.push({ match_all: {} })
@@ -56,8 +51,8 @@ export const searchService = {
           company: { id: (h._source as any)?.company_id, name: (h._source as any)?.company_name },
           score: h._score ?? undefined,
           highlight: undefined,
-          _source: h._source,
-        })),
+          _source: h._source
+        }))
       }
     }
 
@@ -66,7 +61,7 @@ export const searchService = {
       index: 'jobs',
       query: esQuery,
       from,
-      size,
+      size
     })
     timerDone()
     metrics.increment('search.jobs.request')
@@ -100,14 +95,14 @@ export const searchService = {
         company: companyMap[src?.company_id] ?? { id: src?.company_id, name: src?.company_name },
         score: h._score ?? undefined,
         highlight: highlight ? (h as any)._highlight : undefined,
-        _source: src,
+        _source: src
       }
     })
 
     return {
       total: esResp.total,
       took_ms: esResp.took,
-      hits,
+      hits
     }
   },
   /**
@@ -130,7 +125,7 @@ export const searchService = {
       index,
       prefix: dto.q,
       size: dto.size,
-      context: dto.context as Record<string, unknown> | undefined,
+      context: dto.context as Record<string, unknown> | undefined
     })
     timerDone()
     metrics.increment('search.suggest.request')
@@ -147,20 +142,20 @@ export const searchService = {
           bool: {
             should: [
               { match_phrase_prefix: { 'title.autocomplete': { query: dto.q } } },
-              { match_phrase_prefix: { title: { query: dto.q } } },
-            ],
-          },
+              { match_phrase_prefix: { title: { query: dto.q } } }
+            ]
+          }
         }
         const fallbackResp = await elasticsearchService.search({
           index,
           query: fallbackQuery,
           from: 0,
-          size: dto.size ?? 10,
+          size: dto.size ?? 10
         })
         suggestions = (fallbackResp.hits || []).map((h) => ({
           text: (h._source as any)?.title ?? h.id,
           payload: h._source,
-          score: h._score,
+          score: h._score
         }))
       } catch (e) {
         // ignore fallback errors
@@ -171,8 +166,8 @@ export const searchService = {
       suggestions: suggestions.map((s: any) => ({
         text: s.text,
         payload: s.payload,
-        score: s.score,
-      })),
+        score: s.score
+      }))
     }
   },
   /**
@@ -185,13 +180,15 @@ export const searchService = {
   async searchProfilesForJob(jobPayload: any, topN = 200) {
     // Build ES query for retrieving candidate profiles for a given job
     const must: any[] = []
+    const filter: any[] = []
+
     if (jobPayload && jobPayload.title) {
       must.push({
         multi_match: {
           query: jobPayload.title,
           fields: ['headline^3', 'full_name^1', 'profile_summary'],
-          fuzziness: 'AUTO',
-        },
+          fuzziness: 'AUTO'
+        }
       })
     } else {
       must.push({ match_all: {} })
@@ -199,7 +196,11 @@ export const searchService = {
     if (jobPayload && Array.isArray(jobPayload.skills) && jobPayload.skills.length) {
       must.push({ terms: { skills: jobPayload.skills } })
     }
-    const esQuery = { bool: { must } }
+
+    // Filter to only show OPEN candidates (actively looking for jobs)
+    filter.push({ term: { availability_status: 'OPEN' } })
+
+    const esQuery = { bool: { must, filter } }
     const cacheKey = `search:profiles_for_job:${JSON.stringify(jobPayload)}:topN:${topN}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
@@ -212,7 +213,7 @@ export const searchService = {
       index: 'profiles',
       query: esQuery,
       from: 0,
-      size: topN,
+      size: topN
     })
     timerDone()
     metrics.increment('search.profiles_for_job.request')
@@ -237,8 +238,8 @@ export const searchService = {
         multi_match: {
           query: profilePayload.headline,
           fields: ['title^3', 'company_name^1', 'description'],
-          fuzziness: 'AUTO',
-        },
+          fuzziness: 'AUTO'
+        }
       })
     } else {
       must.push({ match_all: {} })
@@ -259,7 +260,7 @@ export const searchService = {
       index: 'jobs',
       query: esQuery,
       from: 0,
-      size: topN,
+      size: topN
     })
     timerDone()
     metrics.increment('search.jobs_for_profile.request')
@@ -285,7 +286,5 @@ export const searchService = {
       // eslint-disable-next-line no-console
       console.error('searchService.logEvent error', e)
     }
-  },
+  }
 }
-
-

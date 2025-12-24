@@ -79,6 +79,10 @@ router.delete('/:id', validateDto(UUIDParamSchema), applicationController.withdr
  * PATCH /api/applications/:id/stages/:stageId/feedback
  * Submit candidate feedback for interview stage
  */
-router.patch('/:id/stages/:stageId/feedback', validateDto(StageFeedbackSchema), applicationController.submitStageFeedback)
+router.patch(
+  '/:id/stages/:stageId/feedback',
+  validateDto(StageFeedbackSchema),
+  applicationController.submitStageFeedback
+)
 
 export default router

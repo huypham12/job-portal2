@@ -65,7 +65,5 @@ export const redisService = {
   },
   async setSuggestResponse(key: string, resp: SuggestResponse, ttlSeconds = 30): Promise<void> {
     await this.set(key, JSON.stringify(resp), ttlSeconds)
-  },
+  }
 }
-
-

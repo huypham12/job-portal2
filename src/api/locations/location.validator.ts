@@ -20,4 +20,3 @@ export const locationIdParams = z.object({
 export type GetDistrictsQuery = z.infer<typeof getDistrictsQuery>
 export type SearchLocationsQuery = z.infer<typeof searchLocationsQuery>
 export type LocationIdParams = z.infer<typeof locationIdParams>
-

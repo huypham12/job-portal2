@@ -12,5 +12,3 @@ export async function suggestionsController(req: Request, res: Response) {
   const resp = await searchService.suggest(parsed)
   return res.json(resp)
 }
-
-

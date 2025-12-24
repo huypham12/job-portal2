@@ -1491,11 +1491,7 @@ export class ResumeService {
    * Generate PDF và upload lên S3, lưu vào resume.file_url
    * @returns file_url của PDF đã upload
    */
-  private async generateAndSaveResumePdf(
-    resume: any,
-    profile: any,
-    template: string = 'modern'
-  ): Promise<string> {
+  private async generateAndSaveResumePdf(resume: any, profile: any, template: string = 'modern'): Promise<string> {
     // Generate HTML từ template
     const html = this.generateResumeHtml(resume, profile, template)
 
@@ -1531,11 +1527,7 @@ export class ResumeService {
   /**
    * Đảm bảo resume có file_url (generate nếu chưa có)
    */
-  private async ensureResumeHasPdf(
-    userId: string,
-    resumeId: string,
-    template?: string
-  ): Promise<string> {
+  private async ensureResumeHasPdf(userId: string, resumeId: string, template?: string): Promise<string> {
     const profile = await prisma.profiles.findFirst({
       where: { user_id: userId },
       include: {

@@ -5,5 +5,3 @@ export * from './search.dto'
 export * from './suggestions.controller'
 export * from './events.controller'
 export * from './events.dto'
-
-

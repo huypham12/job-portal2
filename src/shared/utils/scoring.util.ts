@@ -5,15 +5,17 @@ export type ScoreComponents = {
   experience: number
   recency: number
   activity: number
+  availability: number
 }
 
 export const DEFAULT_SCORE_WEIGHTS = {
   text: 0.35,
-  skills: 0.3,
+  skills: 0.25,
   location: 0.15,
   experience: 0.1,
   recency: 0.05,
   activity: 0.05,
+  availability: 0.05
 }
 
 /**
@@ -39,6 +41,7 @@ export function computeScoreComponents(input: {
   expectedExperience?: number
   postedAtMs?: number
   lastActiveAtMs?: number
+  availabilityStatus?: string // 'OPEN' | 'PASSIVE' | 'NOT_LOOKING'
 }): ScoreComponents {
   const {
     textScore = 0,
@@ -48,7 +51,8 @@ export function computeScoreComponents(input: {
     experienceYears = 0,
     expectedExperience = 0,
     postedAtMs,
-    lastActiveAtMs
+    lastActiveAtMs,
+    availabilityStatus = 'OPEN'
   } = input
 
   // skills overlap (simple intersection / required)
@@ -77,13 +81,17 @@ export function computeScoreComponents(input: {
   // textScore assumed already normalized to 0..1 by caller; otherwise clamp
   const text = Math.max(0, Math.min(1, textScore))
 
+  // availability: boost for OPEN candidates (actively looking for jobs)
+  const availability = availabilityStatus === 'OPEN' ? 1 : availabilityStatus === 'PASSIVE' ? 0.5 : 0
+
   return {
     text,
     skills,
     location: Math.max(0, Math.min(1, locationMatch)),
     experience,
     recency,
-    activity
+    activity,
+    availability
   }
 }
 

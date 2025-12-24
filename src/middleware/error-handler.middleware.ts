@@ -1,6 +1,6 @@
 import { ErrorRequestHandler } from 'express'
-import { HttpError } from '../common/http-error'
-import { ErrorResponseDto } from '../common/error-response.dto'
+import { HttpError } from '../shared/common/http-error'
+import { ErrorResponseDto } from '../shared/common/error-response.dto'
 
 // trình xử lý lỗi chung, mọi error sẽ đều được next tới đây
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {

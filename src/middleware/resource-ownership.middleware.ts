@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 import { prisma } from '@/config/database.service'
-import { HttpError } from '../common/http-error'
-import { MESSAGES } from '../constants/messages'
-import { HTTP_STATUS } from '../constants/httpStatus'
+import { HttpError } from '../shared/common/http-error'
+import { MESSAGES } from '../shared/constants/messages'
+import { HTTP_STATUS } from '../shared/constants/httpStatus'
 import { TokenPayload } from '@/types/token-payload.type'
-import { UserRole } from '../constants/enums/user.enum'
+import { UserRole } from '../shared/constants/enums/user.enum'
 
 // Middleware kiểm tra user chỉ có thể truy cập data của chính họ
 export const checkResourceOwnership = (

@@ -67,18 +67,21 @@ export const elasticsearchService = {
       index,
       body,
       from,
-      size,
+      size
     })
 
     const took = resp.took ?? 0
     const hitsRaw = (resp.hits && resp.hits.hits) || []
     const totalRaw = resp.hits && resp.hits.total
-    const total = typeof totalRaw === 'object' && totalRaw !== null ? (totalRaw as any).value : (totalRaw as number | undefined) ?? hitsRaw.length
+    const total =
+      typeof totalRaw === 'object' && totalRaw !== null
+        ? (totalRaw as any).value
+        : ((totalRaw as number | undefined) ?? hitsRaw.length)
 
     const hits = hitsRaw.map((h: any) => ({
       id: h._id,
       _source: h._source,
-      _score: h._score,
+      _score: h._score
     }))
 
     return { took, total, hits }
@@ -95,11 +98,11 @@ export const elasticsearchService = {
           prefix,
           completion: {
             field: 'title.suggest',
-            size,
-          },
-        },
+            size
+          }
+        }
       },
-      size: 0,
+      size: 0
     }
     // If context is provided, attach to completion suggester (ES expects contexts under `completion` query in mapping)
     if (context && Object.keys(context).length) {
@@ -110,19 +113,21 @@ export const elasticsearchService = {
 
     const resp = await client.search({
       index,
-      body: suggestBody,
+      body: suggestBody
     })
 
     const suggestions: Suggestion[] = []
     const suggestResult = resp.suggest && resp.suggest.completion_suggest
     if (Array.isArray(suggestResult)) {
       for (const entry of suggestResult) {
-        for (const opt of entry.options || []) {
-          suggestions.push({
-            text: opt.text,
-            payload: opt._source ?? opt._id,
-            score: opt._score,
-          })
+        if (entry.options && Array.isArray(entry.options)) {
+          for (const opt of entry.options) {
+            suggestions.push({
+              text: opt.text,
+              payload: (opt as any)._source || (opt as any)._id,
+              score: opt.score
+            })
+          }
         }
       }
     }
@@ -191,6 +196,7 @@ export const elasticsearchService = {
     // Define basic mappings per SEARCH_MATCHING_PLAN.md
     const jobsIndex = this.getIndexName('jobs')
     const profilesIndex = this.getIndexName('profiles')
+    const applicationsIndex = this.getIndexName('applications')
 
     // Jobs mapping
     const jobsMapping = {
@@ -207,11 +213,20 @@ export const elasticsearchService = {
           },
           description: { type: 'text', analyzer: 'standard' },
           skills: { type: 'keyword' },
+          tags: { type: 'keyword' },
           company_id: { type: 'keyword' },
           company_name: { type: 'text' },
           location_id: { type: 'keyword' },
+          location_name: { type: 'text' },
+          salary_range: { type: 'text' },
+          salary_min: { type: 'integer' },
+          salary_max: { type: 'integer' },
+          job_type: { type: 'keyword' },
           experience_level: { type: 'integer' },
-          posted_at: { type: 'date' }
+          status: { type: 'keyword' },
+          posted_at: { type: 'date' },
+          expires_at: { type: 'date' },
+          metadata: { type: 'object' }
         }
       },
       settings: {
@@ -232,12 +247,78 @@ export const elasticsearchService = {
       mappings: {
         properties: {
           id: { type: 'keyword' },
+          user_id: { type: 'keyword' },
           full_name: { type: 'text', analyzer: 'standard' },
+          display_name: { type: 'text', analyzer: 'standard' },
           headline: { type: 'text', analyzer: 'standard' },
-          skills: { type: 'keyword' },
+          bio: { type: 'text', analyzer: 'standard' },
+          desired_job_title: { type: 'text', analyzer: 'standard' },
+          desired_salary_min: { type: 'integer' },
+          desired_salary_max: { type: 'integer' },
           years_of_experience: { type: 'integer' },
+          skills: { type: 'keyword' },
           location_id: { type: 'keyword' },
-          last_active_at: { type: 'date' }
+          location_text: { type: 'text' },
+          is_looking_for_job: { type: 'boolean' },
+          availability_status: { type: 'keyword' },
+          last_active_at: { type: 'date' },
+          resume_url: { type: 'keyword' },
+          avatar_url: { type: 'keyword' }
+        }
+      },
+      settings: {
+        analysis: {
+          analyzer: {
+            autocomplete_analyzer: {
+              type: 'custom',
+              tokenizer: 'standard',
+              filter: ['lowercase', 'asciifolding']
+            }
+          }
+        }
+      }
+    }
+
+    // Applications mapping
+    const applicationsMapping = {
+      mappings: {
+        properties: {
+          id: { type: 'keyword' },
+          job_id: { type: 'keyword' },
+          profile_id: { type: 'keyword' },
+          user_id: { type: 'keyword' },
+          status: { type: 'keyword' },
+          applied_at: { type: 'date' },
+          first_viewed_at: { type: 'date' },
+          last_viewed_at: { type: 'date' },
+          view_count: { type: 'integer' },
+          // Candidate info
+          candidate_name: { type: 'text', analyzer: 'standard' },
+          candidate_email: { type: 'keyword' },
+          candidate_headline: { type: 'text', analyzer: 'standard' },
+          candidate_location: { type: 'text', analyzer: 'standard' },
+          candidate_years_experience: { type: 'integer' },
+          candidate_desired_salary_min: { type: 'integer' },
+          candidate_desired_salary_max: { type: 'integer' },
+          candidate_skills: { type: 'keyword' },
+          candidate_education: { type: 'keyword' },
+          // Job info
+          job_title: { type: 'text', analyzer: 'standard' },
+          job_company_name: { type: 'text', analyzer: 'standard' },
+          job_location: { type: 'text', analyzer: 'standard' },
+          job_type: { type: 'keyword' },
+          job_salary_min: { type: 'integer' },
+          job_salary_max: { type: 'integer' },
+          // Application stages
+          current_stage_name: { type: 'keyword' },
+          current_stage_status: { type: 'keyword' },
+          stages_count: { type: 'integer' },
+          completed_stages_count: { type: 'integer' },
+          average_rating: { type: 'float' },
+          // Metadata
+          has_notes: { type: 'boolean' },
+          has_rating: { type: 'boolean' },
+          is_shortlisted: { type: 'boolean' }
         }
       },
       settings: {
@@ -265,5 +346,6 @@ export const elasticsearchService = {
 
     await createIfNotExists(jobsIndex, jobsMapping)
     await createIfNotExists(profilesIndex, profilesMapping)
-  },
+    await createIfNotExists(applicationsIndex, applicationsMapping)
+  }
 }

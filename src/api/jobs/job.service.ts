@@ -2,8 +2,9 @@ import { prisma } from '@/config/database.service'
 import { HttpError } from '@/shared/common/http-error'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'
-import { CreateJobDTO, UpdateJobDTO, FilterJobsDTO, MyJobsDTO } from './job.validator'
+import { CreateJobDTO, UpdateJobDTO, FilterJobsDTO, MyJobsDTO, SuggestedCandidatesDTO } from './job.validator'
 import { job_status, Prisma } from '@prisma/client'
+import { matchingService } from '../matching/matching.service'
 
 export class JobService {
   // ==================== EMPLOYER METHODS ====================
@@ -421,6 +422,182 @@ export class JobService {
   }
 
   /**
+   * Publish a draft job (change status from draft to approved)
+   */
+  async publishJob(jobId: string, userId: string) {
+    // Check ownership
+    const job = await this.getJobById(jobId, userId, true)
+
+    // Only draft jobs can be published
+    if (job.status !== job_status.draft) {
+      throw new HttpError('Only draft jobs can be published', HTTP_STATUS.BAD_REQUEST)
+    }
+
+    // Update status to approved
+    await prisma.jobs.update({
+      where: { id: jobId },
+      data: { status: job_status.approved }
+    })
+
+    return { message: 'Job published successfully' }
+  }
+
+  /**
+   * Bulk job actions (close, delete, publish)
+   */
+  async bulkJobActions(userId: string, action: 'close' | 'delete' | 'publish', jobIds: string[]) {
+    // Get all jobs that belong to this user
+    const jobs = await prisma.jobs.findMany({
+      where: {
+        id: { in: jobIds },
+        companies: {
+          recruiter_id: userId
+        },
+        deleted: false
+      },
+      select: {
+        id: true,
+        status: true,
+        title: true
+      }
+    })
+
+    // Check if all requested jobs belong to this user
+    const foundJobIds = jobs.map((job) => job.id)
+    const notOwnedJobs = jobIds.filter((id) => !foundJobIds.includes(id))
+
+    if (notOwnedJobs.length > 0) {
+      throw new HttpError(
+        `You don't have permission to perform this action on jobs: ${notOwnedJobs.join(', ')}`,
+        HTTP_STATUS.FORBIDDEN
+      )
+    }
+
+    // Validate action-specific constraints
+    if (action === 'publish') {
+      const nonDraftJobs = jobs.filter((job) => job.status !== job_status.draft)
+      if (nonDraftJobs.length > 0) {
+        throw new HttpError(
+          `Only draft jobs can be published. Non-draft jobs: ${nonDraftJobs.map((j) => j.title).join(', ')}`,
+          HTTP_STATUS.BAD_REQUEST
+        )
+      }
+    }
+
+    // Perform bulk action
+    let updateData: any = {}
+    let actionMessage = ''
+
+    switch (action) {
+      case 'close':
+        updateData.status = job_status.closed
+        actionMessage = 'closed'
+        break
+      case 'delete':
+        updateData.deleted = true
+        actionMessage = 'deleted'
+        break
+      case 'publish':
+        updateData.status = job_status.approved
+        actionMessage = 'published'
+        break
+    }
+
+    await prisma.jobs.updateMany({
+      where: {
+        id: { in: foundJobIds }
+      },
+      data: updateData
+    })
+
+    return {
+      message: `Successfully ${actionMessage} ${foundJobIds.length} job(s)`,
+      affected_jobs: foundJobIds.length,
+      job_ids: foundJobIds
+    }
+  }
+
+  /**
+   * Bulk extend job expiry dates
+   */
+  async bulkExtendExpiry(userId: string, jobIds: string[], newExpiresAt: Date) {
+    // Get all jobs that belong to this user and are not deleted
+    const jobs = await prisma.jobs.findMany({
+      where: {
+        id: { in: jobIds },
+        companies: {
+          recruiter_id: userId
+        },
+        deleted: false,
+        status: job_status.approved // Only extend active jobs
+      },
+      select: {
+        id: true,
+        title: true,
+        expires_at: true
+      }
+    })
+
+    // Check if all requested jobs belong to this user and are active
+    const foundJobIds = jobs.map((job) => job.id)
+    const notOwnedOrInactiveJobs = jobIds.filter((id) => !foundJobIds.includes(id))
+
+    if (notOwnedOrInactiveJobs.length > 0) {
+      throw new HttpError(
+        `Cannot extend expiry for jobs: ${notOwnedOrInactiveJobs.join(', ')}. Jobs must be owned by you and active.`,
+        HTTP_STATUS.FORBIDDEN
+      )
+    }
+
+    // Update expiry dates
+    await prisma.jobs.updateMany({
+      where: {
+        id: { in: foundJobIds }
+      },
+      data: {
+        expires_at: newExpiresAt
+      }
+    })
+
+    return {
+      message: `Successfully extended expiry for ${foundJobIds.length} job(s)`,
+      affected_jobs: foundJobIds.length,
+      job_ids: foundJobIds,
+      new_expires_at: newExpiresAt
+    }
+  }
+
+  /**
+   * Get suggested candidates for a job
+   */
+  async getSuggestedCandidates(jobId: string, userId: string, size: number = 20) {
+    // Check ownership
+    await this.getJobById(jobId, userId, true)
+
+    // Get suggested candidates using matching service
+    const result = await matchingService.matchCandidatesForJob(jobId, size)
+
+    return {
+      job_id: jobId,
+      total: result.total,
+      candidates: result.candidates.map((candidate) => ({
+        id: candidate.id,
+        score_percent: candidate.score_percent,
+        explanation: candidate.explanation,
+        profile: {
+          full_name: candidate._source?.full_name,
+          display_name: candidate._source?.display_name,
+          headline: candidate._source?.headline,
+          location_text: candidate._source?.location_text,
+          years_of_experience: candidate._source?.years_of_experience,
+          is_looking_for_job: candidate._source?.is_looking_for_job,
+          avatar_url: candidate._source?.avatar_url
+        }
+      }))
+    }
+  }
+
+  /**
    * Get job statistics
    */
   async getJobStats(jobId: string, userId: string) {
@@ -510,9 +687,12 @@ export class JobService {
     const skip = (pageNum - 1) * limitNum
 
     // Ensure experience_level is a number if provided
-    const experienceLevelNum = experience_level !== undefined && experience_level !== null
-      ? (typeof experience_level === 'number' ? experience_level : parseInt(String(experience_level), 10))
-      : undefined
+    const experienceLevelNum =
+      experience_level !== undefined && experience_level !== null
+        ? typeof experience_level === 'number'
+          ? experience_level
+          : parseInt(String(experience_level), 10)
+        : undefined
 
     // Build base where clause
     const where: Prisma.jobsWhereInput = {
@@ -535,47 +715,49 @@ export class JobService {
 
       // Filter by skill names (search in job_skills relation)
       // Support multiple skills separated by space or comma
-      ...(skill_names && (() => {
-        const skillNameList = skill_names
-          .trim()
-          .split(/[\s,]+/)
-          .filter(s => s.length > 0)
-          .map(s => s.trim())
-        
-        if (skillNameList.length === 0) return {}
-        
-        return {
-          job_skills: {
-            some: {
-              skills: {
-                OR: skillNameList.map(skillName => ({
-                  name: {
-                    contains: skillName,
-                    mode: 'insensitive' as const
-                  }
-                }))
+      ...(skill_names &&
+        (() => {
+          const skillNameList = skill_names
+            .trim()
+            .split(/[\s,]+/)
+            .filter((s) => s.length > 0)
+            .map((s) => s.trim())
+
+          if (skillNameList.length === 0) return {}
+
+          return {
+            job_skills: {
+              some: {
+                skills: {
+                  OR: skillNameList.map((skillName) => ({
+                    name: {
+                      contains: skillName,
+                      mode: 'insensitive' as const
+                    }
+                  }))
+                }
               }
             }
           }
-        }
-      })()),
+        })()),
 
       // Filter by location name (search in locations relation)
-      ...(location_name && location_name.trim() && {
-        locations: {
-          name: {
-            contains: location_name.trim(),
-            mode: 'insensitive' as const
+      ...(location_name &&
+        location_name.trim() && {
+          locations: {
+            name: {
+              contains: location_name.trim(),
+              mode: 'insensitive' as const
+            }
           }
-        }
-      })
+        })
     }
 
     // Handle salary range filter
     // Use Prisma JSON filter - if it doesn't work, we'll filter after fetch
     if (salary_min || salary_max) {
       const salaryConditions: any[] = []
-      
+
       if (salary_min) {
         // Job's max salary should be >= requested min (overlap condition)
         salaryConditions.push({
@@ -585,7 +767,7 @@ export class JobService {
           }
         })
       }
-      
+
       if (salary_max) {
         // Job's min salary should be <= requested max (overlap condition)
         salaryConditions.push({
@@ -595,9 +777,9 @@ export class JobService {
           }
         })
       }
-      
+
       if (salaryConditions.length > 0) {
-        const existingAnd = Array.isArray(where.AND) ? where.AND : (where.AND ? [where.AND] : [])
+        const existingAnd = Array.isArray(where.AND) ? where.AND : where.AND ? [where.AND] : []
         where.AND = [...existingAnd, ...salaryConditions]
       }
     }
@@ -606,9 +788,7 @@ export class JobService {
     // We'll filter salary in memory as Prisma JSON filter may not work correctly
     const whereWithoutSalary = { ...where }
     if (whereWithoutSalary.AND) {
-      whereWithoutSalary.AND = (whereWithoutSalary.AND as any[]).filter(
-        (condition: any) => !condition.salary_range
-      )
+      whereWithoutSalary.AND = (whereWithoutSalary.AND as any[]).filter((condition: any) => !condition.salary_range)
       if (whereWithoutSalary.AND.length === 0) {
         delete whereWithoutSalary.AND
       }
@@ -624,9 +804,10 @@ export class JobService {
         where: whereWithoutSalary,
         skip: 0, // Fetch all to filter in memory (needed for salary filter)
         take: 10000, // Large limit to get all matching jobs
-        orderBy: sort_by === 'salary_min' 
-          ? { posted_at: 'desc' } // Temporary sort, will be re-sorted by salary
-          : { [sort_by]: sort_order },
+        orderBy:
+          sort_by === 'salary_min'
+            ? { posted_at: 'desc' } // Temporary sort, will be re-sorted by salary
+            : { [sort_by]: sort_order },
         include: {
           companies: {
             select: {
@@ -670,10 +851,10 @@ export class JobService {
         if (!job.salary_range || typeof job.salary_range !== 'object') {
           return false // Exclude jobs without salary range
         }
-        
+
         const jobMin = job.salary_range?.min
         const jobMax = job.salary_range?.max
-        
+
         // Check overlap: job range overlaps with requested range if:
         // job.max >= requested.min AND job.min <= requested.max
         if (salary_min !== undefined && salary_min !== null) {
@@ -681,13 +862,13 @@ export class JobService {
             return false
           }
         }
-        
+
         if (salary_max !== undefined && salary_max !== null) {
           if (jobMin === null || jobMin === undefined || jobMin > salary_max) {
             return false
           }
         }
-        
+
         return true
       })
     }
@@ -697,7 +878,7 @@ export class JobService {
       filteredJobs.sort((a: any, b: any) => {
         const aMin = a.salary_range?.min ?? a.salary_range?.max ?? 0
         const bMin = b.salary_range?.min ?? b.salary_range?.max ?? 0
-        
+
         if (sort_order === 'asc') {
           return aMin - bMin
         } else {

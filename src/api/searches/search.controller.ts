@@ -11,5 +11,3 @@ export async function searchJobsController(req: Request, res: Response) {
   const result = await searchService.searchJobs(parsed)
   return res.json(result)
 }
-
-
