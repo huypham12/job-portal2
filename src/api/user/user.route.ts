@@ -2,9 +2,9 @@ import { Router } from 'express'
 import { UserController } from './user.controller'
 import { UserService } from './services/user.service'
 import { wrapController } from '@/shared/utils/wrap-controller'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { accessTokenValidator } from '../auth/auth.validator'
-import { candidate, recruiter } from '@/shared/middleware/authorize.middleware'
+import { candidate, recruiter } from '@/middleware/authorize.middleware'
 import {
   createProfileValidator,
   updateProfileValidator,

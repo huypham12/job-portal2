@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { RecruiterApplicationController } from './recruiter.controller'
-import { validateDto } from '@/shared/middleware/validateDto.middleware'
+import { validateDto } from '@/middleware/validateDto.middleware'
 import {
   GetApplicationsByJobSchema,
   JobIdParamSchema,
@@ -12,8 +12,8 @@ import {
   ContactCandidateSchema,
   BulkUpdateSchema
 } from './recruiter.validator'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
-import { recruiter } from '@/shared/middleware/authorize.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import { recruiter } from '@/middleware/authorize.middleware'
 
 const router = Router()
 const recruiterController = new RecruiterApplicationController()

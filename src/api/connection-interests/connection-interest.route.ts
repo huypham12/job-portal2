@@ -5,9 +5,9 @@ import {
   GetInterestsSchema,
   InterestIdSchema
 } from './connection-interest.validator'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
-import { authorize, recruiter, candidate } from '@/shared/middleware/authorize.middleware'
-import { validateDto } from '@/shared/middleware/validateDto.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import { authorize, recruiter, candidate } from '@/middleware/authorize.middleware'
+import { validateDto } from '@/middleware/validateDto.middleware'
 import { UserRole } from '@/shared/constants/enums/user.enum'
 
 const router = Router()

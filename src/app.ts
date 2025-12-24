@@ -14,11 +14,13 @@ import {
   connectionInterestRouter,
   locationRouter
 } from './api'
-import { errorHandler } from './shared/middleware/error-handler.middleware'
+import { errorHandler } from './middleware/error-handler.middleware'
 import adminRouter from './api/admin/admin.route'
 import { companyRouter } from './api/companies/company.route'
 import { uploadRouter } from './api/uploads/upload.route'
 import notificationRouter from './api/notifications/notifications.routes'
+import searchRouter from './api/searches/search.routes'
+import matchingRouter from './api/matching/matching.routes'
 import { socketService } from './socket/socket.service'
 import { initializeCronjobs } from './jobs'
 // import { elasticsearchService } from './config/elasticsearch.service'
@@ -66,7 +68,7 @@ const main = async () => {
     )
 
     app.use(express.json())
-    
+
     app.use('/api/auth', authRouter)
     app.use('/api/user', userRouter)
     app.use('/api/admin', adminRouter)
@@ -80,6 +82,8 @@ const main = async () => {
     app.use('/api/connection-interests', connectionInterestRouter)
     app.use('/api/notifications', notificationRouter)
     app.use('/api/locations', locationRouter)
+    app.use('/api/search', searchRouter)
+    app.use('/api/matching', matchingRouter)
     app.use(errorHandler)
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions, swaggerUiOptions))

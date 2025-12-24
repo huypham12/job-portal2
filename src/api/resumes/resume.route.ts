@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { ResumeController } from './resume.controller'
 import { ResumeService } from './resume.service'
 import { wrapController } from '@/shared/utils/wrap-controller'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { accessTokenValidator } from '../auth/auth.validator'
 import {
   createResumeValidator,
@@ -17,7 +17,7 @@ import {
   duplicateResumeValidator
 } from './resume.validator'
 import { uploadDocument, handleMulterError } from '@/api/uploads/middleware/upload.middleware'
-import { candidate } from '@/shared/middleware/authorize.middleware'
+import { candidate } from '@/middleware/authorize.middleware'
 
 const resumeRouter = Router()
 

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { notificationController } from './notifications.controller'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
 
 const router = Router()
 

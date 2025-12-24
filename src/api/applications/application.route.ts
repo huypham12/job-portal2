@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { ApplicationController } from './application.controller'
-import { validateDto } from '@/shared/middleware/validateDto.middleware'
+import { validateDto } from '@/middleware/validateDto.middleware'
 import {
   CreateApplicationSchema,
   GetApplicationsSchema,
@@ -8,8 +8,8 @@ import {
   UploadDocumentSchema,
   StageFeedbackSchema
 } from './application.validator'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
-import { candidate } from '@/shared/middleware/authorize.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import { candidate } from '@/middleware/authorize.middleware'
 import { uploadApplicationDocument, handleMulterError } from '@/api/uploads/middleware/upload.middleware'
 import recruiterRouter from './recruiter/recruiter.route'
 

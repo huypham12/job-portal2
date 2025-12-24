@@ -154,8 +154,7 @@ export const exportResumeValidator = validate(
     }),
     body: z.object({
       template: z.enum(['modern', 'classic', 'minimal', 'professional']).optional().default('modern'),
-      format: z.enum(['pdf', 'html']).optional().default('pdf'),
-      html: z.string().optional() // HTML từ frontend (nếu có thì dùng HTML này thay vì generate từ template backend)
+      format: z.enum(['pdf', 'html']).optional().default('pdf')
     })
   })
 )

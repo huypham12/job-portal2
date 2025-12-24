@@ -18,6 +18,7 @@
     "es:health": "tsx scripts/elasticsearch-cli.js health",
     "es:stats": "tsx scripts/elasticsearch-cli.js stats",
     "es:reset": "tsx scripts/elasticsearch-cli.js reset"
+    ,"test:unit": "tsx tests/unit/index.ts"
   },
   "keywords": [],
   "author": "",

@@ -18,7 +18,7 @@ import {
   authenticateForgotPasswordToken,
   authenticateRefreshToken,
   verifiedUserValidator
-} from '@/shared/middleware/verify.middleware'
+} from '@/middleware/verify.middleware'
 
 const authRouter = Router()
 const emailService = new EmailService()

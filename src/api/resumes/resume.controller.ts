@@ -209,12 +209,11 @@ export class ResumeController {
   exportResume = async (req: Request, res: Response) => {
     const { user_id } = req.decoded_authorization as TokenPayload
     const { id } = req.params
-    const { template, format, html } = req.body
+    const { template, format } = req.body
 
     const result = await this.resumeService.exportResume(user_id, id, {
       template,
-      format,
-      html // HTML từ frontend (optional)
+      format
     })
 
     if (format === 'html') {

@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { AdminController } from './admin.controller'
-import { authenticateAccessToken, verifiedUserValidator } from '@/shared/middleware/verify.middleware'
+import { authenticateAccessToken, verifiedUserValidator } from '@/middleware/verify.middleware'
 import { wrapController } from '@/shared/utils/wrap-controller'
-import { adminOnly } from '@/shared/middleware/authorize.middleware'
+import { adminOnly } from '@/middleware/authorize.middleware'
 import { AdminService } from './admin.service'
 import {
   adminUpdateUserBodySchema,

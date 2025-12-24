@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { jobController } from './job.controller'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
-import { recruiter } from '@/shared/middleware/authorize.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import { recruiter } from '@/middleware/authorize.middleware'
 import {
   createJobValidator,
   updateJobValidator,

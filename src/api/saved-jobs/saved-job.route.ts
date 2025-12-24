@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { savedJobController } from './saved-job.controller'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { saveJobValidator, jobIdValidator, getSavedJobsValidator } from './saved-job.validator'
 
 const router = Router()

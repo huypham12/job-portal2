@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import { wrapController } from '@/shared/utils/wrap-controller'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
-import { recruiter } from '@/shared/middleware/authorize.middleware'
-import { validateDto } from '@/shared/middleware/validateDto.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import { recruiter } from '@/middleware/authorize.middleware'
+import { validateDto } from '@/middleware/validateDto.middleware'
 import {
   createCompanyValidator,
   getCompanyParamsValidator,

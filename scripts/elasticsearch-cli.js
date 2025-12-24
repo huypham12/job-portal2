@@ -14,7 +14,7 @@
 
 import { elasticsearchService } from '../src/config/elasticsearch.service'
 import { elasticsearchSyncService } from '../src/config/elasticsearch-sync.service'
-import { ElasticsearchSyncMiddleware } from '../src/shared/middleware/elasticsearch-sync.middleware'
+import { ElasticsearchSyncMiddleware } from '../src/middleware/elasticsearch-sync.middleware'
 
 const args = process.argv.slice(2)
 const command = args[0] || 'help'

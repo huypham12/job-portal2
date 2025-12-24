@@ -54,7 +54,6 @@ export interface UploadResumeDto {
 export interface ExportResumeDto {
   template?: 'modern' | 'classic' | 'minimal' | 'professional'
   format?: 'pdf' | 'html'
-  html?: string // HTML từ frontend (optional, nếu có thì dùng HTML này thay vì generate từ template backend)
 }
 
 export class ResumeService {
@@ -728,8 +727,8 @@ export class ResumeService {
       throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    // Nếu có HTML từ frontend thì dùng, không thì generate từ template backend
-    const html = dto.html || this.generateResumeHtml(resume, profile, dto.template || 'modern')
+    // Generate HTML từ template
+    const html = this.generateResumeHtml(resume, profile, dto.template || 'modern')
 
     if (dto.format === 'html') {
       return {
@@ -1490,20 +1489,18 @@ export class ResumeService {
 
   /**
    * Generate PDF và upload lên S3, lưu vào resume.file_url
-   * @param html - HTML từ frontend (optional, nếu có thì dùng HTML này)
    * @returns file_url của PDF đã upload
    */
   private async generateAndSaveResumePdf(
     resume: any,
     profile: any,
-    template: string = 'modern',
-    html?: string
+    template: string = 'modern'
   ): Promise<string> {
-    // Nếu có HTML từ frontend thì dùng, không thì generate từ template backend
-    const finalHtml = html || this.generateResumeHtml(resume, profile, template)
+    // Generate HTML từ template
+    const html = this.generateResumeHtml(resume, profile, template)
 
     // Generate PDF từ HTML
-    const pdfBuffer = await this.generatePdfFromHtml(finalHtml)
+    const pdfBuffer = await this.generatePdfFromHtml(html)
 
     // Upload PDF lên S3
     const uploadResult = await this.s3Service.uploadFile({
@@ -1533,13 +1530,11 @@ export class ResumeService {
 
   /**
    * Đảm bảo resume có file_url (generate nếu chưa có)
-   * @param html - HTML từ frontend (optional, nếu có thì dùng HTML này)
    */
   private async ensureResumeHasPdf(
     userId: string,
     resumeId: string,
-    template?: string,
-    html?: string
+    template?: string
   ): Promise<string> {
     const profile = await prisma.profiles.findFirst({
       where: { user_id: userId },
@@ -1582,15 +1577,14 @@ export class ResumeService {
     }
 
     // Chưa có file_url → generate mới
-    return await this.generateAndSaveResumePdf(resume, profile, template || 'modern', html)
+    return await this.generateAndSaveResumePdf(resume, profile, template || 'modern')
   }
 
   /**
    * Public method để ensure resume có PDF (dùng khi ứng tuyển)
-   * @param html - HTML từ frontend (optional)
    */
-  async ensureResumePdfForApplication(userId: string, resumeId: string, html?: string): Promise<void> {
-    await this.ensureResumeHasPdf(userId, resumeId, undefined, html)
+  async ensureResumePdfForApplication(userId: string, resumeId: string): Promise<void> {
+    await this.ensureResumeHasPdf(userId, resumeId)
   }
 
   /**
