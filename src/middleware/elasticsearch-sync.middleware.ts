@@ -306,7 +306,7 @@ export class ElasticsearchSyncMiddleware {
   /**
    * Transform application data for Elasticsearch indexing
    */
-  private static async transformApplicationData(applicationId: string) {
+  static async transformApplicationData(applicationId: string) {
     // Fetch full application data from database
     const application = await prisma.applications.findUnique({
       where: { id: applicationId },

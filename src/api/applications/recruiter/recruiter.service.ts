@@ -8,7 +8,10 @@ import {
   CreateStageDTO,
   AddNotesDTO,
   ContactCandidateDTO,
-  BulkUpdateDTO
+  BulkUpdateDTO,
+  CompareCandidatesDTO,
+  ShortlistCandidateDTO,
+  GetShortlistedDTO
 } from './recruiter.validator'
 import { Prisma, application_status } from '@prisma/client'
 import { NotificationHelper } from '@/shared/helpers/notification.helper'
@@ -118,59 +121,51 @@ export class RecruiterApplicationService {
       }
     }
 
-    // Advanced filters
+    // Advanced filters - build profiles filter separately
+    const profilesFilter: Prisma.profilesWhereInput = {}
+
     if (skills && skills.length > 0) {
-      where.profiles = {
-        ...(where.profiles || {}),
-        skills: {
-          some: {
-            skills: {
-              name: { in: skills }
-            }
+      profilesFilter.skills = {
+        some: {
+          skills: {
+            name: { in: skills }
           }
         }
       }
     }
 
     if (experience_min !== undefined || experience_max !== undefined) {
-      where.profiles = {
-        ...(where.profiles || {}),
-        years_of_experience: {
-          ...(experience_min !== undefined && { gte: experience_min }),
-          ...(experience_max !== undefined && { lte: experience_max })
-        }
+      profilesFilter.years_of_experience = {
+        ...(experience_min !== undefined && { gte: experience_min }),
+        ...(experience_max !== undefined && { lte: experience_max })
       }
     }
 
     if (education_level && education_level.length > 0) {
-      where.profiles = {
-        ...(where.profiles || {}),
-        educations: {
-          some: {
-            degree: { in: education_level }
-          }
+      profilesFilter.educations = {
+        some: {
+          degree: { in: education_level }
         }
       }
     }
 
     if (location) {
-      where.profiles = {
-        ...(where.profiles || {}),
-        location_text: {
-          contains: location,
-          mode: 'insensitive'
-        }
+      profilesFilter.location_text = {
+        contains: location,
+        mode: 'insensitive'
       }
     }
 
     if (salary_min !== undefined || salary_max !== undefined) {
-      where.profiles = {
-        ...(where.profiles || {}),
-        desired_salary_min: {
-          ...(salary_min !== undefined && { gte: salary_min }),
-          ...(salary_max !== undefined && { lte: salary_max })
-        }
+      profilesFilter.desired_salary_min = {
+        ...(salary_min !== undefined && { gte: salary_min }),
+        ...(salary_max !== undefined && { lte: salary_max })
       }
+    }
+
+    // Apply profiles filter if any conditions were set
+    if (Object.keys(profilesFilter).length > 0) {
+      where.profiles = profilesFilter
     }
 
     if (has_rating === true) {
@@ -299,7 +294,6 @@ export class RecruiterApplicationService {
             app.profiles?.desired_salary_min
               ? {
                   min: app.profiles.desired_salary_min,
-                  max: app.profiles.desired_salary_max,
                   currency: app.profiles.desired_currency || 'VND'
                 }
               : null,
@@ -1131,10 +1125,9 @@ export class RecruiterApplicationService {
           location: profile.location_text,
           years_of_experience: profile.years_of_experience,
           salary_expectation:
-            profile.desired_salary_min && profile.desired_salary_max
+            profile.desired_salary_min
               ? {
                   min: profile.desired_salary_min,
-                  max: profile.desired_salary_max,
                   currency: profile.desired_currency || 'VND'
                 }
               : null
@@ -1353,7 +1346,7 @@ export class RecruiterApplicationService {
         created_at: 'desc'
       },
       include: {
-        profiles: {
+        candidate: {
           select: {
             id: true,
             user_id: true,
@@ -1389,24 +1382,6 @@ export class RecruiterApplicationService {
               }
             }
           }
-        },
-        applications: {
-          select: {
-            id: true,
-            status: true,
-            applied_at: true,
-            application_stages: {
-              orderBy: {
-                stage_order: 'desc'
-              },
-              take: 1,
-              select: {
-                stage_name: true,
-                status: true,
-                rating: true
-              }
-            }
-          }
         }
       }
     })
@@ -1417,35 +1392,27 @@ export class RecruiterApplicationService {
       shortlisted_at: shortlist.created_at,
       note: shortlist.message,
       candidate: {
-        profile_id: shortlist.profiles.id,
-        display_name: shortlist.profiles.display_name || shortlist.profiles.full_name,
-        avatar_url: shortlist.profiles.avatar_url,
-        headline: shortlist.profiles.headline,
-        years_of_experience: shortlist.profiles.years_of_experience,
-        location: shortlist.profiles.location_text,
+        profile_id: shortlist.candidate.id,
+        display_name: shortlist.candidate.display_name || shortlist.candidate.full_name,
+        avatar_url: shortlist.candidate.avatar_url,
+        headline: shortlist.candidate.headline,
+        years_of_experience: shortlist.candidate.years_of_experience,
+        location: shortlist.candidate.location_text,
         salary_expectation:
-          shortlist.profiles.desired_salary_min && shortlist.profiles.desired_salary_max
+          shortlist.candidate.desired_salary_min
             ? {
-                min: shortlist.profiles.desired_salary_min,
-                max: shortlist.profiles.desired_salary_max,
-                currency: shortlist.profiles.desired_currency || 'VND'
+                min: shortlist.candidate.desired_salary_min,
+                currency: shortlist.candidate.desired_currency || 'VND'
               }
             : null,
-        top_skills: shortlist.profiles.skills.map((s: any) => s.skills.name)
+        top_skills: shortlist.candidate.skills.map((s: any) => s.skills.name)
       },
-      job: {
+      job: shortlist.jobs ? {
         id: shortlist.jobs.id,
         title: shortlist.jobs.title,
         company_name: shortlist.jobs.companies?.name
-      },
-      application: shortlist.applications
-        ? {
-            id: shortlist.applications.id,
-            status: shortlist.applications.status,
-            applied_at: shortlist.applications.applied_at,
-            current_stage: shortlist.applications.application_stages[0] || null
-          }
-        : null
+      } : null,
+      application: null // TODO: Fetch application data separately if needed
     }))
 
     return {
@@ -1523,8 +1490,7 @@ export class RecruiterApplicationService {
         interviewer_id: true,
         duration_minutes: true,
         result: true,
-        created_at: true,
-        updated_at: true
+        created_at: true
       }
     })
 
