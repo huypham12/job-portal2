@@ -5,12 +5,12 @@
 export const metrics = {
   increment(metric: string, value = 1) {
     // Placeholder: integrate with real metrics backend
-    // eslint-disable-next-line no-console
+
     console.debug(`[metrics] increment ${metric} +${value}`)
   },
   timing(metric: string, ms: number) {
     // Placeholder
-    // eslint-disable-next-line no-console
+
     console.debug(`[metrics] timing ${metric} ${ms}ms`)
   },
   startTimer(metric: string) {

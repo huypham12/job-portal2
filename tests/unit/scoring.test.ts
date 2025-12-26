@@ -10,7 +10,7 @@ export function testScoringComponents() {
     experienceYears: 4,
     expectedExperience: 3,
     postedAtMs: Date.now() - 1000 * 60 * 60 * 24 * 10, // 10 days ago
-    lastActiveAtMs: Date.now() - 1000 * 60 * 60 * 24 * 5, // 5 days ago
+    lastActiveAtMs: Date.now() - 1000 * 60 * 60 * 24 * 5 // 5 days ago
   })
 
   // Basic assertions about ranges and expected properties
@@ -29,5 +29,3 @@ export function testScoringComponents() {
 
   console.log('testScoringComponents passed')
 }
-
-

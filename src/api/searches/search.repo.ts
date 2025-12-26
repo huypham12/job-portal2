@@ -36,7 +36,7 @@ export const searchRepo = {
       })
     } catch (e) {
       // Non-fatal: surface to caller by rethrowing if needed; for now, log and continue.
-      // eslint-disable-next-line no-console
+
       console.error('searchRepo.saveEvent error', e)
       throw e
     }

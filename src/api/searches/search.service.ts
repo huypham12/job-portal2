@@ -121,7 +121,7 @@ export const searchService = {
     }
 
     const timerDone = metrics.startTimer('search.suggest.duration')
-    let esResp = await elasticsearchService.suggest({
+    const esResp = await elasticsearchService.suggest({
       index,
       prefix: dto.q,
       size: dto.size,
@@ -283,7 +283,7 @@ export const searchService = {
       // Logging should not crash caller; rethrow if you want to surface errors.
       // For now, swallow and log to console for observability in dev.
       // Replace with proper logger in production.
-      // eslint-disable-next-line no-console
+
       console.error('searchService.logEvent error', e)
     }
   }

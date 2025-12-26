@@ -1,5 +1,7 @@
 import { prisma } from '@/config/database.service'
 import { job_type, availability_status } from '@prisma/client'
+import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { profileToESDoc } from '@/shared/utils/es-transformers'
 export class UserService {
   getUserById = async (userId: string) => {
     return await prisma.users.findUnique({
@@ -286,7 +288,7 @@ export class UserService {
       throw new Error('Profile already exists')
     }
 
-    return await prisma.profiles.create({
+    const created = await prisma.profiles.create({
       data: {
         user_id: userId,
         full_name: data.full_name,
@@ -334,6 +336,18 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Sync to Elasticsearch
+    setImmediate(async () => {
+      try {
+        const esDocument = profileToESDoc(created)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', created.id, esDocument)
+      } catch (error) {
+        console.error(`Profile create sync failed: ${created.id}`, error)
+      }
+    })
+
+    return created
   }
 
   // Thêm mới: cập nhật/khởi tạo profile theo user_id
@@ -387,6 +401,17 @@ export class UserService {
           created_at: true
         }
       })
+
+      // Sync to Elasticsearch
+      setImmediate(async () => {
+        try {
+          const esDocument = profileToESDoc(updated)
+          await elasticsearchSyncService.syncToElasticsearch('profiles', updated.id, esDocument)
+        } catch (error) {
+          console.error(`Profile update sync failed: ${updated.id}`, error)
+        }
+      })
+
       return updated
     }
 
@@ -655,7 +680,7 @@ export class UserService {
   async createProfileExperience(userId: string, data: any) {
     const profileId = await this.getProfileIdOrThrow(userId)
 
-    return await prisma.profile_experiences.create({
+    const experience = await prisma.profile_experiences.create({
       data: {
         profile_id: profileId,
         ...data
@@ -670,6 +695,19 @@ export class UserService {
         description: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile experience create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return experience
   }
 
   async updateProfileExperience(userId: string, experienceId: string, data: any) {
@@ -683,7 +721,7 @@ export class UserService {
       throw new Error('Experience not found')
     }
 
-    return await prisma.profile_experiences.update({
+    const updatedExperience = await prisma.profile_experiences.update({
       where: { id: experience.id },
       data,
       select: {
@@ -696,6 +734,19 @@ export class UserService {
         description: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile experience update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedExperience
   }
 
   async deleteProfileExperience(userId: string, experienceId: string) {
@@ -709,16 +760,29 @@ export class UserService {
       throw new Error('Experience not found')
     }
 
-    return await prisma.profile_experiences.delete({
+    await prisma.profile_experiences.delete({
       where: { id: experience.id }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile experience delete sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return { message: 'Experience deleted successfully' }
   }
 
   // === PROFILE EDUCATION METHODS ===
   async createProfileEducation(userId: string, data: any) {
     const profileId = await this.getProfileIdOrThrow(userId)
 
-    return await prisma.profile_educations.create({
+    const education = await prisma.profile_educations.create({
       data: {
         profile_id: profileId,
         ...data
@@ -732,6 +796,19 @@ export class UserService {
         end_date: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile education create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return education
   }
 
   async updateProfileEducation(userId: string, educationId: string, data: any) {
@@ -745,7 +822,7 @@ export class UserService {
       throw new Error('Education not found')
     }
 
-    return await prisma.profile_educations.update({
+    const updatedEducation = await prisma.profile_educations.update({
       where: { id: education.id },
       data,
       select: {
@@ -757,6 +834,19 @@ export class UserService {
         end_date: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile education update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedEducation
   }
 
   async deleteProfileEducation(userId: string, educationId: string) {
@@ -770,9 +860,22 @@ export class UserService {
       throw new Error('Education not found')
     }
 
-    return await prisma.profile_educations.delete({
+    await prisma.profile_educations.delete({
       where: { id: education.id }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile education delete sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return { message: 'Education deleted successfully' }
   }
 
   // === PROFILE SKILL METHODS ===
@@ -804,7 +907,7 @@ export class UserService {
       throw new Error('This skill has already been added to your profile.')
     }
 
-    return await prisma.profile_skills.create({
+    const skill = await prisma.profile_skills.create({
       data: {
         profile_id: profileId,
         ...data
@@ -822,6 +925,19 @@ export class UserService {
         }
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile skill create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return skill
   }
 
   async updateProfileSkill(userId: string, skillId: string, data: any) {
@@ -842,7 +958,7 @@ export class UserService {
     // Only validate data fields, not skill_id (can't change skill_id in update)
     // Just update proficiency and level
 
-    return await prisma.profile_skills.update({
+    const updatedSkill = await prisma.profile_skills.update({
       where,
       data,
       select: {
@@ -858,6 +974,19 @@ export class UserService {
         }
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile skill update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedSkill
   }
 
   async deleteProfileSkill(userId: string, skillId: string) {
@@ -875,14 +1004,27 @@ export class UserService {
       throw new Error('Skill not found in your profile.')
     }
 
-    return await prisma.profile_skills.delete({ where })
+    await prisma.profile_skills.delete({ where })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile skill delete sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return { message: 'Skill removed successfully' }
   }
 
   // === PROFILE CERTIFICATION METHODS ===
   async createProfileCertification(userId: string, data: any) {
     const profileId = await this.getProfileIdOrThrow(userId)
 
-    return await prisma.profile_certifications.create({
+    const certification = await prisma.profile_certifications.create({
       data: {
         profile_id: profileId,
         ...data
@@ -902,6 +1044,19 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile certification create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return certification
   }
 
   async updateProfileCertification(userId: string, certificationId: string, data: any) {
@@ -915,7 +1070,7 @@ export class UserService {
       throw new Error('Certification not found')
     }
 
-    return await prisma.profile_certifications.update({
+    const updatedCertification = await prisma.profile_certifications.update({
       where: { id: certification.id },
       data,
       select: {
@@ -933,6 +1088,19 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile certification update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedCertification
   }
 
   async deleteProfileCertification(userId: string, certificationId: string) {
@@ -946,16 +1114,29 @@ export class UserService {
       throw new Error('Certification not found')
     }
 
-    return await prisma.profile_certifications.delete({
+    await prisma.profile_certifications.delete({
       where: { id: certification.id }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile certification delete sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return { message: 'Certification deleted successfully' }
   }
 
   // === PROFILE AWARD METHODS ===
   async createProfileAward(userId: string, data: any) {
     const profileId = await this.getProfileIdOrThrow(userId)
 
-    return await prisma.profile_awards.create({
+    const award = await prisma.profile_awards.create({
       data: {
         profile_id: profileId,
         ...data
@@ -973,6 +1154,19 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile award create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return award
   }
 
   async updateProfileAward(userId: string, awardId: string, data: any) {
@@ -986,7 +1180,7 @@ export class UserService {
       throw new Error('Award not found')
     }
 
-    return await prisma.profile_awards.update({
+    const updatedAward = await prisma.profile_awards.update({
       where: { id: award.id },
       data,
       select: {
@@ -1002,6 +1196,19 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile award update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedAward
   }
 
   async deleteProfileAward(userId: string, awardId: string) {
@@ -1015,9 +1222,22 @@ export class UserService {
       throw new Error('Award not found')
     }
 
-    return await prisma.profile_awards.delete({
+    await prisma.profile_awards.delete({
       where: { id: award.id }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile award delete sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return { message: 'Award deleted successfully' }
   }
 
   // === SPECIALIZED GET METHODS ===

@@ -6,6 +6,8 @@ import { Prisma, application_status } from '@prisma/client'
 import { NotificationHelper } from '@/shared/helpers/notification.helper'
 import { S3Service } from '../uploads/services/s3.service'
 import { ResumeService } from '../resumes/resume.service'
+import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { applicationToESDoc } from '@/shared/utils/es-transformers'
 
 export class ApplicationService {
   /**
@@ -141,6 +143,50 @@ export class ApplicationService {
         // Don't throw error, notification failure shouldn't block application creation
       }
     }
+
+    // Sync to Elasticsearch
+    setImmediate(async () => {
+      try {
+        // Fetch complete application data with relations for ES sync
+        const fullApplication = await prisma.applications.findUnique({
+          where: { id: application.id },
+          include: {
+            jobs: {
+              select: {
+                title: true,
+                job_type: true,
+                salary_range: true,
+                companies: { select: { name: true } },
+                locations: { select: { name: true } }
+              }
+            },
+            profiles: {
+              select: {
+                user_id: true,
+                display_name: true,
+                full_name: true,
+                headline: true,
+                location_text: true,
+                years_of_experience: true,
+                desired_salary_min: true,
+                skills: {
+                  include: { skills: { select: { name: true } } }
+                },
+                educations: { select: { degree: true } },
+                users: { select: { email: true } }
+              }
+            }
+          }
+        })
+
+        if (fullApplication) {
+          const esDocument = applicationToESDoc(fullApplication)
+          await elasticsearchSyncService.syncToElasticsearch('applications', application.id, esDocument)
+        }
+      } catch (error) {
+        console.error(`Application create sync failed: ${application.id}`, error)
+      }
+    })
 
     return application
   }

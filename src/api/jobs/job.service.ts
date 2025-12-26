@@ -5,6 +5,8 @@ import { MESSAGES } from '@/shared/constants/messages'
 import { CreateJobDTO, UpdateJobDTO, FilterJobsDTO, MyJobsDTO, SuggestedCandidatesDTO } from './job.validator'
 import { job_status, Prisma } from '@prisma/client'
 import { matchingService } from '../matching/matching.service'
+import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { jobToESDoc } from '@/shared/utils/es-transformers'
 
 export class JobService {
   // ==================== EMPLOYER METHODS ====================
@@ -139,6 +141,16 @@ export class JobService {
         job_work_arrangements: true
       }
     })
+
+    // Sync to Elasticsearch immediately
+    try {
+      const esDocument = jobToESDoc(job)
+      await elasticsearchSyncService.syncToElasticsearch('jobs', job.id, esDocument)
+      console.log(`✅ Job ${job.id} synced to Elasticsearch successfully`)
+    } catch (error) {
+      console.error(`❌ Failed to sync job ${job.id} to Elasticsearch:`, error)
+      // Don't fail job creation due to sync error
+    }
 
     return job
   }
@@ -316,7 +328,7 @@ export class JobService {
     }
 
     // Update job
-    const updatedJob = await prisma.$transaction(async (tx) => {
+    const jobUpdateResult = await prisma.$transaction(async (tx) => {
       // Update main job data
       const job = await tx.jobs.update({
         where: { id: jobId },
@@ -377,8 +389,20 @@ export class JobService {
       return job
     })
 
-    // Return updated job with relations
-    return this.getJobById(jobId)
+    // Get updated job with relations
+    const jobWithRelations = await this.getJobById(jobId)
+
+    // Sync to Elasticsearch
+    setImmediate(async () => {
+      try {
+        const esDocument = jobToESDoc(jobWithRelations)
+        await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+      } catch (error) {
+        console.error(`Job update sync failed: ${jobId}`, error)
+      }
+    })
+
+    return jobWithRelations
   }
 
   /**
@@ -393,6 +417,15 @@ export class JobService {
       data: {
         deleted: true,
         status: job_status.draft // Change status to draft when deleted
+      }
+    })
+
+    // Delete from Elasticsearch
+    setImmediate(async () => {
+      try {
+        await elasticsearchSyncService.deleteFromElasticsearch('jobs', jobId)
+      } catch (error) {
+        console.error(`Job delete sync failed: ${jobId}`, error)
       }
     })
 
@@ -418,6 +451,19 @@ export class JobService {
       data: { status: status as job_status }
     })
 
+    // Get updated job for sync
+    const updatedJob = await this.getJobById(jobId)
+
+    // Sync to Elasticsearch
+    setImmediate(async () => {
+      try {
+        const esDocument = jobToESDoc(updatedJob)
+        await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+      } catch (error) {
+        console.error(`Job status update sync failed: ${jobId}`, error)
+      }
+    })
+
     return { message: `Job ${status === 'approved' ? 'opened' : 'closed'} successfully` }
   }
 
@@ -438,6 +484,19 @@ export class JobService {
       where: { id: jobId },
       data: { status: job_status.approved }
     })
+
+    // Get updated job for sync
+    const updatedJob = await this.getJobById(jobId)
+
+    // Sync to Elasticsearch immediately
+    try {
+      const esDocument = jobToESDoc(updatedJob)
+      await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+      console.log(`✅ Job ${jobId} synced to Elasticsearch after publish`)
+    } catch (error) {
+      console.error(`❌ Failed to sync job ${jobId} to Elasticsearch after publish:`, error)
+      // Don't fail publish due to sync error
+    }
 
     return { message: 'Job published successfully' }
   }
@@ -485,7 +544,7 @@ export class JobService {
     }
 
     // Perform bulk action
-    let updateData: any = {}
+    const updateData: any = {}
     let actionMessage = ''
 
     switch (action) {
@@ -508,6 +567,20 @@ export class JobService {
         id: { in: foundJobIds }
       },
       data: updateData
+    })
+
+    // Sync all updated jobs to Elasticsearch
+    setImmediate(async () => {
+      for (const jobId of foundJobIds) {
+        try {
+          // Fetch updated job data
+          const updatedJob = await this.getJobById(jobId)
+          const esDocument = jobToESDoc(updatedJob)
+          await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+        } catch (error) {
+          console.error(`Bulk job ${action} sync failed for ${jobId}:`, error)
+        }
+      }
     })
 
     return {
@@ -556,6 +629,20 @@ export class JobService {
       },
       data: {
         expires_at: newExpiresAt
+      }
+    })
+
+    // Sync all updated jobs to Elasticsearch
+    setImmediate(async () => {
+      for (const jobId of foundJobIds) {
+        try {
+          // Fetch updated job data
+          const updatedJob = await this.getJobById(jobId)
+          const esDocument = jobToESDoc(updatedJob)
+          await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+        } catch (error) {
+          console.error(`Bulk extend expiry sync failed for ${jobId}:`, error)
+        }
       }
     })
 

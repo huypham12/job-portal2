@@ -1,0 +1,74 @@
+# ============================================
+# SAVED JOB ENDPOINTS
+# ============================================
+/saved-jobs:
+  post:
+    tags: [saved-jobs]
+    summary: Save a job (Candidate)
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SaveJobRequest'
+    responses:
+      '201': { description: Saved }
+      '401': { description: Unauthorized }
+  get:
+    tags: [saved-jobs]
+    summary: List saved jobs (Candidate)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 10 }
+      - in: query
+        name: search
+        schema: { type: string }
+      - in: query
+        name: job_type
+        schema: { type: string }
+      - in: query
+        name: location_id
+        schema: { type: string, format: uuid }
+      - in: query
+        name: sort_by
+        schema: { type: string, enum: [saved_at, salary, created_at], default: saved_at }
+      - in: query
+        name: order
+        schema: { type: string, enum: [asc, desc], default: desc }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+
+/saved-jobs/{jobId}:
+  delete:
+    tags: [saved-jobs]
+    summary: Unsave a job (Candidate)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: jobId
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: Removed }
+      '401': { description: Unauthorized }
+
+/saved-jobs/check/{jobId}:
+  get:
+    tags: [saved-jobs]
+    summary: Check if job is saved (Candidate)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: jobId
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }

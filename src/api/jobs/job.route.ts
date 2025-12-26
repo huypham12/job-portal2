@@ -29,8 +29,8 @@ import {
 
 const router = Router()
 
-// Apply Elasticsearch sync middleware to all routes
-router.use(ElasticsearchSyncMiddleware.getMiddleware())
+// DISABLED: Elasticsearch sync middleware - now using service-layer sync
+// router.use(ElasticsearchSyncMiddleware.getMiddleware())
 
 // ==================== PUBLIC ROUTES ====================
 // These routes don't require authentication

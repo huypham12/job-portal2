@@ -1,0 +1,51 @@
+# ============================================
+# LOCATION ENDPOINTS
+# ============================================
+/locations/provinces:
+  get:
+    tags: [locations]
+    summary: Get all provinces (tỉnh/thành)
+    description: Public endpoint - no authentication required
+    responses:
+      '200': { description: OK }
+
+/locations/districts:
+  get:
+    tags: [locations]
+    summary: Get all districts (quận/huyện) by province ID
+    description: Public endpoint - no authentication required
+    parameters:
+      - in: query
+        name: province_id
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+
+/locations/search:
+  get:
+    tags: [locations]
+    summary: Search locations by name
+    description: Public endpoint - supports both provinces and districts
+    parameters:
+      - in: query
+        name: search
+        schema: { type: string }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 50 }
+    responses:
+      '200': { description: OK }
+
+/locations/{id}:
+  get:
+    tags: [locations]
+    summary: Get location details by ID
+    description: Public endpoint - full hierarchy with parent if district
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '404': { description: Not found }

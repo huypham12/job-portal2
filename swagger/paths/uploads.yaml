@@ -1,0 +1,100 @@
+# ============================================
+# UPLOAD ENDPOINTS
+# ============================================
+/uploads/avatar:
+  post:
+    tags: [uploads]
+    summary: Upload avatar (Candidate)
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    responses:
+      '200': { description: Uploaded }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/uploads/company-logo/{companyId}:
+  post:
+    tags: [uploads]
+    summary: Upload company logo (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: companyId
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    responses:
+      '200': { description: Uploaded }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/uploads/resume/{profileId}:
+  post:
+    tags: [uploads]
+    summary: Upload resume file (Candidate)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: profileId
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    responses:
+      '200': { description: Uploaded }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/uploads/application-document/{applicationId}:
+  post:
+    tags: [uploads]
+    summary: Upload application document (Candidate)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: applicationId
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+              document_type:
+                type: string
+                enum: [resume, cover_letter, certificate, portfolio, other]
+    responses:
+      '200': { description: Uploaded }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }

@@ -1,0 +1,54 @@
+components:
+  schemas:
+    # ============================================
+    # Base Response Schemas
+    # ============================================
+    SuccessResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: 'Operation successful'
+      required:
+        - statusCode
+        - message
+
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+          description: HTTP status code
+        message:
+          type: string
+          example: 'Validation failed'
+          description: Error message describing what went wrong
+        error:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            'body.email': ['Email must be valid']
+            'body.password': ['Password is required']
+          description: Detailed validation errors (optional, only present for validation failures)
+      required:
+        - statusCode
+        - message
+
+    # ============================================
+    # Enums
+    # ============================================
+    UserRole:
+      type: string
+      enum:
+        - candidate
+        - recruiter
+        - admin
+      example: 'candidate'
+      description: User role in the system

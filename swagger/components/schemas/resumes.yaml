@@ -1,0 +1,52 @@
+components:
+  schemas:
+    # ============================================
+    # Resume Schemas
+    # ============================================
+    CreateResumeRequest:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string, maxLength: 255 }
+        content: { type: object, additionalProperties: true }
+        is_default: { type: boolean, default: false }
+        is_public: { type: boolean, default: false }
+        status: { type: string, enum: [draft, active, archived], default: draft }
+
+    UpdateResumeRequest:
+      type: object
+      properties:
+        title: { type: string, maxLength: 255 }
+        content: { type: object, additionalProperties: true }
+        layout_settings:
+          type: object
+          properties:
+            sections_order: { type: array, items: { type: string } }
+            theme: { type: string }
+            custom_css: { type: object, additionalProperties: true }
+        is_public: { type: boolean }
+        status: { type: string, enum: [draft, active, archived] }
+
+    CreateResumeFromProfileRequest:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string, maxLength: 255 }
+        theme:
+          type: string
+          enum: [default, professional, creative, modern, elegant, blue, purple, green, orange, red]
+          default: default
+        is_default: { type: boolean, default: false }
+        is_public: { type: boolean, default: false }
+
+    ExportResumeRequest:
+      type: object
+      properties:
+        template:
+          type: string
+          enum: [modern, classic, minimal, professional]
+          default: modern
+        format:
+          type: string
+          enum: [pdf, html]
+          default: pdf

@@ -14,19 +14,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Backend",
-      "Node.js",
-      "Microservices"
-    ],
-    "skills": [
-      "Node.js",
-      "TypeScript",
-      "PostgreSQL",
-      "Redis",
-      "Docker",
-      "AWS"
-    ],
+    "tags": ["Backend", "Node.js", "Microservices"],
+    "skills": ["Node.js", "TypeScript", "PostgreSQL", "Redis", "Docker", "AWS"],
     "description": [
       "Tham gia phát triển các dịch vụ backend cho nền tảng tuyển dụng và quản lý quy trình tuyển dụng của khách hàng.",
       "Thiết kế, tối ưu hoá kiến trúc microservices, API nội bộ và public API.",
@@ -96,15 +85,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Product",
-      "HR Tech"
-    ],
-    "skills": [
-      "Product Management",
-      "Agile/Scrum",
-      "SQL"
-    ],
+    "tags": ["Product", "HR Tech"],
+    "skills": ["Product Management", "Agile/Scrum", "SQL"],
     "description": [
       "Làm việc trực tiếp với khách hàng và nội bộ để thu thập yêu cầu nghiệp vụ về tuyển dụng và quản trị nhân sự.",
       "Xây dựng, ưu tiên và quản lý product backlog cho một hoặc nhiều squad.",
@@ -161,15 +143,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "QA",
-      "Manual Testing"
-    ],
-    "skills": [
-      "Manual Testing",
-      "API Testing",
-      "Postman"
-    ],
+    "tags": ["QA", "Manual Testing"],
+    "skills": ["Manual Testing", "API Testing", "Postman"],
     "description": [
       "Tham gia phân tích yêu cầu, xây dựng test case cho các tính năng mới.",
       "Thực hiện test manual cho web và mobile web, kiểm thử API cơ bản.",
@@ -216,17 +191,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Mobile",
-      "React Native",
-      "FinTech"
-    ],
-    "skills": [
-      "React Native",
-      "TypeScript",
-      "Redux",
-      "REST API"
-    ],
+    "tags": ["Mobile", "React Native", "FinTech"],
+    "skills": ["React Native", "TypeScript", "Redux", "REST API"],
     "description": [
       "Phát triển và tối ưu ứng dụng mobile ví điện tử trên nền tảng React Native.",
       "Làm việc chặt chẽ với backend để tích hợp các API thanh toán, KYC, loyalty.",
@@ -275,16 +241,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "DevOps",
-      "AWS"
-    ],
-    "skills": [
-      "AWS",
-      "Docker",
-      "Kubernetes",
-      "CI/CD"
-    ],
+    "tags": ["DevOps", "AWS"],
+    "skills": ["AWS", "Docker", "Kubernetes", "CI/CD"],
     "description": [
       "Thiết kế và vận hành hạ tầng cloud trên AWS cho hệ thống thanh toán.",
       "Xây dựng pipeline CI/CD, logging, monitoring và alerting.",
@@ -331,15 +289,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "BA",
-      "Payment"
-    ],
-    "skills": [
-      "Business Analysis",
-      "Payment Domain",
-      "UML/BPMN"
-    ],
+    "tags": ["BA", "Payment"],
+    "skills": ["Business Analysis", "Payment Domain", "UML/BPMN"],
     "description": [
       "Phân tích yêu cầu nghiệp vụ liên quan đến thanh toán, ví điện tử, đối soát.",
       "Viết BRD, SRS, user story, mô tả flow thanh toán.",
@@ -380,17 +331,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Full-stack",
-      "React",
-      "Node.js"
-    ],
-    "skills": [
-      "React",
-      "Node.js",
-      "TypeScript",
-      "PostgreSQL"
-    ],
+    "tags": ["Full-stack", "React", "Node.js"],
+    "skills": ["React", "Node.js", "TypeScript", "PostgreSQL"],
     "description": [
       "Tham gia phát triển các tính năng mới cho nền tảng tuyển dụng.",
       "Làm việc full-stack: frontend React và backend Node.js/TypeScript.",
@@ -431,15 +373,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "UI/UX",
-      "Product Design"
-    ],
-    "skills": [
-      "Figma",
-      "User Research",
-      "Prototyping"
-    ],
+    "tags": ["UI/UX", "Product Design"],
+    "skills": ["Figma", "User Research", "Prototyping"],
     "description": [
       "Thiết kế giao diện và trải nghiệm người dùng cho web app và mobile web.",
       "Làm việc với Product Owner để xác định vấn đề người dùng và đề xuất giải pháp UX.",
@@ -471,16 +406,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Data Analyst",
-      "Product Analytics"
-    ],
-    "skills": [
-      "SQL",
-      "Excel",
-      "Tableau",
-      "Product Analytics"
-    ],
+    "tags": ["Data Analyst", "Product Analytics"],
+    "skills": ["SQL", "Excel", "Tableau", "Product Analytics"],
     "description": [
       "Phân tích hành vi người dùng ứng viên/nhà tuyển dụng trên nền tảng.",
       "Xây dựng dashboard theo dõi funnel và hiệu quả chiến dịch growth.",
@@ -512,15 +439,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      ".NET",
-      "Retail"
-    ],
-    "skills": [
-      ".NET",
-      "SQL Server",
-      "Microservices"
-    ],
+    "tags": [".NET", "Retail"],
+    "skills": [".NET", "SQL Server", "Microservices"],
     "description": [
       "Phát triển và bảo trì hệ thống POS và backend cho các chuỗi bán lẻ.",
       "Tối ưu hiệu năng hệ thống, xử lý transaction volume lớn.",
@@ -552,15 +472,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Implementation",
-      "Retail"
-    ],
-    "skills": [
-      "SQL",
-      "Communication",
-      "Problem Solving"
-    ],
+    "tags": ["Implementation", "Retail"],
+    "skills": ["SQL", "Communication", "Problem Solving"],
     "description": [
       "Triển khai giải pháp phần mềm bán lẻ cho khách hàng chuỗi cửa hàng.",
       "Khảo sát nghiệp vụ, cấu hình hệ thống và đào tạo người dùng.",
@@ -592,14 +505,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "System Admin",
-      "Windows Server"
-    ],
-    "skills": [
-      "Windows Server",
-      "Networking"
-    ],
+    "tags": ["System Admin", "Windows Server"],
+    "skills": ["Windows Server", "Networking"],
     "description": [
       "Quản trị hệ thống server, AD, mạng nội bộ cho công ty và khách hàng.",
       "Đảm bảo uptime hệ thống và thực hiện sao lưu định kỳ.",
@@ -631,16 +538,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Frontend",
-      "Next.js"
-    ],
-    "skills": [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS"
-    ],
+    "tags": ["Frontend", "Next.js"],
+    "skills": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     "description": [
       "Xây dựng giao diện web cho nền tảng khoá học online sử dụng Next.js.",
       "Tối ưu SEO, performance và trải nghiệm người dùng.",
@@ -672,15 +571,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Marketing",
-      "Content"
-    ],
-    "skills": [
-      "Content Marketing",
-      "SEO",
-      "Social Media"
-    ],
+    "tags": ["Marketing", "Content"],
+    "skills": ["Content Marketing", "SEO", "Social Media"],
     "description": [
       "Lên kế hoạch và sản xuất nội dung cho blog, social, email.",
       "Làm việc với giảng viên để xây dựng nội dung giới thiệu khoá học.",
@@ -712,14 +604,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Product",
-      "EdTech"
-    ],
-    "skills": [
-      "Product Management",
-      "Agile/Scrum"
-    ],
+    "tags": ["Product", "EdTech"],
+    "skills": ["Product Management", "Agile/Scrum"],
     "description": [
       "Xây dựng roadmap sản phẩm nền tảng học tập online.",
       "Làm việc chặt chẽ với team kỹ thuật, nội dung và marketing.",
@@ -751,16 +637,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Backend",
-      "Java",
-      "Logistics"
-    ],
-    "skills": [
-      "Java",
-      "Spring Boot",
-      "Kafka"
-    ],
+    "tags": ["Backend", "Java", "Logistics"],
+    "skills": ["Java", "Spring Boot", "Kafka"],
     "description": [
       "Phát triển dịch vụ backend cho hệ thống quản lý vận đơn và định tuyến giao hàng.",
       "Tối ưu performance cho các batch job và real-time tracking.",
@@ -792,14 +670,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Project Manager",
-      "Logistics"
-    ],
-    "skills": [
-      "Project Management",
-      "Agile"
-    ],
+    "tags": ["Project Manager", "Logistics"],
+    "skills": ["Project Management", "Agile"],
     "description": [
       "Quản lý các dự án triển khai hệ thống cho khách hàng logistics lớn.",
       "Điều phối team kỹ thuật, BA, QA và làm việc với stakeholder phía khách hàng.",
@@ -831,14 +703,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Data Engineer"
-    ],
-    "skills": [
-      "SQL",
-      "ETL",
-      "BigQuery"
-    ],
+    "tags": ["Data Engineer"],
+    "skills": ["SQL", "ETL", "BigQuery"],
     "description": [
       "Xây dựng pipeline dữ liệu phục vụ báo cáo vận hành và tối ưu tuyến giao hàng.",
       "Làm việc với các nguồn dữ liệu vận đơn, tracking thiết bị, đơn hàng.",
@@ -870,15 +736,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Backend",
-      "Healthcare"
-    ],
-    "skills": [
-      "Node.js",
-      "PostgreSQL",
-      "REST API"
-    ],
+    "tags": ["Backend", "Healthcare"],
+    "skills": ["Node.js", "PostgreSQL", "REST API"],
     "description": [
       "Phát triển backend cho hệ thống quản lý hồ sơ bệnh án điện tử.",
       "Đảm bảo bảo mật dữ liệu bệnh nhân và tuân thủ các yêu cầu pháp lý.",
@@ -910,14 +769,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Implementation",
-      "Healthcare"
-    ],
-    "skills": [
-      "Communication",
-      "Problem Solving"
-    ],
+    "tags": ["Implementation", "Healthcare"],
+    "skills": ["Communication", "Problem Solving"],
     "description": [
       "Triển khai hệ thống cho các phòng khám: khảo sát, cấu hình, đào tạo.",
       "Hỗ trợ nhân viên y tế trong giai đoạn đầu sử dụng phần mềm.",
@@ -949,13 +802,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "QA"
-    ],
-    "skills": [
-      "Manual Testing",
-      "SQL"
-    ],
+    "tags": ["QA"],
+    "skills": ["Manual Testing", "SQL"],
     "description": [
       "Kiểm thử tính năng hệ thống, chú trọng tính chính xác dữ liệu và quy trình nghiệp vụ y tế.",
       "Viết test case, test scenario chi tiết.",
@@ -987,14 +835,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Embedded",
-      "IoT"
-    ],
-    "skills": [
-      "C/C++",
-      "Embedded Systems"
-    ],
+    "tags": ["Embedded", "IoT"],
+    "skills": ["C/C++", "Embedded Systems"],
     "description": [
       "Phát triển firmware cho thiết bị nhà thông minh.",
       "Làm việc với các giao thức MQTT, Zigbee, Wi-Fi.",
@@ -1026,13 +868,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Mobile"
-    ],
-    "skills": [
-      "Flutter",
-      "REST API"
-    ],
+    "tags": ["Mobile"],
+    "skills": ["Flutter", "REST API"],
     "description": [
       "Phát triển ứng dụng mobile điều khiển nhà thông minh.",
       "Tích hợp với backend và thiết bị IoT qua API.",
@@ -1064,12 +901,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "QA"
-    ],
-    "skills": [
-      "Manual Testing"
-    ],
+    "tags": ["QA"],
+    "skills": ["Manual Testing"],
     "description": [
       "Kiểm thử tính năng giữa app, backend và thiết bị IoT.",
       "Viết test case cho các kịch bản sử dụng phổ biến.",
@@ -1101,15 +934,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Backend",
-      "Golang"
-    ],
-    "skills": [
-      "Golang",
-      "Microservices",
-      "Redis"
-    ],
+    "tags": ["Backend", "Golang"],
+    "skills": ["Golang", "Microservices", "Redis"],
     "description": [
       "Phát triển hệ thống backend cho nền tảng đặt đồ ăn và giao nhận.",
       "Xử lý lượng request lớn, tối ưu latency và độ ổn định.",
@@ -1141,14 +967,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Marketing",
-      "Growth"
-    ],
-    "skills": [
-      "Digital Marketing",
-      "Performance Marketing"
-    ],
+    "tags": ["Marketing", "Growth"],
+    "skills": ["Digital Marketing", "Performance Marketing"],
     "description": [
       "Xây dựng chiến lược growth cho cả user và merchant.",
       "Quản lý ngân sách marketing performance nhiều kênh.",
@@ -1180,15 +1000,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Data Science",
-      "ML"
-    ],
-    "skills": [
-      "Machine Learning",
-      "Python",
-      "Recommendation Systems"
-    ],
+    "tags": ["Data Science", "ML"],
+    "skills": ["Machine Learning", "Python", "Recommendation Systems"],
     "description": [
       "Xây dựng mô hình gợi ý món ăn và nhà hàng cá nhân hoá.",
       "Làm việc với dữ liệu hành vi người dùng, đơn hàng và feedback.",
@@ -1220,15 +1033,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "BI",
-      "Data"
-    ],
-    "skills": [
-      "SQL",
-      "Power BI",
-      "Data Modeling"
-    ],
+    "tags": ["BI", "Data"],
+    "skills": ["SQL", "Power BI", "Data Modeling"],
     "description": [
       "Thiết kế và xây dựng báo cáo BI cho khách hàng ngân hàng và bán lẻ.",
       "Làm việc với business user để hiểu yêu cầu và mô hình hoá dữ liệu.",
@@ -1260,13 +1066,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Data Engineer"
-    ],
-    "skills": [
-      "ETL",
-      "Cloud Data Warehouse"
-    ],
+    "tags": ["Data Engineer"],
+    "skills": ["ETL", "Cloud Data Warehouse"],
     "description": [
       "Thiết kế kiến trúc dữ liệu trên cloud cho các dự án enterprise.",
       "Xây dựng pipeline ETL/ELT từ nhiều nguồn dữ liệu.",
@@ -1298,14 +1099,8 @@
       "currency": "triệu VND",
       "unit": "month"
     },
-    "tags": [
-      "Consulting",
-      "Analytics"
-    ],
-    "skills": [
-      "SQL",
-      "Business Analysis"
-    ],
+    "tags": ["Consulting", "Analytics"],
+    "skills": ["SQL", "Business Analysis"],
     "description": [
       "Tư vấn giải pháp phân tích dữ liệu cho khách hàng enterprise.",
       "Chuẩn bị tài liệu, workshop và training cho người dùng business.",

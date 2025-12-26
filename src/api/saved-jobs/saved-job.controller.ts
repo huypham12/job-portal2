@@ -19,7 +19,7 @@ export class SavedJobController {
   saveJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.decoded_authorization!.user_id
-      const { job_id }: SaveJobDTO = req.body
+      const { job_id }: SaveJobDTO = req.validated!.body
 
       // Get user's profile
       const profile = await this.getProfileByUserId(userId)
@@ -42,7 +42,7 @@ export class SavedJobController {
   unsaveJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.decoded_authorization!.user_id
-      const { jobId } = req.params
+      const { jobId } = req.validated!.params
 
       // Get user's profile
       const profile = await this.getProfileByUserId(userId)
@@ -65,7 +65,7 @@ export class SavedJobController {
     try {
       const userId = req.decoded_authorization!.user_id
       // Query has been validated and transformed by validator middleware
-      const query = req.query as unknown as GetSavedJobsDTO
+      const query = req.validated!.query as GetSavedJobsDTO
 
       // Get user's profile
       const profile = await this.getProfileByUserId(userId)
@@ -88,7 +88,7 @@ export class SavedJobController {
   checkSaved = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.decoded_authorization!.user_id
-      const { jobId } = req.params
+      const { jobId } = req.validated!.params
 
       // Get user's profile
       const profile = await this.getProfileByUserId(userId)

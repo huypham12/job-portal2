@@ -17,21 +17,50 @@ export async function testMatchingService() {
         skills: ['nodejs', 'typescript'],
         location_id: 'hanoi',
         experience_level: 3,
-        posted_at: new Date().toISOString(),
+        posted_at: new Date().toISOString()
       }
     }
-
     ;(searchService as any).searchProfilesForJob = async () => {
       return [
-        { id: 'p1', _score: 5.0, _source: { skills: ['nodejs'], years_of_experience: 4, location_id: 'hanoi', last_active_at: new Date().toISOString() } },
-        { id: 'p2', _score: 2.0, _source: { skills: ['python'], years_of_experience: 2, location_id: 'hanoi', last_active_at: new Date().toISOString() } },
+        {
+          id: 'p1',
+          _score: 5.0,
+          _source: {
+            skills: ['nodejs'],
+            years_of_experience: 4,
+            location_id: 'hanoi',
+            last_active_at: new Date().toISOString()
+          }
+        },
+        {
+          id: 'p2',
+          _score: 2.0,
+          _source: {
+            skills: ['python'],
+            years_of_experience: 2,
+            location_id: 'hanoi',
+            last_active_at: new Date().toISOString()
+          }
+        }
       ]
     }
-
     ;(searchService as any).searchJobsForProfile = async () => {
       return [
-        { id: 'j1', _score: 7.0, _source: { skills: ['nodejs'], experience_level: 3, location_id: 'hanoi', posted_at: new Date().toISOString() } },
-        { id: 'j2', _score: 1.0, _source: { skills: ['java'], experience_level: 2, location_id: 'hanoi', posted_at: new Date().toISOString() } },
+        {
+          id: 'j1',
+          _score: 7.0,
+          _source: {
+            skills: ['nodejs'],
+            experience_level: 3,
+            location_id: 'hanoi',
+            posted_at: new Date().toISOString()
+          }
+        },
+        {
+          id: 'j2',
+          _score: 1.0,
+          _source: { skills: ['java'], experience_level: 2, location_id: 'hanoi', posted_at: new Date().toISOString() }
+        }
       ]
     }
 
@@ -61,5 +90,3 @@ export async function testMatchingService() {
     ;(searchService as any).searchJobsForProfile = origSearchJobsForProfile
   }
 }
-
-

@@ -7,21 +7,10 @@
     "years_of_experience": 6,
     "location_province": "Hà Nội",
     "desired_job_title": "Senior Backend Developer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 45000000,
     "bio": "Kỹ sư phần mềm backend với 6 năm kinh nghiệm xây dựng hệ thống microservices, API RESTful và GraphQL. Thành thạo Node.js, TypeScript, PostgreSQL và các công nghệ cloud.",
-    "skills": [
-      "Node.js",
-      "TypeScript",
-      "PostgreSQL",
-      "Redis",
-      "Docker",
-      "Kubernetes",
-      "AWS",
-      "Microservices"
-    ],
+    "skills": ["Node.js", "TypeScript", "PostgreSQL", "Redis", "Docker", "Kubernetes", "AWS", "Microservices"],
     "avatar_url": "https://i.pravatar.cc/300?u=anhnguyen1",
     "date_of_birth": "1996-11-02",
     "phone_number": "0911011111",
@@ -37,19 +26,10 @@
     "years_of_experience": 5,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Product Manager",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 40000000,
     "bio": "Product Manager với kinh nghiệm quản lý sản phẩm fintech, từ nghiên cứu người dùng đến ra mắt sản phẩm. Đã quản lý nhiều dự án thành công với đội ngũ đa chức năng.",
-    "skills": [
-      "Product Management",
-      "Agile/Scrum",
-      "User Research",
-      "Data Analysis",
-      "SQL",
-      "Jira"
-    ],
+    "skills": ["Product Management", "Agile/Scrum", "User Research", "Data Analysis", "SQL", "Jira"],
     "avatar_url": "https://i.pravatar.cc/300?u=bichtran2",
     "date_of_birth": "1998-03-14",
     "phone_number": "0921022222",
@@ -65,21 +45,10 @@
     "years_of_experience": 4,
     "location_province": "Hà Nội",
     "desired_job_title": "Full-stack Developer",
-    "desired_job_type": [
-      "full_time",
-      "part_time"
-    ],
+    "desired_job_type": ["full_time", "part_time"],
     "desired_salary_min": 35000000,
     "bio": "Full-stack developer với kinh nghiệm xây dựng ứng dụng web hiện đại. Thành thạo React, Node.js, và các framework phổ biến. Đam mê tạo ra sản phẩm có trải nghiệm người dùng tốt.",
-    "skills": [
-      "React",
-      "Node.js",
-      "TypeScript",
-      "MongoDB",
-      "Express.js",
-      "Next.js",
-      "Tailwind CSS"
-    ],
+    "skills": ["React", "Node.js", "TypeScript", "MongoDB", "Express.js", "Next.js", "Tailwind CSS"],
     "avatar_url": "https://i.pravatar.cc/300?u=quanle3",
     "date_of_birth": "1995-02-11",
     "phone_number": "0931033333",
@@ -95,19 +64,10 @@
     "years_of_experience": 3,
     "location_province": "Hà Nội",
     "desired_job_title": "UI/UX Designer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 20000000,
     "bio": "UI/UX Designer với niềm đam mê thiết kế giao diện đẹp và trải nghiệm người dùng tối ưu. Có kinh nghiệm thiết kế cho cả ứng dụng mobile và web.",
-    "skills": [
-      "Figma",
-      "Adobe XD",
-      "Sketch",
-      "User Research",
-      "Prototyping",
-      "Wireframing"
-    ],
+    "skills": ["Figma", "Adobe XD", "Sketch", "User Research", "Prototyping", "Wireframing"],
     "avatar_url": "https://i.pravatar.cc/300?u=campham4",
     "date_of_birth": "2000-09-22",
     "phone_number": "0941044444",
@@ -123,21 +83,10 @@
     "years_of_experience": 5,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "DevOps Engineer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 42000000,
     "bio": "DevOps Engineer với kinh nghiệm triển khai và vận hành hệ thống trên AWS và Azure. Chuyên về CI/CD, containerization và infrastructure as code.",
-    "skills": [
-      "AWS",
-      "Azure",
-      "Docker",
-      "Kubernetes",
-      "Terraform",
-      "Jenkins",
-      "GitLab CI/CD",
-      "Linux"
-    ],
+    "skills": ["AWS", "Azure", "Docker", "Kubernetes", "Terraform", "Jenkins", "GitLab CI/CD", "Linux"],
     "avatar_url": "https://i.pravatar.cc/300?u=dunghoang5",
     "date_of_birth": "1998-04-02",
     "phone_number": "0961055555",
@@ -153,20 +102,10 @@
     "years_of_experience": 4,
     "location_province": "Hà Nội",
     "desired_job_title": "Data Analyst",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 28000000,
     "bio": "Data Analyst với khả năng phân tích dữ liệu, tạo báo cáo và dashboard để hỗ trợ quyết định kinh doanh. Thành thạo SQL, Python và các công cụ BI.",
-    "skills": [
-      "SQL",
-      "Python",
-      "Power BI",
-      "Tableau",
-      "Excel",
-      "Data Visualization",
-      "Statistical Analysis"
-    ],
+    "skills": ["SQL", "Python", "Power BI", "Tableau", "Excel", "Data Visualization", "Statistical Analysis"],
     "avatar_url": "https://i.pravatar.cc/300?u=havu6",
     "date_of_birth": "1995-08-14",
     "phone_number": "0971066666",
@@ -182,21 +121,10 @@
     "years_of_experience": 3,
     "location_province": "Đà Nẵng",
     "desired_job_title": "Mobile Developer",
-    "desired_job_type": [
-      "full_time",
-      "remote"
-    ],
+    "desired_job_type": ["full_time", "remote"],
     "desired_salary_min": 30000000,
     "bio": "Mobile Developer chuyên phát triển ứng dụng di động đa nền tảng với React Native. Đã tham gia phát triển nhiều ứng dụng thành công trên App Store và Google Play.",
-    "skills": [
-      "React Native",
-      "JavaScript",
-      "TypeScript",
-      "Redux",
-      "Firebase",
-      "REST API",
-      "Git"
-    ],
+    "skills": ["React Native", "JavaScript", "TypeScript", "Redux", "Firebase", "REST API", "Git"],
     "avatar_url": "https://i.pravatar.cc/300?u=hungđang7",
     "date_of_birth": "1999-08-21",
     "phone_number": "0981077777",
@@ -212,19 +140,10 @@
     "years_of_experience": 6,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Marketing Manager",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 35000000,
     "bio": "Marketing Manager với kinh nghiệm quản lý chiến dịch marketing đa kênh. Chuyên về digital marketing, SEO, SEM và social media marketing.",
-    "skills": [
-      "Digital Marketing",
-      "SEO",
-      "Google Ads",
-      "Facebook Ads",
-      "Content Marketing",
-      "Google Analytics"
-    ],
+    "skills": ["Digital Marketing", "SEO", "Google Ads", "Facebook Ads", "Content Marketing", "Google Analytics"],
     "avatar_url": "https://i.pravatar.cc/300?u=lanngo8",
     "date_of_birth": "1995-03-08",
     "phone_number": "0991088888",
@@ -240,20 +159,10 @@
     "years_of_experience": 4,
     "location_province": "Hà Nội",
     "desired_job_title": "QA Engineer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 25000000,
     "bio": "QA Engineer với kinh nghiệm test manual và automation. Đã làm việc với nhiều dự án web và mobile, đảm bảo chất lượng sản phẩm trước khi release.",
-    "skills": [
-      "Manual Testing",
-      "Selenium",
-      "Postman",
-      "JMeter",
-      "TestNG",
-      "API Testing",
-      "Agile Testing"
-    ],
+    "skills": ["Manual Testing", "Selenium", "Postman", "JMeter", "TestNG", "API Testing", "Agile Testing"],
     "avatar_url": "https://i.pravatar.cc/300?u=nambui9",
     "date_of_birth": "1996-05-07",
     "phone_number": "0901099999",
@@ -269,20 +178,10 @@
     "years_of_experience": 5,
     "location_province": "Hà Nội",
     "desired_job_title": "Business Analyst",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 32000000,
     "bio": "Business Analyst với kinh nghiệm phân tích nghiệp vụ trong lĩnh vực ngân hàng và tài chính. Kỹ năng mạnh về thu thập yêu cầu và viết tài liệu đặc tả.",
-    "skills": [
-      "Business Analysis",
-      "SQL",
-      "UML",
-      "BPMN",
-      "Requirements Gathering",
-      "Jira",
-      "Confluence"
-    ],
+    "skills": ["Business Analysis", "SQL", "UML", "BPMN", "Requirements Gathering", "Jira", "Confluence"],
     "avatar_url": "https://i.pravatar.cc/300?u=maily10",
     "date_of_birth": "1997-11-24",
     "phone_number": "0911111111",
@@ -298,21 +197,10 @@
     "years_of_experience": 3,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Frontend Developer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 28000000,
     "bio": "Frontend Developer với kinh nghiệm xây dựng ứng dụng web SPA. Thành thạo Vue.js, Angular và các framework CSS hiện đại.",
-    "skills": [
-      "Vue.js",
-      "Angular",
-      "TypeScript",
-      "HTML5",
-      "CSS3",
-      "SASS",
-      "Webpack",
-      "Git"
-    ],
+    "skills": ["Vue.js", "Angular", "TypeScript", "HTML5", "CSS3", "SASS", "Webpack", "Git"],
     "avatar_url": "https://i.pravatar.cc/300?u=phucvo11",
     "date_of_birth": "1999-06-18",
     "phone_number": "0921122222",
@@ -328,19 +216,10 @@
     "years_of_experience": 7,
     "location_province": "Hà Nội",
     "desired_job_title": "HR Manager",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 38000000,
     "bio": "HR Manager với kinh nghiệm quản lý tuyển dụng và xây dựng thương hiệu nhà tuyển dụng. Đã tuyển dụng thành công hơn 500 ứng viên cho các vị trí IT và non-IT.",
-    "skills": [
-      "Recruitment",
-      "Employer Branding",
-      "HR Management",
-      "Interviewing",
-      "LinkedIn Recruiting",
-      "ATS"
-    ],
+    "skills": ["Recruitment", "Employer Branding", "HR Management", "Interviewing", "LinkedIn Recruiting", "ATS"],
     "avatar_url": "https://i.pravatar.cc/300?u=ngađinh12",
     "date_of_birth": "1992-11-08",
     "phone_number": "0931133333",
@@ -356,21 +235,10 @@
     "years_of_experience": 5,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Data Engineer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 40000000,
     "bio": "Data Engineer với kinh nghiệm xây dựng data pipeline và ETL process. Thành thạo Spark, Hadoop và các công nghệ big data.",
-    "skills": [
-      "Python",
-      "Apache Spark",
-      "Hadoop",
-      "SQL",
-      "ETL",
-      "AWS",
-      "Airflow",
-      "Kafka"
-    ],
+    "skills": ["Python", "Apache Spark", "Hadoop", "SQL", "ETL", "AWS", "Airflow", "Kafka"],
     "avatar_url": "https://i.pravatar.cc/300?u=sonphan13",
     "date_of_birth": "1995-11-21",
     "phone_number": "0941144444",
@@ -386,20 +254,10 @@
     "years_of_experience": 3,
     "location_province": "Hà Nội",
     "desired_job_title": "Content Writer",
-    "desired_job_type": [
-      "full_time",
-      "part_time"
-    ],
+    "desired_job_type": ["full_time", "part_time"],
     "desired_salary_min": 15000000,
     "bio": "Content Writer chuyên viết nội dung về công nghệ và marketing. Có khả năng tạo ra nội dung chất lượng, SEO-friendly và thu hút người đọc.",
-    "skills": [
-      "Content Writing",
-      "SEO Writing",
-      "Copywriting",
-      "WordPress",
-      "Google Docs",
-      "Research"
-    ],
+    "skills": ["Content Writing", "SEO Writing", "Copywriting", "WordPress", "Google Docs", "Research"],
     "avatar_url": "https://i.pravatar.cc/300?u=thaotruong14",
     "date_of_birth": "1997-03-06",
     "phone_number": "0961155555",
@@ -415,21 +273,10 @@
     "years_of_experience": 10,
     "location_province": "Hà Nội",
     "desired_job_title": "Software Architect",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 60000000,
     "bio": "Software Architect với hơn 10 năm kinh nghiệm thiết kế và phát triển hệ thống phần mềm quy mô lớn. Chuyên gia về kiến trúc microservices và enterprise applications.",
-    "skills": [
-      "Java",
-      "Spring Boot",
-      "Microservices",
-      "System Design",
-      "PostgreSQL",
-      "Kafka",
-      "Docker",
-      "Kubernetes"
-    ],
+    "skills": ["Java", "Spring Boot", "Microservices", "System Design", "PostgreSQL", "Kafka", "Docker", "Kubernetes"],
     "avatar_url": "https://i.pravatar.cc/300?u=tamđo15",
     "date_of_birth": "1990-09-17",
     "phone_number": "0971166666",
@@ -445,20 +292,10 @@
     "years_of_experience": 5,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Scrum Master",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 35000000,
     "bio": "Scrum Master với kinh nghiệm hướng dẫn team áp dụng Agile/Scrum. Đã coaching nhiều team chuyển đổi sang làm việc theo Agile và cải thiện hiệu suất.",
-    "skills": [
-      "Scrum",
-      "Agile",
-      "Coaching",
-      "Facilitation",
-      "Jira",
-      "Confluence",
-      "Team Building"
-    ],
+    "skills": ["Scrum", "Agile", "Coaching", "Facilitation", "Jira", "Confluence", "Team Building"],
     "avatar_url": "https://i.pravatar.cc/300?u=uyenhuynh16",
     "date_of_birth": "1994-06-13",
     "phone_number": "0981177777",
@@ -474,22 +311,10 @@
     "years_of_experience": 4,
     "location_province": "Hà Nội",
     "desired_job_title": "Machine Learning Engineer",
-    "desired_job_type": [
-      "full_time",
-      "remote"
-    ],
+    "desired_job_type": ["full_time", "remote"],
     "desired_salary_min": 45000000,
     "bio": "ML Engineer với kinh nghiệm phát triển và triển khai mô hình machine learning. Đam mê AI và luôn cập nhật công nghệ mới nhất.",
-    "skills": [
-      "Python",
-      "TensorFlow",
-      "PyTorch",
-      "Scikit-learn",
-      "Deep Learning",
-      "NLP",
-      "Computer Vision",
-      "MLOps"
-    ],
+    "skills": ["Python", "TensorFlow", "PyTorch", "Scikit-learn", "Deep Learning", "NLP", "Computer Vision", "MLOps"],
     "avatar_url": "https://i.pravatar.cc/300?u=vinhmai17",
     "date_of_birth": "1997-08-02",
     "phone_number": "0991188888",
@@ -505,20 +330,10 @@
     "years_of_experience": 4,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Graphic Designer",
-    "desired_job_type": [
-      "full_time",
-      "freelance"
-    ],
+    "desired_job_type": ["full_time", "freelance"],
     "desired_salary_min": 18000000,
     "bio": "Graphic Designer với niềm đam mê thiết kế thương hiệu và các sản phẩm digital. Có khả năng sáng tạo và làm việc độc lập hoặc theo team.",
-    "skills": [
-      "Adobe Photoshop",
-      "Adobe Illustrator",
-      "Adobe InDesign",
-      "Figma",
-      "Branding",
-      "Print Design"
-    ],
+    "skills": ["Adobe Photoshop", "Adobe Illustrator", "Adobe InDesign", "Figma", "Branding", "Print Design"],
     "avatar_url": "https://i.pravatar.cc/300?u=xuancao18",
     "date_of_birth": "1997-09-15",
     "phone_number": "0901199999",
@@ -534,9 +349,7 @@
     "years_of_experience": 6,
     "location_province": "Hà Nội",
     "desired_job_title": "Security Engineer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 48000000,
     "bio": "Security Engineer chuyên về penetration testing và đánh giá bảo mật hệ thống. Đã phát hiện và khắc phục nhiều lỗ hổng bảo mật nghiêm trọng.",
     "skills": [
@@ -562,19 +375,10 @@
     "years_of_experience": 6,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Sales Manager",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 40000000,
     "bio": "Sales Manager với kinh nghiệm bán hàng B2B trong lĩnh vực phần mềm. Đã đạt và vượt chỉ tiêu doanh số trong 5 năm liên tiếp.",
-    "skills": [
-      "B2B Sales",
-      "CRM",
-      "Salesforce",
-      "Negotiation",
-      "Account Management",
-      "Lead Generation"
-    ],
+    "skills": ["B2B Sales", "CRM", "Salesforce", "Negotiation", "Account Management", "Lead Generation"],
     "avatar_url": "https://i.pravatar.cc/300?u=binhto20",
     "date_of_birth": "1997-10-11",
     "phone_number": "0921222222",
@@ -590,21 +394,10 @@
     "years_of_experience": 4,
     "location_province": "Hà Nội",
     "desired_job_title": "iOS Developer",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 38000000,
     "bio": "iOS Developer với kinh nghiệm phát triển ứng dụng iOS native. Thành thạo Swift, SwiftUI và các framework iOS mới nhất.",
-    "skills": [
-      "Swift",
-      "SwiftUI",
-      "UIKit",
-      "Core Data",
-      "Firebase",
-      "REST API",
-      "Git",
-      "Xcode"
-    ],
+    "skills": ["Swift", "SwiftUI", "UIKit", "Core Data", "Firebase", "REST API", "Git", "Xcode"],
     "avatar_url": "https://i.pravatar.cc/300?u=cuongho21",
     "date_of_birth": "1996-12-17",
     "phone_number": "0931233333",
@@ -620,20 +413,10 @@
     "years_of_experience": 7,
     "location_province": "Hà Nội",
     "desired_job_title": "Project Manager",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 42000000,
     "bio": "Project Manager với kinh nghiệm quản lý các dự án IT từ nhỏ đến lớn. Có chứng chỉ PMP và đã quản lý thành công nhiều dự án trong ngân hàng và fintech.",
-    "skills": [
-      "Project Management",
-      "PMP",
-      "Agile",
-      "Waterfall",
-      "Risk Management",
-      "MS Project",
-      "Jira"
-    ],
+    "skills": ["Project Management", "PMP", "Agile", "Waterfall", "Risk Management", "MS Project", "Jira"],
     "avatar_url": "https://i.pravatar.cc/300?u=dieuduong22",
     "date_of_birth": "1996-12-17",
     "phone_number": "0941244444",
@@ -649,22 +432,10 @@
     "years_of_experience": 5,
     "location_province": "Đà Nẵng",
     "desired_job_title": "Android Developer",
-    "desired_job_type": [
-      "full_time",
-      "remote"
-    ],
+    "desired_job_type": ["full_time", "remote"],
     "desired_salary_min": 36000000,
     "bio": "Android Developer với kinh nghiệm phát triển ứng dụng Android native. Thành thạo Kotlin, Java và Android Jetpack components.",
-    "skills": [
-      "Kotlin",
-      "Java",
-      "Android SDK",
-      "Jetpack Compose",
-      "Room",
-      "Retrofit",
-      "MVVM",
-      "Git"
-    ],
+    "skills": ["Kotlin", "Java", "Android SDK", "Jetpack Compose", "Room", "Retrofit", "MVVM", "Git"],
     "avatar_url": "https://i.pravatar.cc/300?u=haile23",
     "date_of_birth": "1997-01-19",
     "phone_number": "0961255555",
@@ -680,19 +451,10 @@
     "years_of_experience": 4,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Customer Success Manager",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 30000000,
     "bio": "Customer Success Manager với kinh nghiệm chăm sóc và phát triển khách hàng doanh nghiệp. Tỷ lệ retention khách hàng đạt 95%.",
-    "skills": [
-      "Customer Success",
-      "Account Management",
-      "CRM",
-      "Communication",
-      "Problem Solving",
-      "Salesforce"
-    ],
+    "skills": ["Customer Success", "Account Management", "CRM", "Communication", "Problem Solving", "Salesforce"],
     "avatar_url": "https://i.pravatar.cc/300?u=giangnguyen24",
     "date_of_birth": "1999-01-19",
     "phone_number": "0971266666",
@@ -708,21 +470,10 @@
     "years_of_experience": 8,
     "location_province": "Hà Nội",
     "desired_job_title": "Cloud Architect",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 55000000,
     "bio": "Cloud Architect với kinh nghiệm thiết kế và triển khai giải pháp cloud trên AWS, Azure và GCP. Có nhiều chứng chỉ cloud architecture.",
-    "skills": [
-      "AWS",
-      "Azure",
-      "GCP",
-      "Cloud Architecture",
-      "Terraform",
-      "CloudFormation",
-      "Kubernetes",
-      "Serverless"
-    ],
+    "skills": ["AWS", "Azure", "GCP", "Cloud Architecture", "Terraform", "CloudFormation", "Kubernetes", "Serverless"],
     "avatar_url": "https://i.pravatar.cc/300?u=khoatrinh25",
     "date_of_birth": "1993-02-27",
     "phone_number": "0981277777",
@@ -738,20 +489,10 @@
     "years_of_experience": 5,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Financial Analyst",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 32000000,
     "bio": "Financial Analyst với kinh nghiệm phân tích tài chính, lập báo cáo và dự báo ngân sách. Thành thạo Excel và các công cụ phân tích tài chính.",
-    "skills": [
-      "Financial Analysis",
-      "Excel",
-      "Financial Modeling",
-      "Budgeting",
-      "Forecasting",
-      "SAP",
-      "Power BI"
-    ],
+    "skills": ["Financial Analysis", "Excel", "Financial Modeling", "Budgeting", "Forecasting", "SAP", "Power BI"],
     "avatar_url": "https://i.pravatar.cc/300?u=linhphan26",
     "date_of_birth": "1998-08-15",
     "phone_number": "0991288888",
@@ -767,21 +508,10 @@
     "years_of_experience": 8,
     "location_province": "Hà Nội",
     "desired_job_title": "Technical Lead",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 52000000,
     "bio": "Technical Lead với kinh nghiệm phát triển và dẫn dắt team phát triển phần mềm .NET. Đã quản lý nhiều dự án enterprise với công nghệ Microsoft.",
-    "skills": [
-      ".NET Core",
-      "C#",
-      "ASP.NET",
-      "SQL Server",
-      "Azure",
-      "Microservices",
-      "Team Leadership",
-      "Code Review"
-    ],
+    "skills": [".NET Core", "C#", "ASP.NET", "SQL Server", "Azure", "Microservices", "Team Leadership", "Code Review"],
     "avatar_url": "https://i.pravatar.cc/300?u=minhvuong27",
     "date_of_birth": "1991-01-03",
     "phone_number": "0901299999",
@@ -797,18 +527,10 @@
     "years_of_experience": 6,
     "location_province": "Hồ Chí Minh",
     "desired_job_title": "Operations Manager",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 38000000,
     "bio": "Operations Manager với kinh nghiệm quản lý vận hành và tối ưu quy trình. Đã cải thiện hiệu suất hoạt động lên 30% trong công ty trước.",
-    "skills": [
-      "Operations Management",
-      "Process Improvement",
-      "Lean Six Sigma",
-      "KPI Management",
-      "Team Management"
-    ],
+    "skills": ["Operations Management", "Process Improvement", "Lean Six Sigma", "KPI Management", "Team Management"],
     "avatar_url": "https://i.pravatar.cc/300?u=oanhbanh28",
     "date_of_birth": "1996-06-10",
     "phone_number": "0911311110",
@@ -824,22 +546,10 @@
     "years_of_experience": 3,
     "location_province": "Hà Nội",
     "desired_job_title": "Blockchain Developer",
-    "desired_job_type": [
-      "full_time",
-      "remote"
-    ],
+    "desired_job_type": ["full_time", "remote"],
     "desired_salary_min": 50000000,
     "bio": "Blockchain Developer với kinh nghiệm phát triển smart contract và DApp. Đam mê công nghệ blockchain và Web3.",
-    "skills": [
-      "Solidity",
-      "Ethereum",
-      "Web3.js",
-      "Smart Contracts",
-      "Hardhat",
-      "Truffle",
-      "JavaScript",
-      "Node.js"
-    ],
+    "skills": ["Solidity", "Ethereum", "Web3.js", "Smart Contracts", "Hardhat", "Truffle", "JavaScript", "Node.js"],
     "avatar_url": "https://i.pravatar.cc/300?u=phongchau29",
     "date_of_birth": "1998-04-02",
     "phone_number": "0921322221",
@@ -855,19 +565,10 @@
     "years_of_experience": 6,
     "location_province": "Hà Nội",
     "desired_job_title": "Legal Counsel",
-    "desired_job_type": [
-      "full_time"
-    ],
+    "desired_job_type": ["full_time"],
     "desired_salary_min": 40000000,
     "bio": "Legal Counsel chuyên về luật công nghệ và sở hữu trí tuệ. Có kinh nghiệm tư vấn pháp lý cho các công ty startup và tech.",
-    "skills": [
-      "Legal Advisory",
-      "Contract Law",
-      "IP Law",
-      "Tech Law",
-      "Compliance",
-      "Negotiation"
-    ],
+    "skills": ["Legal Advisory", "Contract Law", "IP Law", "Tech Law", "Compliance", "Negotiation"],
     "avatar_url": "https://i.pravatar.cc/300?u=quynhđang30",
     "date_of_birth": "1996-05-20",
     "phone_number": "0931333333",

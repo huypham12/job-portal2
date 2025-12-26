@@ -1,0 +1,195 @@
+components:
+  schemas:
+    # ============================================
+    # Auth Request Schemas
+    # ============================================
+    RegisterRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - confirm_password
+        - date_of_birth
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: 'John Doe'
+          description: User's full name (1-100 characters)
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+          description: User's email address
+        password:
+          type: string
+          minLength: 6
+          example: 'P@ssw0rd123'
+          description: |-
+            Password must contain at least 6 characters with:
+            - At least one uppercase letter
+            - At least one lowercase letter
+            - At least one number
+            - At least one special character
+        confirm_password:
+          type: string
+          minLength: 6
+          example: 'P@ssw0rd123'
+          description: Must match the password field
+        date_of_birth:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          example: '1990-01-01'
+          description: Date of birth in YYYY-MM-DD format
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+        password:
+          type: string
+          example: 'P@ssw0rd123'
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+
+    EmailRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+
+    TokenRequest:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          example: 'verification-token-here'
+
+    ChangePasswordRequest:
+      type: object
+      required:
+        - old_password
+        - new_password
+        - confirm_password
+      properties:
+        old_password:
+          type: string
+          example: 'OldP@ssw0rd123'
+          description: Current password
+        new_password:
+          type: string
+          minLength: 6
+          example: 'NewP@ssw0rd123'
+          description: |-
+            New password must contain at least 6 characters with:
+            - At least one uppercase letter
+            - At least one lowercase letter
+            - At least one number
+            - At least one special character
+        confirm_password:
+          type: string
+          minLength: 6
+          example: 'NewP@ssw0rd123'
+          description: Must match the new password field
+
+    ResetPasswordRequest:
+      type: object
+      required:
+        - token
+        - new_password
+      properties:
+        token:
+          type: string
+          example: 'verified-reset-token'
+          description: The verified reset token (also sent in Authorization header)
+        new_password:
+          type: string
+          minLength: 6
+          example: 'NewP@ssw0rd123'
+          description: |-
+            New password must contain at least 6 characters with:
+            - At least one uppercase letter
+            - At least one lowercase letter
+            - At least one number
+            - At least one special character
+
+    # ============================================
+    # Auth Response Schemas
+    # ============================================
+    TokenData:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+        refresh_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+      required:
+        - access_token
+        - refresh_token
+
+    RegisterResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/TokenData'
+
+    LoginResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/TokenData'
+
+    RefreshTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/TokenData'
+
+    ResetPasswordResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/TokenData'
+
+    VerifyEmailResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 'Email verified successfully'

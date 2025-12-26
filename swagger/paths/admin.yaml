@@ -1,0 +1,305 @@
+# ============================================
+# ADMIN ENDPOINTS
+# ============================================
+/admin/users:
+  get:
+    tags:
+      - admin
+    summary: Get all users (Admin only)
+    description: |-
+      Get paginated list of all users with optional filtering and search.
+      Requires admin role and verified account.
+    operationId: getAllUsers
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: string
+          default: '1'
+        example: '1'
+      - name: limit
+        in: query
+        description: 'Number of items per page (default: 10)'
+        required: false
+        schema:
+          type: string
+          default: '10'
+        example: '20'
+      - name: search
+        in: query
+        description: Search by email or name
+        required: false
+        schema:
+          type: string
+        example: 'john'
+      - name: role
+        in: query
+        description: Filter by user role
+        required: false
+        schema:
+          $ref: '#/components/schemas/UserRole'
+        example: 'candidate'
+      - name: verified
+        in: query
+        description: Filter by verification status
+        required: false
+        schema:
+          type: string
+          enum: ['true', 'false']
+        example: 'true'
+      - name: deleted
+        in: query
+        description: Filter by deleted status (soft delete)
+        required: false
+        schema:
+          type: string
+          enum: ['true', 'false']
+        example: 'false'
+    responses:
+      '200':
+        description: Users retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetAllUsersResponse'
+            example:
+              message: 'Lấy danh sách người dùng thành công.'
+              data:
+                users:
+                  - id: '123e4567-e89b-12d3-a456-426614174000'
+                    email: 'john.doe@example.com'
+                    role: 'candidate'
+                    verified: true
+                    deleted: false
+                    created_at: '2024-01-01T00:00:00.000Z'
+                    updated_at: '2024-01-01T00:00:00.000Z'
+                    profiles:
+                      - name: 'John Doe'
+                        phone: '+1234567890'
+                pagination:
+                  total: 100
+                  page: 1
+                  limit: 20
+                  totalPages: 5
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/users/{userId}:
+  get:
+    tags:
+      - admin
+    summary: Get user details by ID (Admin only)
+    description: |-
+      Get detailed information about a specific user by their ID.
+      Requires admin role and verified account.
+    operationId: getUserDetails
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        description: User ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: User details retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailsResponse'
+            example:
+              message: 'Lấy thông tin chi tiết người dùng thành công.'
+              data:
+                id: '123e4567-e89b-12d3-a456-426614174000'
+                email: 'john.doe@example.com'
+                role: 'candidate'
+                verified: true
+                deleted: false
+                created_at: '2024-01-01T00:00:00.000Z'
+                updated_at: '2024-01-01T00:00:00.000Z'
+                profiles:
+                  - id: '123e4567-e89b-12d3-a456-426614174001'
+                    name: 'John Doe'
+                    phone: '+1234567890'
+                    location_id: '123e4567-e89b-12d3-a456-426614174002'
+                    metadata:
+                      avatar: 'https://example.com/avatar.jpg'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: User not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+  patch:
+    tags:
+      - admin
+    summary: Update user (Admin only)
+    description: |-
+      Admin can update user information including role, verification status, and lock/unlock account (soft delete).
+      Requires admin role and verified account.
+      At least one field must be provided in the request body.
+    operationId: adminUpdateUser
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        description: User ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AdminUpdateUserRequest'
+          example:
+            role: 'recruiter'
+            verified: true
+            deleted: false
+    responses:
+      '200':
+        description: User updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateUserResponse'
+            example:
+              message: 'Cập nhật tài khoản thành công.'
+              data:
+                id: '123e4567-e89b-12d3-a456-426614174000'
+                email: 'john.doe@example.com'
+                role: 'recruiter'
+                verified: true
+                deleted: false
+                updated_at: '2024-01-01T00:00:00.000Z'
+      '400':
+        description: Bad request - Validation error or body is empty
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: User not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+  delete:
+    tags:
+      - admin
+    summary: Delete user permanently (Admin only)
+    description: |-
+      Permanently delete a user from the system (hard delete).
+      This action cannot be undone.
+      Requires admin role and verified account.
+    operationId: deleteUser
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        description: User ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: User deleted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Xóa tài khoản người dùng thành công.'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: User not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'

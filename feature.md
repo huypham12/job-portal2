@@ -3,12 +3,14 @@
 ## Ứng viên
 
 ### Quản lý tài khoản
+
 - Đăng ký và xác thực tài khoản mới
 - Đăng nhập, đăng xuất và quản lý phiên làm việc
 - Khôi phục và thay đổi mật khẩu
 - Refresh token để duy trì phiên đăng nhập
 
 ### Xây dựng hồ sơ cá nhân
+
 - Tạo và cập nhật thông tin profile đầy đủ
 - Quản lý kinh nghiệm làm việc chi tiết
 - Thêm và chỉnh sửa thông tin học vấn
@@ -18,6 +20,7 @@
 - Theo dõi độ hoàn thiện của profile
 
 ### Khám phá việc làm
+
 - Duyệt danh sách việc làm đang tuyển dụng với bộ lọc
 - Xem các vị trí nổi bật, phổ biến và xu hướng
 - Khám phá việc làm mới nhất và theo khu vực địa lý
@@ -27,6 +30,7 @@
 - Nhận gợi ý "Dành cho bạn" dựa trên profile
 
 ### Quản lý CV
+
 - Tạo CV từ thông tin profile có sẵn
 - Thiết kế CV mới với các template có sẵn
 - Upload và tự động phân tích CV từ file
@@ -37,6 +41,7 @@
 - Download CV về máy
 
 ### Ứng tuyển việc làm
+
 - Nộp đơn ứng tuyển cho vị trí mong muốn
 - Theo dõi trạng thái và tiến trình ứng tuyển
 - Xem lịch sử các giai đoạn tuyển dụng
@@ -45,12 +50,14 @@
 - Rút lại đơn ứng tuyển khi cần thiết
 
 ### Quản lý việc làm yêu thích
+
 - Lưu trữ các vị trí việc làm quan tâm
 - Quản lý danh sách việc làm đã lưu
 - Kiểm tra trạng thái lưu của từng vị trí
 - Xóa việc làm khỏi danh sách yêu thích
 
 ### Tìm kiếm và khám phá
+
 - Tìm kiếm việc làm với từ khóa và bộ lọc nâng cao
 - Nhận gợi ý tìm kiếm thông minh
 - Quản lý lịch sử tìm kiếm cá nhân
@@ -59,6 +66,7 @@
 - Khám phá danh sách kỹ năng chuyên môn
 
 ### Thông báo và kết nối
+
 - Nhận thông báo về trạng thái ứng tuyển
 - Quản lý danh sách thông báo chưa đọc
 - Đánh dấu đã đọc và xóa thông báo
@@ -70,12 +78,14 @@
 ## Nhà tuyển dụng
 
 ### Quản lý tài khoản
+
 - Đăng ký và xác thực tài khoản doanh nghiệp
 - Đăng nhập, đăng xuất và quản lý phiên làm việc
 - Khôi phục và thay đổi mật khẩu
 - Refresh token để duy trì phiên đăng nhập
 
 ### Xây dựng hồ sơ công ty
+
 - Tạo và cập nhật thông tin doanh nghiệp
 - Quản lý chi tiết công ty (mô tả, văn hóa, quy mô)
 - Thêm và cập nhật phúc lợi dành cho nhân viên
@@ -83,6 +93,7 @@
 - Xem profile công khai của ứng viên tiềm năng
 
 ### Quản lý tuyển dụng
+
 - Đăng tải vị trí việc làm mới
 - Cập nhật và chỉnh sửa thông tin tuyển dụng
 - Quản lý trạng thái mở/đóng vị trí
@@ -92,6 +103,7 @@
 - Thực hiện các thao tác hàng loạt trên nhiều vị trí
 
 ### Quản lý hồ sơ ứng tuyển
+
 - Xem danh sách ứng viên cho từng vị trí
 - Phân tích thống kê ứng tuyển chi tiết
 - Thêm/bớt ứng viên vào danh sách ngắn
@@ -104,6 +116,7 @@
 - Liên hệ trực tiếp với ứng viên
 
 ### Quản lý quy trình tuyển dụng
+
 - Cập nhật giai đoạn tuyển dụng cho ứng viên
 - Tạo giai đoạn tuyển dụng mới
 - Theo dõi tiến trình tuyển dụng toàn diện
@@ -111,6 +124,7 @@
 - Upload và quản lý tài liệu tuyển dụng
 
 ### Gửi thông báo và khuyến mãi
+
 - Tự động gửi đề xuất việc làm cho ứng viên
 - Gửi cảnh báo về công việc phổ biến
 - Gửi thông báo theo khu vực địa lý
@@ -118,11 +132,13 @@
 - Theo dõi thống kê hiệu quả thông báo
 
 ### Ghép đôi thông minh
+
 - Tìm kiếm ứng viên phù hợp cho vị trí cụ thể
 - Sử dụng thuật toán matching nâng cao
 - Nhận đề xuất ứng viên tự động
 
 ### Mạng lưới kết nối
+
 - Tạo và gửi lời mời kết nối với ứng viên
 - Quản lý danh sách kết nối quan tâm
 - Xem chi tiết thông tin kết nối
@@ -132,6 +148,7 @@
 ## Quản trị viên
 
 ### Quản lý người dùng
+
 - Xem danh sách tất cả người dùng hệ thống
 - Xem chi tiết thông tin từng người dùng
 - Khóa/mở khóa tài khoản người dùng
@@ -139,6 +156,7 @@
 - Xóa vĩnh viễn tài khoản vi phạm
 
 ### Quản lý việc làm
+
 - Giám sát tất cả vị trí tuyển dụng trên hệ thống
 - Xem danh sách việc làm đang chờ duyệt
 - Duyệt và từ chối vị trí tuyển dụng
@@ -150,6 +168,7 @@
 ## Luồng tìm kiếm và đề xuất thông minh
 
 ### Tìm kiếm việc làm cho ứng viên
+
 - Ứng viên nhập từ khóa và bộ lọc tìm kiếm nâng cao
 - Hệ thống hiển thị gợi ý tìm kiếm thông minh theo xu hướng
 - Lọc kết quả theo kỹ năng, địa điểm, mức lương, loại công việc
@@ -157,6 +176,7 @@
 - Xem xu hướng tìm kiếm phổ biến từ cộng đồng
 
 ### Đề xuất việc làm cá nhân hóa
+
 - Phân tích profile ứng viên (kỹ năng, kinh nghiệm, sở thích)
 - Đề xuất việc làm phù hợp dựa trên thuật toán matching
 - Gửi thông báo việc làm "Dành cho bạn" theo định kỳ
@@ -164,12 +184,14 @@
 - Đề xuất việc làm theo khu vực địa lý và ngành nghề
 
 ### Tìm kiếm ứng viên cho nhà tuyển dụng
+
 - Nhà tuyển dụng tìm kiếm ứng viên theo tiêu chí cụ thể
 - Lọc hồ sơ theo kỹ năng, kinh nghiệm, địa điểm
 - Xem profile công khai của ứng viên tiềm năng
 - Phân tích thống kê về nguồn ứng viên chất lượng
 
 ### Đề xuất ứng viên tự động
+
 - Hệ thống matching ứng viên phù hợp cho từng vị trí
 - Đề xuất dựa trên yêu cầu job description
 - Phân tích kỹ năng, kinh nghiệm, và mức độ phù hợp
@@ -178,6 +200,7 @@
 ## Luồng tương tác Ứng viên - Nhà tuyển dụng
 
 ### Quy trình ứng tuyển và tuyển dụng
+
 - **Ứng viên tìm kiếm**: Ứng viên sử dụng công cụ search để khám phá việc làm phù hợp
 - **Hệ thống đề xuất**: Nhận đề xuất việc làm cá nhân hóa dựa trên profile và lịch sử search
 - **Ứng tuyển vị trí**: Nộp đơn ứng tuyển cho vị trí được tìm thấy qua search hoặc recommend
@@ -188,6 +211,7 @@
 - **Hoàn tất quy trình**: Ứng viên nhận kết quả, nhà tuyển dụng tìm được nhân sự phù hợp
 
 ### Mạng lưới kết nối chuyên nghiệp
+
 - Nhà tuyển dụng gửi lời mời kết nối đến ứng viên tiềm năng
 - Ứng viên xem và quản lý các lời mời kết nối
 - Trao đổi thông tin qua hệ thống thông báo

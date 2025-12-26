@@ -1,0 +1,595 @@
+# ============================================
+# USER ENDPOINTS
+# ============================================
+/user/me:
+  get:
+    tags:
+      - user
+    summary: Get current user profile
+    description: Get detailed information about the currently authenticated user including profile, companies (for recruiters), and resumes (for candidates).
+    operationId: getMe
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: User profile retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileResponse'
+            example:
+              id: '123e4567-e89b-12d3-a456-426614174000'
+              email: 'john.doe@example.com'
+              role: 'candidate'
+              verified: true
+              profiles:
+                - name: 'John Doe'
+                  phone: '+1234567890'
+                  metadata:
+                    avatar: 'https://example.com/avatar.jpg'
+                    bio: 'Software developer'
+              companies: []
+              resumes:
+                - id: '123e4567-e89b-12d3-a456-426614174001'
+                  content:
+                    skills: ['JavaScript', 'TypeScript']
+                    experience_years: 5
+                  file_url: 'https://example.com/resume.pdf'
+                  updated_at: '2024-01-01T00:00:00.000Z'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: User not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/user/me/profile:
+  put:
+    tags:
+      - user
+    summary: Update user profile
+    description: Update profile information for the currently authenticated user. At least one field must be provided.
+    operationId: updateProfile
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateProfileRequest'
+          example:
+            name: 'John Doe Updated'
+            phone: '+1234567890'
+            location_id: '123e4567-e89b-12d3-a456-426614174000'
+            metadata:
+              avatar: 'https://example.com/avatar.jpg'
+              bio: 'Updated bio'
+    responses:
+      '200':
+        description: Profile updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileResponse'
+            example:
+              message: 'Profile updated'
+              profile:
+                id: '123e4567-e89b-12d3-a456-426614174002'
+                user_id: '123e4567-e89b-12d3-a456-426614174000'
+                name: 'John Doe Updated'
+                phone: '+1234567890'
+                location_id: '123e4567-e89b-12d3-a456-426614174000'
+                metadata:
+                  avatar: 'https://example.com/avatar.jpg'
+                  bio: 'Updated bio'
+                updated_at: '2024-01-01T00:00:00.000Z'
+                created_at: '2024-01-01T00:00:00.000Z'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/user/profiles/{id}/public:
+  get:
+    tags:
+      - user
+    summary: Get public profile of candidate (Recruiter only)
+    description: |-
+      Get public profile information of a candidate by profile ID.
+      This endpoint allows recruiters to view candidate profiles for recruitment purposes.
+      Sensitive information like phone number and email are excluded from the response.
+    operationId: getPublicProfile
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Profile ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: Public profile retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/PublicProfileResponse'
+            example:
+              success: true
+              message: 'Profile retrieved successfully'
+              data:
+                id: '123e4567-e89b-12d3-a456-426614174000'
+                full_name: 'John Doe'
+                display_name: 'John'
+                headline: 'Senior Software Engineer'
+                avatar_url: 'https://example.com/avatar.jpg'
+                bio: 'Experienced software developer'
+                years_of_experience: 5
+                desired_job_title: 'Full Stack Developer'
+                desired_salary_min: 20000000
+                desired_currency: 'VND'
+                desired_job_type: ['full_time', 'remote']
+                is_looking_for_job: true
+                location_text: 'Ho Chi Minh City'
+                personal_website: 'https://johndoe.dev'
+                linkedin_url: 'https://linkedin.com/in/johndoe'
+                github_url: 'https://github.com/johndoe'
+                role: 'candidate'
+                location:
+                  id: '123e4567-e89b-12d3-a456-426614174001'
+                  name: 'Ho Chi Minh City'
+                  type: 'city'
+                experiences: []
+                educations: []
+                skills: []
+                certifications: []
+                awards: []
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter access required or profile not available for public viewing
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+            example:
+              success: false
+              message: 'This profile is not available for public viewing'
+      '404':
+        description: Profile not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+            example:
+              success: false
+              message: 'Profile not found'
+      '422':
+        description: Unprocessable Entity - Invalid UUID format
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+# ============================================
+# USER PROFILE SUB-RESOURCES
+# ============================================
+/user/me/profile/experiences:
+  get:
+    tags: [user]
+    summary: Get list of profile experiences (candidate)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 20 }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+  post:
+    tags: [user]
+    summary: Create a new profile experience
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              company_name: { type: string }
+              position: { type: string }
+              start_date: { type: string, format: date-time }
+              end_date: { type: string, format: date-time, nullable: true }
+              is_current: { type: boolean }
+              description: { type: string }
+    responses:
+      '201': { description: Created }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
+/user/me/profile/experiences/{experienceId}:
+  get:
+    tags: [user]
+    summary: Get single experience
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: experienceId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '404': { description: Not found }
+  put:
+    tags: [user]
+    summary: Update a profile experience
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '200': { description: Updated }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+  delete:
+    tags: [user]
+    summary: Delete a profile experience
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: experienceId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: Deleted }
+      '401': { description: Unauthorized }
+
+/user/me/profile/educations:
+  get:
+    tags: [user]
+    summary: Get list of profile educations
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 20 }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+  post:
+    tags: [user]
+    summary: Create a profile education
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '201': { description: Created }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
+/user/me/profile/educations/{educationId}:
+  get:
+    tags: [user]
+    summary: Get single education
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: educationId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '404': { description: Not found }
+  put:
+    tags: [user]
+    summary: Update education
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '200': { description: Updated }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+  delete:
+    tags: [user]
+    summary: Delete education
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: educationId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: Deleted }
+      '401': { description: Unauthorized }
+
+/user/me/profile/skills:
+  get:
+    tags: [user]
+    summary: Get list of profile skills
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 20 }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+  post:
+    tags: [user]
+    summary: Add skill to profile
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              skill_id: { type: string, format: uuid }
+              proficiency: { type: integer }
+    responses:
+      '201': { description: Created }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
+/user/me/profile/skills/{skillId}:
+  get:
+    tags: [user]
+    summary: Get single profile skill
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: skillId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '404': { description: Not found }
+  put:
+    tags: [user]
+    summary: Update profile skill
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '200': { description: Updated }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+  delete:
+    tags: [user]
+    summary: Delete profile skill
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: skillId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: Deleted }
+      '401': { description: Unauthorized }
+
+/user/me/profile/certifications:
+  get:
+    tags: [user]
+    summary: Get list of profile certifications
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 20 }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+  post:
+    tags: [user]
+    summary: Add certification
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '201': { description: Created }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
+/user/me/profile/certifications/{certificationId}:
+  get:
+    tags: [user]
+    summary: Get certification detail
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: certificationId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '404': { description: Not found }
+  put:
+    tags: [user]
+    summary: Update certification
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '200': { description: Updated }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+  delete:
+    tags: [user]
+    summary: Delete certification
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: certificationId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: Deleted }
+      '401': { description: Unauthorized }
+
+/user/me/profile/awards:
+  get:
+    tags: [user]
+    summary: Get list of profile awards
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 20 }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+  post:
+    tags: [user]
+    summary: Add award
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '201': { description: Created }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
+/user/me/profile/awards/{awardId}:
+  get:
+    tags: [user]
+    summary: Get award detail
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: awardId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '404': { description: Not found }
+  put:
+    tags: [user]
+    summary: Update award
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+    responses:
+      '200': { description: Updated }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+  delete:
+    tags: [user]
+    summary: Delete award
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - name: awardId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: Deleted }
+      '401': { description: Unauthorized }
+
+/user/me/profile/visibility:
+  put:
+    tags: [user]
+    summary: Update profile visibility (public/private)
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              is_public:
+                type: boolean
+    responses:
+      '200': { description: Updated }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
+/user/me/profile/completeness:
+  get:
+    tags: [user]
+    summary: Get profile completeness percentage
+    security: [{ bearerAuth: [] }]
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }

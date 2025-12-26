@@ -7,6 +7,19 @@ type SchemaParts = {
   params?: z.ZodTypeAny
 }
 
+// Extend Request interface to include validated property
+declare global {
+  namespace Express {
+    interface Request {
+      validated?: {
+        body?: any
+        params?: any
+        query?: any
+      }
+    }
+  }
+}
+
 export const zodValidate = (parts: SchemaParts): RequestHandler => {
   const schema = z.object({
     body: parts.body ?? z.any(),
@@ -31,10 +44,12 @@ export const zodValidate = (parts: SchemaParts): RequestHandler => {
       return
     }
 
-    // Type assertion for validated data
-    req.body = parsed.data.body
-    req.query = parsed.data.query
-    req.params = parsed.data.params
+    // Store validated data in req.validated, DO NOT mutate req.*
+    req.validated = {
+      body: parts.body ? parsed.data.body : undefined,
+      query: parts.query ? parsed.data.query : undefined,
+      params: parts.params ? parsed.data.params : undefined
+    }
 
     next()
   }

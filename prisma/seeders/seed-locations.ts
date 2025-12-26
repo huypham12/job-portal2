@@ -50,7 +50,7 @@ export async function seedLocations(prisma: PrismaClient) {
 
     // 4. Chuẩn bị dữ liệu Quận/Huyện (Districts)
     console.log(`Preparing ${districts.length} districts...`)
-    const districtDataToCreate = []
+    const districtDataToCreate: { name: string; type: LocationType; parent_id: string }[] = []
 
     for (const district of districts) {
       // Tra cứu UUID của Tỉnh/Thành cha bằng 'parent_code'

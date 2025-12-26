@@ -8,6 +8,7 @@ import {
   deleteRecentSearchValidator,
   getPopularQueriesValidator
 } from '../../shared/validators/enhanced-features.validator'
+import { searchJobsValidator, suggestionsValidator } from './search.dto'
 
 /**
  * Search routes:
@@ -23,8 +24,8 @@ import {
  */
 const router = Router()
 
-router.get('/jobs', searchJobsController)
-router.get('/suggestions', suggestionsController)
+router.get('/jobs', searchJobsValidator, searchJobsController)
+router.get('/suggestions', suggestionsValidator, suggestionsController)
 router.post('/events', eventsController)
 
 // Recent searches routes

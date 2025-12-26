@@ -1,0 +1,166 @@
+components:
+  schemas:
+    # ============================================
+    # Admin Request Schemas
+    # ============================================
+    AdminUpdateUserRequest:
+      type: object
+      description: At least one field must be provided
+      properties:
+        role:
+          $ref: '#/components/schemas/UserRole'
+          description: Change user role
+        verified:
+          type: boolean
+          example: true
+          description: Manually verify user email
+        deleted:
+          type: boolean
+          example: false
+          description: 'true to lock account (soft delete), false to unlock'
+
+    # ============================================
+    # Admin Response Schemas
+    # ============================================
+    GetAllUsersResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Lấy danh sách người dùng thành công.'
+        data:
+          type: object
+          properties:
+            users:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  email:
+                    type: string
+                    format: email
+                  role:
+                    $ref: '#/components/schemas/UserRole'
+                  verified:
+                    type: boolean
+                  deleted:
+                    type: boolean
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                  profiles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        phone:
+                          type: string
+            pagination:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 100
+                page:
+                  type: integer
+                  example: 1
+                limit:
+                  type: integer
+                  example: 20
+                totalPages:
+                  type: integer
+                  example: 5
+
+    UserDetailsResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Lấy thông tin chi tiết người dùng thành công.'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+            role:
+              $ref: '#/components/schemas/UserRole'
+            verified:
+              type: boolean
+            deleted:
+              type: boolean
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            profiles:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  location_id:
+                    type: string
+                    format: uuid
+                    nullable: true
+                  metadata:
+                    type: object
+                    additionalProperties: true
+
+    AdminUpdateUserResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Cập nhật tài khoản thành công.'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+            role:
+              $ref: '#/components/schemas/UserRole'
+            verified:
+              type: boolean
+            deleted:
+              type: boolean
+            updated_at:
+              type: string
+              format: date-time
+
+    RejectJobRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason: { type: string, minLength: 10, maxLength: 500 }
+
+    LabelJobRequest:
+      type: object
+      properties:
+        hot: { type: boolean }
+        urgent: { type: boolean }
+        featured: { type: boolean }
+      description: At least one of hot/urgent/featured should be provided

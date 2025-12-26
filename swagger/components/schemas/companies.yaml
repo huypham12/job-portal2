@@ -1,0 +1,187 @@
+components:
+  schemas:
+    # ============================================
+    # Company Request Schemas
+    # ============================================
+    CreateCompanyRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 3
+          example: 'Công ty Cổ phần Công nghệ ABC'
+          description: Company name (minimum 3 characters)
+        description:
+          type: string
+          example: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
+          description: Company description (optional)
+        logo_url:
+          type: string
+          format: url
+          example: 'https://example.com/logo.png'
+          description: Company logo URL (optional)
+        size:
+          type: integer
+          minimum: 1
+          example: 100
+          description: Company size (number of employees, optional)
+        metadata:
+          type: object
+          additionalProperties: true
+          example:
+            website: 'https://abc-tech.com'
+            industry: 'Technology'
+            benefits: ['Health insurance', 'Flexible working hours']
+          description: Additional company metadata as JSON object (optional)
+
+    UpdateCompanyRequest:
+      type: object
+      description: At least one field must be provided
+      properties:
+        name:
+          type: string
+          minLength: 3
+          example: 'Công ty Cổ phần Công nghệ ABC'
+          description: Company name (minimum 3 characters)
+        description:
+          type: string
+          example: 'Mô tả mới cập nhật về công ty'
+          description: Company description
+        logo_url:
+          type: string
+          format: url
+          example: 'https://new-logo-url.com/logo.png'
+          description: Company logo URL
+        size:
+          type: integer
+          minimum: 1
+          example: 150
+          description: Company size (number of employees)
+        metadata:
+          type: object
+          additionalProperties: true
+          example:
+            website: 'https://abc-tech-updated.com'
+            remote_work: true
+          description: Additional company metadata as JSON object
+
+    # ============================================
+    # Company Response Schemas
+    # ============================================
+    CompanyData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174000'
+          description: Company unique identifier
+        name:
+          type: string
+          example: 'Công ty Cổ phần Công nghệ ABC'
+          description: Company name
+        description:
+          type: string
+          nullable: true
+          example: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
+          description: Company description
+        recruiter_id:
+          type: string
+          format: uuid
+          nullable: true
+          example: '123e4567-e89b-12d3-a456-426614174001'
+          description: ID of the recruiter who owns this company
+        logo_url:
+          type: string
+          nullable: true
+          example: 'https://example.com/logo.png'
+          description: Company logo URL
+        size:
+          type: integer
+          nullable: true
+          example: 100
+          description: Company size (number of employees)
+        metadata:
+          type: object
+          additionalProperties: true
+          nullable: true
+          example:
+            website: 'https://abc-tech.com'
+            industry: 'Technology'
+            benefits: ['Health insurance', 'Flexible working hours']
+          description: Additional company metadata as JSON object
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2024-01-01T00:00:00.000Z'
+          description: Company creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2024-01-01T00:00:00.000Z'
+          description: Company last update timestamp
+      required:
+        - id
+        - name
+
+    CreateCompanyResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/CompanyData'
+
+    GetCompanyResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/CompanyData'
+
+    UpdateCompanyResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/CompanyData'
+
+    # ============================================
+    # Company Detail/Benefit Schemas
+    # ============================================
+    CompanyDetailsRequest:
+      type: object
+      properties:
+        industry: { type: string, maxLength: 100 }
+        founded_year: { type: integer, minimum: 1800 }
+        employee_count_min: { type: integer, minimum: 1 }
+        employee_count_max: { type: integer, minimum: 1 }
+        website_url: { type: string, format: url }
+        headquarters_location_id: { type: string, format: uuid }
+        company_type: { type: string, maxLength: 50 }
+        revenue_range: { type: string, maxLength: 50 }
+        stock_symbol: { type: string, maxLength: 10 }
+        culture_description: { type: string }
+
+    UpdateCompanyDetailsRequest:
+      allOf:
+        - $ref: '#/components/schemas/CompanyDetailsRequest'
+
+    CompanyBenefitRequest:
+      type: object
+      required: [benefit_type, title]
+      properties:
+        benefit_type: { type: string, maxLength: 50 }
+        title: { type: string, maxLength: 255 }
+        description: { type: string }
+        is_featured: { type: boolean, default: false }
+
+    UpdateCompanyBenefitRequest:
+      allOf:
+        - $ref: '#/components/schemas/CompanyBenefitRequest'

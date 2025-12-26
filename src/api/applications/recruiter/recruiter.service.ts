@@ -15,6 +15,8 @@ import {
 } from './recruiter.validator'
 import { Prisma, application_status } from '@prisma/client'
 import { NotificationHelper } from '@/shared/helpers/notification.helper'
+import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { applicationToESDoc } from '@/shared/utils/es-transformers'
 
 export class RecruiterApplicationService {
   /**
@@ -290,13 +292,12 @@ export class RecruiterApplicationService {
           headline: app.profiles?.headline,
           years_of_experience: app.profiles?.years_of_experience,
           location: app.profiles?.location_text,
-          salary_expectation:
-            app.profiles?.desired_salary_min
-              ? {
-                  min: app.profiles.desired_salary_min,
-                  currency: app.profiles.desired_currency || 'VND'
-                }
-              : null,
+          salary_expectation: app.profiles?.desired_salary_min
+            ? {
+                min: app.profiles.desired_salary_min,
+                currency: app.profiles.desired_currency || 'VND'
+              }
+            : null,
           top_skills: app.profiles.skills.slice(0, 5).map((s: any) => s.skills.name),
           education_levels: app.profiles.educations.map((e: any) => e.degree).filter(Boolean),
           email: app.profiles.users?.email
@@ -680,6 +681,50 @@ export class RecruiterApplicationService {
         console.error('Failed to send notification:', error)
       }
     }
+
+    // Sync to Elasticsearch
+    setImmediate(async () => {
+      try {
+        // Re-fetch complete application data for ES sync
+        const fullApplication = await prisma.applications.findUnique({
+          where: { id: applicationId },
+          include: {
+            jobs: {
+              select: {
+                title: true,
+                job_type: true,
+                salary_range: true,
+                companies: { select: { name: true } },
+                locations: { select: { name: true } }
+              }
+            },
+            profiles: {
+              select: {
+                user_id: true,
+                display_name: true,
+                full_name: true,
+                headline: true,
+                location_text: true,
+                years_of_experience: true,
+                desired_salary_min: true,
+                skills: {
+                  include: { skills: { select: { name: true } } }
+                },
+                educations: { select: { degree: true } },
+                users: { select: { email: true } }
+              }
+            }
+          }
+        })
+
+        if (fullApplication) {
+          const esDocument = applicationToESDoc(fullApplication)
+          await elasticsearchSyncService.syncToElasticsearch('applications', applicationId, esDocument)
+        }
+      } catch (error) {
+        console.error(`Application status update sync failed: ${applicationId}`, error)
+      }
+    })
 
     return {
       id: updatedApplication.id,
@@ -1124,13 +1169,12 @@ export class RecruiterApplicationService {
           },
           location: profile.location_text,
           years_of_experience: profile.years_of_experience,
-          salary_expectation:
-            profile.desired_salary_min
-              ? {
-                  min: profile.desired_salary_min,
-                  currency: profile.desired_currency || 'VND'
-                }
-              : null
+          salary_expectation: profile.desired_salary_min
+            ? {
+                min: profile.desired_salary_min,
+                currency: profile.desired_currency || 'VND'
+              }
+            : null
         }
       }
 
@@ -1398,20 +1442,21 @@ export class RecruiterApplicationService {
         headline: shortlist.candidate.headline,
         years_of_experience: shortlist.candidate.years_of_experience,
         location: shortlist.candidate.location_text,
-        salary_expectation:
-          shortlist.candidate.desired_salary_min
-            ? {
-                min: shortlist.candidate.desired_salary_min,
-                currency: shortlist.candidate.desired_currency || 'VND'
-              }
-            : null,
+        salary_expectation: shortlist.candidate.desired_salary_min
+          ? {
+              min: shortlist.candidate.desired_salary_min,
+              currency: shortlist.candidate.desired_currency || 'VND'
+            }
+          : null,
         top_skills: shortlist.candidate.skills.map((s: any) => s.skills.name)
       },
-      job: shortlist.jobs ? {
-        id: shortlist.jobs.id,
-        title: shortlist.jobs.title,
-        company_name: shortlist.jobs.companies?.name
-      } : null,
+      job: shortlist.jobs
+        ? {
+            id: shortlist.jobs.id,
+            title: shortlist.jobs.title,
+            company_name: shortlist.jobs.companies?.name
+          }
+        : null,
       application: null // TODO: Fetch application data separately if needed
     }))
 

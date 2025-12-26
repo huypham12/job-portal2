@@ -1,0 +1,7 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'JWT token obtained from login or register endpoint. Format: "Bearer {token}"'

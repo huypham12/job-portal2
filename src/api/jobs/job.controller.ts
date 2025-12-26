@@ -30,7 +30,7 @@ export class JobController {
   createJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.decoded_authorization!.user_id
-      const data: CreateJobDTO = req.body
+      const data: CreateJobDTO = req.validated!.body
 
       const job = await this.jobService.createJob(userId, data)
 
@@ -50,7 +50,7 @@ export class JobController {
   getMyJobs = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.decoded_authorization!.user_id
-      const query: MyJobsDTO = req.query as any
+      const query: MyJobsDTO = req.validated!.query
 
       const result = await this.jobService.getMyJobs(userId, query)
 
@@ -69,7 +69,7 @@ export class JobController {
    */
   getJobForManage = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
       const userId = req.decoded_authorization!.user_id
 
       const job = await this.jobService.getJobById(id, userId, true)
@@ -89,9 +89,9 @@ export class JobController {
    */
   updateJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
       const userId = req.decoded_authorization!.user_id
-      const data: UpdateJobDTO = req.body
+      const data: UpdateJobDTO = req.validated!.body
 
       const job = await this.jobService.updateJob(id, userId, data)
 
@@ -110,7 +110,7 @@ export class JobController {
    */
   deleteJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
       const userId = req.decoded_authorization!.user_id
 
       const result = await this.jobService.deleteJob(id, userId)
@@ -127,9 +127,9 @@ export class JobController {
    */
   updateJobStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
       const userId = req.decoded_authorization!.user_id
-      const { status }: UpdateJobStatusDTO = req.body
+      const { status }: UpdateJobStatusDTO = req.validated!.body
 
       const result = await this.jobService.updateJobStatus(id, userId, status)
 
@@ -145,7 +145,7 @@ export class JobController {
    */
   publishJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
       const userId = req.decoded_authorization!.user_id
 
       const result = await this.jobService.publishJob(id, userId)
@@ -163,7 +163,7 @@ export class JobController {
   bulkJobActions = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.decoded_authorization!.user_id
-      const { action, job_ids }: BulkJobActionsDTO = req.body
+      const { action, job_ids }: BulkJobActionsDTO = req.validated!.body
 
       const result = await this.jobService.bulkJobActions(userId, action, job_ids)
 
@@ -180,7 +180,7 @@ export class JobController {
   bulkExtendExpiry = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.decoded_authorization!.user_id
-      const { job_ids, new_expires_at }: BulkExtendExpiryDTO = req.body
+      const { job_ids, new_expires_at }: BulkExtendExpiryDTO = req.validated!.body
 
       const result = await this.jobService.bulkExtendExpiry(userId, job_ids, new_expires_at)
 
@@ -196,9 +196,9 @@ export class JobController {
    */
   getSuggestedCandidates = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
       const userId = req.decoded_authorization!.user_id
-      const { size }: SuggestedCandidatesDTO = req.query as any
+      const { size }: SuggestedCandidatesDTO = req.validated!.query
 
       const result = await this.jobService.getSuggestedCandidates(id, userId, size)
 
@@ -217,7 +217,7 @@ export class JobController {
    */
   getJobStats = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
       const userId = req.decoded_authorization!.user_id
 
       const stats = await this.jobService.getJobStats(id, userId)
@@ -239,7 +239,7 @@ export class JobController {
    */
   getJobs = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query: FilterJobsDTO = req.query as any
+      const query: FilterJobsDTO = req.validated!.query
 
       const result = await this.jobService.getJobs(query)
 
@@ -258,7 +258,7 @@ export class JobController {
    */
   getJobPublic = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params
+      const { id } = req.validated!.params
 
       const job = await this.jobService.getJobById(id)
 

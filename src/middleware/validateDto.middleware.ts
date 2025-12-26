@@ -11,9 +11,23 @@ type ValidationSchemas = {
   query?: z.Schema
 }
 
+// Extend Request interface to include validated property
+declare global {
+  namespace Express {
+    interface Request {
+      validated?: {
+        body?: any
+        params?: any
+        query?: any
+      }
+    }
+  }
+}
+
 /**
  * Tạo ra một middleware (higher-order function) để validate request.
  * Nó sẽ parse body, params, và query dựa trên schema được cung cấp.
+ * Validated data is stored in req.validated, NOT mutated in req.*
  * Nếu validate thất bại, nó sẽ gọi next(error) với một HttpError 400.
  *
  * @param schemas - Một object chứa các Zod schema cho 'body', 'params', hoặc 'query'.
@@ -21,20 +35,23 @@ type ValidationSchemas = {
 export const validateDto = (schemas: ValidationSchemas) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      // Initialize validated object
+      req.validated = {}
+
       // Validate body nếu schema body được cung cấp
       if (schemas.body) {
         // parseAsync sẽ ném lỗi nếu không khớp
-        req.body = await schemas.body.parseAsync(req.body)
+        req.validated.body = await schemas.body.parseAsync(req.body)
       }
 
       // Validate params nếu schema params được cung cấp
       if (schemas.params) {
-        req.params = (await schemas.params.parseAsync(req.params)) as any
+        req.validated.params = await schemas.params.parseAsync(req.params)
       }
 
       // Validate query nếu schema query được cung cấp
       if (schemas.query) {
-        req.query = (await schemas.query.parseAsync(req.query)) as any
+        req.validated.query = await schemas.query.parseAsync(req.query)
       }
 
       // Nếu tất cả đều thành công, đi tiếp
@@ -57,7 +74,7 @@ export const validateDto = (schemas: ValidationSchemas) => {
         const validationError = new HttpError('Dữ liệu đầu vào không hợp lệ', HTTP_STATUS.BAD_REQUEST, formattedErrors)
         next(validationError)
       } else {
-        // Lỗi server không mong muốn
+        // Lỗi server không mong muốn - should never happen with proper validation
         next(new HttpError('Lỗi server khi validate dữ liệu', HTTP_STATUS.INTERNAL_SERVER_ERROR))
       }
     }

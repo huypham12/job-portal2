@@ -78,7 +78,7 @@ export class UserController {
     }
 
     try {
-      const payload = req.body as CreateProfileDto
+      const payload = req.validated!.body as CreateProfileDto
       const profile = await this.userService.createProfile(userId, payload)
       res.status(201).json({
         success: true,
@@ -105,7 +105,7 @@ export class UserController {
     }
 
     // body đã được validate/transform bởi Zod middleware
-    const payload = req.body as UpdateProfileDto
+    const payload = req.validated!.body as UpdateProfileDto
 
     const profile = await this.userService.updateProfileForUser(userId, payload)
     res.json({

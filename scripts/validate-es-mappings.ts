@@ -9,12 +9,9 @@ async function main() {
     console.log('Elasticsearch indices validated/created successfully.')
     process.exit(0)
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error('Failed to validate/create ES indices', e)
     process.exit(1)
   }
 }
 
 void main()
-
-
