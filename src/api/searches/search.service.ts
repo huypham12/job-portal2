@@ -203,8 +203,6 @@ export const searchService = {
       must.push({ terms: { skills: jobPayload.skills } })
     }
 
-    // Filter to only show OPEN candidates (actively looking for jobs)
-    filter.push({ term: { availability_status: 'OPEN' } })
 
     const esQuery = { bool: { must, filter } }
     const cacheKey = `search:profiles_for_job:${JSON.stringify(jobPayload)}:topN:${topN}`

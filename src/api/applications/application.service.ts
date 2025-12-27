@@ -6,7 +6,7 @@ import { Prisma, application_status } from '@prisma/client'
 import { NotificationHelper } from '@/shared/helpers/notification.helper'
 import { S3Service } from '../uploads/services/s3.service'
 import { ResumeService } from '../resumes/resume.service'
-import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
 import { applicationToESDoc } from '@/shared/utils/es-transformers'
 
 export class ApplicationService {

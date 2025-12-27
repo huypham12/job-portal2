@@ -347,7 +347,6 @@ model profiles {
   personal_website    String?                  @db.VarChar(255)
   phone_number        String?                  @db.VarChar(20)
   years_of_experience Int?                     @default(0)
-  availability_status  availability_status?       @default(OPEN)
   applications        applications[]
   candidate_interests connection_interests[]   @relation("CandidateInterests")
   job_views           job_views[]
@@ -697,12 +696,6 @@ enum user_role {
   candidate
   recruiter
   admin
-}
-
-enum availability_status {
-  OPEN
-  CLOSED
-  BUSY
 }
 
 enum user_token_type {

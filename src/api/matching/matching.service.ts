@@ -48,7 +48,6 @@ export const matchingService = {
         expectedExperience: (jobPayload as any).experience_level ?? 0,
         postedAtMs: (jobPayload as any).posted_at ? new Date((jobPayload as any).posted_at).getTime() : undefined,
         lastActiveAtMs: src.last_active_at ? new Date(src.last_active_at).getTime() : undefined,
-        availabilityStatus: src.availability_status ?? 'OPEN'
       })
 
       const weightedRaw =

@@ -199,7 +199,7 @@ export const getConnectionInterests = async (
   role: 'candidate' | 'recruiter',
   filters: GetInterestsDTO
 ) => {
-  const { page = 1, limit = 20, interest_type, role: filterRole, availability_status } = filters
+  const { page = 1, limit = 20, interest_type, role: filterRole } = filters
 
   const skip = (page - 1) * limit
 
@@ -240,13 +240,6 @@ export const getConnectionInterests = async (
     whereClause.interest_type = interest_type
   }
 
-  // Filter by candidate availability status
-  if (availability_status) {
-    whereClause.candidate = {
-      ...whereClause.candidate,
-      availability_status: availability_status
-    }
-  }
 
   // Filter out expired invitations
   whereClause.expires_at = {

@@ -221,7 +221,7 @@ export async function seedCompanies() {
           if (isElasticsearchAvailable && isElasticsearchEnabled) {
             try {
               // @ts-ignore - Optional elasticsearch dependency
-              const { elasticsearchSyncService }: any = await import('../../../src/shared/services/elasticsearch-sync.service')
+              const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
               const esDoc = {
                 id: company.id,
                 name: company.name,

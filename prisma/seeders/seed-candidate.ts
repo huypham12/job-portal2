@@ -428,7 +428,7 @@ export async function seedCandidates() {
           if (isElasticsearchAvailable) {
             try {
               // @ts-ignore - Optional elasticsearch dependency
-              const { elasticsearchSyncService }: any = await import('../../../src/shared/services/elasticsearch-sync.service')
+              const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
               const esDoc = {
                 id: profile.id,
                 user_id: profile.user_id,

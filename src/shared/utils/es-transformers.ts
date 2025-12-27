@@ -46,11 +46,10 @@ export function profileToESDoc(profile: any) {
     desired_salary_min: profile.desired_salary_min,
     desired_salary_max: profile.desired_salary_min, // Use min as max if no max field
     years_of_experience: profile.years_of_experience || 0,
-    skills: profile.profile_skills?.map((ps: any) => ps.skills?.name).filter(Boolean) || [],
+    skills: profile.skills?.map((ps: any) => ps.skills?.name).filter(Boolean) || [],
     location_id: profile.location_id,
     location_text: profile.location_text || '',
     is_looking_for_job: profile.is_looking_for_job || false,
-    availability_status: profile.availability_status || 'OPEN',
     last_active_at: new Date()
   }
 }

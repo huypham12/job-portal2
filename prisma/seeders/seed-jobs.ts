@@ -320,7 +320,7 @@ export async function seedJobs() {
               if (isElasticsearchAvailable && isElasticsearchEnabled) {
                 try {
                   // @ts-ignore - Optional elasticsearch dependency
-                  const { elasticsearchSyncService }: any = await import('../../../src/shared/services/elasticsearch-sync.service')
+                  const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
                   const esDoc = {
                     id: job.id,
                     title: job.title,

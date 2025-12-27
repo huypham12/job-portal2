@@ -195,6 +195,7 @@ export const elasticsearchService = {
     const client = getClient()
     // Define basic mappings per SEARCH_MATCHING_PLAN.md
     const jobsIndex = this.getIndexName('jobs')
+    const companiesIndex = this.getIndexName('companies')
     const profilesIndex = this.getIndexName('profiles')
     const applicationsIndex = this.getIndexName('applications')
 
@@ -206,12 +207,22 @@ export const elasticsearchService = {
           title: {
             type: 'text',
             analyzer: 'standard',
+            boost: 3.0,
             fields: {
+              keyword: { type: 'keyword' },
               autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
-              suggest: { type: 'completion' }
+              suggest: { type: 'completion' },
+              raw: { type: 'keyword' }
             }
           },
-          description: { type: 'text', analyzer: 'standard' },
+          description: {
+            type: 'text',
+            analyzer: 'standard',
+            boost: 1.5,
+            fields: {
+              keyword: { type: 'keyword' }
+            }
+          },
           skills: { type: 'keyword' },
           tags: { type: 'keyword' },
           company_id: { type: 'keyword' },
@@ -234,8 +245,16 @@ export const elasticsearchService = {
           analyzer: {
             autocomplete_analyzer: {
               type: 'custom',
-              tokenizer: 'standard',
+              tokenizer: 'edge_ngram_tokenizer',
               filter: ['lowercase', 'asciifolding']
+            }
+          },
+          tokenizer: {
+            edge_ngram_tokenizer: {
+              type: 'edge_ngram',
+              min_gram: 1,
+              max_gram: 20,
+              token_chars: ['letter', 'digit']
             }
           }
         }
@@ -248,11 +267,40 @@ export const elasticsearchService = {
         properties: {
           id: { type: 'keyword' },
           user_id: { type: 'keyword' },
-          full_name: { type: 'text', analyzer: 'standard' },
-          display_name: { type: 'text', analyzer: 'standard' },
-          headline: { type: 'text', analyzer: 'standard' },
+          full_name: {
+            type: 'text',
+            analyzer: 'standard',
+            fields: {
+              keyword: { type: 'keyword' }
+            }
+          },
+          display_name: {
+            type: 'text',
+            analyzer: 'standard',
+            boost: 2.0,
+            fields: {
+              keyword: { type: 'keyword' }
+            }
+          },
+          headline: {
+            type: 'text',
+            analyzer: 'standard',
+            boost: 3.0,
+            fields: {
+              keyword: { type: 'keyword' },
+              suggest: { type: 'completion' }
+            }
+          },
           bio: { type: 'text', analyzer: 'standard' },
-          desired_job_title: { type: 'text', analyzer: 'standard' },
+          desired_job_title: {
+            type: 'text',
+            analyzer: 'standard',
+            boost: 2.5,
+            fields: {
+              keyword: { type: 'keyword' },
+              suggest: { type: 'completion' }
+            }
+          },
           desired_salary_min: { type: 'integer' },
           desired_salary_max: { type: 'integer' },
           years_of_experience: { type: 'integer' },
@@ -260,10 +308,66 @@ export const elasticsearchService = {
           location_id: { type: 'keyword' },
           location_text: { type: 'text' },
           is_looking_for_job: { type: 'boolean' },
-          availability_status: { type: 'keyword' },
           last_active_at: { type: 'date' },
           resume_url: { type: 'keyword' },
           avatar_url: { type: 'keyword' }
+        }
+      },
+      settings: {
+        analysis: {
+          analyzer: {
+            autocomplete_analyzer: {
+              type: 'custom',
+              tokenizer: 'edge_ngram_tokenizer',
+              filter: ['lowercase', 'asciifolding']
+            }
+          },
+          tokenizer: {
+            edge_ngram_tokenizer: {
+              type: 'edge_ngram',
+              min_gram: 1,
+              max_gram: 20,
+              token_chars: ['letter', 'digit']
+            }
+          }
+        }
+      }
+    }
+
+    // Companies mapping
+    const companiesMapping = {
+      mappings: {
+        properties: {
+          id: { type: 'keyword' },
+          name: {
+            type: 'text',
+            analyzer: 'standard',
+            fields: {
+              autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
+              suggest: { type: 'completion' }
+            }
+          },
+          description: { type: 'text', analyzer: 'standard' },
+          recruiter_id: { type: 'keyword' },
+          logo_url: { type: 'keyword' },
+          size: { type: 'integer' },
+          contact_email: { type: 'keyword' },
+          contact_phone: { type: 'keyword' },
+          contact_address: { type: 'text', analyzer: 'standard' },
+          linkedin_url: { type: 'keyword' },
+          facebook_url: { type: 'keyword' },
+          twitter_url: { type: 'keyword' },
+          tax_code: { type: 'keyword' },
+          industry: { type: 'keyword' },
+          founded_year: { type: 'integer' },
+          employee_count_min: { type: 'integer' },
+          employee_count_max: { type: 'integer' },
+          website_url: { type: 'keyword' },
+          headquarters_location: { type: 'text', analyzer: 'standard' },
+          company_type: { type: 'keyword' },
+          revenue_range: { type: 'keyword' },
+          stock_symbol: { type: 'keyword' },
+          culture_description: { type: 'text', analyzer: 'standard' }
         }
       },
       settings: {
@@ -345,6 +449,7 @@ export const elasticsearchService = {
     }
 
     await createIfNotExists(jobsIndex, jobsMapping)
+    await createIfNotExists(companiesIndex, companiesMapping)
     await createIfNotExists(profilesIndex, profilesMapping)
     await createIfNotExists(applicationsIndex, applicationsMapping)
   }

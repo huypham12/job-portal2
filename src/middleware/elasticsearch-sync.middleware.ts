@@ -296,7 +296,6 @@ export class ElasticsearchSyncMiddleware {
       location_id: data.location_id || data.locationId,
       location_text: data.location_text || data.locationText || '',
       is_looking_for_job: data.is_looking_for_job || data.isLookingForJob || false,
-      availability_status: data.availability_status || data.availabilityStatus || 'OPEN',
       last_active_at: data.last_active_at || data.lastActiveAt,
       resume_url: data.resume_url || data.resumeUrl,
       avatar_url: data.avatar_url || data.avatarUrl

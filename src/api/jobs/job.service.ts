@@ -5,7 +5,7 @@ import { MESSAGES } from '@/shared/constants/messages'
 import { CreateJobDTO, UpdateJobDTO, FilterJobsDTO, MyJobsDTO, SuggestedCandidatesDTO } from './job.validator'
 import { job_status, Prisma } from '@prisma/client'
 import { matchingService } from '../matching/matching.service'
-import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
 import { jobToESDoc } from '@/shared/utils/es-transformers'
 
 export class JobService {

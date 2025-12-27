@@ -10,7 +10,7 @@ import {
 import { HttpError } from '@/shared/common/http-error'
 import { MESSAGES } from '@/shared/constants/messages'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
-import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
 import { companyToESDoc } from '@/shared/utils/es-transformers'
 
 export class CompanyService {

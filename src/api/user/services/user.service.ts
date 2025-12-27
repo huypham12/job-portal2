@@ -1,6 +1,6 @@
 import { prisma } from '@/config/database.service'
-import { job_type, availability_status } from '@prisma/client'
-import { elasticsearchSyncService } from '@/shared/services/elasticsearch-sync.service'
+import { job_type } from '@prisma/client'
+import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
 import { profileToESDoc } from '@/shared/utils/es-transformers'
 export class UserService {
   getUserById = async (userId: string) => {
@@ -40,7 +40,6 @@ export class UserService {
             desired_salary_min: true,
             desired_currency: true,
             desired_job_type: true,
-            availability_status: true,
             created_at: true,
             updated_at: true,
             // Location với parent hierarchy
@@ -276,7 +275,6 @@ export class UserService {
       desired_salary_min?: number
       desired_currency?: string
       desired_job_type?: job_type[]
-      availability_status?: availability_status
     }
   ) {
     // Kiểm tra xem profile đã tồn tại chưa
@@ -307,8 +305,7 @@ export class UserService {
         desired_job_title: data.desired_job_title,
         desired_salary_min: data.desired_salary_min,
         desired_currency: data.desired_currency || 'VND',
-        desired_job_type: data.desired_job_type || [],
-        availability_status: data.availability_status ?? 'OPEN'
+        desired_job_type: data.desired_job_type || []
       },
       select: {
         id: true,
@@ -331,7 +328,6 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        availability_status: true,
         created_at: true,
         updated_at: true
       }
@@ -366,7 +362,6 @@ export class UserService {
       desired_salary_min?: number
       desired_currency?: string
       desired_job_type?: job_type[]
-      availability_status?: availability_status
     }
   ) {
     // Lọc bỏ các field undefined để tránh overwrite ngoài ý muốn
@@ -396,7 +391,6 @@ export class UserService {
           desired_salary_min: true,
           desired_currency: true,
           desired_job_type: true,
-          availability_status: true,
           updated_at: true,
           created_at: true
         }
@@ -437,7 +431,6 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        availability_status: true,
         updated_at: true,
         created_at: true
       }
@@ -476,7 +469,6 @@ export class UserService {
             desired_salary_min: true,
             desired_currency: true,
             desired_job_type: true,
-            availability_status: true,
             created_at: true,
             updated_at: true,
             location: {
@@ -1260,7 +1252,6 @@ export class UserService {
             headline: true,
             avatar_url: true,
             years_of_experience: true,
-            availability_status: true,
             location_text: true
           }
         }
@@ -1293,7 +1284,6 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        availability_status: true,
         created_at: true,
         updated_at: true,
         // Location with hierarchy
@@ -1842,7 +1832,6 @@ export class UserService {
             avatar_url: true,
             location_id: true,
             location_text: true,
-            availability_status: true,
             location: {
               select: {
                 name: true,
@@ -2236,7 +2225,6 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        availability_status: true,
         location_text: true,
         personal_website: true,
         linkedin_url: true,
@@ -2408,7 +2396,6 @@ export class UserService {
         desired_job_title: true,
         desired_salary_min: true,
         desired_job_type: true,
-        availability_status: true,
         experiences: {
           select: { id: true }
         },
@@ -2458,8 +2445,7 @@ export class UserService {
         years_of_experience: !!profile.years_of_experience,
         desired_job_title: !!profile.desired_job_title,
         desired_salary_min: !!profile.desired_salary_min,
-        desired_job_type: !!profile.desired_job_type && profile.desired_job_type.length > 0,
-        availability_status: profile.availability_status !== null
+        desired_job_type: !!profile.desired_job_type && profile.desired_job_type.length > 0
       },
 
       // Career data (optional but valuable) - 20% total

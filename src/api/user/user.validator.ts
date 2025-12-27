@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import { z } from 'zod'
-import { job_type, user_role, availability_status } from '@prisma/client'
+import { job_type, user_role } from '@prisma/client'
 
 type SchemaParts = {
   body?: z.ZodTypeAny
@@ -79,7 +79,6 @@ const urlSchema = z.string().refine(
 // Enum values from Prisma
 const jobTypeEnum = z.nativeEnum(job_type)
 const userRoleEnum = z.nativeEnum(user_role)
-const availabilityStatusEnum = z.nativeEnum(availability_status)
 
 // Updated profile fields matching current schema
 const updateProfileBody = z
@@ -110,7 +109,6 @@ const updateProfileBody = z
     desired_salary_min: z.number().int().min(0).optional(),
     desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
-    availability_status: availabilityStatusEnum.optional()
   })
   .strict()
   .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
@@ -144,7 +142,6 @@ const createProfileBody = z
     desired_salary_min: z.number().int().min(0).optional(),
     desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
-    availability_status: availabilityStatusEnum.optional()
   })
   .strict()
 

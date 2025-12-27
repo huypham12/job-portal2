@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 import { ResumeController } from './resume.controller'
 import { ResumeService } from './resume.service'
 import { wrapController } from '@/shared/utils/wrap-controller'
@@ -29,7 +29,7 @@ const resumeController = new ResumeController(resumeService)
 const authMiddleware = [accessTokenValidator, authenticateAccessToken, candidate]
 
 // Dev-only request body logger to help debug validation issues
-const logRequestBody = (req, _res, next) => {
+const logRequestBody = (req: Request, _res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV !== 'production') {
     try {
       const preview = JSON.stringify(req.body, (_k, v) =>

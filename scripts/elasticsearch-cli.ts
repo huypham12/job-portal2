@@ -323,7 +323,6 @@ function getStatusIcon(status: string): string {
 
 async function cleanup(): Promise<void> {
   try {
-    await elasticsearchSyncService.cleanup()
     await elasticsearchService.close()
   } catch (error) {
     console.error('Cleanup error:', error)
