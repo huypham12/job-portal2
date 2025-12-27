@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import { LocationController } from './location.controller'
 import { LocationService } from './location.service'
+import { validateDto } from '@/middleware/validateDto.middleware'
+import { getDistrictsQuery, searchLocationsQuery, locationIdParams } from './location.validator'
 
 const router = Router()
 const locationService = new LocationService()
@@ -18,20 +20,20 @@ router.get('/provinces', locationController.getProvinces)
  * Get all districts (quận/huyện) by province ID
  * Public endpoint - no authentication required
  */
-router.get('/districts', locationController.getDistricts)
+router.get('/districts', validateDto({ query: getDistrictsQuery }), locationController.getDistricts)
 
 /**
  * GET /api/locations/search?search=xxx&limit=50
  * Search locations by name (supports both provinces and districts)
  * Public endpoint - no authentication required
  */
-router.get('/search', locationController.searchLocations)
+router.get('/search', validateDto({ query: searchLocationsQuery }), locationController.searchLocations)
 
 /**
  * GET /api/locations/:id
  * Get location details by ID with full hierarchy (parent if district, children if province)
  * Public endpoint - no authentication required
  */
-router.get('/:id', locationController.getLocationById)
+router.get('/:id', validateDto({ params: locationIdParams }), locationController.getLocationById)
 
 export default router

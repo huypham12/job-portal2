@@ -1,0 +1,724 @@
+[
+  {
+    "name": "AWS Certified Cloud Practitioner",
+    "issuing_org": "Amazon Web Services",
+    "description": "Fundamental level certification covering AWS Cloud concepts, services, and terminology",
+    "skills_acquired": "AWS Cloud concepts, core services, security, architecture, pricing, support"
+  },
+  {
+    "name": "AWS Certified Solutions Architect - Associate",
+    "issuing_org": "Amazon Web Services",
+    "description": "Design scalable, cost-effective, and reliable AWS solutions",
+    "skills_acquired": "AWS architecture design, EC2, S3, VPC, IAM, databases, monitoring"
+  },
+  {
+    "name": "AWS Certified Developer - Associate",
+    "issuing_org": "Amazon Web Services",
+    "description": "Develop and maintain applications on AWS platform",
+    "skills_acquired": "AWS SDK, Lambda, API Gateway, DynamoDB, S3, CloudFormation, CI/CD"
+  },
+  {
+    "name": "AWS Certified SysOps Administrator - Associate",
+    "issuing_org": "Amazon Web Services",
+    "description": "Deploy, manage, and operate AWS infrastructure",
+    "skills_acquired": "EC2, ELB, Auto Scaling, RDS, CloudWatch, CloudFormation, AWS CLI"
+  },
+  {
+    "name": "AWS Certified Solutions Architect - Professional",
+    "issuing_org": "Amazon Web Services",
+    "description": "Design complex AWS architectures for enterprise applications",
+    "skills_acquired": "Advanced AWS architecture, hybrid IT, multi-account strategies, security"
+  },
+  {
+    "name": "AWS Certified DevOps Engineer - Professional",
+    "issuing_org": "Amazon Web Services",
+    "description": "Implement and manage continuous delivery systems on AWS",
+    "skills_acquired": "CodePipeline, CodeBuild, CodeDeploy, CloudFormation, monitoring, security"
+  },
+  {
+    "name": "AWS Certified Data Analytics - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Design and implement AWS analytics solutions",
+    "skills_acquired": "Kinesis, Glue, Athena, Redshift, EMR, QuickSight, data lakes"
+  },
+  {
+    "name": "AWS Certified Machine Learning - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Design and implement AWS ML solutions",
+    "skills_acquired": "SageMaker, ML algorithms, data preparation, model deployment"
+  },
+  {
+    "name": "AWS Certified Security - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Specialize in AWS security best practices",
+    "skills_acquired": "IAM, KMS, CloudTrail, GuardDuty, Config, security groups, WAF"
+  },
+  {
+    "name": "AWS Certified Database - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Design and implement AWS database solutions",
+    "skills_acquired": "RDS, DynamoDB, Aurora, Neptune, ElastiCache, database migration"
+  },
+  {
+    "name": "AWS Certified Network Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Design and implement AWS and hybrid networking",
+    "skills_acquired": "VPC, Direct Connect, Route 53, CloudFront, Global Accelerator"
+  },
+  {
+    "name": "AWS Certified SAP on AWS - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Specialize in SAP workloads on AWS",
+    "skills_acquired": "SAP on AWS architecture, migration, HANA, NetWeaver"
+  },
+  {
+    "name": "AWS Certified Advanced Networking Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Design and maintain network architecture on AWS",
+    "skills_acquired": "VPC advanced networking, hybrid connectivity, network security"
+  },
+  {
+    "name": "AWS Certified Alexa Skill Builder - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Build engaging Alexa skills using AWS services",
+    "skills_acquired": "Alexa Skills Kit, Lambda, voice design, smart home skills"
+  },
+  {
+    "name": "AWS Certified Cloud Economics Accreditation",
+    "issuing_org": "Amazon Web Services",
+    "description": "Understand AWS pricing and cost optimization",
+    "skills_acquired": "AWS pricing models, cost optimization, billing, budgeting"
+  },
+  {
+    "name": "AWS Certified: SAP on AWS - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "SAP workloads and architectures on AWS",
+    "skills_acquired": "SAP HANA, NetWeaver, migration strategies, high availability"
+  },
+  {
+    "name": "AWS Certified Containers - Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Containerized applications on AWS",
+    "skills_acquired": "ECS, EKS, Fargate, Kubernetes, container security"
+  },
+  {
+    "name": "AWS Certified IoT Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "IoT solutions using AWS services",
+    "skills_acquired": "IoT Core, IoT Analytics, IoT Device Management, Greengrass"
+  },
+  {
+    "name": "AWS Certified Mainframe Modernization Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Modernize mainframe applications on AWS",
+    "skills_acquired": "Blu Age, Micro Focus, mainframe migration, modernization"
+  },
+  {
+    "name": "AWS Certified Migration Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Plan and execute cloud migration strategies",
+    "skills_acquired": "Migration strategies, Server Migration Service, Database Migration Service"
+  },
+  {
+    "name": "AWS Certified Robotics Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Build robotics applications with AWS RoboMaker",
+    "skills_acquired": "RoboMaker, ROS, simulation, robotics development"
+  },
+  {
+    "name": "AWS Certified Supply Chain Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Supply chain solutions on AWS",
+    "skills_acquired": "Supply chain management, AWS Supply Chain, analytics"
+  },
+  {
+    "name": "AWS Certified Sustainability Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "Build sustainable solutions on AWS",
+    "skills_acquired": "Sustainable architecture, carbon footprint reduction, efficiency"
+  },
+  {
+    "name": "AWS Certified VMware Cloud on AWS Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "VMware workloads on AWS",
+    "skills_acquired": "VMware Cloud on AWS, hybrid cloud, migration"
+  },
+  {
+    "name": "AWS Certified Well-Architected Framework Review",
+    "issuing_org": "Amazon Web Services",
+    "description": "Review architectures using AWS Well-Architected Framework",
+    "skills_acquired": "Operational excellence, security, reliability, performance, cost optimization"
+  },
+
+  {
+    "name": "Microsoft Certified: Azure Fundamentals",
+    "issuing_org": "Microsoft",
+    "description": "Foundational knowledge of cloud services and Azure platform",
+    "skills_acquired": "Azure concepts, core services, security, privacy, compliance, pricing"
+  },
+  {
+    "name": "Microsoft Certified: Azure Administrator Associate",
+    "issuing_org": "Microsoft",
+    "description": "Manage Azure subscriptions, storage, compute, and networking",
+    "skills_acquired": "Azure AD, virtual machines, storage, networking, monitoring, backup"
+  },
+  {
+    "name": "Microsoft Certified: Azure Developer Associate",
+    "issuing_org": "Microsoft",
+    "description": "Design, build, test, and maintain Azure applications",
+    "skills_acquired": "Azure SDK, App Service, Functions, storage, authentication, monitoring"
+  },
+  {
+    "name": "Microsoft Certified: Azure Solutions Architect Expert",
+    "issuing_org": "Microsoft",
+    "description": "Design solutions that run on Azure",
+    "skills_acquired": "Compute, network, storage, security, identity, integration, monitoring"
+  },
+  {
+    "name": "Microsoft Certified: Azure DevOps Engineer Expert",
+    "issuing_org": "Microsoft",
+    "description": "Design and implement DevOps practices for Azure",
+    "skills_acquired": "Azure DevOps, pipelines, Git, containers, monitoring, security"
+  },
+  {
+    "name": "Microsoft Certified: Azure Security Engineer Associate",
+    "issuing_org": "Microsoft",
+    "description": "Implement security controls and threat protection",
+    "skills_acquired": "Azure AD, security center, key vault, SIEM, threat protection"
+  },
+  {
+    "name": "Microsoft Certified: Azure AI Engineer Associate",
+    "issuing_org": "Microsoft",
+    "description": "Design and implement AI solutions on Azure",
+    "skills_acquired": "Azure AI, machine learning, cognitive services, bot services"
+  },
+  {
+    "name": "Microsoft Certified: Azure Data Scientist Associate",
+    "issuing_org": "Microsoft",
+    "description": "Apply data science and machine learning to implement solutions",
+    "skills_acquired": "Azure ML, data science, Python, R, experiment management"
+  },
+  {
+    "name": "Microsoft Certified: Azure Database Administrator Associate",
+    "issuing_org": "Microsoft",
+    "description": "Implement and manage Azure database solutions",
+    "skills_acquired": "Azure SQL Database, Azure SQL Managed Instance, Cosmos DB"
+  },
+  {
+    "name": "Microsoft Certified: Azure Data Engineer Associate",
+    "issuing_org": "Microsoft",
+    "description": "Design and implement data solutions on Azure",
+    "skills_acquired": "Data storage, data processing, data security, monitoring"
+  },
+  {
+    "name": "Microsoft Certified: Azure Network Engineer Associate",
+    "issuing_org": "Microsoft",
+    "description": "Design and implement Azure networking solutions",
+    "skills_acquired": "Virtual networks, VPN, ExpressRoute, load balancing, DNS"
+  },
+  {
+    "name": "Microsoft Certified: Azure IoT Developer Specialty",
+    "issuing_org": "Microsoft",
+    "description": "Develop IoT solutions on Azure",
+    "skills_acquired": "IoT Hub, IoT Central, Stream Analytics, Time Series Insights"
+  },
+  {
+    "name": "Microsoft Certified: Azure for SAP Workloads Specialty",
+    "issuing_org": "Microsoft",
+    "description": "Design and implement SAP solutions on Azure",
+    "skills_acquired": "SAP on Azure architecture, migration, HANA, NetWeaver"
+  },
+  {
+    "name": "Microsoft Certified: Azure Virtual Desktop Specialty",
+    "issuing_org": "Microsoft",
+    "description": "Implement Azure Virtual Desktop solutions",
+    "skills_acquired": "Azure Virtual Desktop, Windows Virtual Desktop, remote access"
+  },
+  {
+    "name": "Microsoft Certified: Azure Synapse Analytics Specialty",
+    "issuing_org": "Microsoft",
+    "description": "Design Azure Synapse Analytics solutions",
+    "skills_acquired": "Data warehousing, big data analytics, data integration"
+  },
+
+  {
+    "name": "Google Cloud Professional Cloud Architect",
+    "issuing_org": "Google Cloud",
+    "description": "Design and plan cloud solution architecture",
+    "skills_acquired": "GCP architecture, compute, storage, networking, security, compliance"
+  },
+  {
+    "name": "Google Cloud Professional Data Engineer",
+    "issuing_org": "Google Cloud",
+    "description": "Design data processing systems on Google Cloud",
+    "skills_acquired": "BigQuery, Dataflow, Dataproc, Pub/Sub, data architecture"
+  },
+  {
+    "name": "Google Cloud Professional Cloud Developer",
+    "issuing_org": "Google Cloud",
+    "description": "Build scalable applications on Google Cloud",
+    "skills_acquired": "App Engine, Cloud Functions, Cloud Run, Firebase, APIs"
+  },
+  {
+    "name": "Google Cloud Professional Cloud Security Engineer",
+    "issuing_org": "Google Cloud",
+    "description": "Design and implement secure infrastructure on GCP",
+    "skills_acquired": "IAM, VPC, firewalls, encryption, security best practices"
+  },
+  {
+    "name": "Google Cloud Professional ML Engineer",
+    "issuing_org": "Google Cloud",
+    "description": "Build ML models and deploy to production",
+    "skills_acquired": "Vertex AI, TensorFlow, MLOps, AutoML, model deployment"
+  },
+  {
+    "name": "Google Cloud Professional Cloud DevOps Engineer",
+    "issuing_org": "Google Cloud",
+    "description": "Build and deploy applications using DevOps practices",
+    "skills_acquired": "Cloud Build, Cloud Deploy, monitoring, logging, CI/CD"
+  },
+  {
+    "name": "Google Cloud Professional Cloud Network Engineer",
+    "issuing_org": "Google Cloud",
+    "description": "Design, implement, and manage GCP networks",
+    "skills_acquired": "VPC, Cloud Load Balancing, Cloud CDN, hybrid networking"
+  },
+  {
+    "name": "Google Cloud Professional Workspace Administrator",
+    "issuing_org": "Google Cloud",
+    "description": "Manage Google Workspace environments",
+    "skills_acquired": "Google Workspace, directory services, security, compliance"
+  },
+  {
+    "name": "Google Cloud Professional Cloud Database Engineer",
+    "issuing_org": "Google Cloud",
+    "description": "Design and manage databases on Google Cloud",
+    "skills_acquired": "Cloud SQL, Spanner, Firestore, Bigtable, database migration"
+  },
+  {
+    "name": "Google Cloud Associate Cloud Engineer",
+    "issuing_org": "Google Cloud",
+    "description": "Deploy applications, monitor operations, and manage enterprise solutions",
+    "skills_acquired": "GCP console, CLI, deployment, monitoring, security"
+  },
+
+  {
+    "name": "Certified Kubernetes Administrator (CKA)",
+    "issuing_org": "Cloud Native Computing Foundation",
+    "description": "Certified Kubernetes administrator skills",
+    "skills_acquired": "Kubernetes architecture, installation, networking, security, troubleshooting"
+  },
+  {
+    "name": "Certified Kubernetes Application Developer (CKAD)",
+    "issuing_org": "Cloud Native Computing Foundation",
+    "description": "Design, build, and deploy cloud-native applications",
+    "skills_acquired": "Kubernetes API, deployments, services, configuration, security"
+  },
+  {
+    "name": "Docker Certified Associate",
+    "issuing_org": "Docker Inc",
+    "description": "Container platform skills and knowledge",
+    "skills_acquired": "Docker images, containers, networking, storage, security"
+  },
+  {
+    "name": "HashiCorp Certified: Terraform Associate",
+    "issuing_org": "HashiCorp",
+    "description": "Infrastructure as Code with Terraform",
+    "skills_acquired": "Terraform configuration, state management, modules, workspaces"
+  },
+  {
+    "name": "Jenkins Certified Developer",
+    "issuing_org": "CloudBees",
+    "description": "Jenkins CI/CD pipeline development",
+    "skills_acquired": "Jenkins pipelines, plugins, security, distributed builds"
+  },
+  {
+    "name": "GitLab Certified Associate",
+    "issuing_org": "GitLab",
+    "description": "GitLab platform fundamentals",
+    "skills_acquired": "GitLab CI/CD, version control, project management"
+  },
+  {
+    "name": "Certified Scrum Master (CSM)",
+    "issuing_org": "Scrum Alliance",
+    "description": "Scrum framework and agile practices",
+    "skills_acquired": "Scrum framework, ceremonies, roles, artifacts, agile principles"
+  },
+  {
+    "name": "SAFe Program Consultant (SPC)",
+    "issuing_org": "Scaled Agile",
+    "description": "Scaled Agile Framework implementation",
+    "skills_acquired": "SAFe framework, agile at scale, Lean portfolio management"
+  },
+  {
+    "name": "ITIL Foundation",
+    "issuing_org": "AXELOS",
+    "description": "IT service management best practices",
+    "skills_acquired": "ITIL framework, service lifecycle, processes, functions"
+  },
+  {
+    "name": "DevOps Foundation",
+    "issuing_org": "DevOps Institute",
+    "description": "DevOps culture and practices fundamentals",
+    "skills_acquired": "DevOps culture, CALMS framework, DevOps practices"
+  },
+
+  {
+    "name": "Oracle Certified Java Programmer (OCJP)",
+    "issuing_org": "Oracle",
+    "description": "Java programming language proficiency",
+    "skills_acquired": "Java SE, OOP, collections, generics, exceptions, concurrency"
+  },
+  {
+    "name": "Oracle Certified Java Developer (OCJD)",
+    "issuing_org": "Oracle",
+    "description": "Advanced Java development skills",
+    "skills_acquired": "Java EE, web services, security, design patterns"
+  },
+  {
+    "name": "Microsoft Certified: Azure Developer Associate",
+    "issuing_org": "Microsoft",
+    "description": "Develop Azure cloud applications",
+    "skills_acquired": ".NET, Azure SDK, APIs, authentication, debugging"
+  },
+  {
+    "name": "Google Developers Certification",
+    "issuing_org": "Google",
+    "description": "Android and web development skills",
+    "skills_acquired": "Android development, web technologies, Firebase"
+  },
+  {
+    "name": "Certified Scrum Developer (CSD)",
+    "issuing_org": "Scrum Alliance",
+    "description": "Technical practices in Scrum teams",
+    "skills_acquired": "TDD, refactoring, pair programming, continuous integration"
+  },
+  {
+    "name": "MongoDB Certified Developer Associate",
+    "issuing_org": "MongoDB Inc",
+    "description": "MongoDB application development",
+    "skills_acquired": "MongoDB CRUD, aggregation, indexing, data modeling"
+  },
+  {
+    "name": "Redis Certified Developer",
+    "issuing_org": "Redis Labs",
+    "description": "Redis data structures and commands",
+    "skills_acquired": "Redis data types, commands, persistence, clustering"
+  },
+  {
+    "name": "Elastic Certified Engineer",
+    "issuing_org": "Elastic",
+    "description": "Elasticsearch and ELK stack expertise",
+    "skills_acquired": "Elasticsearch, Logstash, Kibana, Beats, search, analytics"
+  },
+  {
+    "name": "Neo4j Certified Professional",
+    "issuing_org": "Neo4j",
+    "description": "Graph database development with Neo4j",
+    "skills_acquired": "Cypher query language, graph modeling, Neo4j drivers"
+  },
+  {
+    "name": "PostgreSQL Certified Developer",
+    "issuing_org": "PostgreSQL",
+    "description": "PostgreSQL database development",
+    "skills_acquired": "SQL, PL/pgSQL, performance tuning, administration"
+  },
+
+  {
+    "name": "TensorFlow Developer Certificate",
+    "issuing_org": "Google",
+    "description": "TensorFlow and machine learning skills",
+    "skills_acquired": "TensorFlow, Keras, CNN, RNN, model training, deployment"
+  },
+  {
+    "name": "IBM Data Science Professional Certificate",
+    "issuing_org": "IBM",
+    "description": "Comprehensive data science skills",
+    "skills_acquired": "Python, SQL, data analysis, ML, data visualization"
+  },
+  {
+    "name": "Google Data Analytics Professional Certificate",
+    "issuing_org": "Google",
+    "description": "Data analytics and visualization",
+    "skills_acquired": "SQL, Tableau, spreadsheets, R, data cleaning"
+  },
+  {
+    "name": "Microsoft Certified: Azure AI Engineer Associate",
+    "issuing_org": "Microsoft",
+    "description": "AI solution implementation on Azure",
+    "skills_acquired": "Azure AI, cognitive services, machine learning, NLP"
+  },
+  {
+    "name": "Deep Learning Specialization",
+    "issuing_org": "deeplearning.ai",
+    "description": "Deep learning fundamentals and applications",
+    "skills_acquired": "Neural networks, CNN, RNN, TensorFlow, PyTorch"
+  },
+  {
+    "name": "Machine Learning Engineer Nanodegree",
+    "issuing_org": "Udacity",
+    "description": "Machine learning engineering skills",
+    "skills_acquired": "ML algorithms, model deployment, A/B testing, recommendation systems"
+  },
+  {
+    "name": "Cloudera Data Analyst Certification",
+    "issuing_org": "Cloudera",
+    "description": "Big data analysis with Hadoop ecosystem",
+    "skills_acquired": "Hadoop, Hive, Impala, data analysis, visualization"
+  },
+  {
+    "name": "Databricks Certified Associate Developer",
+    "issuing_org": "Databricks",
+    "description": "Apache Spark development on Databricks",
+    "skills_acquired": "Spark SQL, DataFrames, MLlib, Delta Lake"
+  },
+  {
+    "name": "SAS Certified Data Scientist",
+    "issuing_org": "SAS Institute",
+    "description": "Advanced analytics with SAS",
+    "skills_acquired": "SAS programming, statistical analysis, ML, forecasting"
+  },
+  {
+    "name": "Tableau Desktop Certified Associate",
+    "issuing_org": "Tableau",
+    "description": "Data visualization with Tableau",
+    "skills_acquired": "Tableau Desktop, data connections, calculations, dashboards"
+  },
+
+  {
+    "name": "CompTIA Security+",
+    "issuing_org": "CompTIA",
+    "description": "Core cybersecurity skills",
+    "skills_acquired": "Network security, compliance, threats, vulnerabilities, cryptography"
+  },
+  {
+    "name": "Certified Ethical Hacker (CEH)",
+    "issuing_org": "EC-Council",
+    "description": "Ethical hacking and penetration testing",
+    "skills_acquired": "Footprinting, scanning, enumeration, vulnerability analysis, system hacking"
+  },
+  {
+    "name": "Certified Information Systems Security Professional (CISSP)",
+    "issuing_org": "ISC²",
+    "description": "Information security management",
+    "skills_acquired": "Security architecture, risk management, asset security, communication"
+  },
+  {
+    "name": "Certified Information Security Manager (CISM)",
+    "issuing_org": "ISACA",
+    "description": "Information security management",
+    "skills_acquired": "Risk management, governance, incident management, program development"
+  },
+  {
+    "name": "Certified Information Systems Auditor (CISA)",
+    "issuing_org": "ISACA",
+    "description": "Information systems auditing",
+    "skills_acquired": "Audit process, governance, acquisition, protection, operations"
+  },
+  {
+    "name": "Certified Cloud Security Professional (CCSP)",
+    "issuing_org": "ISC²",
+    "description": "Cloud security architecture and operations",
+    "skills_acquired": "Cloud concepts, architecture, data security, platform security"
+  },
+  {
+    "name": "GIAC Security Essentials (GSEC)",
+    "issuing_org": "GIAC",
+    "description": "Defensive security skills",
+    "skills_acquired": "Access controls, cryptography, network security, incident handling"
+  },
+  {
+    "name": "Offensive Security Certified Professional (OSCP)",
+    "issuing_org": "Offensive Security",
+    "description": "Advanced penetration testing",
+    "skills_acquired": "Penetration testing, vulnerability assessment, exploit development"
+  },
+  {
+    "name": "Certified SCADA Security Architect (CSSA)",
+    "issuing_org": "InfoSec Institute",
+    "description": "SCADA and industrial control systems security",
+    "skills_acquired": "SCADA security, ICS security, industrial protocols"
+  },
+  {
+    "name": "Certified Secure Software Lifecycle Professional (CSSLP)",
+    "issuing_org": "ISC²",
+    "description": "Secure software development lifecycle",
+    "skills_acquired": "Security requirements, secure design, secure coding, testing"
+  },
+
+  {
+    "name": "Project Management Professional (PMP)",
+    "issuing_org": "Project Management Institute",
+    "description": "Project management best practices",
+    "skills_acquired": "Project lifecycle, scope, time, cost, quality, risk, communication"
+  },
+  {
+    "name": "Certified Associate in Project Management (CAPM)",
+    "issuing_org": "Project Management Institute",
+    "description": "Foundational project management knowledge",
+    "skills_acquired": "Project management fundamentals, PMBOK guide"
+  },
+  {
+    "name": "PRINCE2 Foundation",
+    "issuing_org": "AXELOS",
+    "description": "PRINCE2 project management methodology",
+    "skills_acquired": "PRINCE2 principles, themes, processes, management products"
+  },
+  {
+    "name": "PRINCE2 Practitioner",
+    "issuing_org": "AXELOS",
+    "description": "Advanced PRINCE2 project management",
+    "skills_acquired": "PRINCE2 application, tailoring, management products"
+  },
+  {
+    "name": "Certified Scrum Product Owner (CSPO)",
+    "issuing_org": "Scrum Alliance",
+    "description": "Product ownership in Scrum",
+    "skills_acquired": "Product vision, backlog management, stakeholder management"
+  },
+
+  {
+    "name": "Google UX Design Certificate",
+    "issuing_org": "Google",
+    "description": "UX design fundamentals and process",
+    "skills_acquired": "UX research, prototyping, design systems, user testing"
+  },
+  {
+    "name": "Adobe Certified Expert (ACE)",
+    "issuing_org": "Adobe",
+    "description": "Adobe Creative Suite proficiency",
+    "skills_acquired": "Photoshop, Illustrator, InDesign, XD, design workflows"
+  },
+  {
+    "name": "Certified Usability Analyst (CUA)",
+    "issuing_org": "Human Factors International",
+    "description": "Usability analysis and testing",
+    "skills_acquired": "Usability testing, heuristic evaluation, user research"
+  },
+
+  {
+    "name": "Oracle Database Administrator Certified Associate",
+    "issuing_org": "Oracle",
+    "description": "Oracle database administration",
+    "skills_acquired": "Oracle architecture, installation, backup, recovery, performance"
+  },
+  {
+    "name": "Microsoft Certified: Azure Database Administrator Associate",
+    "issuing_org": "Microsoft",
+    "description": "Azure database administration",
+    "skills_acquired": "Azure SQL Database, Azure SQL Managed Instance, Cosmos DB"
+  },
+  {
+    "name": "Cloudera Certified Administrator for Apache Hadoop (CCAH)",
+    "issuing_org": "Cloudera",
+    "description": "Hadoop cluster administration",
+    "skills_acquired": "Hadoop installation, configuration, monitoring, troubleshooting"
+  },
+  {
+    "name": "IBM Certified Data Architect - Big Data",
+    "issuing_org": "IBM",
+    "description": "Big data architecture design",
+    "skills_acquired": "Hadoop, Spark, data modeling, ETL, data governance"
+  },
+
+  {
+    "name": "Cisco Certified Network Associate (CCNA)",
+    "issuing_org": "Cisco",
+    "description": "Network fundamentals and operations",
+    "skills_acquired": "Network fundamentals, routing, switching, security, automation"
+  },
+  {
+    "name": "Cisco Certified Network Professional (CCNP)",
+    "issuing_org": "Cisco",
+    "description": "Advanced networking skills",
+    "skills_acquired": "Enterprise networking, security, automation, troubleshooting"
+  },
+  {
+    "name": "CompTIA Network+",
+    "issuing_org": "CompTIA",
+    "description": "Network technologies and infrastructure",
+    "skills_acquired": "Network architecture, cabling, wireless, network security"
+  },
+  {
+    "name": "Certified Wireless Network Professional (CWNP)",
+    "issuing_org": "CWNP",
+    "description": "Wireless networking expertise",
+    "skills_acquired": "Wi-Fi standards, security, troubleshooting, design"
+  },
+
+  {
+    "name": "Android Developer Certification",
+    "issuing_org": "Google",
+    "description": "Android app development",
+    "skills_acquired": "Android SDK, UI design, data storage, networking, testing"
+  },
+  {
+    "name": "iOS Developer Certification",
+    "issuing_org": "Apple",
+    "description": "iOS app development",
+    "skills_acquired": "Swift, UIKit, Core Data, networking, app store deployment"
+  },
+  {
+    "name": "Flutter Developer Certificate",
+    "issuing_org": "Google",
+    "description": "Cross-platform mobile development",
+    "skills_acquired": "Flutter, Dart, widgets, state management, platform integration"
+  },
+  {
+    "name": "React Native Developer Certificate",
+    "issuing_org": "Meta",
+    "description": "React Native cross-platform development",
+    "skills_acquired": "React Native, JavaScript, native modules, app deployment"
+  },
+
+  {
+    "name": "AWS IoT Specialty",
+    "issuing_org": "Amazon Web Services",
+    "description": "IoT solutions on AWS",
+    "skills_acquired": "IoT Core, IoT Analytics, IoT Device Management, Greengrass"
+  },
+  {
+    "name": "Google Cloud IoT Developer",
+    "issuing_org": "Google Cloud",
+    "description": "IoT development on Google Cloud",
+    "skills_acquired": "Cloud IoT Core, BigQuery, machine learning for IoT"
+  },
+  {
+    "name": "ARM Accredited Engineer",
+    "issuing_org": "ARM",
+    "description": "ARM-based embedded systems development",
+    "skills_acquired": "ARM architecture, assembly, embedded C, debugging"
+  },
+
+  {
+    "name": "ISTQB Certified Tester Foundation Level",
+    "issuing_org": "ISTQB",
+    "description": "Software testing fundamentals",
+    "skills_acquired": "Testing principles, testing throughout lifecycle, static testing"
+  },
+  {
+    "name": "ISTQB Certified Tester Advanced Level",
+    "issuing_org": "ISTQB",
+    "description": "Advanced software testing",
+    "skills_acquired": "Test analysis, test management, tool support, reviews"
+  },
+  {
+    "name": "Certified Software Quality Engineer (CSQE)",
+    "issuing_org": "ASQ",
+    "description": "Software quality engineering",
+    "skills_acquired": "Quality management, testing, process improvement, metrics"
+  },
+
+  {
+    "name": "Certified Business Analysis Professional (CBAP)",
+    "issuing_org": "International Institute of Business Analysis",
+    "description": "Business analysis expertise",
+    "skills_acquired": "Requirements management, business analysis planning, solution evaluation"
+  },
+  {
+    "name": "Business Analysis Body of Knowledge (BABOK)",
+    "issuing_org": "International Institute of Business Analysis",
+    "description": "Business analysis knowledge areas",
+    "skills_acquired": "Business analysis planning, elicitation, requirements management"
+  }
+]

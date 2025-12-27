@@ -12,7 +12,8 @@ const CreateInterestBodySchema = z.object({
   suggested_job_ids: z
     .array(z.string().uuid({ message: 'Each job ID must be a valid UUID' }))
     .max(10, { message: 'Maximum 10 suggested jobs allowed' })
-    .optional(),
+    .optional()
+    .transform((val) => val || null),
   interest_type: z.enum(['job_invitation', 'profile_view', 'network_connection']),
   message: z.string().optional(),
   contact_info: z
@@ -21,6 +22,7 @@ const CreateInterestBodySchema = z.object({
       phone: z.string().optional()
     })
     .optional()
+    .transform((val) => val || null)
 })
 
 export const CreateInterestSchema = {
@@ -35,26 +37,21 @@ export type CreateInterestDTO = z.infer<typeof CreateInterestBodySchema>
 const GetInterestsQuerySchema = z.object({
   page: z.preprocess(
     (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
+      // Handle empty string or invalid values, return default if invalid
+      if (val === undefined || val === null || val === '') return 1
       const num = Number(val)
-      return isNaN(num) ? undefined : num
+      return isNaN(num) ? 1 : num
     },
-    z.number().int().min(1, { message: 'Page must be greater than 0' }).default(1)
+    z.number().int().min(1, { message: 'Page must be greater than 0' })
   ),
   limit: z.preprocess(
     (val) => {
-      // Handle empty string or invalid values as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
+      // Handle empty string or invalid values, return default if invalid
+      if (val === undefined || val === null || val === '') return 20
       const num = Number(val)
-      return isNaN(num) ? undefined : num
+      return isNaN(num) ? 20 : num
     },
-    z
-      .number()
-      .int()
-      .min(1, { message: 'Limit must be at least 1' })
-      .max(100, { message: 'Limit must be at most 100' })
-      .default(20)
+    z.number().int().min(1, { message: 'Limit must be at least 1' }).max(100, { message: 'Limit must be at most 100' })
   ),
   // Status filter removed - invitations don't have accept/reject status
   interest_type: z.enum(['job_invitation', 'profile_view', 'network_connection']).optional(),

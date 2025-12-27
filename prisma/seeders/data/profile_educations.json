@@ -1,0 +1,6797 @@
+[
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Toán tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Dữ liệu",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An ninh Mạng",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Toán ứng dụng",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Computer Vision",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử - Tin học",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Computer Vision",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử - Tin học",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "IoT",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Blockchain",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "DevOps",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Transformation",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Website",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "UX/UI Design",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Website",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Marketing Digital",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "UX/UI Design",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học FPT",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Computer Vision",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Transformation",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Công nghệ Thông tin TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử - Tin học",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Computer Vision",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử - Tin học",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "IoT",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Blockchain",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "DevOps",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Transformation",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Bách khoa TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Mạng máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Mạng",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Network Security",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Communications",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Mạng máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Mạng",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Telecommunications",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Network Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Security",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Điện tử Viễn thông",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Computer Networks",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Mạng máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Communications",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Mạng",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Wireless Communications",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Toán tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Dữ liệu",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An ninh Mạng",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Toán ứng dụng",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Computer Vision",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2021-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Thiết kế Đồ họa",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2021-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2018-09-01",
+    "end_date": "2020-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Quốc gia TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2020-06-30"
+  },
+
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Kinh doanh",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kinh tế Quốc tế",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Quản trị Kinh doanh",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Transformation",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Marketing Digital",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Dự án CNTT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "E-business",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Business Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Innovation Management",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Commerce",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Dự án CNTT",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Technology Management",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "FinTech",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Strategy",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "E-commerce Management",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Dự án CNTT",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Project Management",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Finance",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Economics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Ngoại thương Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Kinh doanh",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kinh tế Quốc tế",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Quản trị Kinh doanh",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Transformation",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Marketing Digital",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Dự án CNTT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "E-business",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Business Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Innovation Management",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Commerce",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Dự án CNTT",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Technology Management",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "FinTech",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Strategy",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "E-commerce Management",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Quản trị Dự án CNTT",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Project Management",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Finance",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Kinh tế Số",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Economics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Kinh tế Quốc dân",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "FinTech",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Banking",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Payment Systems",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Finance",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain Technology",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Cybersecurity in Finance",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Financial Technology",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Payment Solutions",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "FinTech Innovation",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Banking",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Payment Systems",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Currency",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain Technology",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Cybersecurity in Finance",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Banking Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Payment Solutions",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Payment Innovation",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Banking",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Payment Systems",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cryptocurrency",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain Technology",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Cybersecurity in Finance",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Financial Security",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Payment Solutions",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Banking",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Banking",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Payment Systems",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Blockchain Finance",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain Technology",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Cybersecurity in Finance",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "FinTech Security",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Payment Solutions",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Payment Technology",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Banking",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Payment Systems",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Assets",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain Technology",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Cybersecurity in Finance",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Banking Cybersecurity",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Payment Solutions",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Tài chính Công nghệ",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Financial Innovation",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Banking",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Học viện Ngân hàng",
+    "degree": "Cử nhân",
+    "field_of_study": "Payment Systems",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "E-commerce",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Commerce",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Social Commerce",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Marketing Digital",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Content Marketing",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Business",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Market Research",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "E-business",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Advertising",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Commerce",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Data-Driven Marketing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Strategy",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Commerce",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Social Media Marketing",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Marketing Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Content Marketing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "SEO/SEM",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Marketing",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Customer Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "E-commerce Management",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Brand Management",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Business",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Market Intelligence",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Transformation",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Digital Commerce",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Influencer Marketing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Social Commerce",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Content Marketing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Performance Marketing",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Digital Advertising",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "E-commerce",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "CRM",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Customer Experience",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Marketing Online",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Affiliate Marketing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Marketing Analytics",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Business Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thương mại",
+    "degree": "Cử nhân",
+    "field_of_study": "Conversion Rate Optimization",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Computer Vision",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Analytics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Đà Nẵng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Analytics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "Mobile Development",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Network Security",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Cần Thơ",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Analytics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hải Phòng",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Mobile Development",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Nguyên",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Analytics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Thái Bình",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Mobile Development",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Vinh",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Analytics",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm Kỹ thuật TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Mobile Development",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Hà Nội",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Phần mềm",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Machine Learning",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Big Data",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "IoT",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Data Science",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Analytics",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Blockchain",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Machine Learning",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Big Data Analytics",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Cloud Computing",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Trí tuệ Nhân tạo",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Công nghệ Phần mềm",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Artificial Intelligence",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Khoa học Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "DevOps",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Cybersecurity",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Data Science",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Kỹ thuật Máy tính",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Information Technology",
+    "start_date": "2016-09-01",
+    "end_date": "2018-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "An toàn Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Mobile Development",
+    "start_date": "2019-09-01",
+    "end_date": "2023-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Thạc sĩ",
+    "field_of_study": "Software Engineering",
+    "start_date": "2017-09-01",
+    "end_date": "2019-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Cử nhân",
+    "field_of_study": "Công nghệ Thông tin",
+    "start_date": "2018-09-01",
+    "end_date": "2022-06-30"
+  },
+  {
+    "school_name": "Đại học Sư phạm TP.HCM",
+    "degree": "Kỹ sư",
+    "field_of_study": "Hệ thống Thông tin",
+    "start_date": "2020-09-01",
+    "end_date": "2024-06-30"
+  }
+]

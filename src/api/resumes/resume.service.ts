@@ -52,8 +52,10 @@ export interface UploadResumeDto {
 }
 
 export interface ExportResumeDto {
-  template?: 'modern' | 'classic' | 'minimal' | 'professional'
+  template?: 'timeline' | 'professional' | 'compact'
   format?: 'pdf' | 'html'
+  html?: string
+  viewportWidth?: number
 }
 
 export class ResumeService {
@@ -727,8 +729,15 @@ export class ResumeService {
       throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    // Generate HTML từ template
-    const html = this.generateResumeHtml(resume, profile, dto.template || 'modern')
+    // Prefer HTML provided by frontend (ensures preview fidelity); otherwise generate from template
+    const frontendProvided = dto.html && typeof dto.html === 'string' && dto.html.trim().length > 0
+    let html: string
+    if (frontendProvided) {
+      // Use frontend HTML verbatim (do not sanitize or inline fonts) except ensure a base href exists
+      html = dto.html as string
+    } else {
+      html = this.generateResumeHtml(resume, profile, dto.template || 'modern')
+    }
 
     if (dto.format === 'html') {
       return {
@@ -737,8 +746,8 @@ export class ResumeService {
       }
     }
 
-    // Generate PDF từ HTML
-    const pdfBuffer = await this.generatePdfFromHtml(html)
+    // Generate PDF từ HTML; allow frontend to suggest viewport width for consistent rendering
+    const pdfBuffer = await this.generatePdfFromHtml(html, dto.viewportWidth)
 
     // Upload PDF lên S3
     const uploadResult = await this.s3Service.uploadFile({
@@ -802,8 +811,10 @@ export class ResumeService {
       throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    // Generate HTML preview
-    const html = this.generateResumeHtml(resume, profile, 'modern')
+    // Generate HTML preview - respect resume content layout_settings.theme if present
+    const layoutSettings = ((resume.content as any) && (resume.content as any).layout_settings) || {}
+    const theme = layoutSettings.theme || 'professional'
+    const html = this.generateResumeHtml(resume, profile, theme)
 
     return {
       content: html,
@@ -881,19 +892,26 @@ export class ResumeService {
   /**
    * Helper: Generate HTML from resume template
    */
-  private generateResumeHtml(resume: any, profile: any, template: string): string {
+  private generateResumeHtml(resume: any, profile: any, template?: string): string {
     const content = resume.content || this.buildResumeContent(profile)
     const layoutSettings = content.layout_settings || {}
-    const theme = layoutSettings.theme || 'professional'
+    // Prefer explicit template argument; fall back to content.layout_settings.theme; default to 'professional'
+    const theme = (template && String(template).trim()) || (layoutSettings.theme as string) || 'professional'
+
+    // Normalize common template aliases from frontend ('modern'/'minimal'/'classic')
+    let normalizedTheme = theme.toLowerCase()
+    if (normalizedTheme === 'modern' || normalizedTheme === 'classic') normalizedTheme = 'professional'
+    if (normalizedTheme === 'minimal') normalizedTheme = 'compact'
 
     // Route to appropriate template generator
-    // Note: Backend templates are for PDF export only, frontend uses React components
-    switch (theme) {
+    switch (normalizedTheme) {
       case 'timeline':
+        return this.generateTimelineTemplate(resume, content)
       case 'compact':
+        return this.generateCompactTemplate(resume, content)
       case 'professional':
       default:
-        return this.generateModernTemplate(resume, content)
+        return this.generateProfessionalTemplate(resume, content)
     }
   }
 
@@ -1336,128 +1354,62 @@ export class ResumeService {
       }
 
       ${
-        experiences.length > 0
+        (content.technologies && content.technologies.length > 0) ||
+        (content.highlights && content.highlights.length > 0) ||
+        (content.links && content.links.length > 0) ||
+        (content.projects && content.projects.length > 0)
           ? `
         <div class="section">
-          <h2 class="section-title">
-            <i class="fas fa-briefcase"></i>
-            Work Experience
-          </h2>
-          ${experiences
-            .map(
-              (exp: any) => `
-            <div class="timeline-item">
-              <div class="timeline-header">
-                <div>
-                  <div class="timeline-title">${exp.job_title || 'Position'}</div>
-                  <div class="timeline-subtitle">${exp.company_name || 'Company'}</div>
-                </div>
-                <div class="timeline-date">
-                  <i class="far fa-calendar"></i>
-                  ${this.formatDate(exp.start_date)} - ${exp.is_current ? 'Present' : this.formatDate(exp.end_date)}
-                </div>
-              </div>
-              ${exp.description ? `<div class="timeline-description">${exp.description}</div>` : ''}
+          ${content.technologies && content.technologies.length > 0 ? `
+            <h2 class="section-title">
+              <i class="fas fa-tools"></i>
+              Công nghệ nổi bật
+            </h2>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              ${content.technologies.map((t: any) => `<div style="padding:6px 10px;border-radius:8px;background:#f1f5f9;color:#0f172a;font-weight:500;font-size:13px">${t}</div>`).join('')}
             </div>
-          `
-            )
-            .join('')}
-        </div>
-      `
-          : ''
-      }
-
-      ${
-        educations.length > 0
-          ? `
-        <div class="section">
-          <h2 class="section-title">
-            <i class="fas fa-graduation-cap"></i>
-            Education
-          </h2>
-          ${educations
-            .map(
-              (edu: any) => `
-            <div class="timeline-item">
-              <div class="timeline-header">
-                <div>
-                  <div class="timeline-title">${edu.degree || 'Degree'}${edu.field_of_study ? ` in ${edu.field_of_study}` : ''}</div>
-                  <div class="timeline-subtitle">${edu.institution_name || 'Institution'}</div>
-                </div>
-                <div class="timeline-date">
-                  <i class="far fa-calendar"></i>
-                  ${this.formatDate(edu.start_date)} - ${this.formatDate(edu.end_date)}
-                </div>
+          ` : ''}
+          ${content.highlights && content.highlights.length > 0 ? `
+            <h2 class="section-title" style="margin-top:18px;">
+              <i class="fas fa-star"></i>
+              Điểm nổi bật
+            </h2>
+            ${content.highlights.map((h: any) => `
+              <div class="template-card" style="margin-bottom:10px;">
+                <div class="template-card-title">${h.title || h}</div>
+                ${h.description ? `<div class="template-card-subtitle">${h.description}</div>` : ''}
               </div>
-            </div>
-          `
-            )
-            .join('')}
-        </div>
-      `
-          : ''
-      }
-
-      ${
-        certifications.length > 0
-          ? `
-        <div class="section">
-          <h2 class="section-title">
-            <i class="fas fa-certificate"></i>
-            Certifications
-          </h2>
-          ${certifications
-            .map(
-              (cert: any) => `
-            <div class="certification-item">
-              <div class="cert-name">${cert.name}</div>
-              <div class="cert-issuer">${cert.issuing_organization}</div>
-              <div class="cert-date">
-                <i class="far fa-calendar"></i>
-                Issued ${this.formatDate(cert.issue_date)}${cert.expiration_date ? ` - Expires ${this.formatDate(cert.expiration_date)}` : ''}
+            `).join('')}
+          ` : ''}
+          ${content.projects && content.projects.length > 0 ? `
+            <h2 class="section-title" style="margin-top:18px;">
+              <i class="fas fa-project-diagram"></i>
+              Dự án
+            </h2>
+            ${content.projects.map((proj: any) => {
+              const links = Array.isArray(proj.links) ? proj.links : []
+              const linksHtml = links.length
+                ? `<div style="margin-top:8px;">${links.map((l: any) => `<div><a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label || l.url}</a></div>`).join('')}</div>`
+                : ''
+              return `
+              <div class="template-card" style="margin-bottom:12px;">
+                <div class="template-card-title">${proj.title || proj.name || 'Project'}</div>
+                ${proj.role ? `<div class="template-card-subtitle">${proj.role}</div>` : ''}
+                ${proj.description ? `<div class="template-timeline-description" style="margin-top:8px;">${proj.description}</div>` : ''}
+                ${linksHtml}
               </div>
-              ${
-                cert.credential_id || cert.credential_url
-                  ? `
-                <div class="cert-credential">
-                  ${cert.credential_id ? `Credential ID: ${cert.credential_id}` : ''}
-                  ${cert.credential_url ? `<a href="${cert.credential_url}" target="_blank">View Certificate</a>` : ''}
-                </div>
-              `
-                  : ''
-              }
+            `
+            }).join('')}
+          ` : ''}
+          ${content.links && content.links.length > 0 ? `
+            <h2 class="section-title" style="margin-top:18px;">
+              <i class="fas fa-link"></i>
+              Liên kết
+            </h2>
+            <div>
+              ${content.links.map((ln: any) => `<div style="margin-bottom:8px;"><strong style="margin-right:8px">${ln.label ? `${ln.label}:` : ''}</strong><a href="${ln.url}" target="_blank" rel="noopener noreferrer">${ln.url}</a></div>`).join('')}
             </div>
-          `
-            )
-            .join('')}
-        </div>
-      `
-          : ''
-      }
-
-      ${
-        awards.length > 0
-          ? `
-        <div class="section">
-          <h2 class="section-title">
-            <i class="fas fa-trophy"></i>
-            Awards & Honors
-          </h2>
-          ${awards
-            .map(
-              (award: any) => `
-            <div class="award-item">
-              <div class="award-title">${award.title}</div>
-              <div class="award-issuer">${award.issuer}</div>
-              <div class="award-date">
-                <i class="far fa-calendar"></i>
-                ${this.formatDate(award.date)}
-              </div>
-              ${award.description ? `<div class="timeline-description" style="margin-top: 8px;">${award.description}</div>` : ''}
-            </div>
-          `
-            )
-            .join('')}
+          ` : ''}
         </div>
       `
           : ''
@@ -1491,7 +1443,7 @@ export class ResumeService {
    * Generate PDF và upload lên S3, lưu vào resume.file_url
    * @returns file_url của PDF đã upload
    */
-  private async generateAndSaveResumePdf(resume: any, profile: any, template: string = 'modern'): Promise<string> {
+  private async generateAndSaveResumePdf(resume: any, profile: any, template: string = 'professional'): Promise<string> {
     // Generate HTML từ template
     const html = this.generateResumeHtml(resume, profile, template)
 
@@ -1569,7 +1521,7 @@ export class ResumeService {
     }
 
     // Chưa có file_url → generate mới
-    return await this.generateAndSaveResumePdf(resume, profile, template || 'modern')
+    return await this.generateAndSaveResumePdf(resume, profile, template || 'professional')
   }
 
   /**
@@ -1582,7 +1534,7 @@ export class ResumeService {
   /**
    * Helper: Generate PDF from HTML using Puppeteer
    */
-  private async generatePdfFromHtml(html: string): Promise<Buffer> {
+  private async generatePdfFromHtml(html: string, viewportWidth?: number): Promise<Buffer> {
     const browser = await puppeteer.launch({
       headless: true,
       args: [
@@ -1599,12 +1551,71 @@ export class ResumeService {
 
       // Set viewport for consistent rendering
       await page.setViewport({
-        width: 1200,
+        width: viewportWidth && typeof viewportWidth === 'number' ? viewportWidth : 1200,
         height: 1697, // A4 aspect ratio at 96 DPI
         deviceScaleFactor: 2 // High DPI for better quality
       })
 
-      await page.setContent(html, { waitUntil: 'networkidle0' })
+      // Emulate screen media so CSS media queries for screen are used
+      try {
+        await page.emulateMediaType('screen')
+      } catch (e) {
+        // ignore if not supported
+      }
+
+      // Prepare processed HTML. Detect if it's a full HTML document (frontend provided a full page)
+      let processedHtml = html
+      const isFullDocument = /<\s*html|<!doctype/i.test(String(processedHtml))
+
+      if (isFullDocument) {
+        try {
+          if (!/\<base\s+/i.test(processedHtml)) {
+            const baseTag = `<base href="${process.env.PUBLIC_ORIGIN || 'http://localhost:3000'}">`
+            processedHtml = processedHtml.replace(/<head([^>]*)>/i, `<head$1>\n  ${baseTag}`)
+          }
+        } catch (e) {
+          // ignore
+        }
+      } else {
+        // Sanitize incoming HTML: remove accidental inline computed-style attributes on <style> and <link> tags
+        // (frontend may have copied computed styles onto these tags which interferes with rendering)
+        try {
+          // Remove style="..." attributes from <style ...> tags
+          processedHtml = processedHtml.replace(/<style\b([^>]*)\sstyle=(["'])(.*?)\2([^>]*)>/gi, '<style$1$4>')
+          // Remove style="..." attributes from <link ...> tags
+          processedHtml = processedHtml.replace(/<link\b([^>]*)\sstyle=(["'])(.*?)\2([^>]*)>/gi, '<link$1$4>')
+          // If no <base> tag, insert one pointing to server origin to help resolve relative URLs
+          if (!/\<base\s+/i.test(processedHtml)) {
+            const baseTag = `<base href="${process.env.PUBLIC_ORIGIN || 'http://localhost:3000'}">`
+            processedHtml = processedHtml.replace(/<head([^>]*)>/i, `<head$1>\n  ${baseTag}`)
+          }
+        } catch (e) {
+          // ignore sanitization errors and proceed with original HTML
+        }
+
+        // Try to inline Google Fonts CSS + font binaries to avoid network/font-loading issues in Puppeteer
+        try {
+          processedHtml = await this.inlineGoogleFonts(processedHtml)
+        } catch (e) {
+          // If inlining fails, continue with original processedHtml
+          console.warn('Google Fonts inlining failed:', (e as any)?.message || e)
+        }
+      }
+
+      // Ensure @page size exists so Puppeteer respects CSS page size
+      if (!/@page\s*\{/.test(processedHtml)) {
+        // Prepend a simple @page rule to make A4 and zero margins
+        const pageCss = `<style>@page { size: A4; margin: 0; }</style>`
+        processedHtml = pageCss + processedHtml
+      }
+
+      // Allow cross-origin requests and bypass CSP if necessary, then set content
+      try {
+        await page.setBypassCSP(true)
+      } catch (e) {
+        // ignore if not supported
+      }
+      await page.setContent(processedHtml, { waitUntil: 'networkidle0' })
 
       // Wait for all fonts to load
       await page.evaluateHandle('document.fonts.ready')
@@ -1612,25 +1623,131 @@ export class ResumeService {
       // Additional wait for any dynamic content
       await new Promise((resolve) => setTimeout(resolve, 500))
 
-      const pdfBuffer = await page.pdf({
-        format: 'A4',
+      // Build pdf options. Prefer CSS page size if present.
+      const pdfOptions: any = {
         printBackground: true,
-        preferCSSPageSize: false,
+        preferCSSPageSize: true,
         displayHeaderFooter: false,
-        margin: {
-          top: '0mm',
-          right: '0mm',
-          bottom: '0mm',
-          left: '0mm'
-        },
-        // High quality settings
+        margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
         scale: 1,
         tagged: true // For accessibility
-      })
+      }
+
+      if (viewportWidth && typeof viewportWidth === 'number') {
+        // If viewportWidth provided, set paper width to match px width.
+        pdfOptions.width = `${viewportWidth}px`
+        // Keep preferCSSPageSize true so @page rules still apply
+      } else {
+        // Fall back to A4 if no explicit viewport width
+        pdfOptions.format = 'A4'
+      }
+
+      const pdfBuffer = await page.pdf(pdfOptions)
 
       return Buffer.from(pdfBuffer)
     } finally {
       await browser.close()
+    }
+  }
+
+  /**
+   * Professional template (delegates to modern generator for now)
+   */
+  private generateProfessionalTemplate(resume: any, content: any): string {
+    // For now, reuse modern template implementation for professional layout
+    return this.generateModernTemplate(resume, content)
+  }
+
+  /**
+   * Timeline template (delegates to modern generator for now)
+   */
+  private generateTimelineTemplate(resume: any, content: any): string {
+    // Timeline layout currently uses the same renderer but could be specialized later
+    return this.generateModernTemplate(resume, content)
+  }
+
+  /**
+   * Compact template (delegates to modern generator for now)
+   */
+  private generateCompactTemplate(resume: any, content: any): string {
+    // Compact layout currently uses the same renderer but could be specialized later
+    return this.generateModernTemplate(resume, content)
+  }
+
+  /**
+   * Inline Google Fonts CSS and font files into HTML to avoid Puppeteer network/font issues.
+   */
+  private async inlineGoogleFonts(html: string): Promise<string> {
+    try {
+      // Find link tags pointing to fonts.googleapis.com
+      const linkRegex = /<link\b[^>]*href=(["'])(https?:\/\/fonts\.googleapis\.com[^"']+)\1[^>]*>/gi
+      let m
+      let result = html
+
+      // Determine fetch function
+      let fetchFn: any = (globalThis as any).fetch
+      if (!fetchFn) {
+        try {
+          // dynamic import node-fetch
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          fetchFn = require('node-fetch')
+        } catch (e) {
+          // can't fetch, return original html
+          return html
+        }
+      }
+
+      const processedHrefs: Record<string, string> = {}
+
+      while ((m = linkRegex.exec(html)) !== null) {
+        const href = m[2]
+        if (!href || processedHrefs[href]) continue
+        try {
+          const cssRes = await fetchFn(href)
+          if (!cssRes.ok) continue
+          const cssText = await cssRes.text()
+
+          // Find font file URLs in CSS (fonts.gstatic.com)
+          const urlRegex = /url\((https?:\/\/[^)]+)\)/g
+          let um
+          let inlinedCss = cssText
+          const seenUrls: Record<string, string> = {}
+          while ((um = urlRegex.exec(cssText)) !== null) {
+            const fontUrl = um[1].replace(/["']/g, '')
+            if (seenUrls[fontUrl]) continue
+            try {
+              const fontRes = await fetchFn(fontUrl)
+              if (!fontRes.ok) continue
+              const arrayBuffer = await fontRes.arrayBuffer()
+              const buf = Buffer.from(arrayBuffer)
+              // Guess mime type by extension
+              let mime = 'font/woff2'
+              if (fontUrl.endsWith('.woff2')) mime = 'font/woff2'
+              else if (fontUrl.endsWith('.woff')) mime = 'font/woff'
+              else if (fontUrl.endsWith('.ttf')) mime = 'font/ttf'
+              else if (fontUrl.endsWith('.otf')) mime = 'font/otf'
+              const dataUri = `data:${mime};base64,${buf.toString('base64')}`
+              // Replace all occurrences of the fontUrl in css
+              const esc = fontUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+              inlinedCss = inlinedCss.replace(new RegExp(esc, 'g'), dataUri)
+              seenUrls[fontUrl] = dataUri
+            } catch (e) {
+              // ignore individual font fetch errors
+            }
+          }
+
+          // Now replace the original <link ...> tag with <style>inlinedCss</style>
+          const linkTagRegex = new RegExp(`<link\\b[^>]*href=(["'])${href.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\1[^>]*>`, 'gi')
+          result = result.replace(linkTagRegex, `<style>${inlinedCss}</style>`)
+          processedHrefs[href] = href
+        } catch (e) {
+          // ignore per-href errors
+        }
+      }
+
+      return result
+    } catch (e) {
+      return html
     }
   }
 }

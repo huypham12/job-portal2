@@ -21,21 +21,21 @@ export type CreateApplicationDTO = z.infer<typeof CreateApplicationBodySchema>
  */
 const GetApplicationsQuerySchema = z.object({
   page: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
     .transform((val) => {
       if (!val || val.trim() === '') return 1
       const parsed = parseInt(val, 10)
-      return isNaN(parsed) ? 1 : parsed
+      return isNaN(parsed) || parsed <= 0 ? 1 : parsed
     })
     .pipe(z.number().int().positive({ message: 'Page must be greater than 0' })),
   limit: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
     .transform((val) => {
       if (!val || val.trim() === '') return 20
       const parsed = parseInt(val, 10)
-      return isNaN(parsed) ? 20 : parsed
+      return isNaN(parsed) || parsed < 1 || parsed > 100 ? 20 : parsed
     })
     .pipe(
       z

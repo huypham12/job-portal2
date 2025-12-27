@@ -28,6 +28,8 @@
     "db:seed:comprehensive": "tsx prisma/seeders/comprehensive-seed.ts",
     "db:seed:test": "tsx prisma/seeders/test-seed.ts",
     "db:seed:cleanup": "node prisma/seeders/cleanup-deprecated.js",
+    "db:seed:companies": "tsx prisma/seeders/seed-companies.ts",
+    "db:seed:jobs": "tsx prisma/seeders/seed-jobs.ts",
     "db:seed:full": "npm run db:seed:streaming && npm run db:seed:validate"
   },
   "keywords": [],

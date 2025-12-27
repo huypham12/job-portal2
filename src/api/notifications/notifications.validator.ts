@@ -6,26 +6,21 @@ import { NotificationType } from '@/shared/constants/notification-types'
  */
 export const getNotificationsQuerySchema = z.object({
   page: z.preprocess((val) => {
-    // Handle empty string or invalid values as undefined to use default
     if (val === undefined || val === null || val === '') return undefined
     const num = Number(val)
     return isNaN(num) ? undefined : num
   }, z.number().int().min(1).default(1)),
   limit: z.preprocess((val) => {
-    // Handle empty string or invalid values as undefined to use default
     if (val === undefined || val === null || val === '') return undefined
     const num = Number(val)
     return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(100).default(20)),
+  }, z.number().int().min(1).default(20)),
   read: z.preprocess((val) => {
-    // Handle empty string as undefined
     if (val === undefined || val === null || val === '') return undefined
-    // Coerce to boolean
-    return val === 'true' || val === '1'
+    return val === 'true' || val === '1' || val === true
   }, z.boolean().optional()),
   type: z.preprocess(
     (val) => {
-      // Handle empty string as undefined
       if (val === undefined || val === null || val === '') return undefined
       return val
     },

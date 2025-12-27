@@ -1,45 +1,5002 @@
 [
-  { "name": "Node.js", "category": "Backend" },
-  { "name": "TypeScript", "category": "Programming Language" },
-  { "name": "PostgreSQL", "category": "Database" },
-  { "name": "Redis", "category": "Database" },
-  { "name": "Docker", "category": "DevOps" },
-  { "name": "AWS", "category": "Cloud" },
-  { "name": "React", "category": "Frontend" },
-  { "name": "Next.js", "category": "Frontend" },
-  { "name": "Tailwind CSS", "category": "Frontend" },
-  { "name": "React Native", "category": "Mobile" },
-  { "name": ".NET", "category": "Backend" },
-  { "name": "SQL Server", "category": "Database" },
-  { "name": "Java", "category": "Backend" },
-  { "name": "Spring Boot", "category": "Backend" },
-  { "name": "Kafka", "category": "Messaging" },
-  { "name": "Figma", "category": "Design" },
-  { "name": "User Research", "category": "Design" },
-  { "name": "Prototyping", "category": "Design" },
-  { "name": "Product Management", "category": "Product" },
-  { "name": "Agile/Scrum", "category": "Methodology" },
-  { "name": "Business Analysis", "category": "Business" },
-  { "name": "Payment Domain", "category": "Domain" },
-  { "name": "UML/BPMN", "category": "Analysis" },
-  { "name": "Manual Testing", "category": "QA" },
-  { "name": "API Testing", "category": "QA" },
-  { "name": "Postman", "category": "QA" },
-  { "name": "SQL", "category": "Database" },
-  { "name": "ETL", "category": "Data" },
-  { "name": "Cloud Data Warehouse", "category": "Data" },
-  { "name": "Power BI", "category": "Data" },
-  { "name": "Tableau", "category": "Data" },
-  { "name": "Product Analytics", "category": "Data" },
-  { "name": "Machine Learning", "category": "AI/ML" },
-  { "name": "Python", "category": "Programming Language" },
-  { "name": "Recommendation Systems", "category": "AI/ML" },
-  { "name": "C/C++", "category": "Programming Language" },
-  { "name": "Embedded Systems", "category": "IoT" },
-  { "name": "MQTT", "category": "IoT" },
-  { "name": "Digital Marketing", "category": "Marketing" },
-  { "name": "Performance Marketing", "category": "Marketing" },
-  { "name": "Analytics", "category": "Marketing" },
-  { "name": "Communication", "category": "Soft Skill" },
-  { "name": "Presentation", "category": "Soft Skill" }
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440000",
+    "name": "Project Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440001",
+    "name": "Software Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440002",
+    "name": "IT Support",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440003",
+    "name": "System Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440004",
+    "name": "Data Analysis",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440005",
+    "name": "Cloud Computing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440006",
+    "name": "Cybersecurity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440007",
+    "name": "Network Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440008",
+    "name": "Quality Assurance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440009",
+    "name": "Technical Writing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440010",
+    "name": "Medical Diagnosis",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440011",
+    "name": "Patient Care",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440012",
+    "name": "Medical Research",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440013",
+    "name": "Healthcare Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440014",
+    "name": "Nursing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440015",
+    "name": "Pharmacy",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440016",
+    "name": "Medical Imaging",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440017",
+    "name": "Emergency Medicine",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440018",
+    "name": "Surgery",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440019",
+    "name": "Mental Health Counseling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440001"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440020",
+    "name": "Financial Analysis",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440021",
+    "name": "Investment Banking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440022",
+    "name": "Risk Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440023",
+    "name": "Financial Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440024",
+    "name": "Accounting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440025",
+    "name": "Auditing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440026",
+    "name": "Tax Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440027",
+    "name": "Corporate Finance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440028",
+    "name": "Financial Modeling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440029",
+    "name": "Wealth Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440002"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440030",
+    "name": "Teaching",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440031",
+    "name": "Curriculum Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440032",
+    "name": "Educational Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440033",
+    "name": "Student Counseling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440034",
+    "name": "Special Education",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440035",
+    "name": "Educational Technology",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440036",
+    "name": "Language Teaching",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440037",
+    "name": "Research",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440038",
+    "name": "Academic Advising",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440039",
+    "name": "Library Science",
+    "category_id": "550e8400-e29b-41d4-a716-446655440003"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440040",
+    "name": "Retail Sales",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440041",
+    "name": "Customer Service",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440042",
+    "name": "Inventory Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440043",
+    "name": "Store Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440044",
+    "name": "Merchandising",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440045",
+    "name": "Visual Merchandising",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440046",
+    "name": "Loss Prevention",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440047",
+    "name": "Point of Sale Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440048",
+    "name": "Retail Analytics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440049",
+    "name": "E-commerce",
+    "category_id": "550e8400-e29b-41d4-a716-446655440004"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440050",
+    "name": "Manufacturing Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440051",
+    "name": "Quality Control",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440052",
+    "name": "Production Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440053",
+    "name": "Supply Chain Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440054",
+    "name": "Lean Manufacturing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440055",
+    "name": "Six Sigma",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440056",
+    "name": "Industrial Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440057",
+    "name": "Process Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440058",
+    "name": "Maintenance Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440059",
+    "name": "Safety Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440005"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440060",
+    "name": "Business Strategy",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440061",
+    "name": "Management Consulting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440062",
+    "name": "Process Improvement",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440063",
+    "name": "Change Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440064",
+    "name": "Organizational Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440065",
+    "name": "Strategic Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440066",
+    "name": "Business Analysis",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440067",
+    "name": "Requirements Gathering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440068",
+    "name": "Client Relations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440069",
+    "name": "Proposal Writing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440006"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440070",
+    "name": "Digital Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440071",
+    "name": "Content Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440072",
+    "name": "SEO/SEM",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440073",
+    "name": "Social Media Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440074",
+    "name": "Brand Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440075",
+    "name": "Market Research",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440076",
+    "name": "Advertising",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440077",
+    "name": "Public Relations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440078",
+    "name": "Event Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440079",
+    "name": "Email Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440007"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440080",
+    "name": "Real Estate Sales",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440081",
+    "name": "Property Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440082",
+    "name": "Real Estate Appraisal",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440083",
+    "name": "Commercial Real Estate",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440084",
+    "name": "Residential Real Estate",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440085",
+    "name": "Real Estate Law",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440086",
+    "name": "Property Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440087",
+    "name": "Real Estate Investment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440088",
+    "name": "Leasing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440089",
+    "name": "Real Estate Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440008"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440090",
+    "name": "Logistics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440091",
+    "name": "Fleet Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440092",
+    "name": "Transportation Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440093",
+    "name": "Route Optimization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440094",
+    "name": "Warehouse Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440095",
+    "name": "Shipping Coordination",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440096",
+    "name": "Import/Export",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440097",
+    "name": "Customs Compliance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440098",
+    "name": "Freight Forwarding",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440099",
+    "name": "Last Mile Delivery",
+    "category_id": "550e8400-e29b-41d4-a716-446655440009"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440100",
+    "name": "Food Preparation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440101",
+    "name": "Culinary Arts",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440102",
+    "name": "Restaurant Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440103",
+    "name": "Food Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440104",
+    "name": "Menu Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440105",
+    "name": "Beverage Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440106",
+    "name": "Catering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440107",
+    "name": "Nutrition",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440108",
+    "name": "Dietary Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440109",
+    "name": "Bakery Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440010"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440110",
+    "name": "Construction Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440111",
+    "name": "Project Estimation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440112",
+    "name": "Building Codes",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440113",
+    "name": "Structural Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440114",
+    "name": "Architectural Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440115",
+    "name": "Site Supervision",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440116",
+    "name": "Contract Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440117",
+    "name": "Permitting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440118",
+    "name": "Construction Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440119",
+    "name": "Blueprint Reading",
+    "category_id": "550e8400-e29b-41d4-a716-446655440011"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440120",
+    "name": "Legal Research",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440121",
+    "name": "Contract Law",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440122",
+    "name": "Corporate Law",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440123",
+    "name": "Intellectual Property",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440124",
+    "name": "Litigation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440125",
+    "name": "Compliance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440126",
+    "name": "Regulatory Affairs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440127",
+    "name": "Legal Writing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440128",
+    "name": "Case Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440129",
+    "name": "Mediation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440012"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440130",
+    "name": "Public Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440131",
+    "name": "Policy Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440132",
+    "name": "Government Relations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440133",
+    "name": "Public Policy",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440134",
+    "name": "Regulatory Compliance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440135",
+    "name": "Budget Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440136",
+    "name": "Grant Writing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440137",
+    "name": "Community Outreach",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440138",
+    "name": "Crisis Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440139",
+    "name": "Emergency Response",
+    "category_id": "550e8400-e29b-41d4-a716-446655440013"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440140",
+    "name": "Fundraising",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440141",
+    "name": "Program Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440142",
+    "name": "Nonprofit Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440143",
+    "name": "Volunteer Coordination",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440144",
+    "name": "Community Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440145",
+    "name": "Social Impact",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440146",
+    "name": "Grant Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440147",
+    "name": "Advocacy",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440148",
+    "name": "Social Services",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440149",
+    "name": "Charity Work",
+    "category_id": "550e8400-e29b-41d4-a716-446655440014"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440150",
+    "name": "Broadcasting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440151",
+    "name": "Journalism",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440152",
+    "name": "Content Creation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440153",
+    "name": "Video Production",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440154",
+    "name": "Film Production",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440155",
+    "name": "Media Relations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440156",
+    "name": "Public Speaking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440157",
+    "name": "Entertainment Production",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440158",
+    "name": "Event Production",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440159",
+    "name": "Creative Writing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440015"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440160",
+    "name": "Energy Production",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440161",
+    "name": "Renewable Energy",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440162",
+    "name": "Oil & Gas",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440163",
+    "name": "Power Distribution",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440164",
+    "name": "Energy Efficiency",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440165",
+    "name": "Environmental Compliance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440166",
+    "name": "Grid Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440167",
+    "name": "Energy Trading",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440168",
+    "name": "Utility Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440169",
+    "name": "Sustainability",
+    "category_id": "550e8400-e29b-41d4-a716-446655440016"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440170",
+    "name": "Telecommunications Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440171",
+    "name": "Network Infrastructure",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440172",
+    "name": "Wireless Communications",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440173",
+    "name": "Fiber Optics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440174",
+    "name": "Satellite Communications",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440175",
+    "name": "VoIP Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440176",
+    "name": "Data Communications",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440177",
+    "name": "Telecom Regulations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440178",
+    "name": "Customer Service Telecom",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440179",
+    "name": "Network Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440017"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440180",
+    "name": "Insurance Underwriting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440181",
+    "name": "Claims Processing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440182",
+    "name": "Risk Assessment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440183",
+    "name": "Insurance Sales",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440184",
+    "name": "Policy Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440185",
+    "name": "Actuarial Science",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440186",
+    "name": "Fraud Investigation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440187",
+    "name": "Insurance Law",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440188",
+    "name": "Customer Service Insurance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440189",
+    "name": "Insurance Analytics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440018"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440190",
+    "name": "Automotive Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440191",
+    "name": "Vehicle Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440192",
+    "name": "Manufacturing Automotive",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440193",
+    "name": "Quality Control Automotive",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440194",
+    "name": "Supply Chain Automotive",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440195",
+    "name": "Automotive Sales",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440196",
+    "name": "Auto Repair",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440197",
+    "name": "Fleet Management Automotive",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440198",
+    "name": "Electric Vehicles",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440199",
+    "name": "Autonomous Driving",
+    "category_id": "550e8400-e29b-41d4-a716-446655440019"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440200",
+    "name": "Agricultural Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440201",
+    "name": "Crop Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440202",
+    "name": "Livestock Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440203",
+    "name": "Farm Equipment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440204",
+    "name": "Soil Science",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440205",
+    "name": "Agribusiness",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440206",
+    "name": "Sustainable Farming",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440207",
+    "name": "Food Processing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440208",
+    "name": "Agricultural Economics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440209",
+    "name": "Agricultural Research",
+    "category_id": "550e8400-e29b-41d4-a716-446655440020"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440210",
+    "name": "Drug Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440211",
+    "name": "Clinical Trials",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440212",
+    "name": "Regulatory Affairs Pharma",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440213",
+    "name": "Pharmaceutical Manufacturing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440214",
+    "name": "Quality Control Pharma",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440215",
+    "name": "Pharmacology",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440216",
+    "name": "Biochemistry",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440217",
+    "name": "Medical Affairs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440218",
+    "name": "Pharmaceutical Sales",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440219",
+    "name": "Drug Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440021"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440220",
+    "name": "Aerospace Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440221",
+    "name": "Aircraft Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440222",
+    "name": "Avionics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440223",
+    "name": "Flight Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440224",
+    "name": "Space Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440225",
+    "name": "Propulsion Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440226",
+    "name": "Air Traffic Control",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440227",
+    "name": "Aviation Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440228",
+    "name": "Aircraft Maintenance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440229",
+    "name": "Unmanned Aerial Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440022"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440230",
+    "name": "Hotel Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440231",
+    "name": "Event Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440232",
+    "name": "Tourism Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440233",
+    "name": "Customer Service Hospitality",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440234",
+    "name": "Revenue Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440235",
+    "name": "Front Office Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440236",
+    "name": "Housekeeping",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440237",
+    "name": "Food & Beverage Service",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440238",
+    "name": "Concierge Services",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440239",
+    "name": "Spa Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440023"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440240",
+    "name": "Sports Coaching",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440241",
+    "name": "Event Management Sports",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440242",
+    "name": "Athlete Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440243",
+    "name": "Sports Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440244",
+    "name": "Sports Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440245",
+    "name": "Fitness Training",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440246",
+    "name": "Sports Medicine",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440247",
+    "name": "Venue Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440248",
+    "name": "Sports Analytics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440249",
+    "name": "Team Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440024"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440250",
+    "name": "JavaScript Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440251",
+    "name": "Frontend JavaScript",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440252",
+    "name": "Node.js Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440253",
+    "name": "React.js",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440254",
+    "name": "Angular.js",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440255",
+    "name": "Vue.js",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440256",
+    "name": "Express.js",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440257",
+    "name": "JavaScript Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440258",
+    "name": "JavaScript Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440259",
+    "name": "JavaScript Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440025"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440260",
+    "name": "Python Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440261",
+    "name": "Django Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440262",
+    "name": "Flask Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440263",
+    "name": "Python Data Science",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440264",
+    "name": "Python Machine Learning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440265",
+    "name": "Python Web Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440266",
+    "name": "Python Automation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440267",
+    "name": "Python Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440268",
+    "name": "Python Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440269",
+    "name": "Python Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440026"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440270",
+    "name": "Java Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440271",
+    "name": "Spring Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440272",
+    "name": "Spring Boot",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440273",
+    "name": "Java Enterprise Edition",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440274",
+    "name": "Java Microservices",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440275",
+    "name": "Java Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440276",
+    "name": "Java Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440277",
+    "name": "Java Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440278",
+    "name": "Android Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440279",
+    "name": "Java Desktop Applications",
+    "category_id": "550e8400-e29b-41d4-a716-446655440027"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440280",
+    "name": "C# Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440281",
+    "name": ".NET Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440282",
+    "name": ".NET Core",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440283",
+    "name": "ASP.NET",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440284",
+    "name": "Entity Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440285",
+    "name": "C# Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440286",
+    "name": "C# Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440287",
+    "name": "C# Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440288",
+    "name": "Unity Game Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440289",
+    "name": "WPF Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440028"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440290",
+    "name": "PHP Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440291",
+    "name": "Laravel Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440292",
+    "name": "Symfony Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440293",
+    "name": "CodeIgniter Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440294",
+    "name": "PHP Web Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440295",
+    "name": "PHP Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440296",
+    "name": "PHP Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440297",
+    "name": "PHP Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440298",
+    "name": "WordPress Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440299",
+    "name": "PHP APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440029"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440300",
+    "name": "Ruby Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440301",
+    "name": "Ruby on Rails",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440302",
+    "name": "Sinatra Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440303",
+    "name": "Ruby Web Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440304",
+    "name": "Ruby Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440305",
+    "name": "Ruby Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440306",
+    "name": "Ruby Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440307",
+    "name": "Ruby Metaprogramming",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440308",
+    "name": "Ruby Gems Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440309",
+    "name": "Ruby APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440030"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440310",
+    "name": "Go Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440311",
+    "name": "Go Web Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440312",
+    "name": "Go Microservices",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440313",
+    "name": "Go Concurrency",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440314",
+    "name": "Go Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440315",
+    "name": "Go Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440316",
+    "name": "Go Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440317",
+    "name": "Go CLI Applications",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440318",
+    "name": "Go Cloud Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440319",
+    "name": "Go APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440031"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440320",
+    "name": "Rust Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440321",
+    "name": "Rust Systems Programming",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440322",
+    "name": "Rust Web Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440323",
+    "name": "Rust Concurrency",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440324",
+    "name": "Rust Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440325",
+    "name": "Rust Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440326",
+    "name": "Rust Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440327",
+    "name": "Rust Memory Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440328",
+    "name": "Rust CLI Applications",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440329",
+    "name": "Rust APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440032"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440330",
+    "name": "Swift Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440331",
+    "name": "iOS Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440332",
+    "name": "SwiftUI",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440333",
+    "name": "macOS Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440334",
+    "name": "Swift Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440335",
+    "name": "Swift Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440336",
+    "name": "Swift Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440337",
+    "name": "watchOS Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440338",
+    "name": "tvOS Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440339",
+    "name": "Swift APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440033"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440340",
+    "name": "Kotlin Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440341",
+    "name": "Android Development Kotlin",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440342",
+    "name": "Kotlin Multiplatform",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440343",
+    "name": "Kotlin Native",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440344",
+    "name": "Kotlin Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440345",
+    "name": "Kotlin Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440346",
+    "name": "Kotlin Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440347",
+    "name": "Kotlin DSL",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440348",
+    "name": "Kotlin Coroutines",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440349",
+    "name": "Kotlin APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440034"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440350",
+    "name": "TypeScript Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440351",
+    "name": "TypeScript Frontend",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440352",
+    "name": "TypeScript Backend",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440353",
+    "name": "TypeScript Node.js",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440354",
+    "name": "TypeScript Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440355",
+    "name": "TypeScript Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440356",
+    "name": "TypeScript Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440357",
+    "name": "TypeScript Generics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440358",
+    "name": "TypeScript Decorators",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440359",
+    "name": "TypeScript APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440035"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440360",
+    "name": "C++ Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440361",
+    "name": "C++ Systems Programming",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440362",
+    "name": "C++ Game Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440363",
+    "name": "C++ Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440364",
+    "name": "C++ Memory Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440365",
+    "name": "C++ Templates",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440366",
+    "name": "C++ STL",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440367",
+    "name": "C++ Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440368",
+    "name": "C++ Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440369",
+    "name": "C++ APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440036"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440370",
+    "name": "C Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440371",
+    "name": "C Systems Programming",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440372",
+    "name": "C Embedded Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440373",
+    "name": "C Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440374",
+    "name": "C Memory Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440375",
+    "name": "C Pointers",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440376",
+    "name": "C Libraries",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440377",
+    "name": "C Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440378",
+    "name": "C Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440379",
+    "name": "C APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440037"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440380",
+    "name": "Scala Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440381",
+    "name": "Scala Functional Programming",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440382",
+    "name": "Akka Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440383",
+    "name": "Play Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440384",
+    "name": "Scala Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440385",
+    "name": "Scala Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440386",
+    "name": "Scala Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440387",
+    "name": "Scala Big Data",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440388",
+    "name": "Scala APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440389",
+    "name": "Scala Macros",
+    "category_id": "550e8400-e29b-41d4-a716-446655440038"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440390",
+    "name": "R Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440391",
+    "name": "R Data Analysis",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440392",
+    "name": "R Statistics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440393",
+    "name": "R Visualization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440394",
+    "name": "R Machine Learning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440395",
+    "name": "R Shiny",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440396",
+    "name": "R Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440397",
+    "name": "R Packages",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440398",
+    "name": "R APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440399",
+    "name": "R Research",
+    "category_id": "550e8400-e29b-41d4-a716-446655440039"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440400",
+    "name": "SQL Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440401",
+    "name": "Database Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440402",
+    "name": "Query Optimization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440403",
+    "name": "Stored Procedures",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440404",
+    "name": "Database Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440405",
+    "name": "Data Warehousing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440406",
+    "name": "ETL Processes",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440407",
+    "name": "Database Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440408",
+    "name": "Data Modeling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440409",
+    "name": "NoSQL Databases",
+    "category_id": "550e8400-e29b-41d4-a716-446655440040"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440410",
+    "name": "MongoDB Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440411",
+    "name": "MongoDB Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440412",
+    "name": "MongoDB Aggregation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440413",
+    "name": "MongoDB Indexing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440414",
+    "name": "MongoDB Sharding",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440415",
+    "name": "MongoDB Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440416",
+    "name": "MongoDB Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440417",
+    "name": "MongoDB Replication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440418",
+    "name": "MongoDB Atlas",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440419",
+    "name": "MongoDB APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440041"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440420",
+    "name": "PostgreSQL Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440421",
+    "name": "PostgreSQL Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440422",
+    "name": "PostgreSQL Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440423",
+    "name": "PostgreSQL Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440424",
+    "name": "PostgreSQL Extensions",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440425",
+    "name": "PostgreSQL JSON",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440426",
+    "name": "PostgreSQL Replication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440427",
+    "name": "PostgreSQL Partitioning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440428",
+    "name": "PostgreSQL APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440429",
+    "name": "PostgreSQL Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440042"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440430",
+    "name": "MySQL Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440431",
+    "name": "MySQL Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440432",
+    "name": "MySQL Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440433",
+    "name": "MySQL Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440434",
+    "name": "MySQL Replication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440435",
+    "name": "MySQL Clustering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440436",
+    "name": "MySQL Optimization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440437",
+    "name": "MySQL APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440438",
+    "name": "MySQL Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440439",
+    "name": "MySQL Backup",
+    "category_id": "550e8400-e29b-41d4-a716-446655440043"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440440",
+    "name": "Redis Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440441",
+    "name": "Redis Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440442",
+    "name": "Redis Clustering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440443",
+    "name": "Redis Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440444",
+    "name": "Redis Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440445",
+    "name": "Redis Data Structures",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440446",
+    "name": "Redis Pub/Sub",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440447",
+    "name": "Redis APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440448",
+    "name": "Redis Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440449",
+    "name": "Redis Caching",
+    "category_id": "550e8400-e29b-41d4-a716-446655440044"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440450",
+    "name": "Elasticsearch Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440451",
+    "name": "Elasticsearch Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440452",
+    "name": "Elasticsearch Search",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440453",
+    "name": "Elasticsearch Mapping",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440454",
+    "name": "Elasticsearch Aggregation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440455",
+    "name": "Elasticsearch Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440456",
+    "name": "Elasticsearch Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440457",
+    "name": "Elasticsearch APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440458",
+    "name": "Elasticsearch Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440459",
+    "name": "Elasticsearch Kibana",
+    "category_id": "550e8400-e29b-41d4-a716-446655440045"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440460",
+    "name": "Docker Containerization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440461",
+    "name": "Docker Compose",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440462",
+    "name": "Docker Images",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440463",
+    "name": "Docker Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440464",
+    "name": "Docker Volumes",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440465",
+    "name": "Docker Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440466",
+    "name": "Docker Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440467",
+    "name": "Docker Registry",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440468",
+    "name": "Docker APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440469",
+    "name": "Docker Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440046"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440470",
+    "name": "Kubernetes Orchestration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440471",
+    "name": "Kubernetes Pods",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440472",
+    "name": "Kubernetes Services",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440473",
+    "name": "Kubernetes Deployments",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440474",
+    "name": "Kubernetes Ingress",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440475",
+    "name": "Kubernetes Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440476",
+    "name": "Kubernetes Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440477",
+    "name": "Kubernetes Helm",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440478",
+    "name": "Kubernetes APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440479",
+    "name": "Kubernetes Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440047"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440480",
+    "name": "AWS EC2",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440481",
+    "name": "AWS S3",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440482",
+    "name": "AWS Lambda",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440483",
+    "name": "AWS RDS",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440484",
+    "name": "AWS CloudFormation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440485",
+    "name": "AWS Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440486",
+    "name": "AWS Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440487",
+    "name": "AWS Cost Optimization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440488",
+    "name": "AWS APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440489",
+    "name": "AWS DevOps",
+    "category_id": "550e8400-e29b-41d4-a716-446655440048"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440490",
+    "name": "Azure Virtual Machines",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440491",
+    "name": "Azure Storage",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440492",
+    "name": "Azure Functions",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440493",
+    "name": "Azure SQL Database",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440494",
+    "name": "Azure Resource Manager",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440495",
+    "name": "Azure Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440496",
+    "name": "Azure Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440497",
+    "name": "Azure Cost Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440498",
+    "name": "Azure APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440499",
+    "name": "Azure DevOps",
+    "category_id": "550e8400-e29b-41d4-a716-446655440049"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440500",
+    "name": "Google Compute Engine",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440501",
+    "name": "Google Cloud Storage",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440502",
+    "name": "Google Cloud Functions",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440503",
+    "name": "Google Cloud SQL",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440504",
+    "name": "Google Cloud Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440505",
+    "name": "Google Cloud Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440506",
+    "name": "Google Cloud Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440507",
+    "name": "Google Cloud Cost",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440508",
+    "name": "Google Cloud APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440509",
+    "name": "Google Cloud DevOps",
+    "category_id": "550e8400-e29b-41d4-a716-446655440050"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440510",
+    "name": "React Component Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440511",
+    "name": "React Hooks",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440512",
+    "name": "React State Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440513",
+    "name": "React Router",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440514",
+    "name": "React Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440515",
+    "name": "React Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440516",
+    "name": "React Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440517",
+    "name": "React Native",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440518",
+    "name": "React APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440519",
+    "name": "React Redux",
+    "category_id": "550e8400-e29b-41d4-a716-446655440051"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440520",
+    "name": "Vue.js Component Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440521",
+    "name": "Vue.js Composition API",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440522",
+    "name": "Vue.js State Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440523",
+    "name": "Vue.js Router",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440524",
+    "name": "Vue.js Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440525",
+    "name": "Vue.js Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440526",
+    "name": "Vue.js Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440527",
+    "name": "Nuxt.js",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440528",
+    "name": "Vue.js APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440529",
+    "name": "Vuex",
+    "category_id": "550e8400-e29b-41d4-a716-446655440052"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440530",
+    "name": "Angular Component Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440531",
+    "name": "Angular Services",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440532",
+    "name": "Angular State Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440533",
+    "name": "Angular Router",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440534",
+    "name": "Angular Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440535",
+    "name": "Angular Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440536",
+    "name": "Angular Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440537",
+    "name": "Angular Material",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440538",
+    "name": "Angular APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440539",
+    "name": "RxJS",
+    "category_id": "550e8400-e29b-41d4-a716-446655440053"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440540",
+    "name": "Node.js Server Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440541",
+    "name": "Node.js APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440542",
+    "name": "Node.js Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440543",
+    "name": "Node.js Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440544",
+    "name": "Node.js Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440545",
+    "name": "Node.js Streams",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440546",
+    "name": "Node.js Clustering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440547",
+    "name": "Node.js Microservices",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440548",
+    "name": "Node.js Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440549",
+    "name": "Node.js Event Loop",
+    "category_id": "550e8400-e29b-41d4-a716-446655440054"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440550",
+    "name": "Express.js Routing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440551",
+    "name": "Express.js Middleware",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440552",
+    "name": "Express.js Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440553",
+    "name": "Express.js Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440554",
+    "name": "Express.js Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440555",
+    "name": "Express.js APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440556",
+    "name": "Express.js Authentication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440557",
+    "name": "Express.js Validation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440558",
+    "name": "Express.js Error Handling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440559",
+    "name": "Express.js File Upload",
+    "category_id": "550e8400-e29b-41d4-a716-446655440055"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440560",
+    "name": "Django Models",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440561",
+    "name": "Django Views",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440562",
+    "name": "Django Templates",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440563",
+    "name": "Django Admin",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440564",
+    "name": "Django REST Framework",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440565",
+    "name": "Django Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440566",
+    "name": "Django Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440567",
+    "name": "Django Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440568",
+    "name": "Django Authentication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440569",
+    "name": "Django Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440056"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440570",
+    "name": "Spring Boot Controllers",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440571",
+    "name": "Spring Boot Services",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440572",
+    "name": "Spring Boot Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440573",
+    "name": "Spring Boot Data JPA",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440574",
+    "name": "Spring Boot Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440575",
+    "name": "Spring Boot Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440576",
+    "name": "Spring Boot Microservices",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440577",
+    "name": "Spring Boot APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440578",
+    "name": "Spring Boot Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440579",
+    "name": "Spring Boot Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440057"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440580",
+    "name": "Laravel Controllers",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440581",
+    "name": "Laravel Models",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440582",
+    "name": "Laravel Views",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440583",
+    "name": "Laravel Routing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440584",
+    "name": "Laravel Eloquent",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440585",
+    "name": "Laravel Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440586",
+    "name": "Laravel Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440587",
+    "name": "Laravel Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440588",
+    "name": "Laravel APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440589",
+    "name": "Laravel Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440058"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440590",
+    "name": "Ruby on Rails MVC",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440591",
+    "name": "Ruby on Rails Active Record",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440592",
+    "name": "Ruby on Rails Routing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440593",
+    "name": "Ruby on Rails Views",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440594",
+    "name": "Ruby on Rails Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440595",
+    "name": "Ruby on Rails Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440596",
+    "name": "Ruby on Rails Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440597",
+    "name": "Ruby on Rails APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440598",
+    "name": "Ruby on Rails Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440599",
+    "name": "Ruby on Rails Gems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440059"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440600",
+    "name": "Flutter Widgets",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440601",
+    "name": "Flutter State Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440602",
+    "name": "Flutter Navigation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440603",
+    "name": "Flutter Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440604",
+    "name": "Flutter Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440605",
+    "name": "Flutter Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440606",
+    "name": "Flutter APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440607",
+    "name": "Flutter Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440608",
+    "name": "Dart Programming",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440609",
+    "name": "Flutter UI Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440060"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440610",
+    "name": "React Native Components",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440611",
+    "name": "React Native Navigation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440612",
+    "name": "React Native State Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440613",
+    "name": "React Native Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440614",
+    "name": "React Native Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440615",
+    "name": "React Native Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440616",
+    "name": "React Native APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440617",
+    "name": "React Native Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440618",
+    "name": "Native Modules",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440619",
+    "name": "React Native UI",
+    "category_id": "550e8400-e29b-41d4-a716-446655440061"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440620",
+    "name": "TensorFlow Model Training",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440621",
+    "name": "TensorFlow Neural Networks",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440622",
+    "name": "TensorFlow Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440623",
+    "name": "TensorFlow Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440624",
+    "name": "TensorFlow APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440625",
+    "name": "TensorFlow Serving",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440626",
+    "name": "TensorFlow Lite",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440627",
+    "name": "TensorFlow Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440628",
+    "name": "TensorFlow Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440629",
+    "name": "Computer Vision",
+    "category_id": "550e8400-e29b-41d4-a716-446655440062"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440630",
+    "name": "PyTorch Model Training",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440631",
+    "name": "PyTorch Neural Networks",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440632",
+    "name": "PyTorch Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440633",
+    "name": "PyTorch Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440634",
+    "name": "PyTorch APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440635",
+    "name": "PyTorch Lightning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440636",
+    "name": "PyTorch Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440637",
+    "name": "PyTorch Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440638",
+    "name": "Deep Learning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440639",
+    "name": "NLP Processing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440063"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440640",
+    "name": "Machine Learning Algorithms",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440641",
+    "name": "Data Preprocessing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440642",
+    "name": "Feature Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440643",
+    "name": "Model Evaluation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440644",
+    "name": "Supervised Learning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440645",
+    "name": "Unsupervised Learning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440646",
+    "name": "Reinforcement Learning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440647",
+    "name": "Model Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440648",
+    "name": "ML Ops",
+    "category_id": "550e8400-e29b-41d4-a716-446655440064"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440649",
+    "name": "AI Ethics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440650",
+    "name": "Natural Language Processing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440651",
+    "name": "Computer Vision",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440652",
+    "name": "Robotics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440653",
+    "name": "Expert Systems",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440654",
+    "name": "Neural Networks",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440655",
+    "name": "AI Model Training",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440656",
+    "name": "AI Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440657",
+    "name": "AI Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440658",
+    "name": "AI Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440065"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440659",
+    "name": "Big Data Analytics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440660",
+    "name": "Statistical Analysis",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440661",
+    "name": "Data Visualization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440662",
+    "name": "Predictive Modeling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440663",
+    "name": "Data Mining",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440664",
+    "name": "Business Intelligence",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440665",
+    "name": "Data Warehousing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440666",
+    "name": "ETL Processes",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440667",
+    "name": "Data Governance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440668",
+    "name": "Data Quality",
+    "category_id": "550e8400-e29b-41d4-a716-446655440066"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440669",
+    "name": "Continuous Integration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440670",
+    "name": "Continuous Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440671",
+    "name": "Infrastructure as Code",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440672",
+    "name": "Configuration Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440673",
+    "name": "Automated Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440674",
+    "name": "Monitoring & Logging",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440675",
+    "name": "Release Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440676",
+    "name": "DevOps Tools",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440677",
+    "name": "Site Reliability Engineering",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440678",
+    "name": "DevOps Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440067"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440679",
+    "name": "Network Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440680",
+    "name": "Application Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440681",
+    "name": "Data Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440682",
+    "name": "Penetration Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440683",
+    "name": "Vulnerability Assessment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440684",
+    "name": "Security Auditing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440685",
+    "name": "Incident Response",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440686",
+    "name": "Forensic Analysis",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440687",
+    "name": "Compliance Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440688",
+    "name": "Cryptography",
+    "category_id": "550e8400-e29b-41d4-a716-446655440068"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440689",
+    "name": "Blockchain Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440690",
+    "name": "Smart Contracts",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440691",
+    "name": "Decentralized Applications",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440692",
+    "name": "Cryptocurrency",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440693",
+    "name": "Distributed Ledger",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440694",
+    "name": "Consensus Mechanisms",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440695",
+    "name": "Blockchain Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440696",
+    "name": "Token Economics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440697",
+    "name": "Web3 Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440698",
+    "name": "NFT Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440069"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440699",
+    "name": "Full Stack Architecture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440700",
+    "name": "API Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440701",
+    "name": "Database Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440702",
+    "name": "System Integration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440703",
+    "name": "Performance Optimization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440704",
+    "name": "Code Architecture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440705",
+    "name": "Scalability Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440706",
+    "name": "Microservices Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440707",
+    "name": "RESTful APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440708",
+    "name": "GraphQL APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440070"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440709",
+    "name": "Frontend Architecture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440710",
+    "name": "UI/UX Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440711",
+    "name": "Responsive Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440712",
+    "name": "CSS Frameworks",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440713",
+    "name": "JavaScript Frameworks",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440714",
+    "name": "Frontend Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440715",
+    "name": "Frontend Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440716",
+    "name": "Frontend Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440717",
+    "name": "Browser APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440718",
+    "name": "Progressive Web Apps",
+    "category_id": "550e8400-e29b-41d4-a716-446655440071"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440719",
+    "name": "Backend Architecture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440720",
+    "name": "Server-Side Logic",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440721",
+    "name": "Database Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440722",
+    "name": "API Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440723",
+    "name": "Authentication & Authorization",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440724",
+    "name": "Backend Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440725",
+    "name": "Backend Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440726",
+    "name": "Backend Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440727",
+    "name": "Server Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440728",
+    "name": "Caching Strategies",
+    "category_id": "550e8400-e29b-41d4-a716-446655440072"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440729",
+    "name": "Mobile App Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440730",
+    "name": "iOS Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440731",
+    "name": "Android Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440732",
+    "name": "Cross-Platform Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440733",
+    "name": "Mobile UI/UX",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440734",
+    "name": "Mobile Testing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440735",
+    "name": "Mobile Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440736",
+    "name": "Mobile Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440737",
+    "name": "App Store Deployment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440738",
+    "name": "Mobile APIs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440073"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440739",
+    "name": "Remote Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440740",
+    "name": "Video Conferencing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440741",
+    "name": "Remote Team Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440742",
+    "name": "Virtual Collaboration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440743",
+    "name": "Remote Work Tools",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440744",
+    "name": "Timezone Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440745",
+    "name": "Remote Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440746",
+    "name": "Work-Life Balance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440747",
+    "name": "Remote Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440748",
+    "name": "Distributed Teams",
+    "category_id": "550e8400-e29b-41d4-a716-446655440074"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440749",
+    "name": "Office Environment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440750",
+    "name": "In-Person Collaboration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440751",
+    "name": "Office Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440752",
+    "name": "Meeting Facilitation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440753",
+    "name": "Office Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440754",
+    "name": "Workspace Design",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440755",
+    "name": "Office Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440756",
+    "name": "Office Culture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440757",
+    "name": "Office Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440758",
+    "name": "Physical Team Building",
+    "category_id": "550e8400-e29b-41d4-a716-446655440075"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440759",
+    "name": "Hybrid Work Models",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440760",
+    "name": "Flexible Scheduling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440761",
+    "name": "Workplace Flexibility",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440762",
+    "name": "Hybrid Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440763",
+    "name": "Hybrid Collaboration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440764",
+    "name": "Hybrid Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440765",
+    "name": "Hybrid Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440766",
+    "name": "Hybrid Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440767",
+    "name": "Work Mode Adaptation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440768",
+    "name": "Hybrid Team Dynamics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440076"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440769",
+    "name": "Contract Negotiation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440770",
+    "name": "Project-Based Work",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440771",
+    "name": "Freelance Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440772",
+    "name": "Contract Administration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440773",
+    "name": "Vendor Relations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440774",
+    "name": "Contract Compliance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440775",
+    "name": "Service Level Agreements",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440776",
+    "name": "Contract Performance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440777",
+    "name": "Contract Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440778",
+    "name": "Contract Monitoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440077"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440779",
+    "name": "Freelance Platforms",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440780",
+    "name": "Gig Economy Navigation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440781",
+    "name": "Independent Contracting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440782",
+    "name": "Freelance Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440783",
+    "name": "Client Acquisition",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440784",
+    "name": "Freelance Finance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440785",
+    "name": "Portfolio Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440786",
+    "name": "Freelance Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440787",
+    "name": "Rate Negotiation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440788",
+    "name": "Project Estimation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440078"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440789",
+    "name": "Part-Time Scheduling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440790",
+    "name": "Work-Life Integration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440791",
+    "name": "Flexible Hours Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440792",
+    "name": "Part-Time Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440793",
+    "name": "Side Project Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440794",
+    "name": "Multiple Role Balancing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440795",
+    "name": "Part-Time Career Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440796",
+    "name": "Time Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440797",
+    "name": "Part-Time Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440798",
+    "name": "Income Diversification",
+    "category_id": "550e8400-e29b-41d4-a716-446655440079"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440799",
+    "name": "Full-Time Career Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440800",
+    "name": "Long-Term Commitment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440801",
+    "name": "Career Advancement",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440802",
+    "name": "Professional Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440803",
+    "name": "Full-Time Benefits",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440804",
+    "name": "Workplace Stability",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440805",
+    "name": "Full-Time Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440806",
+    "name": "Corporate Culture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440807",
+    "name": "Team Integration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440808",
+    "name": "Organizational Loyalty",
+    "category_id": "550e8400-e29b-41d4-a716-446655440080"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440809",
+    "name": "Internship Programs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440810",
+    "name": "Entry-Level Training",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440811",
+    "name": "Mentorship Programs",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440812",
+    "name": "Career Exploration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440813",
+    "name": "Skill Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440814",
+    "name": "Professional Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440815",
+    "name": "Resume Building",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440816",
+    "name": "Interview Preparation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440817",
+    "name": "Industry Exposure",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440818",
+    "name": "Learning Culture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440081"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440819",
+    "name": "Temporary Assignment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440820",
+    "name": "Short-Term Projects",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440821",
+    "name": "Seasonal Work",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440822",
+    "name": "Contract Staffing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440823",
+    "name": "Temporary Agencies",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440824",
+    "name": "Flexible Employment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440825",
+    "name": "Interim Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440826",
+    "name": "Project Completion",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440827",
+    "name": "Temporary Team Building",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440828",
+    "name": "Transition Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440082"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440829",
+    "name": "Consulting Delivery",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440830",
+    "name": "Client Advisory",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440831",
+    "name": "Expert Consulting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440832",
+    "name": "Consulting Methodologies",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440833",
+    "name": "Consulting Tools",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440834",
+    "name": "Consulting Reports",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440835",
+    "name": "Consulting Presentations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440836",
+    "name": "Consulting Ethics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440837",
+    "name": "Consulting Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440838",
+    "name": "Consulting Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440083"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440839",
+    "name": "Project-Based Delivery",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440840",
+    "name": "Milestone Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440841",
+    "name": "Deliverable Tracking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440842",
+    "name": "Project Scoping",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440843",
+    "name": "Project Budgeting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440844",
+    "name": "Project Documentation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440845",
+    "name": "Project Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440846",
+    "name": "Project Risk Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440847",
+    "name": "Project Quality Assurance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440848",
+    "name": "Project Closure",
+    "category_id": "550e8400-e29b-41d4-a716-446655440084"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440849",
+    "name": "Gig Economy Platforms",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440850",
+    "name": "On-Demand Services",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440851",
+    "name": "Task-Based Work",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440852",
+    "name": "Micro-Task Platforms",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440853",
+    "name": "Gig Worker Rights",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440854",
+    "name": "Gig Income Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440855",
+    "name": "Gig Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440856",
+    "name": "Gig Skill Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440857",
+    "name": "Gig Work Balance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440858",
+    "name": "Gig Reputation Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440085"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440859",
+    "name": "Shift Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440860",
+    "name": "Rotating Schedules",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440861",
+    "name": "24/7 Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440862",
+    "name": "Night Shift Adaptation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440863",
+    "name": "Shift Handover",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440864",
+    "name": "Shift Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440865",
+    "name": "Sleep Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440866",
+    "name": "Shift Work Health",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440867",
+    "name": "Overtime Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440868",
+    "name": "Overtime Compensation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440086"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440869",
+    "name": "Night Shift Work",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440870",
+    "name": "Graveyard Shift",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440871",
+    "name": "Third Shift Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440872",
+    "name": "Night Shift Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440873",
+    "name": "Circadian Rhythm",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440874",
+    "name": "Night Shift Health",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440875",
+    "name": "Night Shift Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440876",
+    "name": "Night Shift Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440877",
+    "name": "Sleep Quality",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440878",
+    "name": "Night Shift Benefits",
+    "category_id": "550e8400-e29b-41d4-a716-446655440087"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440879",
+    "name": "Weekend Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440880",
+    "name": "Saturday Work",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440881",
+    "name": "Sunday Work",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440882",
+    "name": "Weekend Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440883",
+    "name": "Weekend Scheduling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440884",
+    "name": "Weekend Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440885",
+    "name": "Work-Life Separation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440886",
+    "name": "Weekend Work Balance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440887",
+    "name": "Weekend Compensation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440888",
+    "name": "Weekend Overtime",
+    "category_id": "550e8400-e29b-41d4-a716-446655440088"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440889",
+    "name": "Flexible Hours",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440890",
+    "name": "Work Schedule Autonomy",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440891",
+    "name": "Time Management Skills",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440892",
+    "name": "Flexible Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440893",
+    "name": "Work-Life Integration",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440894",
+    "name": "Flexible Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440895",
+    "name": "Personal Scheduling",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440896",
+    "name": "Flexible Work Culture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440897",
+    "name": "Autonomous Working",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440898",
+    "name": "Flexible Benefits",
+    "category_id": "550e8400-e29b-41d4-a716-446655440089"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440899",
+    "name": "Home Office Setup",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440900",
+    "name": "Remote Work Tools",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440901",
+    "name": "Home Internet Setup",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440902",
+    "name": "Home Office Ergonomics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440903",
+    "name": "Remote Work Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440904",
+    "name": "Home Office Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440905",
+    "name": "Remote Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440906",
+    "name": "Home Office Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440907",
+    "name": "Remote Work Boundaries",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440908",
+    "name": "Work from Home Culture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440090"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440909",
+    "name": "Office Facilities",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440910",
+    "name": "Office Equipment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440911",
+    "name": "Office Layout",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440912",
+    "name": "Office Maintenance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440913",
+    "name": "Office Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440914",
+    "name": "Office Environment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440915",
+    "name": "Office Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440916",
+    "name": "Office Culture",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440917",
+    "name": "Office Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440918",
+    "name": "Office Security",
+    "category_id": "550e8400-e29b-41d4-a716-446655440091"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440919",
+    "name": "Field Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440920",
+    "name": "Mobile Workforce",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440921",
+    "name": "Field Equipment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440922",
+    "name": "Field Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440923",
+    "name": "Field Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440924",
+    "name": "Field Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440925",
+    "name": "Field Reporting",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440926",
+    "name": "Field Training",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440927",
+    "name": "Field Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440928",
+    "name": "Field Technology",
+    "category_id": "550e8400-e29b-41d4-a716-446655440092"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440929",
+    "name": "Business Travel",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440930",
+    "name": "Travel Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440931",
+    "name": "Travel Logistics",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440932",
+    "name": "Travel Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440933",
+    "name": "Travel Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440934",
+    "name": "Travel Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440935",
+    "name": "Jet Lag Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440936",
+    "name": "Travel Expense Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440937",
+    "name": "Travel Technology",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440938",
+    "name": "Travel Health",
+    "category_id": "550e8400-e29b-41d4-a716-446655440093"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440939",
+    "name": "Local Work Environment",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440940",
+    "name": "Local Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440941",
+    "name": "Local Market Knowledge",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440942",
+    "name": "Local Culture Adaptation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440943",
+    "name": "Local Transportation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440944",
+    "name": "Local Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440945",
+    "name": "Local Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440946",
+    "name": "Local Business Practices",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440947",
+    "name": "Local Regulations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440948",
+    "name": "Local Safety",
+    "category_id": "550e8400-e29b-41d4-a716-446655440094"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440949",
+    "name": "Business Travel Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440950",
+    "name": "Corporate Travel",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440951",
+    "name": "Travel Expense Policies",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440952",
+    "name": "Travel Risk Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440953",
+    "name": "Travel Compliance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440954",
+    "name": "Travel Insurance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440955",
+    "name": "Travel Technology Tools",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440956",
+    "name": "Travel Health Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440957",
+    "name": "Travel Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440958",
+    "name": "Travel Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440095"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440959",
+    "name": "International Business",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440960",
+    "name": "Global Operations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440961",
+    "name": "Cross-Cultural Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440962",
+    "name": "International Regulations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440963",
+    "name": "International Trade",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440964",
+    "name": "Global Supply Chain",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440965",
+    "name": "International Finance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440966",
+    "name": "Global Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440967",
+    "name": "International HR",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440968",
+    "name": "Global Strategy",
+    "category_id": "550e8400-e29b-41d4-a716-446655440096"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440969",
+    "name": "Local Business Focus",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440970",
+    "name": "Community Engagement",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440971",
+    "name": "Local Partnerships",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440972",
+    "name": "Regional Markets",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440973",
+    "name": "Local Supply Chains",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440974",
+    "name": "Local Talent Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440975",
+    "name": "Local Customer Service",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440976",
+    "name": "Local Marketing",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440977",
+    "name": "Local Regulations Compliance",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440978",
+    "name": "Local Economic Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440097"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440979",
+    "name": "Entry-Level Skills",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440980",
+    "name": "Basic Training",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440981",
+    "name": "Foundation Skills",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440982",
+    "name": "Learning Agility",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440983",
+    "name": "Adaptability",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440984",
+    "name": "Entry-Level Productivity",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440985",
+    "name": "Basic Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440986",
+    "name": "Entry-Level Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440987",
+    "name": "Career Foundation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440988",
+    "name": "Growth Mindset",
+    "category_id": "550e8400-e29b-41d4-a716-446655440098"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440989",
+    "name": "Senior Leadership",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440990",
+    "name": "Executive Management",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440991",
+    "name": "Strategic Leadership",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440992",
+    "name": "Executive Communication",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440993",
+    "name": "Executive Decision Making",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440994",
+    "name": "Executive Networking",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440995",
+    "name": "Board Relations",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440996",
+    "name": "Executive Compensation",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440997",
+    "name": "Executive Development",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440998",
+    "name": "Senior Mentoring",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440999",
+    "name": "Executive Succession Planning",
+    "category_id": "550e8400-e29b-41d4-a716-446655440099"
+  }
 ]

@@ -28,6 +28,21 @@ const resumeController = new ResumeController(resumeService)
 // Middleware chung cho authentication (only candidates can manage resumes)
 const authMiddleware = [accessTokenValidator, authenticateAccessToken, candidate]
 
+// Dev-only request body logger to help debug validation issues
+const logRequestBody = (req, _res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    try {
+      const preview = JSON.stringify(req.body, (_k, v) =>
+        typeof v === 'string' && v.length > 10000 ? `${v.slice(0, 10000)}...[truncated]` : v
+      )
+      console.log('[debug] Request body for', req.method, req.originalUrl, ':', preview)
+    } catch (e) {
+      console.log('[debug] Request body could not be stringified')
+    }
+  }
+  next()
+}
+
 /**
  * @route GET /api/resumes/themes
  * @desc Lấy danh sách themes có sẵn
@@ -128,6 +143,8 @@ resumeRouter.get(
 resumeRouter.post(
   '/:id/export',
   ...authMiddleware,
+  // log body before validation (dev only)
+  logRequestBody,
   exportResumeValidator,
   wrapController(resumeController.exportResume)
 )

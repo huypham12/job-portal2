@@ -10,21 +10,21 @@ const GetApplicationsByJobParamsSchema = z.object({
 
 const GetApplicationsByJobQuerySchema = z.object({
   page: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
     .transform((val) => {
       if (!val || val.trim() === '') return 1
       const parsed = parseInt(val, 10)
-      return isNaN(parsed) ? 1 : parsed
+      return isNaN(parsed) || parsed <= 0 ? 1 : parsed
     })
     .pipe(z.number().int().positive({ message: 'Page must be greater than 0' })),
   limit: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
     .transform((val) => {
       if (!val || val.trim() === '') return 20
       const parsed = parseInt(val, 10)
-      return isNaN(parsed) ? 20 : parsed
+      return isNaN(parsed) || parsed < 1 || parsed > 100 ? 20 : parsed
     })
     .pipe(
       z
@@ -48,14 +48,22 @@ const GetApplicationsByJobQuerySchema = z.object({
     ])
     .optional(),
   experience_min: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .transform((val) => {
+      if (!val || val.trim() === '') return undefined
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) || parsed < 0 ? undefined : parsed
+    })
     .pipe(z.number().int().min(0).optional()),
   experience_max: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .transform((val) => {
+      if (!val || val.trim() === '') return undefined
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) || parsed < 0 ? undefined : parsed
+    })
     .pipe(z.number().int().min(0).optional()),
   education_level: z
     .union([
@@ -70,37 +78,62 @@ const GetApplicationsByJobQuerySchema = z.object({
     .optional(),
   location: z.string().optional(),
   salary_min: z
-    .string()
-    .optional()
-    .transform((val) => (val ? parseInt(val, 10) : undefined))
-    .pipe(z.number().int().min(0).optional()),
-  salary_max: z
-    .string()
-    .optional()
-    .transform((val) => (val ? parseInt(val, 10) : undefined))
-    .pipe(z.number().int().min(0).optional()),
-  has_rating: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
     .transform((val) => {
+      if (!val || val.trim() === '') return undefined
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) || parsed < 0 ? undefined : parsed
+    })
+    .pipe(z.number().int().min(0).optional()),
+  salary_max: z
+    .union([z.string(), z.undefined()])
+    .optional()
+    .transform((val) => {
+      if (!val || val.trim() === '') return undefined
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) || parsed < 0 ? undefined : parsed
+    })
+    .pipe(z.number().int().min(0).optional()),
+  has_rating: z
+    .union([z.string(), z.undefined()])
+    .optional()
+    .transform((val) => {
+      if (!val || val.trim() === '') return undefined
       if (val === 'true' || val === '1') return true
       if (val === 'false' || val === '0') return false
       return undefined
     })
     .pipe(z.boolean().optional()),
   rating_min: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : undefined))
+    .transform((val) => {
+      if (!val || val.trim() === '') return undefined
+      const parsed = parseInt(val, 10)
+      return isNaN(parsed) || parsed < 1 || parsed > 5 ? undefined : parsed
+    })
     .pipe(z.number().int().min(1).max(5).optional()),
   applied_after: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
-    .refine((val) => !val || !isNaN(Date.parse(val)), { message: 'Invalid date format. Use ISO 8601 format.' }),
+    .refine(
+      (val) => {
+        if (!val || val.trim() === '') return true
+        return !isNaN(new Date(val).getTime())
+      },
+      { message: 'Invalid date format. Use ISO 8601 format.' }
+    ),
   applied_before: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
-    .refine((val) => !val || !isNaN(Date.parse(val)), { message: 'Invalid date format. Use ISO 8601 format.' }),
+    .refine(
+      (val) => {
+        if (!val || val.trim() === '') return true
+        return !isNaN(new Date(val).getTime())
+      },
+      { message: 'Invalid date format. Use ISO 8601 format.' }
+    ),
   sort_by: z.enum(['applied_at', 'rating', 'name', 'experience', 'salary']).optional().default('applied_at'),
   order: z.enum(['asc', 'desc']).optional().default('desc')
 })
@@ -164,27 +197,29 @@ const UpdateStageBodySchema = z.object({
       z.number().int().min(1).max(5),
       z.string().transform((val) => {
         const parsed = parseInt(val, 10)
-        if (isNaN(parsed)) {
-          throw new Error('Rating must be a number between 1 and 5')
+        if (isNaN(parsed) || parsed < 1 || parsed > 5) {
+          return undefined
         }
         return parsed
-      })
+      }),
+      z.undefined()
     ])
-    .refine((val) => Number.isInteger(val) && val >= 1 && val <= 5, {
+    .optional()
+    .refine((val) => val === undefined || (Number.isInteger(val) && val >= 1 && val <= 5), {
       message: 'Rating must be an integer between 1 and 5'
-    })
-    .optional(),
+    }),
   interviewer_notes: z.string().optional(),
   completed_at: z
-    .string()
+    .union([z.string(), z.undefined()])
+    .optional()
     .refine(
       (val) => {
+        if (!val || val.trim() === '') return true
         const date = new Date(val)
         return !isNaN(date.getTime())
       },
       { message: 'Invalid datetime format. Use ISO 8601 format.' }
     )
-    .optional()
 })
 
 export const UpdateStageSchema = {
@@ -221,15 +256,16 @@ const CreateStageBodySchema = z.object({
       message: 'Stage order must be a positive integer'
     }),
   scheduled_at: z
-    .string()
+    .union([z.string(), z.undefined()])
+    .optional()
     .refine(
       (val) => {
+        if (!val || val.trim() === '') return true
         const date = new Date(val)
         return !isNaN(date.getTime())
       },
       { message: 'Invalid datetime format. Use ISO 8601 format.' }
-    )
-    .optional(),
+    ),
   location: z.string().max(255).optional(),
   meeting_link: z.string().url().max(500).optional(),
   meeting_password: z.string().max(100).optional(),
@@ -240,15 +276,16 @@ const CreateStageBodySchema = z.object({
       z.string().transform((val) => {
         const parsed = parseInt(val, 10)
         if (isNaN(parsed) || parsed <= 0) {
-          throw new Error('Duration must be a positive integer')
+          return undefined
         }
         return parsed
-      })
+      }),
+      z.undefined()
     ])
-    .refine((val) => Number.isInteger(val) && val > 0, {
+    .optional()
+    .refine((val) => val === undefined || (Number.isInteger(val) && val > 0), {
       message: 'Duration must be a positive integer'
-    })
-    .optional(),
+    }),
   interviewer_notes: z.string().optional()
 })
 
@@ -386,21 +423,21 @@ export type ShortlistCandidateDTO = z.infer<typeof ShortlistCandidateBodySchema>
 const GetShortlistedQuerySchema = z.object({
   job_id: z.string().uuid().optional(),
   page: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
     .transform((val) => {
       if (!val || val.trim() === '') return 1
       const parsed = parseInt(val, 10)
-      return isNaN(parsed) ? 1 : parsed
+      return isNaN(parsed) || parsed <= 0 ? 1 : parsed
     })
     .pipe(z.number().int().positive({ message: 'Page must be greater than 0' })),
   limit: z
-    .string()
+    .union([z.string(), z.undefined()])
     .optional()
     .transform((val) => {
       if (!val || val.trim() === '') return 20
       const parsed = parseInt(val, 10)
-      return isNaN(parsed) ? 20 : parsed
+      return isNaN(parsed) || parsed < 1 || parsed > 100 ? 20 : parsed
     })
     .pipe(
       z

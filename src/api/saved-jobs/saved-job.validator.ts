@@ -1,59 +1,7 @@
 import { RequestHandler } from 'express'
 import { z } from 'zod'
-
-type SchemaParts = {
-  body?: z.ZodTypeAny
-  query?: z.ZodTypeAny
-  params?: z.ZodTypeAny
-}
-
-// Extend Request interface to include validated property
-declare global {
-  namespace Express {
-    interface Request {
-      validated?: {
-        body?: any
-        params?: any
-        query?: any
-      }
-    }
-  }
-}
-
-const zodValidate = (parts: SchemaParts): RequestHandler => {
-  const schema = z.object({
-    body: parts.body ?? z.any(),
-    query: parts.query ?? z.any(),
-    params: parts.params ?? z.any()
-  })
-
-  return (req, res, next) => {
-    const parsed = schema.safeParse({
-      body: req.body,
-      query: req.query,
-      params: req.params
-    })
-    if (!parsed.success) {
-      res.status(400).json({
-        message: 'Validation error',
-        errors: parsed.error.issues.map((i) => ({
-          path: i.path.join('.'),
-          message: i.message
-        }))
-      })
-      return
-    }
-
-    // Store validated data in req.validated, DO NOT mutate req.*
-    req.validated = {
-      body: parts.body ? parsed.data.body : undefined,
-      query: parts.query ? parsed.data.query : undefined,
-      params: parts.params ? parsed.data.params : undefined
-    }
-
-    next()
-  }
-}
+import { job_type } from '@prisma/client'
+import { validateDto } from '@/middleware/validateDto.middleware'
 
 // ==================== SAVE JOB SCHEMA ====================
 const saveJobBody = z.object({
@@ -62,7 +10,7 @@ const saveJobBody = z.object({
 
 export type SaveJobDTO = z.infer<typeof saveJobBody>
 
-export const saveJobValidator = zodValidate({
+export const saveJobValidator = validateDto({
   body: saveJobBody
 })
 
@@ -71,59 +19,39 @@ const jobIdParams = z.object({
   jobId: z.string().uuid('Invalid job ID')
 })
 
-export const jobIdValidator = zodValidate({
+export const jobIdValidator = validateDto({
   params: jobIdParams
 })
 
 // ==================== GET SAVED JOBS SCHEMA ====================
+// Helper function to convert string to number or return default
+const stringToNumber = (val: unknown, defaultValue: number): number => {
+  if (val === undefined || val === null || val === '') return defaultValue
+  const num = Number(val)
+  return isNaN(num) ? defaultValue : num
+}
+
+// Helper function to handle optional string values
+const optionalString = (val: unknown): string | undefined => {
+  if (val === undefined || val === null || val === '') return undefined
+  return String(val)
+}
+
 const getSavedJobsQuery = z.object({
-  page: z.preprocess((val) => {
-    // Handle empty string or invalid values as undefined to use default
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1, 'Page must be greater than 0').default(1)),
-  limit: z.preprocess((val) => {
-    // Handle empty string or invalid values as undefined to use default
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1, 'Limit must be at least 1').max(100, 'Limit must be at most 100').default(10)),
-  search: z.preprocess((val) => {
-    // Handle empty string as undefined
-    if (val === undefined || val === null || val === '') return undefined
-    return val
-  }, z.string().optional()),
-  job_type: z.preprocess((val) => {
-    // Handle empty string as undefined
-    if (val === undefined || val === null || val === '') return undefined
-    return val
-  }, z.string().optional()),
-  location_id: z.preprocess((val) => {
-    // Handle empty string as undefined
-    if (val === undefined || val === null || val === '') return undefined
-    return val
-  }, z.string().uuid('Invalid location ID').optional()),
-  sort_by: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.enum(['saved_at', 'salary', 'created_at']).default('saved_at')
+  page: z.preprocess((val) => stringToNumber(val, 1), z.number().int().min(1, 'Page must be greater than 0')),
+  limit: z.preprocess(
+    (val) => stringToNumber(val, 10),
+    z.number().int().min(1, 'Limit must be at least 1').max(100, 'Limit must be at most 100')
   ),
-  order: z.preprocess(
-    (val) => {
-      // Handle empty string as undefined to use default
-      if (val === undefined || val === null || val === '') return undefined
-      return val
-    },
-    z.enum(['asc', 'desc']).default('desc')
-  )
+  search: z.preprocess(optionalString, z.string().optional()),
+  job_type: z.preprocess(optionalString, z.nativeEnum(job_type).optional()),
+  location_id: z.preprocess(optionalString, z.string().uuid('Invalid location ID').optional()),
+  sort_by: z.preprocess((val) => optionalString(val) || 'saved_at', z.enum(['saved_at', 'salary', 'created_at'])),
+  order: z.preprocess((val) => optionalString(val) || 'desc', z.enum(['asc', 'desc']))
 })
 
 export type GetSavedJobsDTO = z.infer<typeof getSavedJobsQuery>
 
-export const getSavedJobsValidator = zodValidate({
+export const getSavedJobsValidator = validateDto({
   query: getSavedJobsQuery
 })

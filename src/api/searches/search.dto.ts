@@ -7,19 +7,82 @@ const jobTypeEnum = z.nativeEnum(job_type)
 
 export const JobSearchRequestSchema = z.object({
   q: z.string().optional(),
-  location: z.string().optional(),
+  location: z.string().trim().min(1).optional(),
   jobType: jobTypeEnum.optional(),
-  experienceLevel: z.coerce.number().int().optional(),
-  skills: z.array(z.string()).optional(),
-  page: z.coerce.number().int().min(1).default(1),
-  size: z.coerce.number().int().min(1).max(100).default(20),
-  highlight: z.coerce.boolean().default(false)
+  experienceLevel: z
+    .union([z.number().int().min(0).max(50), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0 || parsed > 50) {
+          throw new Error('experienceLevel must be an integer between 0 and 50')
+        }
+        return parsed
+      }
+      return val
+    }),
+  skills: z
+    .array(z.string().trim().min(1))
+    .optional()
+    .refine((arr) => !arr || arr.length > 0, {
+      message: 'Skills array must not be empty when provided'
+    }),
+  page: z
+    .union([z.number().int().min(1), z.string()])
+    .default(1)
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 1) {
+          throw new Error('page must be a positive integer')
+        }
+        return parsed
+      }
+      return val
+    }),
+  size: z
+    .union([z.number().int().min(1).max(100), z.string()])
+    .default(20)
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 1 || parsed > 100) {
+          throw new Error('size must be an integer between 1 and 100')
+        }
+        return parsed
+      }
+      return val
+    }),
+  highlight: z
+    .union([z.boolean(), z.string()])
+    .default(false)
+    .transform((val) => {
+      if (typeof val === 'string') {
+        if (val === 'true') return true
+        if (val === 'false') return false
+        throw new Error('highlight must be "true" or "false"')
+      }
+      return val
+    })
 })
 
 export const SuggestionRequestSchema = z.object({
   q: z.string().min(1),
   type: z.enum(['jobs', 'profiles']).optional(),
-  size: z.coerce.number().int().min(1).max(20).default(10),
+  size: z
+    .union([z.number().int().min(1).max(20), z.string()])
+    .default(10)
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 1 || parsed > 20) {
+          throw new Error('size must be an integer between 1 and 20')
+        }
+        return parsed
+      }
+      return val
+    }),
   context: z.record(z.string(), z.any()).optional()
 })
 

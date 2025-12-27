@@ -3,6 +3,9 @@ import { ResumeService } from './resume.service'
 import { TokenPayload } from '@/types/token-payload.type'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { HttpError } from '@/shared/common/http-error'
+import fs from 'fs'
+import os from 'os'
+import path from 'path'
 
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
@@ -209,11 +212,26 @@ export class ResumeController {
   exportResume = async (req: Request, res: Response) => {
     const { user_id } = req.decoded_authorization as TokenPayload
     const { id } = req.params
-    const { template, format } = req.body
+    const { template, format, html, viewportWidth } = req.body
+
+    // dev-only: persist incoming HTML to tmp for debugging if present
+    if (html && process.env.NODE_ENV !== 'production') {
+      try {
+        const outDir = path.join(os.tmpdir(), 'job-portal-debug')
+        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true })
+        const outPath = path.join(outDir, `last-export-${Date.now()}.html`)
+        fs.writeFileSync(outPath, String(html), 'utf8')
+        console.log('Saved export HTML to', outPath)
+      } catch (err) {
+        console.error('Failed to save export HTML:', err)
+      }
+    }
 
     const result = await this.resumeService.exportResume(user_id, id, {
       template,
-      format
+      format,
+      html,
+      viewportWidth
     })
 
     if (format === 'html') {

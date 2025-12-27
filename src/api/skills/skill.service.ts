@@ -56,18 +56,22 @@ export class SkillService {
    * Used for dropdown/filter options
    */
   async getCategories() {
-    const result = await prisma.skills.findMany({
-      select: {
-        category: true
+    const result = await prisma.categories.findMany({
+      where: {
+        type: 'technical'
       },
-      distinct: ['category'],
+      select: {
+        id: true,
+        name: true,
+        slug: true
+      },
       orderBy: {
-        category: 'asc'
+        name: 'asc'
       }
     })
 
-    // Return just the category names
-    return result.map((r) => r.category).filter(Boolean)
+    // Return category objects
+    return result
   }
 
   /**

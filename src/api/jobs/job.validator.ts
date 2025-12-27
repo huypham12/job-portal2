@@ -7,20 +7,6 @@ type SchemaParts = {
   query?: z.ZodTypeAny
   params?: z.ZodTypeAny
 }
-
-// Extend Request interface to include validated property
-declare global {
-  namespace Express {
-    interface Request {
-      validated?: {
-        body?: any
-        params?: any
-        query?: any
-      }
-    }
-  }
-}
-
 const zodValidate = (parts: SchemaParts): RequestHandler => {
   const schema = z.object({
     body: parts.body ?? z.any(),
@@ -114,7 +100,7 @@ const createJobBody = z
           benefit_type: z.string().max(50),
           title: z.string().max(255),
           description: z.string().optional(),
-          value_amount: z.union([z.number(), z.string()]).optional(),
+          value_amount: z.number().optional(),
           value_currency: z.string().max(10).default('VND')
         })
       )
@@ -177,7 +163,7 @@ const updateJobBody = z
           benefit_type: z.string().max(50),
           title: z.string().max(255),
           description: z.string().optional(),
-          value_amount: z.union([z.number(), z.string()]).optional(),
+          value_amount: z.number().optional(),
           value_currency: z.string().max(10).default('VND')
         })
       )

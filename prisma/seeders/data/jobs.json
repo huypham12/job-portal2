@@ -1,1120 +1,4202 @@
 [
   {
-    "company_slug": "techvision-jsc",
-    "title": "Senior Backend Engineer (Node.js)",
-    "department": "Engineering",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 4,
-    "experience_years_max": 7,
-    "salary": {
-      "min": 40,
-      "max": 60,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
     },
-    "tags": ["Backend", "Node.js", "Microservices"],
-    "skills": ["Node.js", "TypeScript", "PostgreSQL", "Redis", "Docker", "AWS"],
-    "description": [
-      "Tham gia phát triển các dịch vụ backend cho nền tảng tuyển dụng và quản lý quy trình tuyển dụng của khách hàng.",
-      "Thiết kế, tối ưu hoá kiến trúc microservices, API nội bộ và public API.",
-      "Review code, mentoring các bạn developer cấp thấp hơn, tham gia xây dựng tiêu chuẩn coding nội bộ."
-    ],
-    "requirements": [
-      {
-        "requirement_type": "skill",
-        "title": "Kinh nghiệm Node.js/TypeScript",
-        "description": "Ít nhất 4 năm kinh nghiệm phát triển backend với Node.js, TypeScript.",
-        "is_required": true,
-        "level": "advanced",
-        "years_experience": 4
-      },
-      {
-        "requirement_type": "skill",
-        "title": "Cơ sở dữ liệu quan hệ",
-        "description": "Có kinh nghiệm làm việc với PostgreSQL hoặc MySQL, hiểu về indexing, transaction.",
-        "is_required": true,
-        "level": "intermediate",
-        "years_experience": 2
-      },
-      {
-        "requirement_type": "education",
-        "title": "Tốt nghiệp chuyên ngành CNTT hoặc tương đương",
-        "description": "Ưu tiên ứng viên tốt nghiệp ngành Khoa học máy tính, Kỹ thuật phần mềm.",
-        "is_required": false,
-        "level": "intermediate",
-        "years_experience": null
-      }
-    ],
-    "benefits": [
-      {
-        "benefit_type": "bonus",
-        "title": "Thưởng hiệu suất",
-        "description": "Thưởng theo kết quả đánh giá hàng quý và hiệu quả dự án.",
-        "value_amount": 5000000,
-        "value_currency": "VND"
-      },
-      {
-        "benefit_type": "remote",
-        "title": "Làm việc hybrid",
-        "description": "Làm việc tại văn phòng 2–3 ngày/tuần, còn lại có thể remote."
-      }
-    ],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 60,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.153Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "techvision-jsc",
-    "title": "Product Owner (HR SaaS)",
-    "department": "Product",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid-Senior",
-    "experience_years_min": 3,
-    "experience_years_max": 6,
-    "salary": {
-      "min": 35,
-      "max": 50,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
     },
-    "tags": ["Product", "HR Tech"],
-    "skills": ["Product Management", "Agile/Scrum", "SQL"],
-    "description": [
-      "Làm việc trực tiếp với khách hàng và nội bộ để thu thập yêu cầu nghiệp vụ về tuyển dụng và quản trị nhân sự.",
-      "Xây dựng, ưu tiên và quản lý product backlog cho một hoặc nhiều squad.",
-      "Phối hợp chặt chẽ với team kỹ thuật, design, QA trong suốt vòng đời sprint."
-    ],
-    "requirements": [
-      {
-        "requirement_type": "skill",
-        "title": "Kinh nghiệm Product Owner/BA",
-        "description": "Tối thiểu 3 năm kinh nghiệm ở vai trò Product Owner hoặc Business Analyst.",
-        "is_required": true,
-        "level": "intermediate",
-        "years_experience": 3
-      },
-      {
-        "requirement_type": "language",
-        "title": "Tiếng Anh giao tiếp",
-        "description": "Có khả năng đọc hiểu tài liệu và trao đổi cơ bản với khách hàng nước ngoài.",
-        "is_required": false,
-        "level": "intermediate",
-        "years_experience": null
-      }
-    ],
-    "benefits": [
-      {
-        "benefit_type": "training",
-        "title": "Ngân sách học tập",
-        "description": "Hỗ trợ khoá học về Product, UX, Data.",
-        "value_amount": 5000000,
-        "value_currency": "VND"
-      }
-    ],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 40,
-      "flexible_hours": true,
-      "travel_requirement": "occasional",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "techvision-jsc",
-    "title": "QA Engineer (Web/App)",
-    "department": "Quality Assurance",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Junior-Mid",
-    "experience_years_min": 1,
-    "experience_years_max": 3,
-    "salary": {
-      "min": 18,
-      "max": 30,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
     },
-    "tags": ["QA", "Manual Testing"],
-    "skills": ["Manual Testing", "API Testing", "Postman"],
-    "description": [
-      "Tham gia phân tích yêu cầu, xây dựng test case cho các tính năng mới.",
-      "Thực hiện test manual cho web và mobile web, kiểm thử API cơ bản.",
-      "Phối hợp với developer để tái hiện lỗi và đề xuất cải thiện chất lượng sản phẩm."
-    ],
-    "requirements": [
-      {
-        "requirement_type": "skill",
-        "title": "Kiến thức cơ bản về kiểm thử phần mềm",
-        "description": "Nắm được các khái niệm cơ bản về test case, test plan, bug life cycle.",
-        "is_required": true,
-        "level": "beginner",
-        "years_experience": 0
-      }
-    ],
-    "benefits": [
-      {
-        "benefit_type": "training",
-        "title": "Mentor 1-1",
-        "description": "Được mentor bởi Senior QA và tham gia các buổi sharing nội bộ."
-      }
-    ],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 30,
-      "flexible_hours": false,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "finpay-vietnam",
-    "title": "Senior Mobile Engineer (React Native)",
-    "department": "Engineering",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 4,
-    "experience_years_max": 8,
-    "salary": {
-      "min": 45,
-      "max": 70,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Senior Software Engineer",
+    "description": "Chúng tôi đang tìm kiếm Senior Software Engineer tài năng để tham gia phát triển các giải pháp công nghệ tiên tiến. Ứng viên cần có kinh nghiệm 3+ năm với các ngôn ngữ lập trình hiện đại.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
     },
-    "tags": ["Mobile", "React Native", "FinTech"],
-    "skills": ["React Native", "TypeScript", "Redux", "REST API"],
-    "description": [
-      "Phát triển và tối ưu ứng dụng mobile ví điện tử trên nền tảng React Native.",
-      "Làm việc chặt chẽ với backend để tích hợp các API thanh toán, KYC, loyalty.",
-      "Đảm bảo hiệu năng và bảo mật ở mức phù hợp với ứng dụng tài chính."
-    ],
-    "requirements": [
-      {
-        "requirement_type": "skill",
-        "title": "React Native",
-        "description": "Tối thiểu 3 năm làm việc với React Native, đã từng lên store sản phẩm thực tế.",
-        "is_required": true,
-        "level": "advanced",
-        "years_experience": 3
-      }
-    ],
-    "benefits": [
-      {
-        "benefit_type": "bonus",
-        "title": "ESOP cho key member",
-        "description": "Có chính sách ESOP với nhân sự chủ chốt.",
-        "value_amount": 3000000,
-        "value_currency": "VND"
-      }
-    ],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 40,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "finpay-vietnam",
-    "title": "DevOps Engineer (AWS)",
-    "department": "Engineering",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid-Senior",
-    "experience_years_min": 3,
-    "experience_years_max": 6,
-    "salary": {
-      "min": 40,
-      "max": 55,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Product Manager",
+    "description": "Vị trí Product Manager để định hướng và phát triển sản phẩm công nghệ. Yêu cầu kỹ năng quản lý dự án, phân tích thị trường và làm việc với đội ngũ phát triển.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
     },
-    "tags": ["DevOps", "AWS"],
-    "skills": ["AWS", "Docker", "Kubernetes", "CI/CD"],
-    "description": [
-      "Thiết kế và vận hành hạ tầng cloud trên AWS cho hệ thống thanh toán.",
-      "Xây dựng pipeline CI/CD, logging, monitoring và alerting.",
-      "Phối hợp với team backend, security để đảm bảo compliance theo chuẩn ngân hàng."
-    ],
-    "requirements": [
-      {
-        "requirement_type": "skill",
-        "title": "Kinh nghiệm AWS",
-        "description": "Có kinh nghiệm thực chiến với các dịch vụ EC2, ECS/EKS, RDS, S3.",
-        "is_required": true,
-        "level": "intermediate",
-        "years_experience": 2
-      }
-    ],
-    "benefits": [
-      {
-        "benefit_type": "training",
-        "title": "Hỗ trợ chứng chỉ AWS",
-        "description": "Hỗ trợ toàn bộ lệ phí thi chứng chỉ AWS Associate/Professional."
-      }
-    ],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "finpay-vietnam",
-    "title": "Business Analyst (Payment)",
-    "department": "Product",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 28,
-      "max": 40,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "DevOps Engineer",
+    "description": "DevOps Engineer để xây dựng và duy trì hạ tầng đám mây, CI/CD pipeline. Kinh nghiệm với AWS/GCP/Azure và công cụ containerization.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 48000000,
+      "currency": "VND"
     },
-    "tags": ["BA", "Payment"],
-    "skills": ["Business Analysis", "Payment Domain", "UML/BPMN"],
-    "description": [
-      "Phân tích yêu cầu nghiệp vụ liên quan đến thanh toán, ví điện tử, đối soát.",
-      "Viết BRD, SRS, user story, mô tả flow thanh toán.",
-      "Làm việc với đối tác ngân hàng và cổng thanh toán."
-    ],
-    "requirements": [
-      {
-        "requirement_type": "skill",
-        "title": "Kinh nghiệm BA trong lĩnh vực tài chính",
-        "description": "Tối thiểu 2 năm BA trong ngân hàng, fintech hoặc các sản phẩm thanh toán.",
-        "is_required": true,
-        "level": "intermediate",
-        "years_experience": 2
-      }
-    ],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 20,
-      "flexible_hours": true,
-      "travel_requirement": "occasional",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "vietcareer-platform",
-    "title": "Full-stack Developer (React/Node)",
-    "department": "Engineering",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 28,
-      "max": 40,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Senior Software Engineer",
+    "description": "Chúng tôi đang tìm kiếm Senior Software Engineer tài năng để tham gia phát triển các giải pháp công nghệ tiên tiến. Ứng viên cần có kinh nghiệm 3+ năm với các ngôn ngữ lập trình hiện đại.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
     },
-    "tags": ["Full-stack", "React", "Node.js"],
-    "skills": ["React", "Node.js", "TypeScript", "PostgreSQL"],
-    "description": [
-      "Tham gia phát triển các tính năng mới cho nền tảng tuyển dụng.",
-      "Làm việc full-stack: frontend React và backend Node.js/TypeScript.",
-      "Tối ưu hiệu năng trang listing, search và trang profile ứng viên."
-    ],
-    "requirements": [
-      {
-        "requirement_type": "skill",
-        "title": "Kinh nghiệm React và Node.js",
-        "description": "Ít nhất 2 năm làm việc với React và Node.js trong môi trường production.",
-        "is_required": true,
-        "level": "intermediate",
-        "years_experience": 2
-      }
-    ],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 50,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "vietcareer-platform",
-    "title": "UI/UX Designer (Job Platform)",
-    "department": "Design",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 5,
-    "salary": {
-      "min": 25,
-      "max": 38,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Product Manager",
+    "description": "Vị trí Product Manager để định hướng và phát triển sản phẩm công nghệ. Yêu cầu kỹ năng quản lý dự án, phân tích thị trường và làm việc với đội ngũ phát triển.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
     },
-    "tags": ["UI/UX", "Product Design"],
-    "skills": ["Figma", "User Research", "Prototyping"],
-    "description": [
-      "Thiết kế giao diện và trải nghiệm người dùng cho web app và mobile web.",
-      "Làm việc với Product Owner để xác định vấn đề người dùng và đề xuất giải pháp UX.",
-      "Thực hiện wireframe, prototype và test với người dùng thật."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 40,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "vietcareer-platform",
-    "title": "Data Analyst (User Growth)",
-    "department": "Data",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 30,
-      "max": 42,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "DevOps Engineer",
+    "description": "DevOps Engineer để xây dựng và duy trì hạ tầng đám mây, CI/CD pipeline. Kinh nghiệm với AWS/GCP/Azure và công cụ containerization.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 48000000,
+      "currency": "VND"
     },
-    "tags": ["Data Analyst", "Product Analytics"],
-    "skills": ["SQL", "Excel", "Tableau", "Product Analytics"],
-    "description": [
-      "Phân tích hành vi người dùng ứng viên/nhà tuyển dụng trên nền tảng.",
-      "Xây dựng dashboard theo dõi funnel và hiệu quả chiến dịch growth.",
-      "Đề xuất các A/B test nhằm cải thiện conversion."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 20,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "smartretail-solutions",
-    "title": "Senior .NET Developer (Retail POS)",
-    "department": "Engineering",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 5,
-    "experience_years_max": 8,
-    "salary": {
-      "min": 45,
-      "max": 65,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Relationship Manager",
+    "description": "Quản lý mối quan hệ khách hàng doanh nghiệp, tư vấn giải pháp tài chính. Yêu cầu kỹ năng giao tiếp tốt và kiến thức tài chính.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
     },
-    "tags": [".NET", "Retail"],
-    "skills": [".NET", "SQL Server", "Microservices"],
-    "description": [
-      "Phát triển và bảo trì hệ thống POS và backend cho các chuỗi bán lẻ.",
-      "Tối ưu hiệu năng hệ thống, xử lý transaction volume lớn.",
-      "Tham gia thiết kế kiến trúc và tiêu chuẩn coding."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": false,
-      "travel_requirement": "occasional",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "smartretail-solutions",
-    "title": "Implementation Consultant (Retail)",
-    "department": "Implementation",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 3,
-    "experience_years_max": 5,
-    "salary": {
-      "min": 30,
-      "max": 45,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "IT Banking Specialist",
+    "description": "Chuyên viên IT hỗ trợ hệ thống ngân hàng điện tử, ứng dụng di động. Kinh nghiệm với hệ thống core banking là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
     },
-    "tags": ["Implementation", "Retail"],
-    "skills": ["SQL", "Communication", "Problem Solving"],
-    "description": [
-      "Triển khai giải pháp phần mềm bán lẻ cho khách hàng chuỗi cửa hàng.",
-      "Khảo sát nghiệp vụ, cấu hình hệ thống và đào tạo người dùng.",
-      "Hỗ trợ sau triển khai trong giai đoạn vận hành."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": true,
-      "travel_requirement": "frequent",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "smartretail-solutions",
-    "title": "System Administrator",
-    "department": "IT Operations",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 3,
-    "experience_years_max": 6,
-    "salary": {
-      "min": 28,
-      "max": 40,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Risk Analyst",
+    "description": "Phân tích rủi ro tín dụng, đánh giá hồ sơ vay vốn. Yêu cầu kiến thức tài chính và kỹ năng phân tích dữ liệu.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
     },
-    "tags": ["System Admin", "Windows Server"],
-    "skills": ["Windows Server", "Networking"],
-    "description": [
-      "Quản trị hệ thống server, AD, mạng nội bộ cho công ty và khách hàng.",
-      "Đảm bảo uptime hệ thống và thực hiện sao lưu định kỳ.",
-      "Phối hợp xử lý sự cố hạ tầng khi có incident."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": false,
-      "travel_requirement": "occasional",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "eduspace",
-    "title": "Frontend Developer (Next.js)",
-    "department": "Engineering",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 25,
-      "max": 38,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Relationship Manager",
+    "description": "Quản lý mối quan hệ khách hàng doanh nghiệp, tư vấn giải pháp tài chính. Yêu cầu kỹ năng giao tiếp tốt và kiến thức tài chính.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
     },
-    "tags": ["Frontend", "Next.js"],
-    "skills": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-    "description": [
-      "Xây dựng giao diện web cho nền tảng khoá học online sử dụng Next.js.",
-      "Tối ưu SEO, performance và trải nghiệm người dùng.",
-      "Phối hợp với team Product, Design để triển khai A/B testing."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 80,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "eduspace",
-    "title": "Content Marketing Specialist (EdTech)",
-    "department": "Marketing",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 18,
-      "max": 30,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "IT Banking Specialist",
+    "description": "Chuyên viên IT hỗ trợ hệ thống ngân hàng điện tử, ứng dụng di động. Kinh nghiệm với hệ thống core banking là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
     },
-    "tags": ["Marketing", "Content"],
-    "skills": ["Content Marketing", "SEO", "Social Media"],
-    "description": [
-      "Lên kế hoạch và sản xuất nội dung cho blog, social, email.",
-      "Làm việc với giảng viên để xây dựng nội dung giới thiệu khoá học.",
-      "Đo lường hiệu quả nội dung và tối ưu theo funnel."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 60,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "eduspace",
-    "title": "Product Manager (Learning Platform)",
-    "department": "Product",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 4,
-    "experience_years_max": 7,
-    "salary": {
-      "min": 40,
-      "max": 60,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Risk Analyst",
+    "description": "Phân tích rủi ro tín dụng, đánh giá hồ sơ vay vốn. Yêu cầu kiến thức tài chính và kỹ năng phân tích dữ liệu.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
     },
-    "tags": ["Product", "EdTech"],
-    "skills": ["Product Management", "Agile/Scrum"],
-    "description": [
-      "Xây dựng roadmap sản phẩm nền tảng học tập online.",
-      "Làm việc chặt chẽ với team kỹ thuật, nội dung và marketing.",
-      "Phân tích dữ liệu hành vi học viên để tối ưu trải nghiệm."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 50,
-      "flexible_hours": true,
-      "travel_requirement": "occasional",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "logixpress",
-    "title": "Backend Engineer (Java/Spring)",
-    "department": "Engineering",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid-Senior",
-    "experience_years_min": 3,
-    "experience_years_max": 6,
-    "salary": {
-      "min": 35,
-      "max": 50,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Relationship Manager",
+    "description": "Quản lý mối quan hệ khách hàng doanh nghiệp, tư vấn giải pháp tài chính. Yêu cầu kỹ năng giao tiếp tốt và kiến thức tài chính.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
     },
-    "tags": ["Backend", "Java", "Logistics"],
-    "skills": ["Java", "Spring Boot", "Kafka"],
-    "description": [
-      "Phát triển dịch vụ backend cho hệ thống quản lý vận đơn và định tuyến giao hàng.",
-      "Tối ưu performance cho các batch job và real-time tracking.",
-      "Làm việc với kiến trúc microservices, event-driven."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": false,
-      "travel_requirement": "none",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "logixpress",
-    "title": "Technical Project Manager",
-    "department": "Project Management",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 5,
-    "experience_years_max": 8,
-    "salary": {
-      "min": 40,
-      "max": 60,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "IT Banking Specialist",
+    "description": "Chuyên viên IT hỗ trợ hệ thống ngân hàng điện tử, ứng dụng di động. Kinh nghiệm với hệ thống core banking là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
     },
-    "tags": ["Project Manager", "Logistics"],
-    "skills": ["Project Management", "Agile"],
-    "description": [
-      "Quản lý các dự án triển khai hệ thống cho khách hàng logistics lớn.",
-      "Điều phối team kỹ thuật, BA, QA và làm việc với stakeholder phía khách hàng.",
-      "Theo dõi tiến độ, rủi ro và lập báo cáo định kỳ."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": true,
-      "travel_requirement": "frequent",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "logixpress",
-    "title": "Data Engineer",
-    "department": "Data",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 3,
-    "experience_years_max": 5,
-    "salary": {
-      "min": 35,
-      "max": 48,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Risk Analyst",
+    "description": "Phân tích rủi ro tín dụng, đánh giá hồ sơ vay vốn. Yêu cầu kiến thức tài chính và kỹ năng phân tích dữ liệu.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
     },
-    "tags": ["Data Engineer"],
-    "skills": ["SQL", "ETL", "BigQuery"],
-    "description": [
-      "Xây dựng pipeline dữ liệu phục vụ báo cáo vận hành và tối ưu tuyến giao hàng.",
-      "Làm việc với các nguồn dữ liệu vận đơn, tracking thiết bị, đơn hàng.",
-      "Đảm bảo chất lượng và tính toàn vẹn của dữ liệu."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "healthlink-care",
-    "title": "Backend Developer (Healthcare)",
-    "department": "Engineering",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 3,
-    "experience_years_max": 5,
-    "salary": {
-      "min": 30,
-      "max": 42,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Senior Software Engineer",
+    "description": "Chúng tôi đang tìm kiếm Senior Software Engineer tài năng để tham gia phát triển các giải pháp công nghệ tiên tiến. Ứng viên cần có kinh nghiệm 3+ năm với các ngôn ngữ lập trình hiện đại.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
     },
-    "tags": ["Backend", "Healthcare"],
-    "skills": ["Node.js", "PostgreSQL", "REST API"],
-    "description": [
-      "Phát triển backend cho hệ thống quản lý hồ sơ bệnh án điện tử.",
-      "Đảm bảo bảo mật dữ liệu bệnh nhân và tuân thủ các yêu cầu pháp lý.",
-      "Tối ưu hiệu năng cho màn hình tra cứu và báo cáo."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": false,
-      "travel_requirement": "occasional",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "healthlink-care",
-    "title": "Implementation Specialist (Clinic)",
-    "department": "Implementation",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 25,
-      "max": 35,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Product Manager",
+    "description": "Vị trí Product Manager để định hướng và phát triển sản phẩm công nghệ. Yêu cầu kỹ năng quản lý dự án, phân tích thị trường và làm việc với đội ngũ phát triển.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
     },
-    "tags": ["Implementation", "Healthcare"],
-    "skills": ["Communication", "Problem Solving"],
-    "description": [
-      "Triển khai hệ thống cho các phòng khám: khảo sát, cấu hình, đào tạo.",
-      "Hỗ trợ nhân viên y tế trong giai đoạn đầu sử dụng phần mềm.",
-      "Thu thập feedback để cải thiện sản phẩm."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": true,
-      "travel_requirement": "frequent",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "healthlink-care",
-    "title": "QA Engineer (Healthcare)",
-    "department": "Quality Assurance",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 25,
-      "max": 35,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "DevOps Engineer",
+    "description": "DevOps Engineer để xây dựng và duy trì hạ tầng đám mây, CI/CD pipeline. Kinh nghiệm với AWS/GCP/Azure và công cụ containerization.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 48000000,
+      "currency": "VND"
     },
-    "tags": ["QA"],
-    "skills": ["Manual Testing", "SQL"],
-    "description": [
-      "Kiểm thử tính năng hệ thống, chú trọng tính chính xác dữ liệu và quy trình nghiệp vụ y tế.",
-      "Viết test case, test scenario chi tiết.",
-      "Phối hợp BA và dev để đảm bảo yêu cầu nghiệp vụ được đáp ứng."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "greenhome-iot",
-    "title": "Embedded Engineer (IoT)",
-    "department": "Engineering",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid-Senior",
-    "experience_years_min": 3,
-    "experience_years_max": 6,
-    "salary": {
-      "min": 35,
-      "max": 50,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Petroleum Engineer",
+    "description": "Kỹ sư dầu khí, tham gia khai thác và sản xuất dầu khí. Kinh nghiệm với công nghệ khoan và khai thác.",
+    "salary_range": {
+      "min": 35000000,
+      "max": 60000000,
+      "currency": "VND"
     },
-    "tags": ["Embedded", "IoT"],
-    "skills": ["C/C++", "Embedded Systems"],
-    "description": [
-      "Phát triển firmware cho thiết bị nhà thông minh.",
-      "Làm việc với các giao thức MQTT, Zigbee, Wi-Fi.",
-      "Tối ưu tiêu thụ năng lượng và độ ổn định của thiết bị."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": false,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "greenhome-iot",
-    "title": "Mobile Developer (Smart Home App)",
-    "department": "Engineering",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Mid",
-    "experience_years_min": 2,
-    "experience_years_max": 4,
-    "salary": {
-      "min": 28,
-      "max": 40,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Process Engineer",
+    "description": "Kỹ sư quy trình, tối ưu hóa quy trình sản xuất và chế biến dầu khí. Kinh nghiệm với refinery operations.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
     },
-    "tags": ["Mobile"],
-    "skills": ["Flutter", "REST API"],
-    "description": [
-      "Phát triển ứng dụng mobile điều khiển nhà thông minh.",
-      "Tích hợp với backend và thiết bị IoT qua API.",
-      "Tối ưu UI/UX cho người dùng phổ thông."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 40,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "greenhome-iot",
-    "title": "QA Engineer (IoT)",
-    "department": "Quality Assurance",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Junior-Mid",
-    "experience_years_min": 1,
-    "experience_years_max": 3,
-    "salary": {
-      "min": 18,
-      "max": 28,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "HSSE Manager",
+    "description": "Quản lý an toàn, sức khỏe, môi trường. Đảm bảo tuân thủ các tiêu chuẩn an toàn trong ngành dầu khí.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
     },
-    "tags": ["QA"],
-    "skills": ["Manual Testing"],
-    "description": [
-      "Kiểm thử tính năng giữa app, backend và thiết bị IoT.",
-      "Viết test case cho các kịch bản sử dụng phổ biến.",
-      "Ghi nhận lỗi và phối hợp với developer để khắc phục."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "cityfood-delivery",
-    "title": "Senior Backend Engineer (Golang)",
-    "department": "Engineering",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 4,
-    "experience_years_max": 7,
-    "salary": {
-      "min": 45,
-      "max": 65,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
     },
-    "tags": ["Backend", "Golang"],
-    "skills": ["Golang", "Microservices", "Redis"],
-    "description": [
-      "Phát triển hệ thống backend cho nền tảng đặt đồ ăn và giao nhận.",
-      "Xử lý lượng request lớn, tối ưu latency và độ ổn định.",
-      "Làm việc với kiến trúc microservices, caching, message queue."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": false,
-      "remote_percentage": 0,
-      "flexible_hours": false,
-      "travel_requirement": "none",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "cityfood-delivery",
-    "title": "Growth Marketing Manager",
-    "department": "Marketing",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 5,
-    "experience_years_max": 8,
-    "salary": {
-      "min": 40,
-      "max": 60,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
     },
-    "tags": ["Marketing", "Growth"],
-    "skills": ["Digital Marketing", "Performance Marketing"],
-    "description": [
-      "Xây dựng chiến lược growth cho cả user và merchant.",
-      "Quản lý ngân sách marketing performance nhiều kênh.",
-      "Làm việc với product để tối ưu funnel chuyển đổi."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 20,
-      "flexible_hours": true,
-      "travel_requirement": "occasional",
-      "overtime_expected": true,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "cityfood-delivery",
-    "title": "Data Scientist (Recommendation)",
-    "department": "Data",
-    "location_province": "TP. Hồ Chí Minh",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 4,
-    "experience_years_max": 7,
-    "salary": {
-      "min": 45,
-      "max": 65,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
     },
-    "tags": ["Data Science", "ML"],
-    "skills": ["Machine Learning", "Python", "Recommendation Systems"],
-    "description": [
-      "Xây dựng mô hình gợi ý món ăn và nhà hàng cá nhân hoá.",
-      "Làm việc với dữ liệu hành vi người dùng, đơn hàng và feedback.",
-      "Hợp tác với engineering để triển khai mô hình vào production."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 40,
-      "flexible_hours": true,
-      "travel_requirement": "none",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "datainsight-labs",
-    "title": "BI Developer",
-    "department": "Data",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid-Senior",
-    "experience_years_min": 3,
-    "experience_years_max": 6,
-    "salary": {
-      "min": 35,
-      "max": 50,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
     },
-    "tags": ["BI", "Data"],
-    "skills": ["SQL", "Power BI", "Data Modeling"],
-    "description": [
-      "Thiết kế và xây dựng báo cáo BI cho khách hàng ngân hàng và bán lẻ.",
-      "Làm việc với business user để hiểu yêu cầu và mô hình hoá dữ liệu.",
-      "Tối ưu performance của dashboard, report."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 30,
-      "flexible_hours": true,
-      "travel_requirement": "occasional",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "datainsight-labs",
-    "title": "Data Engineer (Cloud)",
-    "department": "Data",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Senior",
-    "experience_years_min": 4,
-    "experience_years_max": 7,
-    "salary": {
-      "min": 40,
-      "max": 60,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
     },
-    "tags": ["Data Engineer"],
-    "skills": ["ETL", "Cloud Data Warehouse"],
-    "description": [
-      "Thiết kế kiến trúc dữ liệu trên cloud cho các dự án enterprise.",
-      "Xây dựng pipeline ETL/ELT từ nhiều nguồn dữ liệu.",
-      "Đảm bảo bảo mật và phân quyền truy cập dữ liệu."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 40,
-      "flexible_hours": true,
-      "travel_requirement": "occasional",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
   },
   {
-    "company_slug": "datainsight-labs",
-    "title": "Analytics Consultant",
-    "department": "Consulting",
-    "location_province": "Hà Nội",
-    "job_type": "full_time",
-    "level": "Mid-Senior",
-    "experience_years_min": 3,
-    "experience_years_max": 6,
-    "salary": {
-      "min": 35,
-      "max": 48,
-      "currency": "triệu VND",
-      "unit": "month"
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
     },
-    "tags": ["Consulting", "Analytics"],
-    "skills": ["SQL", "Business Analysis"],
-    "description": [
-      "Tư vấn giải pháp phân tích dữ liệu cho khách hàng enterprise.",
-      "Chuẩn bị tài liệu, workshop và training cho người dùng business.",
-      "Phối hợp với team kỹ thuật để triển khai giải pháp."
-    ],
-    "requirements": [],
-    "benefits": [],
-    "work_arrangement": {
-      "is_remote_allowed": true,
-      "remote_percentage": 20,
-      "flexible_hours": true,
-      "travel_requirement": "frequent",
-      "overtime_expected": false,
-      "shift_type": "day"
-    }
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Relationship Manager",
+    "description": "Quản lý mối quan hệ khách hàng doanh nghiệp, tư vấn giải pháp tài chính. Yêu cầu kỹ năng giao tiếp tốt và kiến thức tài chính.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "IT Banking Specialist",
+    "description": "Chuyên viên IT hỗ trợ hệ thống ngân hàng điện tử, ứng dụng di động. Kinh nghiệm với hệ thống core banking là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Risk Analyst",
+    "description": "Phân tích rủi ro tín dụng, đánh giá hồ sơ vay vốn. Yêu cầu kiến thức tài chính và kỹ năng phân tích dữ liệu.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Senior Software Engineer",
+    "description": "Chúng tôi đang tìm kiếm Senior Software Engineer tài năng để tham gia phát triển các giải pháp công nghệ tiên tiến. Ứng viên cần có kinh nghiệm 3+ năm với các ngôn ngữ lập trình hiện đại.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Product Manager",
+    "description": "Vị trí Product Manager để định hướng và phát triển sản phẩm công nghệ. Yêu cầu kỹ năng quản lý dự án, phân tích thị trường và làm việc với đội ngũ phát triển.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "DevOps Engineer",
+    "description": "DevOps Engineer để xây dựng và duy trì hạ tầng đám mây, CI/CD pipeline. Kinh nghiệm với AWS/GCP/Azure và công cụ containerization.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 48000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Senior Software Engineer",
+    "description": "Chúng tôi đang tìm kiếm Senior Software Engineer tài năng để tham gia phát triển các giải pháp công nghệ tiên tiến. Ứng viên cần có kinh nghiệm 3+ năm với các ngôn ngữ lập trình hiện đại.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Product Manager",
+    "description": "Vị trí Product Manager để định hướng và phát triển sản phẩm công nghệ. Yêu cầu kỹ năng quản lý dự án, phân tích thị trường và làm việc với đội ngũ phát triển.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "DevOps Engineer",
+    "description": "DevOps Engineer để xây dựng và duy trì hạ tầng đám mây, CI/CD pipeline. Kinh nghiệm với AWS/GCP/Azure và công cụ containerization.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 48000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.154Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.154Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Electrical Engineer",
+    "description": "Kỹ sư điện, thiết kế và vận hành hệ thống điện. Kinh nghiệm với lưới điện phân phối và truyền tải.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành hệ thống điện, đảm bảo an toàn và ổn định cung cấp điện. Kinh nghiệm quản lý kỹ thuật.",
+    "salary_range": {
+      "min": 28000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Maintenance Engineer",
+    "description": "Kỹ sư bảo trì, bảo dưỡng thiết bị điện và hệ thống lưới điện. Kinh nghiệm sửa chữa và bảo trì kỹ thuật.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 30000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Real Estate Sales Manager",
+    "description": "Quản lý đội ngũ kinh doanh bất động sản, đạt mục tiêu doanh số. Kinh nghiệm bán hàng và quản lý team là cần thiết.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 45000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Project Manager",
+    "description": "Quản lý dự án phát triển bất động sản từ khâu lập kế hoạch đến bàn giao. Kinh nghiệm quản lý dự án và kiến trúc.",
+    "salary_range": {
+      "min": 30000000,
+      "max": 50000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 4,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing bất động sản, quản lý thương hiệu và chiến dịch marketing online/offline.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Production Manager",
+    "description": "Quản lý sản xuất, đảm bảo chất lượng sản phẩm và hiệu quả sản xuất. Kinh nghiệm trong ngành thực phẩm là lợi thế.",
+    "salary_range": {
+      "min": 22000000,
+      "max": 38000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Quality Control Specialist",
+    "description": "Kiểm soát chất lượng sản phẩm, đảm bảo tuân thủ tiêu chuẩn an toàn thực phẩm và các quy định pháp luật.",
+    "salary_range": {
+      "min": 15000000,
+      "max": 25000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Brand Manager",
+    "description": "Quản lý thương hiệu, phát triển chiến lược marketing và mở rộng thị trường cho các sản phẩm thực phẩm.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Business Analyst",
+    "description": "Phân tích nghiệp vụ, thu thập và phân tích yêu cầu kinh doanh. Hỗ trợ tối ưu hóa quy trình và cải thiện hiệu quả.",
+    "salary_range": {
+      "min": 20000000,
+      "max": 35000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Operations Manager",
+    "description": "Quản lý vận hành, đảm bảo hiệu quả hoạt động và đạt mục tiêu kinh doanh. Kinh nghiệm quản lý team và dự án.",
+    "salary_range": {
+      "min": 25000000,
+      "max": 40000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
+  },
+  {
+    "title": "Marketing Specialist",
+    "description": "Chuyên viên marketing, phát triển chiến lược marketing và quản lý thương hiệu. Kỹ năng digital marketing là lợi thế.",
+    "salary_range": {
+      "min": 18000000,
+      "max": 28000000,
+      "currency": "VND"
+    },
+    "job_type": "full_time",
+    "experience_level": 2,
+    "status": "published",
+    "expires_at": "2026-01-26T10:42:07.155Z",
+    "posted_at": "2025-12-27T10:42:07.155Z"
   }
 ]

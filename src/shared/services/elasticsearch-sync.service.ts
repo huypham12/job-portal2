@@ -20,9 +20,17 @@ export class ElasticsearchSyncService {
       })
 
       console.log(`✅ Synced ${index}:${id} to Elasticsearch`)
-    } catch (error) {
-      console.error(`❌ Failed to sync ${index}:${id} to Elasticsearch:`, error)
-      throw error // Re-throw để caller handle
+    } catch (error: any) {
+      // Check if it's a connection error (ES not available)
+      if (error?.name === 'ConnectionError' || error?.code === 'ECONNREFUSED' || error?.meta?.statusCode === 0) {
+        console.warn(`⚠️  Elasticsearch not available - skipping sync for ${index}:${id}`)
+      } else {
+        console.error(`❌ Failed to sync ${index}:${id} to Elasticsearch:`, error)
+      }
+      // Don't throw error for connection issues to avoid breaking the seeding process
+      if (error?.name !== 'ConnectionError' && error?.code !== 'ECONNREFUSED' && error?.meta?.statusCode !== 0) {
+        throw error
+      }
     }
   }
 

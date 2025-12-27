@@ -1,537 +1,83 @@
-// prisma/seeders/skills.ts
-
 import { PrismaClient } from '@prisma/client'
+import * as fs from 'fs'
+import * as path from 'path'
 
-// Danh sách toàn diện các kỹ năng theo ngành nghề (1000+ skills)
-const skillsData = [
-  // ==================== PROGRAMMING LANGUAGES ====================
-  { name: 'JavaScript', category: 'Ngôn ngữ lập trình' },
-  { name: 'TypeScript', category: 'Ngôn ngữ lập trình' },
-  { name: 'Python', category: 'Ngôn ngữ lập trình' },
-  { name: 'Java', category: 'Ngôn ngữ lập trình' },
-  { name: 'C#', category: 'Ngôn ngữ lập trình' },
-  { name: 'C++', category: 'Ngôn ngữ lập trình' },
-  { name: 'C', category: 'Ngôn ngữ lập trình' },
-  { name: 'PHP', category: 'Ngôn ngữ lập trình' },
-  { name: 'Ruby', category: 'Ngôn ngữ lập trình' },
-  { name: 'Go', category: 'Ngôn ngữ lập trình' },
-  { name: 'Rust', category: 'Ngôn ngữ lập trình' },
-  { name: 'Swift', category: 'Ngôn ngữ lập trình' },
-  { name: 'Kotlin', category: 'Ngôn ngữ lập trình' },
-  { name: 'Scala', category: 'Ngôn ngữ lập trình' },
-  { name: 'R', category: 'Ngôn ngữ lập trình' },
-  { name: 'Dart', category: 'Ngôn ngữ lập trình' },
-  { name: 'Lua', category: 'Ngôn ngữ lập trình' },
-  { name: 'Perl', category: 'Ngôn ngữ lập trình' },
-  { name: 'Haskell', category: 'Ngôn ngữ lập trình' },
-  { name: 'Elixir', category: 'Ngôn ngữ lập trình' },
-  { name: 'Clojure', category: 'Ngôn ngữ lập trình' },
-  { name: 'F#', category: 'Ngôn ngữ lập trình' },
-  { name: 'Objective-C', category: 'Ngôn ngữ lập trình' },
-  { name: 'MATLAB', category: 'Ngôn ngữ lập trình' },
-  { name: 'SQL', category: 'Ngôn ngữ lập trình' },
-  { name: 'Shell/Bash', category: 'Ngôn ngữ lập trình' },
-  { name: 'PowerShell', category: 'Ngôn ngữ lập trình' },
-  { name: 'VBA', category: 'Ngôn ngữ lập trình' },
-  { name: 'Assembly', category: 'Ngôn ngữ lập trình' },
-  { name: 'Solidity', category: 'Ngôn ngữ lập trình' },
-  { name: 'COBOL', category: 'Ngôn ngữ lập trình' },
-  { name: 'Fortran', category: 'Ngôn ngữ lập trình' },
+const prisma = new PrismaClient()
 
-  // ==================== WEB DEVELOPMENT - FRONTEND ====================
-  { name: 'HTML', category: 'Web Development - Frontend' },
-  { name: 'CSS', category: 'Web Development - Frontend' },
-  { name: 'SASS/SCSS', category: 'Web Development - Frontend' },
-  { name: 'LESS', category: 'Web Development - Frontend' },
-  { name: 'Tailwind CSS', category: 'Web Development - Frontend' },
-  { name: 'Bootstrap', category: 'Web Development - Frontend' },
-  { name: 'Material-UI', category: 'Web Development - Frontend' },
-  { name: 'Ant Design', category: 'Web Development - Frontend' },
-  { name: 'Chakra UI', category: 'Web Development - Frontend' },
-  { name: 'React', category: 'Web Development - Frontend' },
-  { name: 'Vue.js', category: 'Web Development - Frontend' },
-  { name: 'Angular', category: 'Web Development - Frontend' },
-  { name: 'Svelte', category: 'Web Development - Frontend' },
-  { name: 'Next.js', category: 'Web Development - Frontend' },
-  { name: 'Nuxt.js', category: 'Web Development - Frontend' },
-  { name: 'Gatsby', category: 'Web Development - Frontend' },
-  { name: 'jQuery', category: 'Web Development - Frontend' },
-  { name: 'Redux', category: 'Web Development - Frontend' },
-  { name: 'Redux Toolkit', category: 'Web Development - Frontend' },
-  { name: 'MobX', category: 'Web Development - Frontend' },
-  { name: 'Zustand', category: 'Web Development - Frontend' },
-  { name: 'Recoil', category: 'Web Development - Frontend' },
-  { name: 'Webpack', category: 'Web Development - Frontend' },
-  { name: 'Vite', category: 'Web Development - Frontend' },
-  { name: 'Parcel', category: 'Web Development - Frontend' },
-  { name: 'Rollup', category: 'Web Development - Frontend' },
-  { name: 'Babel', category: 'Web Development - Frontend' },
-  { name: 'ESLint', category: 'Web Development - Frontend' },
-  { name: 'Prettier', category: 'Web Development - Frontend' },
-  { name: 'Responsive Design', category: 'Web Development - Frontend' },
-  { name: 'Progressive Web Apps (PWA)', category: 'Web Development - Frontend' },
-  { name: 'Web Accessibility (a11y)', category: 'Web Development - Frontend' },
-  { name: 'Web Performance Optimization', category: 'Web Development - Frontend' },
-  { name: 'Cross-browser Compatibility', category: 'Web Development - Frontend' },
-
-  // ==================== WEB DEVELOPMENT - BACKEND ====================
-  { name: 'Node.js', category: 'Web Development - Backend' },
-  { name: 'Express.js', category: 'Web Development - Backend' },
-  { name: 'NestJS', category: 'Web Development - Backend' },
-  { name: 'Fastify', category: 'Web Development - Backend' },
-  { name: 'Koa.js', category: 'Web Development - Backend' },
-  { name: 'Django', category: 'Web Development - Backend' },
-  { name: 'Flask', category: 'Web Development - Backend' },
-  { name: 'FastAPI', category: 'Web Development - Backend' },
-  { name: 'Spring Boot', category: 'Web Development - Backend' },
-  { name: 'ASP.NET Core', category: 'Web Development - Backend' },
-  { name: 'Laravel', category: 'Web Development - Backend' },
-  { name: 'Symfony', category: 'Web Development - Backend' },
-  { name: 'Ruby on Rails', category: 'Web Development - Backend' },
-  { name: 'GraphQL', category: 'Web Development - Backend' },
-  { name: 'REST API', category: 'Web Development - Backend' },
-  { name: 'gRPC', category: 'Web Development - Backend' },
-  { name: 'WebSocket', category: 'Web Development - Backend' },
-  { name: 'Microservices Architecture', category: 'Web Development - Backend' },
-  { name: 'Serverless Architecture', category: 'Web Development - Backend' },
-  { name: 'API Gateway', category: 'Web Development - Backend' },
-  { name: 'Message Queues', category: 'Web Development - Backend' },
-  { name: 'Event-Driven Architecture', category: 'Web Development - Backend' },
-
-  // ==================== DATABASES ====================
-  { name: 'MySQL', category: 'Cơ sở dữ liệu' },
-  { name: 'PostgreSQL', category: 'Cơ sở dữ liệu' },
-  { name: 'MongoDB', category: 'Cơ sở dữ liệu' },
-  { name: 'Redis', category: 'Cơ sở dữ liệu' },
-  { name: 'Elasticsearch', category: 'Cơ sở dữ liệu' },
-  { name: 'Oracle Database', category: 'Cơ sở dữ liệu' },
-  { name: 'Microsoft SQL Server', category: 'Cơ sở dữ liệu' },
-  { name: 'SQLite', category: 'Cơ sở dữ liệu' },
-  { name: 'Cassandra', category: 'Cơ sở dữ liệu' },
-  { name: 'DynamoDB', category: 'Cơ sở dữ liệu' },
-  { name: 'Firebase Realtime Database', category: 'Cơ sở dữ liệu' },
-  { name: 'Firestore', category: 'Cơ sở dữ liệu' },
-  { name: 'MariaDB', category: 'Cơ sở dữ liệu' },
-  { name: 'CouchDB', category: 'Cơ sở dữ liệu' },
-  { name: 'Neo4j', category: 'Cơ sở dữ liệu' },
-  { name: 'ClickHouse', category: 'Cơ sở dữ liệu' },
-  { name: 'InfluxDB', category: 'Cơ sở dữ liệu' },
-  { name: 'TimescaleDB', category: 'Cơ sở dữ liệu' },
-  { name: 'Prisma', category: 'Cơ sở dữ liệu' },
-  { name: 'TypeORM', category: 'Cơ sở dữ liệu' },
-  { name: 'Sequelize', category: 'Cơ sở dữ liệu' },
-  { name: 'Mongoose', category: 'Cơ sở dữ liệu' },
-  { name: 'Knex.js', category: 'Cơ sở dữ liệu' },
-  { name: 'Database Design', category: 'Cơ sở dữ liệu' },
-  { name: 'Database Optimization', category: 'Cơ sở dữ liệu' },
-  { name: 'Query Optimization', category: 'Cơ sở dữ liệu' },
-  { name: 'Data Modeling', category: 'Cơ sở dữ liệu' },
-
-  // ==================== DEVOPS & CLOUD ====================
-  { name: 'Docker', category: 'DevOps & Cloud' },
-  { name: 'Kubernetes', category: 'DevOps & Cloud' },
-  { name: 'Jenkins', category: 'DevOps & Cloud' },
-  { name: 'GitLab CI/CD', category: 'DevOps & Cloud' },
-  { name: 'GitHub Actions', category: 'DevOps & Cloud' },
-  { name: 'CircleCI', category: 'DevOps & Cloud' },
-  { name: 'Travis CI', category: 'DevOps & Cloud' },
-  { name: 'AWS (Amazon Web Services)', category: 'DevOps & Cloud' },
-  { name: 'AWS EC2', category: 'DevOps & Cloud' },
-  { name: 'AWS S3', category: 'DevOps & Cloud' },
-  { name: 'AWS Lambda', category: 'DevOps & Cloud' },
-  { name: 'AWS RDS', category: 'DevOps & Cloud' },
-  { name: 'AWS ECS', category: 'DevOps & Cloud' },
-  { name: 'AWS CloudFormation', category: 'DevOps & Cloud' },
-  { name: 'Azure', category: 'DevOps & Cloud' },
-  { name: 'Google Cloud Platform (GCP)', category: 'DevOps & Cloud' },
-  { name: 'Terraform', category: 'DevOps & Cloud' },
-  { name: 'Ansible', category: 'DevOps & Cloud' },
-  { name: 'Chef', category: 'DevOps & Cloud' },
-  { name: 'Puppet', category: 'DevOps & Cloud' },
-  { name: 'Linux', category: 'DevOps & Cloud' },
-  { name: 'Ubuntu', category: 'DevOps & Cloud' },
-  { name: 'CentOS', category: 'DevOps & Cloud' },
-  { name: 'Nginx', category: 'DevOps & Cloud' },
-  { name: 'Apache', category: 'DevOps & Cloud' },
-  { name: 'CI/CD', category: 'DevOps & Cloud' },
-  { name: 'Infrastructure as Code (IaC)', category: 'DevOps & Cloud' },
-  { name: 'Monitoring', category: 'DevOps & Cloud' },
-  { name: 'Prometheus', category: 'DevOps & Cloud' },
-  { name: 'Grafana', category: 'DevOps & Cloud' },
-  { name: 'ELK Stack', category: 'DevOps & Cloud' },
-  { name: 'Datadog', category: 'DevOps & Cloud' },
-  { name: 'New Relic', category: 'DevOps & Cloud' },
-  { name: 'Splunk', category: 'DevOps & Cloud' },
-
-  // ==================== MOBILE DEVELOPMENT ====================
-  { name: 'React Native', category: 'Mobile Development' },
-  { name: 'Flutter', category: 'Mobile Development' },
-  { name: 'iOS Development', category: 'Mobile Development' },
-  { name: 'Android Development', category: 'Mobile Development' },
-  { name: 'Xamarin', category: 'Mobile Development' },
-  { name: 'Ionic', category: 'Mobile Development' },
-  { name: 'SwiftUI', category: 'Mobile Development' },
-  { name: 'Jetpack Compose', category: 'Mobile Development' },
-  { name: 'Xcode', category: 'Mobile Development' },
-  { name: 'Android Studio', category: 'Mobile Development' },
-  { name: 'Mobile UI/UX', category: 'Mobile Development' },
-  { name: 'App Store Optimization (ASO)', category: 'Mobile Development' },
-  { name: 'Mobile Testing', category: 'Mobile Development' },
-  { name: 'Push Notifications', category: 'Mobile Development' },
-
-  // ==================== DATA SCIENCE & AI/ML ====================
-  { name: 'Machine Learning', category: 'Data Science & AI' },
-  { name: 'Deep Learning', category: 'Data Science & AI' },
-  { name: 'Natural Language Processing (NLP)', category: 'Data Science & AI' },
-  { name: 'Computer Vision', category: 'Data Science & AI' },
-  { name: 'TensorFlow', category: 'Data Science & AI' },
-  { name: 'PyTorch', category: 'Data Science & AI' },
-  { name: 'Keras', category: 'Data Science & AI' },
-  { name: 'scikit-learn', category: 'Data Science & AI' },
-  { name: 'Pandas', category: 'Data Science & AI' },
-  { name: 'NumPy', category: 'Data Science & AI' },
-  { name: 'SciPy', category: 'Data Science & AI' },
-  { name: 'Matplotlib', category: 'Data Science & AI' },
-  { name: 'Seaborn', category: 'Data Science & AI' },
-  { name: 'Data Analysis', category: 'Data Science & AI' },
-  { name: 'Data Visualization', category: 'Data Science & AI' },
-  { name: 'Statistical Analysis', category: 'Data Science & AI' },
-  { name: 'Tableau', category: 'Data Science & AI' },
-  { name: 'Power BI', category: 'Data Science & AI' },
-  { name: 'Apache Spark', category: 'Data Science & AI' },
-  { name: 'Hadoop', category: 'Data Science & AI' },
-  { name: 'Apache Airflow', category: 'Data Science & AI' },
-  { name: 'Jupyter Notebook', category: 'Data Science & AI' },
-  { name: 'Data Mining', category: 'Data Science & AI' },
-  { name: 'Predictive Modeling', category: 'Data Science & AI' },
-  { name: 'A/B Testing', category: 'Data Science & AI' },
-  { name: 'Big Data', category: 'Data Science & AI' },
-  { name: 'ETL (Extract, Transform, Load)', category: 'Data Science & AI' },
-  { name: 'Data Warehousing', category: 'Data Science & AI' },
-
-  // ==================== DESIGN ====================
-  { name: 'UI/UX Design', category: 'Thiết kế' },
-  { name: 'User Interface Design', category: 'Thiết kế' },
-  { name: 'User Experience Design', category: 'Thiết kế' },
-  { name: 'Figma', category: 'Thiết kế' },
-  { name: 'Adobe XD', category: 'Thiết kế' },
-  { name: 'Sketch', category: 'Thiết kế' },
-  { name: 'Photoshop', category: 'Thiết kế' },
-  { name: 'Illustrator', category: 'Thiết kế' },
-  { name: 'InDesign', category: 'Thiết kế' },
-  { name: 'After Effects', category: 'Thiết kế' },
-  { name: 'Premiere Pro', category: 'Thiết kế' },
-  { name: 'Wireframing', category: 'Thiết kế' },
-  { name: 'Prototyping', category: 'Thiết kế' },
-  { name: 'User Research', category: 'Thiết kế' },
-  { name: 'Usability Testing', category: 'Thiết kế' },
-  { name: 'Design Systems', category: 'Thiết kế' },
-  { name: 'Graphic Design', category: 'Thiết kế' },
-  { name: 'Brand Identity Design', category: 'Thiết kế' },
-  { name: 'Motion Graphics', category: 'Thiết kế' },
-  { name: 'Video Editing', category: 'Thiết kế' },
-  { name: '3D Modeling', category: 'Thiết kế' },
-  { name: 'Blender', category: 'Thiết kế' },
-  { name: 'Maya', category: 'Thiết kế' },
-  { name: 'Cinema 4D', category: 'Thiết kế' },
-
-  // ==================== MARKETING & SALES ====================
-  { name: 'Digital Marketing', category: 'Marketing & Sales' },
-  { name: 'SEO (Search Engine Optimization)', category: 'Marketing & Sales' },
-  { name: 'SEM (Search Engine Marketing)', category: 'Marketing & Sales' },
-  { name: 'Content Marketing', category: 'Marketing & Sales' },
-  { name: 'Social Media Marketing', category: 'Marketing & Sales' },
-  { name: 'Email Marketing', category: 'Marketing & Sales' },
-  { name: 'Marketing Automation', category: 'Marketing & Sales' },
-  { name: 'Google Analytics', category: 'Marketing & Sales' },
-  { name: 'Google Ads', category: 'Marketing & Sales' },
-  { name: 'Facebook Ads', category: 'Marketing & Sales' },
-  { name: 'Instagram Marketing', category: 'Marketing & Sales' },
-  { name: 'LinkedIn Marketing', category: 'Marketing & Sales' },
-  { name: 'TikTok Marketing', category: 'Marketing & Sales' },
-  { name: 'Influencer Marketing', category: 'Marketing & Sales' },
-  { name: 'Affiliate Marketing', category: 'Marketing & Sales' },
-  { name: 'Copywriting', category: 'Marketing & Sales' },
-  { name: 'Brand Management', category: 'Marketing & Sales' },
-  { name: 'Public Relations (PR)', category: 'Marketing & Sales' },
-  { name: 'Market Research', category: 'Marketing & Sales' },
-  { name: 'Customer Relationship Management (CRM)', category: 'Marketing & Sales' },
-  { name: 'Salesforce', category: 'Marketing & Sales' },
-  { name: 'HubSpot', category: 'Marketing & Sales' },
-  { name: 'Mailchimp', category: 'Marketing & Sales' },
-  { name: 'Conversion Rate Optimization (CRO)', category: 'Marketing & Sales' },
-  { name: 'Growth Hacking', category: 'Marketing & Sales' },
-  { name: 'B2B Marketing', category: 'Marketing & Sales' },
-  { name: 'B2C Marketing', category: 'Marketing & Sales' },
-  { name: 'Sales Strategy', category: 'Marketing & Sales' },
-  { name: 'Lead Generation', category: 'Marketing & Sales' },
-  { name: 'Sales Negotiation', category: 'Marketing & Sales' },
-  { name: 'Account Management', category: 'Marketing & Sales' },
-
-  // ==================== BUSINESS & MANAGEMENT ====================
-  { name: 'Project Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Agile', category: 'Kinh doanh & Quản lý' },
-  { name: 'Scrum', category: 'Kinh doanh & Quản lý' },
-  { name: 'Kanban', category: 'Kinh doanh & Quản lý' },
-  { name: 'Jira', category: 'Kinh doanh & Quản lý' },
-  { name: 'Trello', category: 'Kinh doanh & Quản lý' },
-  { name: 'Asana', category: 'Kinh doanh & Quản lý' },
-  { name: 'Monday.com', category: 'Kinh doanh & Quản lý' },
-  { name: 'Business Analysis', category: 'Kinh doanh & Quản lý' },
-  { name: 'Product Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Product Strategy', category: 'Kinh doanh & Quản lý' },
-  { name: 'Roadmap Planning', category: 'Kinh doanh & Quản lý' },
-  { name: 'Stakeholder Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Business Strategy', category: 'Kinh doanh & Quản lý' },
-  { name: 'Strategic Planning', category: 'Kinh doanh & Quản lý' },
-  { name: 'Change Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Risk Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Quality Assurance (QA)', category: 'Kinh doanh & Quản lý' },
-  { name: 'Process Improvement', category: 'Kinh doanh & Quản lý' },
-  { name: 'Six Sigma', category: 'Kinh doanh & Quản lý' },
-  { name: 'Lean Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Operations Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Supply Chain Management', category: 'Kinh doanh & Quản lý' },
-  { name: 'Procurement', category: 'Kinh doanh & Quản lý' },
-  { name: 'Vendor Management', category: 'Kinh doanh & Quản lý' },
-
-  // ==================== FINANCE & ACCOUNTING ====================
-  { name: 'Accounting', category: 'Tài chính & Kế toán' },
-  { name: 'Financial Analysis', category: 'Tài chính & Kế toán' },
-  { name: 'Financial Modeling', category: 'Tài chính & Kế toán' },
-  { name: 'Budgeting', category: 'Tài chính & Kế toán' },
-  { name: 'Forecasting', category: 'Tài chính & Kế toán' },
-  { name: 'Auditing', category: 'Tài chính & Kế toán' },
-  { name: 'Tax Preparation', category: 'Tài chính & Kế toán' },
-  { name: 'Financial Reporting', category: 'Tài chính & Kế toán' },
-  { name: 'GAAP', category: 'Tài chính & Kế toán' },
-  { name: 'IFRS', category: 'Tài chính & Kế toán' },
-  { name: 'QuickBooks', category: 'Tài chính & Kế toán' },
-  { name: 'SAP', category: 'Tài chính & Kế toán' },
-  { name: 'Oracle Financials', category: 'Tài chính & Kế toán' },
-  { name: 'Excel (Advanced)', category: 'Tài chính & Kế toán' },
-  { name: 'Investment Analysis', category: 'Tài chính & Kế toán' },
-  { name: 'Corporate Finance', category: 'Tài chính & Kế toán' },
-  { name: 'Risk Assessment', category: 'Tài chính & Kế toán' },
-
-  // ==================== CYBERSECURITY ====================
-  { name: 'Cybersecurity', category: 'An ninh mạng' },
-  { name: 'Penetration Testing', category: 'An ninh mạng' },
-  { name: 'Network Security', category: 'An ninh mạng' },
-  { name: 'Application Security', category: 'An ninh mạng' },
-  { name: 'Cryptography', category: 'An ninh mạng' },
-  { name: 'OWASP', category: 'An ninh mạng' },
-  { name: 'Firewall', category: 'An ninh mạng' },
-  { name: 'VPN', category: 'An ninh mạng' },
-  { name: 'IAM (Identity and Access Management)', category: 'An ninh mạng' },
-  { name: 'Security Auditing', category: 'An ninh mạng' },
-  { name: 'Incident Response', category: 'An ninh mạng' },
-  { name: 'Threat Intelligence', category: 'An ninh mạng' },
-  { name: 'SIEM', category: 'An ninh mạng' },
-  { name: 'Vulnerability Assessment', category: 'An ninh mạng' },
-  { name: 'Security Compliance', category: 'An ninh mạng' },
-  { name: 'Ethical Hacking', category: 'An ninh mạng' },
-
-  // ==================== QUALITY ASSURANCE & TESTING ====================
-  { name: 'Manual Testing', category: 'Quality Assurance' },
-  { name: 'Test Automation', category: 'Quality Assurance' },
-  { name: 'Selenium', category: 'Quality Assurance' },
-  { name: 'Cypress', category: 'Quality Assurance' },
-  { name: 'Jest', category: 'Quality Assurance' },
-  { name: 'Mocha', category: 'Quality Assurance' },
-  { name: 'Chai', category: 'Quality Assurance' },
-  { name: 'JUnit', category: 'Quality Assurance' },
-  { name: 'TestNG', category: 'Quality Assurance' },
-  { name: 'Playwright', category: 'Quality Assurance' },
-  { name: 'Appium', category: 'Quality Assurance' },
-  { name: 'Postman', category: 'Quality Assurance' },
-  { name: 'API Testing', category: 'Quality Assurance' },
-  { name: 'Performance Testing', category: 'Quality Assurance' },
-  { name: 'Load Testing', category: 'Quality Assurance' },
-  { name: 'JMeter', category: 'Quality Assurance' },
-  { name: 'Test Planning', category: 'Quality Assurance' },
-  { name: 'Test Case Design', category: 'Quality Assurance' },
-  { name: 'Regression Testing', category: 'Quality Assurance' },
-  { name: 'Integration Testing', category: 'Quality Assurance' },
-
-  // ==================== GAME DEVELOPMENT ====================
-  { name: 'Game Development', category: 'Game Development' },
-  { name: 'Unity', category: 'Game Development' },
-  { name: 'Unreal Engine', category: 'Game Development' },
-  { name: 'Godot', category: 'Game Development' },
-  { name: 'Game Design', category: 'Game Development' },
-  { name: 'Level Design', category: 'Game Development' },
-  { name: '3D Game Development', category: 'Game Development' },
-  { name: '2D Game Development', category: 'Game Development' },
-  { name: 'Multiplayer Game Development', category: 'Game Development' },
-  { name: 'Mobile Game Development', category: 'Game Development' },
-
-  // ==================== BLOCKCHAIN & WEB3 ====================
-  { name: 'Blockchain', category: 'Blockchain & Web3' },
-  { name: 'Smart Contracts', category: 'Blockchain & Web3' },
-  { name: 'Ethereum', category: 'Blockchain & Web3' },
-  { name: 'Web3.js', category: 'Blockchain & Web3' },
-  { name: 'DeFi', category: 'Blockchain & Web3' },
-  { name: 'NFT', category: 'Blockchain & Web3' },
-  { name: 'Cryptocurrency', category: 'Blockchain & Web3' },
-  { name: 'Hyperledger', category: 'Blockchain & Web3' },
-
-  // ==================== IoT & EMBEDDED SYSTEMS ====================
-  { name: 'Internet of Things (IoT)', category: 'IoT & Embedded' },
-  { name: 'Embedded Systems', category: 'IoT & Embedded' },
-  { name: 'Arduino', category: 'IoT & Embedded' },
-  { name: 'Raspberry Pi', category: 'IoT & Embedded' },
-  { name: 'MQTT', category: 'IoT & Embedded' },
-  { name: 'Sensor Integration', category: 'IoT & Embedded' },
-  { name: 'Firmware Development', category: 'IoT & Embedded' },
-
-  // ==================== AR/VR ====================
-  { name: 'Augmented Reality (AR)', category: 'AR/VR' },
-  { name: 'Virtual Reality (VR)', category: 'AR/VR' },
-  { name: 'ARKit', category: 'AR/VR' },
-  { name: 'ARCore', category: 'AR/VR' },
-  { name: 'Oculus Development', category: 'AR/VR' },
-  { name: 'Mixed Reality', category: 'AR/VR' },
-
-  // ==================== SOFT SKILLS ====================
-  { name: 'Communication', category: 'Kỹ năng mềm' },
-  { name: 'Teamwork', category: 'Kỹ năng mềm' },
-  { name: 'Leadership', category: 'Kỹ năng mềm' },
-  { name: 'Problem Solving', category: 'Kỹ năng mềm' },
-  { name: 'Critical Thinking', category: 'Kỹ năng mềm' },
-  { name: 'Time Management', category: 'Kỹ năng mềm' },
-  { name: 'Adaptability', category: 'Kỹ năng mềm' },
-  { name: 'Creativity', category: 'Kỹ năng mềm' },
-  { name: 'Emotional Intelligence', category: 'Kỹ năng mềm' },
-  { name: 'Presentation Skills', category: 'Kỹ năng mềm' },
-  { name: 'Negotiation', category: 'Kỹ năng mềm' },
-  { name: 'Conflict Resolution', category: 'Kỹ năng mềm' },
-  { name: 'Decision Making', category: 'Kỹ năng mềm' },
-  { name: 'Collaboration', category: 'Kỹ năng mềm' },
-  { name: 'Active Listening', category: 'Kỹ năng mềm' },
-  { name: 'Mentoring', category: 'Kỹ năng mềm' },
-  { name: 'Coaching', category: 'Kỹ năng mềm' },
-  { name: 'Customer Service', category: 'Kỹ năng mềm' },
-
-  // ==================== LANGUAGES ====================
-  { name: 'English', category: 'Ngôn ngữ' },
-  { name: 'Vietnamese', category: 'Ngôn ngữ' },
-  { name: 'Japanese', category: 'Ngôn ngữ' },
-  { name: 'Korean', category: 'Ngôn ngữ' },
-  { name: 'Chinese (Mandarin)', category: 'Ngôn ngữ' },
-  { name: 'French', category: 'Ngôn ngữ' },
-  { name: 'German', category: 'Ngôn ngữ' },
-  { name: 'Spanish', category: 'Ngôn ngữ' },
-  { name: 'Portuguese', category: 'Ngôn ngữ' },
-  { name: 'Russian', category: 'Ngôn ngữ' },
-
-  // ==================== OTHER TECHNICAL SKILLS ====================
-  { name: 'Version Control', category: 'Công cụ & Phương pháp' },
-  { name: 'Git', category: 'Công cụ & Phương pháp' },
-  { name: 'GitHub', category: 'Công cụ & Phương pháp' },
-  { name: 'GitLab', category: 'Công cụ & Phương pháp' },
-  { name: 'Bitbucket', category: 'Công cụ & Phương pháp' },
-  { name: 'Code Review', category: 'Công cụ & Phương pháp' },
-  { name: 'Pair Programming', category: 'Công cụ & Phương pháp' },
-  { name: 'Technical Documentation', category: 'Công cụ & Phương pháp' },
-  { name: 'API Documentation', category: 'Công cụ & Phương pháp' },
-  { name: 'Swagger/OpenAPI', category: 'Công cụ & Phương pháp' },
-  { name: 'Postman', category: 'Công cụ & Phương pháp' },
-  { name: 'System Design', category: 'Công cụ & Phương pháp' },
-  { name: 'Architecture Design', category: 'Công cụ & Phương pháp' },
-  { name: 'Design Patterns', category: 'Công cụ & Phương pháp' },
-  { name: 'Clean Code', category: 'Công cụ & Phương pháp' },
-  { name: 'SOLID Principles', category: 'Công cụ & Phương pháp' },
-  { name: 'Test-Driven Development (TDD)', category: 'Công cụ & Phương pháp' },
-  { name: 'Behavior-Driven Development (BDD)', category: 'Công cụ & Phương pháp' },
-  { name: 'Domain-Driven Design (DDD)', category: 'Công cụ & Phương pháp' },
-
-  // ==================== INDUSTRY-SPECIFIC ====================
-  { name: 'Healthcare IT', category: 'Ngành nghề chuyên biệt' },
-  { name: 'Fintech', category: 'Ngành nghề chuyên biệt' },
-  { name: 'E-commerce', category: 'Ngành nghề chuyên biệt' },
-  { name: 'EdTech', category: 'Ngành nghề chuyên biệt' },
-  { name: 'Real Estate Technology', category: 'Ngành nghề chuyên biệt' },
-  { name: 'Logistics & Supply Chain', category: 'Ngành nghề chuyên biệt' },
-  { name: 'Manufacturing', category: 'Ngành nghề chuyên biệt' },
-  { name: 'Automotive', category: 'Ngành nghề chuyên biệt' },
-  { name: 'Telecommunications', category: 'Ngành nghề chuyên biệt' },
-  { name: 'Energy & Utilities', category: 'Ngành nghề chuyên biệt' },
-
-  // ==================== ENGINEERING (NON-SOFTWARE) ====================
-  { name: 'Mechanical Engineering', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Electrical Engineering', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Civil Engineering', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Chemical Engineering', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Industrial Engineering', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Automation', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'CAD (AutoCAD, SolidWorks)', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Quality Control', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Manufacturing Processes', category: 'Kỹ thuật & Sản xuất' },
-  { name: 'Production Planning', category: 'Kỹ thuật & Sản xuất' },
-
-  // ==================== HUMAN RESOURCES ====================
-  { name: 'Recruitment', category: 'Nhân sự' },
-  { name: 'Talent Acquisition', category: 'Nhân sự' },
-  { name: 'HR Management', category: 'Nhân sự' },
-  { name: 'Employee Relations', category: 'Nhân sự' },
-  { name: 'Performance Management', category: 'Nhân sự' },
-  { name: 'Compensation & Benefits', category: 'Nhân sự' },
-  { name: 'Training & Development', category: 'Nhân sự' },
-  { name: 'Onboarding', category: 'Nhân sự' },
-  { name: 'HR Analytics', category: 'Nhân sự' },
-  { name: 'Labor Law', category: 'Nhân sự' },
-
-  // ==================== LEGAL ====================
-  { name: 'Contract Law', category: 'Pháp lý' },
-  { name: 'Corporate Law', category: 'Pháp lý' },
-  { name: 'Intellectual Property', category: 'Pháp lý' },
-  { name: 'Compliance', category: 'Pháp lý' },
-  { name: 'Legal Research', category: 'Pháp lý' },
-  { name: 'Legal Writing', category: 'Pháp lý' },
-
-  // ==================== CUSTOMER SERVICE ====================
-  { name: 'Customer Support', category: 'Dịch vụ khách hàng' },
-  { name: 'Technical Support', category: 'Dịch vụ khách hàng' },
-  { name: 'Help Desk', category: 'Dịch vụ khách hàng' },
-  { name: 'Client Relations', category: 'Dịch vụ khách hàng' },
-  { name: 'Complaint Resolution', category: 'Dịch vụ khách hàng' },
-  { name: 'Zendesk', category: 'Dịch vụ khách hàng' },
-  { name: 'Freshdesk', category: 'Dịch vụ khách hàng' },
-
-  // ==================== CONTENT & WRITING ====================
-  { name: 'Content Writing', category: 'Nội dung & Viết lách' },
-  { name: 'Technical Writing', category: 'Nội dung & Viết lách' },
-  { name: 'Blogging', category: 'Nội dung & Viết lách' },
-  { name: 'Editing', category: 'Nội dung & Viết lách' },
-  { name: 'Proofreading', category: 'Nội dung & Viết lách' },
-  { name: 'Creative Writing', category: 'Nội dung & Viết lách' },
-  { name: 'Journalism', category: 'Nội dung & Viết lách' },
-  { name: 'Scriptwriting', category: 'Nội dung & Viết lách' }
-]
-
-export async function seedSkills(prisma: PrismaClient) {
-  console.log('  Bắt đầu seed dữ liệu skills...')
+export async function seedSkills() {
+  console.log('🌱 Seeding skills...')
 
   try {
-    // Sử dụng transaction để thực hiện tất cả các upsert
-    await prisma.$transaction(async (tx) => {
-      for (const skill of skillsData) {
-        await tx.skills.upsert({
-          where: { name: skill.name }, // Điều kiện để tìm
-          update: { category: skill.category }, // Nếu tìm thấy -> Cập nhật
+    const skillsPath = path.join(__dirname, 'data', 'skills.json')
+    const skillsData = JSON.parse(fs.readFileSync(skillsPath, 'utf8'))
+
+    console.log(`📝 Found ${skillsData.length} skills to seed`)
+
+    // Clear existing skills and related data
+    await (prisma as any).job_skills.deleteMany()
+    await (prisma as any).profile_skills.deleteMany()
+    await (prisma as any).skills.deleteMany()
+    console.log('🗑️  Cleared existing skills and related data')
+
+    // Get all existing category IDs to validate foreign keys
+    const existingCategories = await (prisma as any).categories.findMany({
+      select: { id: true }
+    })
+    const categoryIds = new Set(existingCategories.map((cat: any) => cat.id))
+
+    console.log(`📋 Found ${categoryIds.size} existing categories`)
+
+    // Seed skills individually to handle foreign key constraints
+    let successCount = 0
+    let errorCount = 0
+
+    for (const skill of skillsData) {
+      try {
+        // Skip if category_id doesn't exist
+        if (!categoryIds.has(skill.category_id)) {
+          errorCount++
+          if (errorCount <= 5) {
+            console.log(
+              `❌ Skipped skill "${skill.name}": category_id "${skill.category_id}" does not exist`
+            )
+          }
+          continue
+        }
+
+        await (prisma as any).skills.upsert({
+          where: {
+            name: skill.name
+          },
+          update: {
+            category_id: skill.category_id
+          },
           create: {
-            // Nếu không tìm thấy -> Tạo mới
+            id: skill.id,
             name: skill.name,
-            category: skill.category
+            category_id: skill.category_id
           }
         })
+        successCount++
+      } catch (error) {
+        errorCount++
+        if (errorCount <= 5) {
+          console.log(
+            `❌ Failed to create skill "${skill.name}" with category_id "${skill.category_id}":`,
+            error instanceof Error ? error.message : String(error)
+          )
+        }
       }
-    })
+    }
 
-    console.log(`  Seed ${skillsData.length} skills hoàn tất.`)
+    console.log(`✅ Created ${successCount} skills, ${errorCount} failed`)
+
+    if (errorCount > 0) {
+      console.warn(`⚠️  ${errorCount} skills were skipped due to missing categories`)
+    }
+
+    console.log('✅ Skills seeded successfully!')
   } catch (error) {
-    console.error('  Lỗi khi seed dữ liệu skills:', error)
+    console.error('❌ Error seeding skills:', error)
     throw error
   }
 }

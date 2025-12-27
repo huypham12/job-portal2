@@ -1,0 +1,602 @@
+[
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Lương thưởng cạnh tranh",
+    "description": "Mức lương hấp dẫn theo vị trí và năng lực, thưởng nóng hàng tháng, thưởng năm theo hiệu quả công ty và cá nhân.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Bảo hiểm sức khỏe toàn diện",
+    "description": "Bảo hiểm y tế, tai nạn 24/7, bảo hiểm nhân thọ với mức chi trả cao, khám sức khỏe định kỳ hàng năm.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Nghỉ phép có lương",
+    "description": "12-18 ngày phép năm, nghỉ lễ tết theo quy định nhà nước, nghỉ thai sản đầy đủ cho nữ và nam nhân viên.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Đào tạo và phát triển nghề nghiệp",
+    "description": "Đào tạo nội bộ, tài trợ học phí cho các khóa học nâng cao, hội thảo và workshop chuyên ngành.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Team building và hoạt động tập thể",
+    "description": "Các chuyến du lịch công ty hàng năm, hoạt động thể thao, văn hóa văn nghệ, ngày hội gia đình nhân viên.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Văn phòng hiện đại và tiện nghi",
+    "description": "Không gian làm việc thoáng đãng, trang bị máy tính và thiết bị hiện đại, phòng nghỉ ngơi và khu vực giải trí.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Cơm trưa miễn phí",
+    "description": "Cơm trưa dinh dưỡng tại căng tin công ty hoặc hỗ trợ tiền ăn trưa hàng tháng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Hỗ trợ phương tiện đi lại",
+    "description": "Phí đi lại hai chiều, hỗ trợ gửi xe, xe bus đưa đón từ các khu vực lân cận.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Công cụ và phần mềm làm việc",
+    "description": "Cung cấp laptop, điện thoại công việc, phần mềm và công cụ cần thiết cho công việc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Thưởng hiệu suất hàng quý",
+    "description": "Đánh giá hiệu suất hàng quý và thưởng tương ứng dựa trên KPI đạt được.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Chăm sóc sức khỏe tinh thần",
+    "description": "Tư vấn viên tâm lý, yoga và mindfulness tại văn phòng, chương trình wellness.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Làm việc linh hoạt",
+    "description": "Lịch làm việc linh hoạt, làm việc từ xa 1-2 ngày/tuần, chính sách work from home.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Học bổng du học",
+    "description": "Hỗ trợ học phí cho chương trình đào tạo ở nước ngoài, học bổng thạc sĩ và tiến sĩ.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Văn hóa doanh nghiệp",
+    "description": "Môi trường làm việc thân thiện, cởi mở, tôn trọng đa dạng, không phân biệt đối xử.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Phòng gym và thể dục",
+    "description": "Phòng gym trang bị hiện đại, lớp yoga và fitness miễn phí cho nhân viên.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Cà phê và đồ uống miễn phí",
+    "description": "Máy pha cà phê, nước uống, sinh tố healthy tại khu vực pantry.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Bãi đậu xe miễn phí",
+    "description": "Bãi đậu xe rộng rãi, an ninh 24/7, hỗ trợ gửi xe máy và ô tô.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Hỗ trợ thiết bị cá nhân",
+    "description": "Hỗ trợ mua thiết bị cá nhân, phụ cấp internet hàng tháng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Cổ phiếu cho nhân viên",
+    "description": "Chương trình ESOP (Employee Stock Ownership Plan) cho nhân viên lâu năm.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Khám chữa bệnh định kỳ",
+    "description": "Khám tổng quát hàng năm, tư vấn dinh dưỡng và sức khỏe sinh sản.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Nghỉ dưỡng hàng năm",
+    "description": "Du lịch nghỉ dưỡng cho nhân viên và gia đình tại các resort 4-5 sao.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Mentorship program",
+    "description": "Chương trình cố vấn từ lãnh đạo cấp cao, phát triển kỹ năng lãnh đạo.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Ngày hội thể thao công ty",
+    "description": "Giải bóng đá, bóng chuyền, cầu lông nội bộ với giải thưởng hấp dẫn.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Không gian làm việc sáng tạo",
+    "description": "Thiết kế văn phòng theo concept open space, creative zones cho brainstorming.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Đồ ăn nhẹ healthy",
+    "description": "Trái cây, sữa chua, bánh mì healthy miễn phí suốt ngày.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Vé máy bay nội địa",
+    "description": "Hỗ trợ vé máy bay về quê hương 1-2 lần/năm cho nhân viên ở xa.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Đào tạo kỹ năng số",
+    "description": "Khóa học về AI, data science, cloud computing với giảng viên quốc tế.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Thưởng sáng kiến cải tiến",
+    "description": "Thưởng cho nhân viên có ý tưởng cải tiến quy trình, tăng hiệu quả công việc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Phụ cấp thai sản",
+    "description": "Phụ cấp thêm cho bà mẹ mang thai, hỗ trợ mua sữa và dụng cụ cho trẻ sơ sinh.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Ngày làm việc ngắn",
+    "description": "Làm việc 5 ngày/tuần, giờ làm chuẩn 8 tiếng/ngày, không OT bắt buộc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Thư viện sách điện tử",
+    "description": "Truy cập miễn phí hàng nghìn cuốn sách điện tử, audio books về kinh doanh và kỹ năng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Chương trình tình nguyện",
+    "description": "Tham gia các hoạt động từ thiện, bảo vệ môi trường, hỗ trợ cộng đồng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Phòng họp hiện đại",
+    "description": "Hệ thống video conference, bảng tương tác thông minh, âm thanh chất lượng cao.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Tiệc cuối năm",
+    "description": "Tiệc tất niên sang trọng với chương trình văn nghệ, trao thưởng cho nhân viên xuất sắc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Phụ cấp xăng xe",
+    "description": "Phụ cấp nhiên liệu hàng tháng cho nhân viên đi lại bằng phương tiện cá nhân.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "MacBook Pro cho developer",
+    "description": "Cung cấp MacBook Pro và màn hình lớn cho đội ngũ phát triển phần mềm.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Thưởng thâm niên",
+    "description": "Thưởng nhân dịp kỷ niệm làm việc (1 năm, 3 năm, 5 năm, 10 năm).",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Phòng khám công ty",
+    "description": "Phòng y tế tại chỗ với bác sĩ thường trực, cấp cứu sơ bộ và tư vấn sức khỏe.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Nghỉ việc riêng",
+    "description": "Nghỉ có lương 3-5 ngày cho việc riêng cá nhân (cưới hỏi, tang gia).",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Hội thảo quốc tế",
+    "description": "Tài trợ tham gia hội thảo, conference quốc tế trong lĩnh vực chuyên môn.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Sinh nhật tập thể",
+    "description": "Tổ chức sinh nhật tập thể hàng tháng, quà tặng và bánh kem cho nhân viên sinh nhật.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Máy lạnh và điều hòa",
+    "description": "Hệ thống điều hòa hiện đại, duy trì nhiệt độ 24-26 độ C suốt ngày.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Máy bán hàng tự động",
+    "description": "Máy bán snack, nước uống, cà phê 24/7 tại văn phòng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Grab credit",
+    "description": "Tài trợ Grab bike/car hàng tháng cho việc đi lại cá nhân.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Headset gaming cho dev",
+    "description": "Headset chất lượng cao cho developer và designer làm việc tập trung.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Thưởng dự án hoàn thành",
+    "description": "Thưởng nóng khi hoàn thành dự án quan trọng, tỷ lệ theo đóng góp cá nhân.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Massage tại chỗ",
+    "description": "Dịch vụ massage thư giãn tại văn phòng 1-2 lần/tuần.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Early Friday",
+    "description": "Kết thúc làm việc sớm vào thứ 6 hàng tuần lúc 16h.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Conference budget",
+    "description": "Ngân sách 20 triệu/năm cho mỗi nhân viên tham gia hội thảo chuyên ngành.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Pet friendly office",
+    "description": "Cho phép mang thú cưng đến văn phòng, có khu vực riêng cho pet.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Máy lọc không khí",
+    "description": "Hệ thống máy lọc không khí HEPA trong tất cả các phòng làm việc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Coffee subscription",
+    "description": "Thẻ Starbucks hoặc The Coffee House hàng tháng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Đỗ xe điện",
+    "description": "Trạm sạc xe điện miễn phí tại bãi đậu xe công ty.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "VR headset",
+    "description": "Thiết bị VR cho training và demo sản phẩm công nghệ.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Thưởng vượt KPI",
+    "description": "Thưởng thêm 20-50% lương khi vượt KPI hàng quý.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Dinh dưỡng cân bằng",
+    "description": "Tư vấn dinh dưỡng cá nhân hóa và thực đơn healthy tại căng tin.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Workation policy",
+    "description": "Cho phép làm việc từ nước ngoài 1 tháng/năm với chi phí hỗ trợ.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "TED Talks access",
+    "description": "Truy cập không giới hạn TED Talks và các nền tảng học online.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Volunteer day",
+    "description": "1 ngày làm tình nguyện hàng quý với chi phí công ty chi trả.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Nap pods",
+    "description": "Phòng ngủ ngắn với capsule beds cho nhân viên nghỉ ngơi giữa giờ.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Healthy snacks",
+    "description": "Kho healthy snacks organic, không chất bảo quản suốt ngày.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Bike parking premium",
+    "description": "Bãi đậu xe đạp với hệ thống khóa an toàn và bảo vệ 24/7.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "AI tools subscription",
+    "description": "Truy cập ChatGPT Pro, Midjourney, và các công cụ AI hàng đầu.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Thưởng referral",
+    "description": "Thưởng 10-20 triệu khi giới thiệu ứng viên phù hợp được tuyển dụng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Mental health day",
+    "description": "1 ngày nghỉ có lương hàng tháng để chăm sóc sức khỏe tinh thần.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Summer hours",
+    "description": "Làm việc 7.5 tiếng/ngày trong tháng 6-8 để cân bằng công việc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Skill sharing sessions",
+    "description": "Buổi chia sẻ kiến thức nội bộ hàng tuần với chuyên gia nội bộ.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Diversity & inclusion",
+    "description": "Chương trình thúc đẩy đa dạng văn hóa, tôn trọng LGBTQ+ và người khuyết tật.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Ergonomic chairs",
+    "description": "Ghế làm việc ergonomic cao cấp cho tất cả nhân viên.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Fresh fruit daily",
+    "description": "Trái cây tươi organic giao hàng tận nơi hàng ngày.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Car lease program",
+    "description": "Chương trình thuê xe ô tô với lãi suất ưu đãi cho nhân viên cấp cao.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Home office setup",
+    "description": "Hỗ trợ 5 triệu đồng setup văn phòng tại nhà khi work from home.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Profit sharing",
+    "description": "Chia sẻ lợi nhuận hàng năm theo kết quả kinh doanh công ty.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Preventive care",
+    "description": "Khám sức khỏe định kỳ, vaccine ngừa bệnh và tư vấn sức khỏe dự phòng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Parental leave extended",
+    "description": "Nghỉ thai sản 6 tháng cho mẹ, 2 tuần cho bố với lương đầy đủ.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Executive coaching",
+    "description": "Coaching lãnh đạo cho nhân viên cấp trung và cao với coach quốc tế.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Innovation awards",
+    "description": "Giải thưởng sáng tạo hàng năm với quỹ 100 triệu đồng cho dự án xuất sắc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Podcast studio",
+    "description": "Phòng thu podcast với thiết bị chuyên nghiệp cho content creation.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Chef's table",
+    "description": "Bữa ăn đặc biệt với đầu bếp nổi tiếng 1 lần/tháng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Helicopter service",
+    "description": "Dịch vụ helicopter cho executive đi công tác khẩn cấp.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Quantum computer access",
+    "description": "Truy cập máy tính lượng tử cho nghiên cứu khoa học và AI.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Golden handshake",
+    "description": "Gói severance hào phóng cho nhân viên nghỉ hưu hoặc nghỉ việc tự nguyện.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Executive health check",
+    "description": "Khám sức khỏe chuyên sâu với bác sĩ quốc tế cho lãnh đạo cấp cao.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "Sabbatical leave",
+    "description": "Nghỉ phép 3-6 tháng có lương sau 5 năm làm việc để nghỉ ngơi và học hỏi.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "University partnerships",
+    "description": "Hợp tác với các trường đại học hàng đầu cho chương trình đào tạo nội bộ.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Philanthropy fund",
+    "description": "Quỹ từ thiện công ty với 1% lợi nhuận hàng năm cho các hoạt động xã hội.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Rooftop garden",
+    "description": "Sân thượng xanh với vườn thực vật và khu vực thư giãn ngoài trời.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Wine tasting events",
+    "description": "Buổi degustation rượu vang hàng quý với sommelier chuyên nghiệp.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Company jet",
+    "description": "Máy bay riêng cho lãnh đạo đi công tác quốc tế và khẩn cấp.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Personal AI assistant",
+    "description": "AI assistant cá nhân cho mỗi nhân viên để tối ưu hóa công việc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Crypto bonus",
+    "description": "Thưởng bằng cryptocurrency cho nhân viên tech và developer.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Health & Insurance",
+    "title": "Cryotherapy chamber",
+    "description": "Phòng cryotherapy với nhiệt độ -110 độ C cho phục hồi sức khỏe.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Work-Life Balance",
+    "title": "4 day work week",
+    "description": "Làm việc 4 ngày/tuần với lương không giảm cho nhân viên xuất sắc.",
+    "is_featured": true
+  },
+  {
+    "benefit_type": "Learning & Development",
+    "title": "Personal development budget",
+    "description": "Ngân sách 50 triệu/năm cho mỗi nhân viên phát triển bản thân.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Company Culture",
+    "title": "Dream job program",
+    "description": "Chương trình cho phép nhân viên thử làm công việc mơ ước trong 1 tháng.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Facilities & Equipment",
+    "title": "Home automation",
+    "description": "Trang bị smart home system cho nhà của nhân viên cấp cao.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Food & Beverage",
+    "title": "Private chef",
+    "description": "Đầu bếp riêng cho executive và gia đình trong các buổi tiệc.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Transportation",
+    "title": "Luxury car fleet",
+    "description": "Đội xe sang trọng cho lãnh đạo và khách hàng VIP.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Technology & Tools",
+    "title": "Satellite internet",
+    "description": "Internet vệ tinh tốc độ cao cho nhân viên sống ở vùng xa.",
+    "is_featured": false
+  },
+  {
+    "benefit_type": "Salary & Compensation",
+    "title": "Thưởng sáng kiến",
+    "description": "Thưởng cho nhân viên có ý tưởng cải tiến quy trình, tăng hiệu quả công việc.",
+    "is_featured": false
+  }
+]

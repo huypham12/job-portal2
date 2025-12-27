@@ -35,12 +35,12 @@ model applications {
   withdrawn_reason      String?
   rejected_at           DateTime?               @db.Timestamp(6)
   rejected_reason       String?
-  first_viewed_at       DateTime?              @db.Timestamp(6)
-  last_viewed_at        DateTime?              @db.Timestamp(6)
-  view_count            Int?                   @default(0)
+  first_viewed_at       DateTime?               @db.Timestamp(6)
+  last_viewed_at        DateTime?               @db.Timestamp(6)
+  view_count            Int?                    @default(0)
   offer_sent_at         DateTime?               @db.Timestamp(6)
-  offer_accepted_at     DateTime?              @db.Timestamp(6)
-  offer_declined_at     DateTime?              @db.Timestamp(6)
+  offer_accepted_at     DateTime?               @db.Timestamp(6)
+  offer_declined_at     DateTime?               @db.Timestamp(6)
   application_documents application_documents[]
   application_stages    application_stages[]
   jobs                  jobs                    @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -68,9 +68,9 @@ model application_stages {
   location           String?      @db.VarChar(255)
   meeting_link       String?      @db.VarChar(500)
   meeting_password   String?      @db.VarChar(100)
-  interviewer_id     String?     @db.Uuid
+  interviewer_id     String?      @db.Uuid
   duration_minutes   Int?
-  result             String?     @db.VarChar(50)
+  result             String?      @db.VarChar(50)
   created_at         DateTime     @default(now()) @db.Timestamp(6)
   applications       applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
 
@@ -189,13 +189,15 @@ model job_skills {
   @@id([job_id, skill_id])
 }
 
-model job_tags {
-  job_id String @db.Uuid
-  tag_id String @db.Uuid
-  jobs   jobs   @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  tags   tags   @relation(fields: [tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+model job_categories {
+  job_id      String     @db.Uuid
+  category_id String     @db.Uuid
+  jobs        jobs       @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([job_id, tag_id])
+  @@id([job_id, category_id])
+  @@index([job_id], map: "idx_job_categories_job")
+  @@index([category_id], map: "idx_job_categories_category")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -221,6 +223,7 @@ model jobs {
   job_posts_history     job_posts_history[]
   job_requirements      job_requirements[]
   job_skills            job_skills[]
+  job_categories        job_categories[]
   job_tags              job_tags[]
   job_views             job_views[]
   referrer_views        job_views[]            @relation("JobReferrals")
@@ -338,13 +341,13 @@ model profiles {
   github_url          String?                  @db.VarChar(255)
   headline            String?                  @db.VarChar(255)
   is_looking_for_job  Boolean                  @default(true)
-  availability_status  availability_status?     @default(OPEN)
-  is_public            Boolean                  @default(true)
+  is_public           Boolean                  @default(true)
   linkedin_url        String?                  @db.VarChar(255)
   location_text       String?                  @db.VarChar(100)
   personal_website    String?                  @db.VarChar(255)
   phone_number        String?                  @db.VarChar(20)
   years_of_experience Int?                     @default(0)
+  availability_status  availability_status?       @default(OPEN)
   applications        applications[]
   candidate_interests connection_interests[]   @relation("CandidateInterests")
   job_views           job_views[]
@@ -533,36 +536,68 @@ model search_history {
   @@index([profile_id, session_id, searched_at], map: "idx_search_history_session")
 }
 
+model categories {
+  id     String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String           @unique @db.VarChar(100)
+  slug   String           @unique @db.VarChar(100)
+  type   category_type
+  skills skills[]
+  jobs   job_categories[]
+
+  @@index([type], map: "idx_categories_type")
+  @@map("categories")
+}
+
 model skills {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name           String           @unique
-  category       String?
+  name           String           @unique @db.VarChar(255)
+  category_id    String           @db.Uuid
+  category       categories       @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
   job_skills     job_skills[]
   profile_skills profile_skills[]
+
+  @@index([category_id], map: "idx_skills_category")
 }
 
 model tags {
-  id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String     @unique
-  job_tags job_tags[]
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String      @unique @db.VarChar(100)
+  slug       String      @unique @db.VarChar(100)
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  job_tags   job_tags[]
+
+  @@index([name])
+  @@index([slug])
+}
+
+model job_tags {
+  job_id String @db.Uuid
+  tag_id String @db.Uuid
+  jobs   jobs   @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  tags   tags   @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([job_id, tag_id])
+  @@index([job_id])
+  @@index([tag_id])
 }
 
 model connection_interests {
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  candidate_id     String    @db.Uuid
-  recruiter_id     String    @db.Uuid
-  job_id           String?   @db.Uuid
-  interest_type    String
-  status           String    @default("pending")
-  message          String?
-  contact_info     Json?
-  suggested_job_ids Json?    // Array of job UUIDs (max 10)
-  created_at       DateTime? @default(now()) @db.Timestamp(6)
-  expires_at       DateTime? @db.Timestamp(6)
-  responded_at     DateTime? @db.Timestamp(6)
-  candidate        profiles  @relation("CandidateInterests", fields: [candidate_id], references: [id], onDelete: Cascade)
-  jobs             jobs?     @relation(fields: [job_id], references: [id], onDelete: Cascade)
-  recruiter        users     @relation("RecruiterInterests", fields: [recruiter_id], references: [id], onDelete: Cascade)
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  candidate_id      String    @db.Uuid
+  recruiter_id      String    @db.Uuid
+  job_id            String?   @db.Uuid
+  interest_type     String
+  status            String    @default("pending")
+  message           String?
+  contact_info      Json?
+  suggested_job_ids Json? // Array of job UUIDs (max 10)
+  created_at        DateTime? @default(now()) @db.Timestamp(6)
+  expires_at        DateTime? @db.Timestamp(6)
+  responded_at      DateTime? @db.Timestamp(6)
+  candidate         profiles  @relation("CandidateInterests", fields: [candidate_id], references: [id], onDelete: Cascade)
+  jobs              jobs?     @relation(fields: [job_id], references: [id], onDelete: Cascade)
+  recruiter         users     @relation("RecruiterInterests", fields: [recruiter_id], references: [id], onDelete: Cascade)
 
   @@unique([candidate_id, recruiter_id, job_id, interest_type])
   @@index([candidate_id, status, created_at(sort: Desc)], map: "idx_connection_interests_candidate_status")
@@ -664,6 +699,12 @@ enum user_role {
   admin
 }
 
+enum availability_status {
+  OPEN
+  CLOSED
+  BUSY
+}
+
 enum user_token_type {
   verify_email
   reset_password
@@ -676,8 +717,10 @@ enum LocationType {
   @@map("location_type")
 }
 
-enum availability_status {
-  OPEN
-  PASSIVE
-  NOT_LOOKING
+enum category_type {
+  industry // FinTech, Healthcare, Retail, etc.
+  technical // Programming Language, Database, etc.
+  work_type // Remote, Onsite, Hybrid, etc.
+
+  @@map("category_type")
 }

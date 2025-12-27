@@ -23,6 +23,18 @@ export const validate = <T extends z.ZodTypeAny>(schema: T) => {
           if (!errors[path]) errors[path] = []
           errors[path].push(issue.message)
         })
+        // Dev log: show validation details and payload summary
+        try {
+          const payloadSummary = {
+            path: req.originalUrl,
+            bodyKeys: Object.keys(req.body || {}),
+            htmlSize: req.body && typeof req.body.html === 'string' ? `${req.body.html.length} bytes` : undefined,
+            errors
+          }
+          console.error('[validate] Validation failed:', JSON.stringify(payloadSummary))
+        } catch (e) {
+          console.error('[validate] Validation failed (could not serialize payload):', e)
+        }
         return next(new HttpError('Validation failed', 400, errors))
       }
 
@@ -152,10 +164,15 @@ export const exportResumeValidator = validate(
     params: z.object({
       id: z.string().uuid('Invalid resume ID format')
     }),
-    body: z.object({
-      template: z.enum(['modern', 'classic', 'minimal', 'professional']).optional().default('modern'),
-      format: z.enum(['pdf', 'html']).optional().default('pdf')
-    })
+    body: z
+      .object({
+        // Only accept canonical templates supported by backend
+        template: z.enum(['timeline', 'professional', 'compact']).optional().default('professional'),
+        format: z.enum(['pdf', 'html']).optional().default('pdf'),
+        html: z.string().max(10 * 1024 * 1024).optional(), // allow up to ~10MB HTML payload
+        viewportWidth: z.number().int().min(1).optional()
+      })
+      .passthrough() // allow extra fields from frontend
   })
 )
 

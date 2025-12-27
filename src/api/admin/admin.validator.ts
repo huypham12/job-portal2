@@ -105,7 +105,7 @@ export const getAllUsersQuerySchema = z.object({
       }
       return num
     }),
-  search: z.string().trim().optional().or(z.literal('')),
+  search: z.string().trim().optional(),
   role: z.nativeEnum(user_role).optional(),
   verified: z
     .enum(['true', 'false'])
@@ -191,7 +191,7 @@ export const getAllJobsQuerySchema = z.object({
       }
       return num
     }),
-  search: z.string().trim().optional().or(z.literal('')),
+  search: z.string().trim().optional(),
   status: z.enum(['draft', 'approved', 'closed']).optional(),
   deleted: z
     .enum(['true', 'false'])

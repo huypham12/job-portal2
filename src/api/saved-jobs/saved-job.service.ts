@@ -128,7 +128,7 @@ export class SavedJobService {
     }
 
     if (job_type) {
-      jobWhere.job_type = job_type as any
+      jobWhere.job_type = job_type
     }
 
     if (location_id) {

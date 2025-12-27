@@ -8,6 +8,15 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const message = err.message || 'Internal Server Error'
   const errors = err instanceof HttpError ? err.errors || {} : {}
 
+  // Dev-only: log validation / error details to console for easier debugging
+  if (process.env.NODE_ENV !== 'production') {
+    try {
+      console.error('[error-handler] ', { path: req.originalUrl, status, message, errors })
+    } catch (e) {
+      console.error('[error-handler] could not log error details', e)
+    }
+  }
+
   const response = new ErrorResponseDto(status, message, errors)
 
   res.status(status).json(response)

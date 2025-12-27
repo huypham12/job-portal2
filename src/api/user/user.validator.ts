@@ -8,19 +8,6 @@ type SchemaParts = {
   params?: z.ZodTypeAny
 }
 
-// Extend Request interface to include validated property
-declare global {
-  namespace Express {
-    interface Request {
-      validated?: {
-        body?: any
-        params?: any
-        query?: any
-      }
-    }
-  }
-}
-
 const zodValidate = (parts: SchemaParts): RequestHandler => {
   const schema = z.object({
     body: parts.body ?? z.any(),
@@ -59,6 +46,36 @@ const zodValidate = (parts: SchemaParts): RequestHandler => {
 const phoneRegex = /^[+]?[0-9\s\-().]{7,20}$/
 const urlRegex = /^https?:\/\/.+\..+/
 
+// Safe date validation that doesn't throw on invalid dates
+const safeDate = z
+  .string()
+  .refine(
+    (val) => {
+      const date = new Date(val)
+      return !isNaN(date.getTime())
+    },
+    {
+      message: 'Invalid date format'
+    }
+  )
+  .transform((val) => new Date(val))
+
+// Custom URL validation that's less strict than Zod's built-in url()
+const urlSchema = z.string().refine(
+  (val) => {
+    try {
+      new URL(val)
+      return true
+    } catch {
+      // Fallback to regex for URLs without protocol
+      return urlRegex.test(val)
+    }
+  },
+  {
+    message: 'Invalid URL format'
+  }
+)
+
 // Enum values from Prisma
 const jobTypeEnum = z.nativeEnum(job_type)
 const userRoleEnum = z.nativeEnum(user_role)
@@ -71,18 +88,14 @@ const updateProfileBody = z
     full_name: z.string().trim().min(1, 'Full name cannot be empty').max(255).optional(),
     display_name: z.string().trim().max(255).optional(),
     headline: z.string().trim().max(255).optional(),
-    date_of_birth: z
-      .string()
-      .date()
-      .transform((str) => new Date(str))
-      .optional(),
+    date_of_birth: safeDate.optional(),
     gender: z.string().max(20).optional(),
 
     // Contact info
     phone_number: z.string().min(7).max(20).optional(),
-    personal_website: z.string().url('Invalid website URL').or(z.string().regex(urlRegex)).optional(),
-    linkedin_url: z.string().url('Invalid LinkedIn URL').or(z.string().min(1)).optional(),
-    github_url: z.string().url('Invalid GitHub URL').or(z.string().min(1)).optional(),
+    personal_website: urlSchema.or(z.string().regex(urlRegex)).optional(),
+    linkedin_url: urlSchema.or(z.string().min(1)).optional(),
+    github_url: urlSchema.or(z.string().min(1)).optional(),
 
     // Location
     location_text: z.string().max(100).optional(),
@@ -95,7 +108,7 @@ const updateProfileBody = z
     // Job preferences
     desired_job_title: z.string().trim().max(255).optional(),
     desired_salary_min: z.number().int().min(0).optional(),
-    desired_currency: z.string().max(10).default('VND').optional(),
+    desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
     availability_status: availabilityStatusEnum.optional()
   })
@@ -109,18 +122,14 @@ const createProfileBody = z
     full_name: z.string().trim().min(1, 'Full name is required').max(255),
     display_name: z.string().trim().max(255).optional(),
     headline: z.string().trim().max(255).optional(),
-    date_of_birth: z
-      .string()
-      .date()
-      .transform((str) => new Date(str))
-      .optional(),
+    date_of_birth: safeDate.optional(),
     gender: z.string().max(20).optional(),
 
     // Contact info
     phone_number: z.string().min(7).max(20).optional(),
-    personal_website: z.string().url('Invalid website URL').or(z.string().regex(urlRegex)).optional(),
-    linkedin_url: z.string().url('Invalid LinkedIn URL').or(z.string().min(1)).optional(),
-    github_url: z.string().url('Invalid GitHub URL').or(z.string().min(1)).optional(),
+    personal_website: urlSchema.or(z.string().regex(urlRegex)).optional(),
+    linkedin_url: urlSchema.or(z.string().min(1)).optional(),
+    github_url: urlSchema.or(z.string().min(1)).optional(),
 
     // Location
     location_text: z.string().max(100).optional(),
@@ -133,7 +142,7 @@ const createProfileBody = z
     // Job preferences
     desired_job_title: z.string().trim().max(255).optional(),
     desired_salary_min: z.number().int().min(0).optional(),
-    desired_currency: z.string().max(10).default('VND').optional(),
+    desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
     availability_status: availabilityStatusEnum.optional()
   })
@@ -150,17 +159,44 @@ const updateUserBody = z
 
 // Get users with filters
 const getUsersQuery = z.object({
-  page: z.coerce.number().int().min(1).default(1).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(10).optional(),
+  page: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1)
+    .optional()
+    .default(1),
+  limit: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1 && val <= 100)
+    .optional()
+    .default(10),
   role: userRoleEnum.optional(),
-  verified: z.coerce.boolean().optional(),
+  verified: z
+    .union([z.literal('true'), z.literal('false')])
+    .transform((val) => val === 'true')
+    .optional(),
   search: z.string().trim().min(1).optional()
 })
 
 // Pagination query for applications/saved-jobs/activity
 const paginationQuery = z.object({
-  page: z.coerce.number().int().min(1).default(1).optional(),
-  limit: z.coerce.number().int().min(1).max(50).default(10).optional()
+  page: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1)
+    .optional()
+    .default(1),
+  limit: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1 && val <= 50)
+    .optional()
+    .default(10)
 })
 
 // User ID param validation
@@ -172,15 +208,8 @@ const userIdParam = z.object({
 const profileExperienceBody = z.object({
   company_name: z.string().trim().min(1).max(255),
   position: z.string().trim().min(1).max(255),
-  start_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
-  end_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str))
-    .optional(),
+  start_date: safeDate,
+  end_date: safeDate.optional(),
   is_current: z.boolean().default(false),
   description: z.string().max(2000).optional()
 })
@@ -190,15 +219,8 @@ const profileEducationBody = z.object({
   school_name: z.string().trim().min(1).max(255),
   degree: z.string().trim().max(255).optional(),
   field_of_study: z.string().trim().max(255).optional(),
-  start_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
-  end_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str))
-    .optional()
+  start_date: safeDate,
+  end_date: safeDate.optional()
 })
 
 // Profile skill validation
@@ -213,16 +235,9 @@ const profileCertificationBody = z.object({
   name: z.string().trim().min(1).max(255),
   issuing_org: z.string().trim().min(1).max(255),
   credential_id: z.string().trim().max(255).optional(),
-  credential_url: z.string().url().or(z.string().min(1)).optional(),
-  issue_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
-  expiry_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str))
-    .optional(),
+  credential_url: urlSchema.or(z.string().min(1)).optional(),
+  issue_date: safeDate,
+  expiry_date: safeDate.optional(),
   never_expires: z.boolean().default(false),
   description: z.string().max(2000).optional(),
   skills_acquired: z.string().max(2000).optional()
@@ -232,12 +247,9 @@ const profileCertificationBody = z.object({
 const profileAwardBody = z.object({
   title: z.string().trim().min(1).max(255),
   issuer: z.string().trim().min(1).max(255),
-  date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
+  date: safeDate,
   description: z.string().max(2000).optional(),
-  url: z.string().url().or(z.string().min(1)).optional(),
+  url: urlSchema.or(z.string().min(1)).optional(),
   category: z.enum(['academic', 'professional', 'competition', 'volunteer', 'other']).optional(),
   level: z.enum(['international', 'national', 'regional', 'local', 'organizational']).optional()
 })

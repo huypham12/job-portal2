@@ -32,7 +32,13 @@ export const searchService = {
       must.push({ match_all: {} })
     }
 
-    if (location) filter.push({ term: { location_id: location } })
+    // Handle location filtering with province/district hierarchy
+    if (location) {
+      const locationIds = await searchRepo.getLocationIdsForFilter(location)
+      if (locationIds.length > 0) {
+        filter.push({ terms: { location_id: locationIds } })
+      }
+    }
     if (jobType) filter.push({ term: { job_type: jobType } })
     if (typeof experienceLevel === 'number') filter.push({ term: { experience_level: experienceLevel } })
     if (skills && Array.isArray(skills) && skills.length) filter.push({ terms: { skills } })

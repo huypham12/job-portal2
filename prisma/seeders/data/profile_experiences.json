@@ -1,0 +1,2280 @@
+[
+  {
+    "company_name": "FPT Software",
+    "position": "Frontend Developer",
+    "start_date": "2021-03-01",
+    "end_date": "2023-12-31",
+    "is_current": false,
+    "description": "Phát triển giao diện người dùng cho các ứng dụng web doanh nghiệp sử dụng React.js, TypeScript và Redux. Tham gia tối ưu hóa performance và cải thiện UX/UI theo yêu cầu khách hàng."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Backend Developer",
+    "start_date": "2020-01-15",
+    "end_date": "2022-08-30",
+    "is_current": false,
+    "description": "Xây dựng và duy trì các API backend sử dụng Node.js, Express và PostgreSQL. Tham gia thiết kế kiến trúc microservices và tích hợp với hệ thống third-party."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "DevOps Engineer",
+    "start_date": "2019-06-01",
+    "is_current": true,
+    "description": "Quản lý hạ tầng đám mây AWS, triển khai CI/CD pipeline với Jenkins và Docker. Giám sát hệ thống và đảm bảo uptime 99.9% cho các dự án enterprise."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Full-stack Developer",
+    "start_date": "2022-09-01",
+    "end_date": "2024-06-30",
+    "is_current": false,
+    "description": "Phát triển ứng dụng web hoàn chỉnh từ frontend đến backend sử dụng MERN stack. Tham gia code review và mentoring junior developers."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "QA Engineer",
+    "start_date": "2021-11-01",
+    "end_date": "2023-10-31",
+    "is_current": false,
+    "description": "Thực hiện testing tự động và manual testing cho các sản phẩm phần mềm. Viết test cases và báo cáo defects sử dụng Selenium và JIRA."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Data Analyst",
+    "start_date": "2020-04-01",
+    "is_current": true,
+    "description": "Phân tích dữ liệu kinh doanh sử dụng SQL, Python và Tableau. Tạo dashboard báo cáo cho management và đề xuất insights để tối ưu hóa sản phẩm."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "UI/UX Designer",
+    "start_date": "2021-07-01",
+    "end_date": "2023-12-31",
+    "is_current": false,
+    "description": "Thiết kế giao diện người dùng cho ứng dụng mobile và web. Thực hiện user research, wireframing và prototyping sử dụng Figma."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Mobile Developer",
+    "start_date": "2022-01-15",
+    "is_current": true,
+    "description": "Phát triển ứng dụng mobile đa nền tảng sử dụng React Native. Tích hợp với backend APIs và triển khai trên App Store và Google Play."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Technical Lead",
+    "start_date": "2019-03-01",
+    "end_date": "2022-12-31",
+    "is_current": false,
+    "description": "Đẫn dắt team 8 developers trong dự án fintech. Thiết kế kiến trúc hệ thống, code review và đảm bảo chất lượng code."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Business Analyst",
+    "start_date": "2020-08-01",
+    "is_current": true,
+    "description": "Thu thập và phân tích yêu cầu từ khách hàng. Viết specification, tạo user stories và phối hợp với development team."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "System Administrator",
+    "start_date": "2018-12-01",
+    "end_date": "2021-11-30",
+    "is_current": false,
+    "description": "Quản lý hệ thống Linux servers, cấu hình network và đảm bảo security. Triển khai backup và disaster recovery plans."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Security Engineer",
+    "start_date": "2021-05-01",
+    "is_current": true,
+    "description": "Triển khai các biện pháp bảo mật cho ứng dụng và hạ tầng. Thực hiện penetration testing và compliance auditing."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Database Administrator",
+    "start_date": "2019-09-01",
+    "end_date": "2022-08-31",
+    "is_current": false,
+    "description": "Quản lý cơ sở dữ liệu PostgreSQL và MongoDB. Tối ưu hóa queries, backup và performance tuning."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Project Manager",
+    "start_date": "2020-02-01",
+    "end_date": "2023-07-31",
+    "is_current": false,
+    "description": "Quản lý dự án phần mềm theo Agile methodology. Phối hợp với khách hàng, lập kế hoạch và đảm bảo deadline."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Software Architect",
+    "start_date": "2018-06-01",
+    "is_current": true,
+    "description": "Thiết kế kiến trúc hệ thống cho các dự án lớn. Đánh giá công nghệ và đưa ra quyết định technical."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Data Scientist",
+    "start_date": "2021-10-01",
+    "end_date": "2024-03-31",
+    "is_current": false,
+    "description": "Xây dựng mô hình machine learning cho dự đoán hành vi người dùng. Sử dụng Python, TensorFlow và xử lý big data."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Frontend Developer",
+    "start_date": "2022-04-01",
+    "is_current": true,
+    "description": "Phát triển SPA sử dụng Vue.js và Nuxt.js. Tối ưu hóa SEO và performance cho các trang thương mại điện tử."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Backend Developer",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "Xây dựng microservices với Spring Boot và Kubernetes. Triển khai RESTful APIs và GraphQL."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "QA Lead",
+    "start_date": "2020-07-01",
+    "is_current": true,
+    "description": "Đẫn dắt team QA, thiết kế chiến lược testing và đảm bảo chất lượng sản phẩm. Triển khai test automation framework."
+  },
+  {
+    "company_name": "FPT Software",
+    "position": "Product Manager",
+    "start_date": "2021-01-15",
+    "end_date": "2023-12-31",
+    "is_current": false,
+    "description": "Định nghĩa product roadmap, thu thập requirements và prioritize features. Phối hợp cross-functional teams."
+  },
+
+  {
+    "company_name": "Viettel Group",
+    "position": "Network Engineer",
+    "start_date": "2019-02-01",
+    "end_date": "2022-12-31",
+    "is_current": false,
+    "description": "Thiết kế và triển khai mạng viễn thông 4G/5G. Quản lý thiết bị Cisco và Huawei, đảm bảo uptime mạng 99.9%."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Software Developer",
+    "start_date": "2020-08-01",
+    "is_current": true,
+    "description": "Phát triển ứng dụng internal cho quản lý mạng và dịch vụ viễn thông. Sử dụng Java, Spring Boot và PostgreSQL."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Security Analyst",
+    "start_date": "2018-11-01",
+    "end_date": "2021-10-31",
+    "is_current": false,
+    "description": "Giám sát an ninh mạng, phân tích threats và triển khai security controls. Sử dụng SIEM và firewall systems."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Data Engineer",
+    "start_date": "2021-06-01",
+    "is_current": true,
+    "description": "Xây dựng data pipeline cho big data analytics. Sử dụng Hadoop, Spark và Kafka để xử lý dữ liệu viễn thông."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "System Administrator",
+    "start_date": "2019-04-01",
+    "end_date": "2022-03-31",
+    "is_current": false,
+    "description": "Quản lý hệ thống Linux servers và virtual infrastructure. Triển khai VMware và OpenStack."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Mobile App Developer",
+    "start_date": "2022-01-15",
+    "is_current": true,
+    "description": "Phát triển ứng dụng mobile cho dịch vụ My Viettel. Sử dụng Flutter và tích hợp với backend APIs."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "IT Project Manager",
+    "start_date": "2020-03-01",
+    "end_date": "2023-08-31",
+    "is_current": false,
+    "description": "Quản lý các dự án chuyển đổi số trong tập đoàn. Phối hợp với các đơn vị kinh doanh và IT teams."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Cloud Architect",
+    "start_date": "2019-09-01",
+    "is_current": true,
+    "description": "Thiết kế kiến trúc đám mây cho các dịch vụ Viettel Cloud. Triển khai hybrid cloud với AWS và Azure."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "DevOps Engineer",
+    "start_date": "2021-11-01",
+    "end_date": "2024-04-30",
+    "is_current": false,
+    "description": "Triển khai CI/CD pipelines cho các dự án phần mềm. Sử dụng Kubernetes, Docker và Jenkins."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Business Intelligence Analyst",
+    "start_date": "2020-05-01",
+    "is_current": true,
+    "description": "Phân tích dữ liệu kinh doanh viễn thông. Tạo báo cáo và dashboards sử dụng Power BI và SQL."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Frontend Developer",
+    "start_date": "2022-07-01",
+    "is_current": true,
+    "description": "Phát triển giao diện web cho portal khách hàng. Sử dụng React.js và tích hợp với hệ thống backend."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Database Administrator",
+    "start_date": "2018-12-01",
+    "end_date": "2021-11-30",
+    "is_current": false,
+    "description": "Quản lý cơ sở dữ liệu Oracle và MySQL cho hệ thống billing. Performance tuning và backup strategies."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "QA Engineer",
+    "start_date": "2021-03-01",
+    "is_current": true,
+    "description": "Testing cho các ứng dụng viễn thông và dịch vụ số. Automation testing với Selenium và Appium."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Technical Support Engineer",
+    "start_date": "2019-07-01",
+    "end_date": "2022-06-30",
+    "is_current": false,
+    "description": "Hỗ trợ kỹ thuật cho khách hàng enterprise. Troubleshooting network issues và system problems."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Product Manager",
+    "start_date": "2020-10-01",
+    "is_current": true,
+    "description": "Quản lý sản phẩm dịch vụ số Viettel. Nghiên cứu thị trường và định nghĩa product requirements."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Machine Learning Engineer",
+    "start_date": "2021-08-01",
+    "end_date": "2024-01-31",
+    "is_current": false,
+    "description": "Xây dựng mô hình AI cho dự đoán churn rate. Sử dụng Python, scikit-learn và TensorFlow."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Full-stack Developer",
+    "start_date": "2022-03-01",
+    "is_current": true,
+    "description": "Phát triển ứng dụng web internal cho quản lý nhân sự. Sử dụng .NET Core và React.js."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Network Security Engineer",
+    "start_date": "2019-01-01",
+    "end_date": "2022-12-31",
+    "is_current": false,
+    "description": "Triển khai bảo mật mạng, firewall và IDS/IPS. SOC monitoring và incident response."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Solutions Architect",
+    "start_date": "2020-06-01",
+    "is_current": true,
+    "description": "Thiết kế giải pháp công nghệ cho khách hàng enterprise. Tư vấn và triển khai các dự án lớn."
+  },
+  {
+    "company_name": "Viettel Group",
+    "position": "Data Scientist",
+    "start_date": "2021-12-01",
+    "end_date": "2024-05-31",
+    "is_current": false,
+    "description": "Phân tích dữ liệu lớn từ mạng viễn thông. Predictive modeling và recommendation systems."
+  },
+
+  {
+    "company_name": "VNPT",
+    "position": "Telecom Engineer",
+    "start_date": "2018-05-01",
+    "end_date": "2021-12-31",
+    "is_current": false,
+    "description": "Triển khai và bảo trì hạ tầng mạng viễn thông. Quản lý thiết bị Huawei và ZTE, troubleshooting network issues."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Software Developer",
+    "start_date": "2020-09-01",
+    "is_current": true,
+    "description": "Phát triển hệ thống quản lý dịch vụ VNPT. Sử dụng Java EE, Oracle Database và tích hợp với legacy systems."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "IT Support Specialist",
+    "start_date": "2019-03-01",
+    "end_date": "2022-02-28",
+    "is_current": false,
+    "description": "Hỗ trợ kỹ thuật cho khách hàng doanh nghiệp. Cấu hình email, VPN và troubleshooting các vấn đề IT."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "DevOps Engineer",
+    "start_date": "2021-07-01",
+    "is_current": true,
+    "description": "Triển khai infrastructure as code với Terraform. Quản lý AWS và Azure environments cho các dịch vụ cloud."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Security Consultant",
+    "start_date": "2020-01-01",
+    "end_date": "2023-06-30",
+    "is_current": false,
+    "description": "Tư vấn an ninh thông tin cho khách hàng enterprise. Triển khai security assessments và compliance."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Network Administrator",
+    "start_date": "2019-11-01",
+    "is_current": true,
+    "description": "Quản lý mạng doanh nghiệp và data center. Triển khai MPLS, VPN và network monitoring."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Business Analyst",
+    "start_date": "2021-04-01",
+    "end_date": "2024-03-31",
+    "is_current": false,
+    "description": "Phân tích yêu cầu và thiết kế giải pháp cho dịch vụ VNPT. Tạo business cases và ROI analysis."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Frontend Developer",
+    "start_date": "2022-02-01",
+    "is_current": true,
+    "description": "Phát triển portal khách hàng VNPT. Sử dụng Angular và tích hợp với backend APIs."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Database Administrator",
+    "start_date": "2018-08-01",
+    "end_date": "2021-07-31",
+    "is_current": false,
+    "description": "Quản lý cơ sở dữ liệu Oracle cho hệ thống billing. Performance optimization và data migration."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Mobile Developer",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "Phát triển ứng dụng My VNPT cho iOS và Android. Sử dụng Swift và Kotlin native development."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "System Analyst",
+    "start_date": "2019-06-01",
+    "end_date": "2022-05-31",
+    "is_current": false,
+    "description": "Phân tích hệ thống và thiết kế giải pháp IT. Tạo technical specifications và system architecture."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Cloud Engineer",
+    "start_date": "2021-09-01",
+    "is_current": true,
+    "description": "Triển khai và quản lý cloud infrastructure. Migration workloads to AWS and Azure."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "QA Manager",
+    "start_date": "2020-04-01",
+    "end_date": "2023-09-30",
+    "is_current": false,
+    "description": "Quản lý team QA cho các dự án phần mềm. Thiết kế test strategy và quality assurance processes."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Technical Project Manager",
+    "start_date": "2022-06-01",
+    "is_current": true,
+    "description": "Quản lý dự án triển khai hạ tầng mạng. Phối hợp với vendors và đảm bảo project delivery."
+  },
+  {
+    "company_name": "VNPT",
+    "position": "Data Engineer",
+    "start_date": "2019-10-01",
+    "end_date": "2022-09-30",
+    "is_current": false,
+    "description": "Xây dựng data warehouse cho business intelligence. ETL processes với Informatica và SQL."
+  },
+
+  {
+    "company_name": "Mobifone",
+    "position": "Backend Developer",
+    "start_date": "2020-02-01",
+    "is_current": true,
+    "description": "Phát triển APIs cho dịch vụ viễn thông. Sử dụng Java Spring Boot và microservices architecture."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Network Operations Engineer",
+    "start_date": "2018-07-01",
+    "end_date": "2021-06-30",
+    "is_current": false,
+    "description": "Giám sát và vận hành mạng viễn thông. Troubleshooting network issues và đảm bảo service quality."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Data Analyst",
+    "start_date": "2021-11-01",
+    "is_current": true,
+    "description": "Phân tích dữ liệu khách hàng và usage patterns. Tạo insights cho marketing campaigns."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Mobile App Developer",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "Phát triển ứng dụng My Mobifone. Native iOS và Android development với React Native."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "IT Security Officer",
+    "start_date": "2020-06-01",
+    "is_current": true,
+    "description": "Triển khai security policies và compliance. SOC monitoring và incident response."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "CRM Developer",
+    "start_date": "2019-04-01",
+    "end_date": "2022-03-31",
+    "is_current": false,
+    "description": "Phát triển hệ thống CRM internal. Customization Salesforce và integration với billing system."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "System Administrator",
+    "start_date": "2021-08-01",
+    "is_current": true,
+    "description": "Quản lý Windows và Linux servers. Virtual infrastructure với VMware và cloud migration."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Product Manager",
+    "start_date": "2020-09-01",
+    "end_date": "2023-12-31",
+    "is_current": false,
+    "description": "Quản lý sản phẩm dịch vụ số. User research và product roadmap planning."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "DevOps Engineer",
+    "start_date": "2022-01-01",
+    "is_current": true,
+    "description": "Triển khai CI/CD cho mobile applications. Container orchestration với Kubernetes."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Business Intelligence Developer",
+    "start_date": "2019-01-01",
+    "end_date": "2021-12-31",
+    "is_current": false,
+    "description": "Xây dựng dashboards và reports với Power BI. Data modeling và ETL processes."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Frontend Developer",
+    "start_date": "2021-05-01",
+    "is_current": true,
+    "description": "Phát triển web portal cho khách hàng doanh nghiệp. Vue.js và responsive design."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Network Engineer",
+    "start_date": "2018-10-01",
+    "end_date": "2021-09-30",
+    "is_current": false,
+    "description": "Thiết kế mạng doanh nghiệp và triển khai VPN. Network security với firewalls."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "QA Engineer",
+    "start_date": "2020-11-01",
+    "is_current": true,
+    "description": "Testing cho mobile applications và web services. Automation testing với Appium."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Solutions Architect",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Thiết kế giải pháp công nghệ cho khách hàng B2B. Technical consulting và proposal writing."
+  },
+  {
+    "company_name": "Mobifone",
+    "position": "Data Scientist",
+    "start_date": "2021-03-01",
+    "is_current": true,
+    "description": "Machine learning models cho customer segmentation. Python, TensorFlow và big data processing."
+  },
+
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "IT Developer",
+    "start_date": "2019-06-01",
+    "end_date": "2022-05-31",
+    "is_current": false,
+    "description": "Phát triển hệ thống banking internal. .NET Core, SQL Server và tích hợp với core banking system."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Security Engineer",
+    "start_date": "2020-03-01",
+    "is_current": true,
+    "description": "Triển khai bảo mật cho hệ thống ngân hàng. PCI DSS compliance và security monitoring."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Database Administrator",
+    "start_date": "2018-09-01",
+    "end_date": "2021-08-31",
+    "is_current": false,
+    "description": "Quản lý cơ sở dữ liệu SQL Server và Oracle. Backup, recovery và performance tuning."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Mobile Banking Developer",
+    "start_date": "2021-01-01",
+    "is_current": true,
+    "description": "Phát triển ứng dụng VietinBank Mobile. Hybrid development với Ionic và Cordova."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Business Analyst",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "Phân tích yêu cầu nghiệp vụ ngân hàng. Thiết kế workflows và system requirements."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "System Analyst",
+    "start_date": "2020-07-01",
+    "is_current": true,
+    "description": "Phân tích hệ thống và thiết kế giải pháp IT. Technical documentation và vendor management."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "DevOps Engineer",
+    "start_date": "2021-12-01",
+    "end_date": "2024-05-31",
+    "is_current": false,
+    "description": "Triển khai CI/CD cho banking applications. Infrastructure automation với Ansible."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Frontend Developer",
+    "start_date": "2022-04-01",
+    "is_current": true,
+    "description": "Phát triển internet banking portal. React.js và accessibility compliance."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Risk Management Analyst",
+    "start_date": "2019-02-01",
+    "end_date": "2021-12-31",
+    "is_current": false,
+    "description": "Phân tích rủi ro IT và compliance. Basel II/III reporting và audit support."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "QA Lead",
+    "start_date": "2020-05-01",
+    "is_current": true,
+    "description": "Đẫn dắt team testing cho core banking systems. Regulatory compliance testing."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Cloud Architect",
+    "start_date": "2018-12-01",
+    "end_date": "2021-11-30",
+    "is_current": false,
+    "description": "Thiết kế cloud strategy cho banking operations. Migration to Azure cloud."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Data Engineer",
+    "start_date": "2021-06-01",
+    "is_current": true,
+    "description": "Xây dựng data lake cho analytics. ETL pipelines và data governance."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "IT Project Manager",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Quản lý dự án chuyển đổi số ngân hàng. PMBOK methodology và stakeholder management."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Technical Support Engineer",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "Hỗ trợ kỹ thuật cho nhân viên và khách hàng. Help desk management và knowledge base."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam (VietinBank)",
+    "position": "Full-stack Developer",
+    "start_date": "2021-09-01",
+    "end_date": "2024-02-29",
+    "is_current": false,
+    "description": "Phát triển ứng dụng internal banking. MERN stack và RESTful API design."
+  },
+
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Software Engineer",
+    "start_date": "2020-01-01",
+    "is_current": true,
+    "description": "Phát triển hệ thống fintech cho Techcombank. Microservices với .NET Core và Kubernetes."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Data Scientist",
+    "start_date": "2019-04-01",
+    "end_date": "2022-03-31",
+    "is_current": false,
+    "description": "Machine learning cho credit scoring và fraud detection. Python, R và big data technologies."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Cybersecurity Specialist",
+    "start_date": "2021-02-01",
+    "is_current": true,
+    "description": "Bảo mật hệ thống ngân hàng điện tử. Threat hunting và incident response."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Mobile Developer",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "Phát triển ứng dụng F@st Mobile Banking. Native development cho iOS và Android."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Cloud Engineer",
+    "start_date": "2020-08-01",
+    "is_current": true,
+    "description": "Quản lý cloud infrastructure AWS và Azure. Multi-cloud strategy và cost optimization."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Product Manager",
+    "start_date": "2021-07-01",
+    "end_date": "2024-04-30",
+    "is_current": false,
+    "description": "Quản lý sản phẩm fintech và digital banking. User research và product analytics."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Backend Developer",
+    "start_date": "2022-03-01",
+    "is_current": true,
+    "description": "Xây dựng APIs cho banking services. Node.js, GraphQL và event-driven architecture."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Business Intelligence Analyst",
+    "start_date": "2019-07-01",
+    "end_date": "2022-06-30",
+    "is_current": false,
+    "description": "Phân tích dữ liệu khách hàng và tạo insights. SQL, Tableau và statistical modeling."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "DevOps Engineer",
+    "start_date": "2020-11-01",
+    "is_current": true,
+    "description": "Infrastructure automation và CI/CD pipelines. Docker, Kubernetes và monitoring."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "UI/UX Designer",
+    "start_date": "2021-05-01",
+    "end_date": "2023-12-31",
+    "is_current": false,
+    "description": "Thiết kế giao diện digital banking. User experience research và prototyping."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Solutions Architect",
+    "start_date": "2019-01-01",
+    "end_date": "2021-12-31",
+    "is_current": false,
+    "description": "Thiết kế giải pháp công nghệ cho enterprise customers. Technical leadership và mentoring."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "QA Automation Engineer",
+    "start_date": "2020-04-01",
+    "is_current": true,
+    "description": "Test automation cho banking applications. Selenium, Appium và API testing."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Database Administrator",
+    "start_date": "2018-10-01",
+    "end_date": "2021-09-30",
+    "is_current": false,
+    "description": "Quản lý cơ sở dữ liệu PostgreSQL và MongoDB. High availability và backup strategies."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Frontend Developer",
+    "start_date": "2021-09-01",
+    "is_current": true,
+    "description": "Phát triển web banking portal. React.js, TypeScript và state management."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Kỹ Thương Việt Nam (Techcombank)",
+    "position": "Security Operations Center Analyst",
+    "start_date": "2020-06-01",
+    "end_date": "2023-05-31",
+    "is_current": false,
+    "description": "24/7 monitoring và threat detection. SIEM tools và incident management."
+  },
+
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "Software Architect",
+    "start_date": "2019-03-01",
+    "is_current": true,
+    "description": "Thiết kế kiến trúc hệ thống cho các dự án smart city. Microservices và cloud-native solutions."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "Data Engineer",
+    "start_date": "2020-07-01",
+    "end_date": "2023-06-30",
+    "is_current": false,
+    "description": "Xây dựng data platform cho Vingroup. Big data processing với Hadoop và Spark."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "IoT Engineer",
+    "start_date": "2021-01-01",
+    "is_current": true,
+    "description": "Phát triển hệ thống IoT cho VinSmart. Embedded systems và cloud connectivity."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "DevOps Engineer",
+    "start_date": "2019-09-01",
+    "end_date": "2022-08-31",
+    "is_current": false,
+    "description": "Infrastructure automation cho VinID ecosystem. Kubernetes và AWS services."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "Mobile Developer",
+    "start_date": "2020-11-01",
+    "is_current": true,
+    "description": "Phát triển ứng dụng VinID và Vinpearl. Cross-platform development với Flutter."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "AI Engineer",
+    "start_date": "2021-06-01",
+    "end_date": "2024-01-31",
+    "is_current": false,
+    "description": "Machine learning cho recommendation systems. Computer vision và NLP applications."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "Full-stack Developer",
+    "start_date": "2022-02-01",
+    "is_current": true,
+    "description": "Phát triển e-commerce platform. MERN stack và real-time features."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "Security Engineer",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "Bảo mật cho hệ thống VinID. Zero-trust architecture và data protection."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "Product Manager",
+    "start_date": "2020-04-01",
+    "is_current": true,
+    "description": "Quản lý sản phẩm công nghệ Vingroup. Agile methodology và user-centric design."
+  },
+  {
+    "company_name": "Tập đoàn Vingroup",
+    "position": "Cloud Architect",
+    "start_date": "2021-08-01",
+    "end_date": "2024-03-31",
+    "is_current": false,
+    "description": "Thiết kế cloud infrastructure cho Vingroup. Multi-cloud strategy và cost optimization."
+  },
+
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "E-commerce Developer",
+    "start_date": "2020-01-01",
+    "is_current": true,
+    "description": "Phát triển website thương mại điện tử. PHP, Laravel và MySQL optimization."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "Data Analyst",
+    "start_date": "2019-05-01",
+    "end_date": "2022-04-30",
+    "is_current": false,
+    "description": "Phân tích dữ liệu bán hàng và hành vi khách hàng. SQL, Excel và Power BI."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "Mobile App Developer",
+    "start_date": "2021-03-01",
+    "is_current": true,
+    "description": "Phát triển ứng dụng di động cho khách hàng. React Native và Firebase integration."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "System Administrator",
+    "start_date": "2018-11-01",
+    "end_date": "2021-10-31",
+    "is_current": false,
+    "description": "Quản lý hệ thống IT và network. Windows Server, Active Directory và VMware."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "Frontend Developer",
+    "start_date": "2022-06-01",
+    "is_current": true,
+    "description": "Phát triển giao diện website bán hàng. Vue.js và responsive design."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "DevOps Engineer",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Triển khai CI/CD cho e-commerce platform. Docker và AWS services."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "Business Intelligence Developer",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "Xây dựng dashboard báo cáo kinh doanh. Tableau và data warehouse design."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "QA Engineer",
+    "start_date": "2021-09-01",
+    "end_date": "2024-02-29",
+    "is_current": false,
+    "description": "Testing cho website và mobile app. Manual testing và automation với Selenium."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "Database Administrator",
+    "start_date": "2019-02-01",
+    "is_current": true,
+    "description": "Quản lý cơ sở dữ liệu cho hệ thống bán hàng. SQL Server và performance tuning."
+  },
+  {
+    "company_name": "Công ty Cổ phần Thế Giới Di Động (Thế Giới Di Động)",
+    "position": "Security Analyst",
+    "start_date": "2020-07-01",
+    "end_date": "2023-06-30",
+    "is_current": false,
+    "description": "Bảo mật thông tin cho hệ thống e-commerce. Vulnerability assessment và compliance."
+  },
+
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Backend Developer",
+    "start_date": "2020-05-01",
+    "is_current": true,
+    "description": "Phát triển APIs cho e-commerce platform. Java, Spring Boot và high-traffic systems."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Data Scientist",
+    "start_date": "2019-10-01",
+    "end_date": "2022-09-30",
+    "is_current": false,
+    "description": "Machine learning cho recommendation engine. Python, TensorFlow và A/B testing."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Frontend Developer",
+    "start_date": "2021-02-01",
+    "is_current": true,
+    "description": "Phát triển giao diện website Lazada. React.js, performance optimization và SEO."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2019-07-01",
+    "end_date": "2022-06-30",
+    "is_current": false,
+    "description": "Infrastructure scaling cho high-traffic e-commerce. AWS, Kubernetes và monitoring."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Mobile Developer",
+    "start_date": "2020-11-01",
+    "is_current": true,
+    "description": "Phát triển ứng dụng Lazada mobile. Flutter và native performance optimization."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Product Manager",
+    "start_date": "2021-08-01",
+    "end_date": "2024-01-31",
+    "is_current": false,
+    "description": "Quản lý sản phẩm marketplace. User research và data-driven product decisions."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Security Engineer",
+    "start_date": "2020-03-01",
+    "is_current": true,
+    "description": "Bảo mật cho e-commerce platform. Fraud detection và payment security."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Data Engineer",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "Big data processing cho analytics. Hadoop, Spark và real-time data pipelines."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "QA Engineer",
+    "start_date": "2021-05-01",
+    "is_current": true,
+    "description": "Quality assurance cho mobile và web applications. Test automation và performance testing."
+  },
+  {
+    "company_name": "Lazada Việt Nam",
+    "position": "Solutions Architect",
+    "start_date": "2018-09-01",
+    "end_date": "2021-08-31",
+    "is_current": false,
+    "description": "Thiết kế kiến trúc hệ thống e-commerce. Scalability và reliability engineering."
+  },
+
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Full-stack Developer",
+    "start_date": "2020-09-01",
+    "is_current": true,
+    "description": "Phát triển features cho Shopee platform. MERN stack và real-time messaging."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Data Analyst",
+    "start_date": "2019-04-01",
+    "end_date": "2022-03-31",
+    "is_current": false,
+    "description": "Phân tích hành vi người dùng và conversion. SQL, Python và statistical analysis."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2021-01-01",
+    "is_current": true,
+    "description": "Infrastructure automation và scaling. Kubernetes, Terraform và cloud services."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Mobile Developer",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "Phát triển ứng dụng Shopee mobile. React Native và native modules."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "AI Engineer",
+    "start_date": "2020-06-01",
+    "is_current": true,
+    "description": "Machine learning cho personalized recommendations. Deep learning và computer vision."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Security Engineer",
+    "start_date": "2021-07-01",
+    "end_date": "2024-04-30",
+    "is_current": false,
+    "description": "Cybersecurity cho e-commerce platform. Threat detection và compliance."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Backend Developer",
+    "start_date": "2022-03-01",
+    "is_current": true,
+    "description": "Microservices development cho Shopee. Go, gRPC và event-driven architecture."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Product Manager",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Product management cho marketplace features. Agile và user experience focus."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Data Engineer",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "Data pipeline construction cho real-time analytics. Kafka, Spark và cloud databases."
+  },
+  {
+    "company_name": "Shopee Việt Nam",
+    "position": "Frontend Developer",
+    "start_date": "2021-09-01",
+    "end_date": "2024-02-29",
+    "is_current": false,
+    "description": "UI development cho Shopee web platform. Vue.js, TypeScript và performance optimization."
+  },
+
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Backend Engineer",
+    "start_date": "2020-02-01",
+    "is_current": true,
+    "description": "Phát triển APIs cho ride-hailing platform. Node.js, microservices và high availability."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Data Scientist",
+    "start_date": "2019-07-01",
+    "end_date": "2022-06-30",
+    "is_current": false,
+    "description": "Predictive modeling cho demand forecasting. Machine learning và time series analysis."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Mobile Developer",
+    "start_date": "2021-04-01",
+    "is_current": true,
+    "description": "Cross-platform mobile development. React Native và native performance optimization."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "CI/CD pipelines và infrastructure scaling. Docker, Kubernetes và AWS."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Security Engineer",
+    "start_date": "2020-08-01",
+    "is_current": true,
+    "description": "Application security và data protection. Threat modeling và compliance."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Full-stack Developer",
+    "start_date": "2021-11-01",
+    "end_date": "2024-05-31",
+    "is_current": false,
+    "description": "End-to-end development cho GrabFood. MERN stack và real-time features."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Data Engineer",
+    "start_date": "2022-01-01",
+    "is_current": true,
+    "description": "Big data processing cho logistics optimization. Spark, Presto và data lakes."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Product Manager",
+    "start_date": "2019-05-01",
+    "end_date": "2022-04-30",
+    "is_current": false,
+    "description": "Product strategy cho Grab Việt Nam. Market analysis và user experience."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Frontend Developer",
+    "start_date": "2020-10-01",
+    "is_current": true,
+    "description": "Web development cho Grab platform. React.js, Next.js và responsive design."
+  },
+  {
+    "company_name": "Grab Việt Nam",
+    "position": "Solutions Architect",
+    "start_date": "2021-06-01",
+    "end_date": "2024-01-31",
+    "is_current": false,
+    "description": "Technical architecture cho enterprise solutions. Cloud migration và scalability."
+  },
+
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Software Engineer",
+    "start_date": "2020-06-01",
+    "is_current": true,
+    "description": "Backend development cho e-commerce platform. Python, Django và PostgreSQL."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Data Analyst",
+    "start_date": "2019-09-01",
+    "end_date": "2022-08-31",
+    "is_current": false,
+    "description": "Customer behavior analysis và sales forecasting. SQL, Python và visualization."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "DevOps Engineer",
+    "start_date": "2021-03-01",
+    "is_current": true,
+    "description": "Infrastructure automation và monitoring. AWS, Terraform và Prometheus."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Mobile Developer",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "Native mobile app development. iOS Swift và Android Kotlin."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Machine Learning Engineer",
+    "start_date": "2020-11-01",
+    "is_current": true,
+    "description": "Recommendation systems và personalization. TensorFlow, Python và A/B testing."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Security Engineer",
+    "start_date": "2021-08-01",
+    "end_date": "2024-04-30",
+    "is_current": false,
+    "description": "Application security và penetration testing. OWASP và compliance."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Frontend Developer",
+    "start_date": "2022-05-01",
+    "is_current": true,
+    "description": "E-commerce website development. React.js, Redux và performance optimization."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Product Manager",
+    "start_date": "2019-03-01",
+    "end_date": "2022-02-28",
+    "is_current": false,
+    "description": "Digital product management. User research và data-driven decisions."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "Data Engineer",
+    "start_date": "2020-07-01",
+    "is_current": true,
+    "description": "Data warehouse construction và ETL processes. Redshift, Airflow và dbt."
+  },
+  {
+    "company_name": "Tiki Corporation",
+    "position": "QA Engineer",
+    "start_date": "2021-12-01",
+    "end_date": "2024-06-30",
+    "is_current": false,
+    "description": "Quality assurance cho web và mobile platforms. Automation testing và bug tracking."
+  },
+
+  {
+    "company_name": "CMC Corporation",
+    "position": "Software Developer",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Phát triển phần mềm doanh nghiệp cho khách hàng Nhật Bản. Java, Spring Framework và Oracle Database."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "System Analyst",
+    "start_date": "2020-03-01",
+    "is_current": true,
+    "description": "Phân tích yêu cầu hệ thống và thiết kế giải pháp IT. UML modeling và technical specifications."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "DevOps Engineer",
+    "start_date": "2021-01-01",
+    "end_date": "2023-12-31",
+    "is_current": false,
+    "description": "Triển khai CI/CD pipelines và infrastructure automation. AWS, Docker và Jenkins."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "Project Manager",
+    "start_date": "2019-11-01",
+    "is_current": true,
+    "description": "Quản lý dự án outsourcing cho khách hàng quốc tế. Agile methodology và client communication."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "QA Lead",
+    "start_date": "2020-06-01",
+    "end_date": "2023-05-31",
+    "is_current": false,
+    "description": "Đẫn dắt team QA cho các dự án enterprise. Test strategy và quality management."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "Backend Developer",
+    "start_date": "2021-09-01",
+    "is_current": true,
+    "description": "Microservices development với .NET Core. RESTful APIs và database optimization."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "Frontend Developer",
+    "start_date": "2022-02-01",
+    "end_date": "2024-07-31",
+    "is_current": false,
+    "description": "UI development cho web applications. Angular, TypeScript và responsive design."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "Database Administrator",
+    "start_date": "2019-04-01",
+    "is_current": true,
+    "description": "Quản lý SQL Server và PostgreSQL databases. Performance tuning và backup strategies."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "Security Engineer",
+    "start_date": "2020-12-01",
+    "end_date": "2023-11-30",
+    "is_current": false,
+    "description": "Information security cho enterprise systems. Vulnerability assessment và compliance."
+  },
+  {
+    "company_name": "CMC Corporation",
+    "position": "Technical Architect",
+    "start_date": "2021-05-01",
+    "is_current": true,
+    "description": "Thiết kế kiến trúc hệ thống cho large-scale projects. Cloud architecture và scalability."
+  },
+
+  {
+    "company_name": "TMA Solutions",
+    "position": "Software Engineer",
+    "start_date": "2019-06-01",
+    "end_date": "2022-05-31",
+    "is_current": false,
+    "description": "Product development cho công ty phần mềm. C#, .NET Framework và SQL Server."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "Test Engineer",
+    "start_date": "2020-01-01",
+    "is_current": true,
+    "description": "Automation testing cho software products. Selenium, NUnit và CI/CD integration."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "Scrum Master",
+    "start_date": "2021-03-01",
+    "end_date": "2024-02-29",
+    "is_current": false,
+    "description": "Facilitate Agile processes và team collaboration. Sprint planning và retrospectives."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "Mobile Developer",
+    "start_date": "2019-09-01",
+    "is_current": true,
+    "description": "Cross-platform mobile development. Xamarin và native Android/iOS development."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "Solution Architect",
+    "start_date": "2020-07-01",
+    "end_date": "2023-06-30",
+    "is_current": false,
+    "description": "Technical leadership cho enterprise solutions. Architecture design và technology selection."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "DevOps Specialist",
+    "start_date": "2021-11-01",
+    "is_current": true,
+    "description": "Infrastructure as code và cloud deployment. Azure DevOps và Kubernetes."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "Product Owner",
+    "start_date": "2022-04-01",
+    "end_date": "2024-08-31",
+    "is_current": false,
+    "description": "Product backlog management và stakeholder communication. Requirements gathering."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "Data Analyst",
+    "start_date": "2019-12-01",
+    "is_current": true,
+    "description": "Business intelligence và data visualization. Power BI, SQL và Excel."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "UI/UX Designer",
+    "start_date": "2020-08-01",
+    "end_date": "2023-07-31",
+    "is_current": false,
+    "description": "User interface design và user experience research. Sketch, Figma và usability testing."
+  },
+  {
+    "company_name": "TMA Solutions",
+    "position": "Technical Writer",
+    "start_date": "2021-06-01",
+    "is_current": true,
+    "description": "Documentation cho software products. API documentation và user guides."
+  },
+
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Senior Developer",
+    "start_date": "2018-10-01",
+    "end_date": "2021-09-30",
+    "is_current": false,
+    "description": "Enterprise application development. Java EE, Oracle và mainframe integration."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Project Manager",
+    "start_date": "2019-05-01",
+    "is_current": true,
+    "description": "IT project management cho khách hàng Nhật Bản. PMBOK và risk management."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "System Integrator",
+    "start_date": "2020-02-01",
+    "end_date": "2023-01-31",
+    "is_current": false,
+    "description": "System integration và middleware development. ESB, SOA và enterprise services."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Cloud Engineer",
+    "start_date": "2021-08-01",
+    "is_current": true,
+    "description": "Cloud migration và infrastructure management. AWS, Azure và hybrid cloud."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Business Analyst",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "Requirements analysis cho banking systems. Use case modeling và process mapping."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Security Consultant",
+    "start_date": "2020-04-01",
+    "is_current": true,
+    "description": "Information security consulting. ISO 27001 và security audits."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Data Engineer",
+    "start_date": "2021-12-01",
+    "end_date": "2024-05-31",
+    "is_current": false,
+    "description": "Big data solutions cho enterprise customers. Hadoop, Spark và data lakes."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Frontend Developer",
+    "start_date": "2022-07-01",
+    "is_current": true,
+    "description": "Modern web application development. React.js, Vue.js và progressive web apps."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "Database Architect",
+    "start_date": "2019-03-01",
+    "end_date": "2022-02-28",
+    "is_current": false,
+    "description": "Database design và optimization. Oracle, SQL Server và NoSQL databases."
+  },
+  {
+    "company_name": "NTT Data Việt Nam",
+    "position": "QA Manager",
+    "start_date": "2020-09-01",
+    "is_current": true,
+    "description": "Quality management cho large-scale projects. Test automation và quality metrics."
+  },
+
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Software Developer",
+    "start_date": "2019-01-01",
+    "end_date": "2021-12-31",
+    "is_current": false,
+    "description": "Application development cho khách hàng enterprise. .NET, Java và database systems."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Infrastructure Engineer",
+    "start_date": "2020-06-01",
+    "is_current": true,
+    "description": "IT infrastructure management và cloud services. VMware, AWS và monitoring."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Solution Consultant",
+    "start_date": "2018-09-01",
+    "end_date": "2021-08-31",
+    "is_current": false,
+    "description": "Technical consulting cho digital transformation. Solution design và proposal writing."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2021-04-01",
+    "is_current": true,
+    "description": "CI/CD implementation và automation. Jenkins, Docker và Kubernetes."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Data Scientist",
+    "start_date": "2020-11-01",
+    "end_date": "2023-10-31",
+    "is_current": false,
+    "description": "Advanced analytics và machine learning. Python, R và predictive modeling."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Cybersecurity Engineer",
+    "start_date": "2019-07-01",
+    "is_current": true,
+    "description": "Security operations và threat management. SIEM, firewall và incident response."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Mobile Developer",
+    "start_date": "2022-01-01",
+    "end_date": "2024-06-30",
+    "is_current": false,
+    "description": "Enterprise mobile applications. iOS, Android và cross-platform development."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Business Analyst",
+    "start_date": "2021-02-01",
+    "is_current": true,
+    "description": "Process analysis và requirements gathering. BPMN và stakeholder management."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "Technical Architect",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "Enterprise architecture design. TOGAF framework và technology roadmap."
+  },
+  {
+    "company_name": "Fujitsu Việt Nam",
+    "position": "QA Engineer",
+    "start_date": "2020-08-01",
+    "is_current": true,
+    "description": "Quality assurance cho software products. Test automation và performance testing."
+  },
+
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Software Engineer",
+    "start_date": "2018-05-01",
+    "end_date": "2021-04-30",
+    "is_current": false,
+    "description": "Cloud application development. IBM Cloud, Watson services và microservices."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Data Scientist",
+    "start_date": "2019-09-01",
+    "is_current": true,
+    "description": "AI và machine learning solutions. Watson Studio, Python và cognitive computing."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Cloud Architect",
+    "start_date": "2020-01-01",
+    "end_date": "2022-12-31",
+    "is_current": false,
+    "description": "Enterprise cloud architecture. IBM Cloud, AWS và hybrid cloud solutions."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Security Consultant",
+    "start_date": "2021-06-01",
+    "is_current": true,
+    "description": "Cybersecurity consulting. IBM Security, threat intelligence và compliance."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Full-stack Developer",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "Web application development. Node.js, React và IBM Cloud services."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Solutions Architect",
+    "start_date": "2020-07-01",
+    "is_current": true,
+    "description": "Technical solution design. IBM middleware và enterprise integration."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2021-03-01",
+    "end_date": "2024-02-29",
+    "is_current": false,
+    "description": "Infrastructure automation. IBM UrbanCode, Docker và Kubernetes."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Analytics Consultant",
+    "start_date": "2022-05-01",
+    "is_current": true,
+    "description": "Business analytics solutions. IBM Cognos, SPSS và data visualization."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Blockchain Developer",
+    "start_date": "2019-03-01",
+    "end_date": "2022-02-28",
+    "is_current": false,
+    "description": "Blockchain solutions development. Hyperledger Fabric và smart contracts."
+  },
+  {
+    "company_name": "IBM Việt Nam",
+    "position": "Technical Sales",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "Technical pre-sales và solution demonstration. IBM products và cloud services."
+  },
+
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Software Engineer",
+    "start_date": "2019-07-01",
+    "is_current": true,
+    "description": "Azure cloud services development. .NET Core, Azure Functions và serverless computing."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Cloud Solutions Architect",
+    "start_date": "2018-11-01",
+    "end_date": "2021-10-31",
+    "is_current": false,
+    "description": "Enterprise cloud architecture. Azure, Office 365 và Microsoft 365 solutions."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Data Platform Engineer",
+    "start_date": "2020-04-01",
+    "is_current": true,
+    "description": "Azure data services implementation. Azure SQL, Synapse và big data analytics."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "AI Engineer",
+    "start_date": "2021-01-01",
+    "end_date": "2023-12-31",
+    "is_current": false,
+    "description": "Azure AI và machine learning. Azure Machine Learning, Cognitive Services."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Security Engineer",
+    "start_date": "2019-09-01",
+    "is_current": true,
+    "description": "Azure security services. Azure AD, Azure Security Center và threat protection."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2020-08-01",
+    "end_date": "2023-07-31",
+    "is_current": false,
+    "description": "Azure DevOps và CI/CD. Azure Pipelines, GitHub Actions và Infrastructure as Code."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Technical Consultant",
+    "start_date": "2021-11-01",
+    "is_current": true,
+    "description": "Digital transformation consulting. Microsoft technology stack và cloud migration."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Power Platform Developer",
+    "start_date": "2022-03-01",
+    "end_date": "2024-08-31",
+    "is_current": false,
+    "description": "Low-code development. Power Apps, Power Automate và Power BI."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Solutions Sales Specialist",
+    "start_date": "2019-02-01",
+    "is_current": true,
+    "description": "Technical sales cho enterprise customers. Azure, Dynamics 365 và licensing."
+  },
+  {
+    "company_name": "Microsoft Việt Nam",
+    "position": "Customer Engineer",
+    "start_date": "2020-06-01",
+    "end_date": "2023-05-31",
+    "is_current": false,
+    "description": "Customer technical support. Azure troubleshooting và performance optimization."
+  },
+
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Software Engineer",
+    "start_date": "2020-03-01",
+    "is_current": true,
+    "description": "Google Cloud Platform development. GCP services, Kubernetes và microservices."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Cloud Architect",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Enterprise cloud solutions. GCP, hybrid cloud và migration strategies."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Data Engineer",
+    "start_date": "2021-05-01",
+    "is_current": true,
+    "description": "BigQuery và data analytics. Google Cloud Dataflow, Pub/Sub và Bigtable."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Machine Learning Engineer",
+    "start_date": "2020-10-01",
+    "end_date": "2023-09-30",
+    "is_current": false,
+    "description": "AI/ML solutions. TensorFlow, AutoML và Vertex AI platform."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2019-12-01",
+    "is_current": true,
+    "description": "Site Reliability Engineering. GCP monitoring, logging và automation."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Solutions Engineer",
+    "start_date": "2021-07-01",
+    "end_date": "2024-06-30",
+    "is_current": false,
+    "description": "Technical solutions design. GCP services và customer requirements."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Security Engineer",
+    "start_date": "2022-01-01",
+    "is_current": true,
+    "description": "Cloud security implementation. Google Cloud Security và compliance."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Mobile Developer",
+    "start_date": "2020-02-01",
+    "end_date": "2023-01-31",
+    "is_current": false,
+    "description": "Android application development. Kotlin, Android Jetpack và Google Play Services."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Technical Program Manager",
+    "start_date": "2019-06-01",
+    "is_current": true,
+    "description": "Program management cho cloud projects. Cross-functional coordination và delivery."
+  },
+  {
+    "company_name": "Google Việt Nam",
+    "position": "Customer Engineer",
+    "start_date": "2021-09-01",
+    "end_date": "2024-04-30",
+    "is_current": false,
+    "description": "Customer technical support. GCP troubleshooting và best practices guidance."
+  },
+
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Software Engineer",
+    "start_date": "2020-01-01",
+    "is_current": true,
+    "description": "Facebook platform development. React.js, GraphQL và real-time applications."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Data Scientist",
+    "start_date": "2019-05-01",
+    "end_date": "2022-04-30",
+    "is_current": false,
+    "description": "Social media analytics. Python, R và statistical modeling cho user behavior."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Product Manager",
+    "start_date": "2021-03-01",
+    "is_current": true,
+    "description": "Social platform features. User research và product strategy cho Southeast Asia."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "Infrastructure scaling cho high-traffic platforms. AWS, Kubernetes và monitoring."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Security Engineer",
+    "start_date": "2020-07-01",
+    "is_current": true,
+    "description": "Platform security và privacy. Threat detection và content moderation systems."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Frontend Developer",
+    "start_date": "2021-09-01",
+    "end_date": "2024-02-29",
+    "is_current": false,
+    "description": "Web application development. React, TypeScript và performance optimization."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Machine Learning Engineer",
+    "start_date": "2022-04-01",
+    "is_current": true,
+    "description": "AI for content recommendation. PyTorch, computer vision và natural language processing."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Business Analyst",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Market analysis và competitive intelligence. Southeast Asia digital landscape."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Mobile Developer",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "Cross-platform mobile apps. React Native và native performance optimization."
+  },
+  {
+    "company_name": "Meta Việt Nam",
+    "position": "Technical Program Manager",
+    "start_date": "2021-06-01",
+    "end_date": "2024-01-31",
+    "is_current": false,
+    "description": "Cross-functional program management. Product launches và technical initiatives."
+  },
+
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Software Development Engineer",
+    "start_date": "2019-09-01",
+    "is_current": true,
+    "description": "AWS services development. Java, Spring Boot và serverless architecture."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Solutions Architect",
+    "start_date": "2020-04-01",
+    "end_date": "2023-03-31",
+    "is_current": false,
+    "description": "Enterprise cloud solutions. AWS services và migration strategies."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Data Engineer",
+    "start_date": "2021-01-01",
+    "is_current": true,
+    "description": "AWS data analytics. Redshift, EMR và data lake implementation."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "Infrastructure automation. AWS CloudFormation, CodePipeline và monitoring."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Security Engineer",
+    "start_date": "2020-08-01",
+    "is_current": true,
+    "description": "AWS security services. IAM, KMS và compliance frameworks."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Machine Learning Engineer",
+    "start_date": "2021-11-01",
+    "end_date": "2024-05-31",
+    "is_current": false,
+    "description": "AWS AI/ML services. SageMaker, Rekognition và natural language services."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Technical Account Manager",
+    "start_date": "2022-06-01",
+    "is_current": true,
+    "description": "Enterprise customer support. AWS best practices và architectural guidance."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Frontend Developer",
+    "start_date": "2020-02-01",
+    "end_date": "2023-01-31",
+    "is_current": false,
+    "description": "AWS console development. React.js, TypeScript và cloud-native applications."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Business Analyst",
+    "start_date": "2019-06-01",
+    "is_current": true,
+    "description": "Market analysis cho cloud services. Competitive intelligence và pricing strategy."
+  },
+  {
+    "company_name": "Amazon Việt Nam",
+    "position": "Site Reliability Engineer",
+    "start_date": "2021-07-01",
+    "end_date": "2024-03-31",
+    "is_current": false,
+    "description": "Service reliability engineering. AWS monitoring, incident response và automation."
+  },
+
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "Software Engineer",
+    "start_date": "2019-03-01",
+    "is_current": true,
+    "description": "Mobile device software development. Android framework, Linux kernel và device drivers."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "Product Manager",
+    "start_date": "2020-08-01",
+    "end_date": "2023-07-31",
+    "is_current": false,
+    "description": "Smartphone product management. Feature planning và market analysis cho Việt Nam."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "Data Analyst",
+    "start_date": "2021-01-01",
+    "is_current": true,
+    "description": "Sales data analysis và market insights. SQL, Excel và business intelligence tools."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "DevOps Engineer",
+    "start_date": "2019-11-01",
+    "end_date": "2022-10-31",
+    "is_current": false,
+    "description": "CI/CD cho mobile applications. Jenkins, Docker và cloud infrastructure."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "UX Designer",
+    "start_date": "2020-05-01",
+    "is_current": true,
+    "description": "User experience design cho consumer electronics. User research và prototyping."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "System Administrator",
+    "start_date": "2021-06-01",
+    "end_date": "2024-01-31",
+    "is_current": false,
+    "description": "IT infrastructure management. Windows Server, Linux và network administration."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "AI Engineer",
+    "start_date": "2022-02-01",
+    "is_current": true,
+    "description": "AI applications cho smart devices. Machine learning và computer vision."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "Business Analyst",
+    "start_date": "2019-07-01",
+    "end_date": "2022-06-30",
+    "is_current": false,
+    "description": "Market research và competitive analysis. Consumer electronics industry."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "Mobile Developer",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "Android application development. Kotlin, Android SDK và Samsung SDKs."
+  },
+  {
+    "company_name": "Samsung Việt Nam",
+    "position": "Technical Support Engineer",
+    "start_date": "2021-09-01",
+    "end_date": "2024-04-30",
+    "is_current": false,
+    "description": "Customer technical support. Product troubleshooting và repair coordination."
+  },
+
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "Full-stack Developer",
+    "start_date": "2019-05-01",
+    "end_date": "2022-04-30",
+    "is_current": false,
+    "description": "E-commerce platform development. PHP, Laravel và MySQL cho tourism booking system."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "Frontend Developer",
+    "start_date": "2020-10-01",
+    "is_current": true,
+    "description": "User interface development cho booking website. React.js và responsive design."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "Database Administrator",
+    "start_date": "2018-12-01",
+    "end_date": "2021-11-30",
+    "is_current": false,
+    "description": "Database management cho tourism platform. MySQL optimization và backup strategies."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "DevOps Engineer",
+    "start_date": "2021-04-01",
+    "is_current": true,
+    "description": "Infrastructure deployment và monitoring. AWS, Docker và CI/CD pipelines."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "Mobile Developer",
+    "start_date": "2020-02-01",
+    "end_date": "2023-01-31",
+    "is_current": false,
+    "description": "Mobile app development cho Sapaco. React Native và native Android/iOS."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "Business Analyst",
+    "start_date": "2021-07-01",
+    "is_current": true,
+    "description": "Requirements analysis cho tourism services. Process mapping và user stories."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "QA Engineer",
+    "start_date": "2019-09-01",
+    "end_date": "2022-08-31",
+    "is_current": false,
+    "description": "Quality assurance cho booking system. Manual testing và automation scripts."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "UI/UX Designer",
+    "start_date": "2020-06-01",
+    "is_current": true,
+    "description": "Interface design cho tourism website. Figma, user research và prototyping."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "System Analyst",
+    "start_date": "2021-11-01",
+    "end_date": "2024-05-31",
+    "is_current": false,
+    "description": "System design và technical specifications. UML diagrams và documentation."
+  },
+  {
+    "company_name": "Sapaco Tourist",
+    "position": "Data Analyst",
+    "start_date": "2022-03-01",
+    "is_current": true,
+    "description": "Tourism data analysis. Customer behavior và booking trends using SQL và Excel."
+  },
+
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "IT Developer",
+    "start_date": "2018-07-01",
+    "end_date": "2021-06-30",
+    "is_current": false,
+    "description": "Core banking system development. COBOL, Java và database programming."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Security Engineer",
+    "start_date": "2019-12-01",
+    "is_current": true,
+    "description": "Banking security systems. PCI DSS compliance và fraud prevention."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Data Engineer",
+    "start_date": "2020-05-01",
+    "end_date": "2023-04-30",
+    "is_current": false,
+    "description": "Big data platform cho banking analytics. Hadoop, Spark và data warehousing."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Mobile Banking Developer",
+    "start_date": "2021-02-01",
+    "is_current": true,
+    "description": "Digital banking app development. iOS, Android và backend APIs."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Business Analyst",
+    "start_date": "2019-04-01",
+    "end_date": "2022-03-31",
+    "is_current": false,
+    "description": "Banking process analysis. Requirements gathering và workflow design."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "DevOps Engineer",
+    "start_date": "2020-09-01",
+    "is_current": true,
+    "description": "Infrastructure automation. Cloud migration và monitoring systems."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Risk Analyst",
+    "start_date": "2021-08-01",
+    "end_date": "2024-02-29",
+    "is_current": false,
+    "description": "IT risk assessment và compliance. Basel II/III reporting và audit support."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Frontend Developer",
+    "start_date": "2022-05-01",
+    "is_current": true,
+    "description": "Internet banking portal development. Angular, TypeScript và accessibility."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Database Administrator",
+    "start_date": "2019-01-01",
+    "end_date": "2021-12-31",
+    "is_current": false,
+    "description": "Database management cho core banking. Oracle RAC và high availability."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (Vietcombank)",
+    "position": "Project Manager",
+    "start_date": "2020-11-01",
+    "is_current": true,
+    "description": "Digital transformation projects. Agile methodology và stakeholder management."
+  },
+
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "Software Developer",
+    "start_date": "2019-02-01",
+    "end_date": "2022-01-31",
+    "is_current": false,
+    "description": "Banking application development. .NET, C# và SQL Server cho internal systems."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "System Analyst",
+    "start_date": "2020-07-01",
+    "is_current": true,
+    "description": "Banking system analysis. Process modeling và technical specifications."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "Cybersecurity Specialist",
+    "start_date": "2018-10-01",
+    "end_date": "2021-09-30",
+    "is_current": false,
+    "description": "Information security implementation. ISO 27001 và banking security standards."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "Data Analyst",
+    "start_date": "2021-04-01",
+    "is_current": true,
+    "description": "Financial data analysis. SQL, Excel và statistical reporting."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "DevOps Engineer",
+    "start_date": "2019-08-01",
+    "end_date": "2022-07-31",
+    "is_current": false,
+    "description": "Infrastructure automation. VMware, Windows Server và cloud services."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "Mobile Developer",
+    "start_date": "2020-12-01",
+    "is_current": true,
+    "description": "BIDV mobile banking app. Hybrid development với Cordova và PhoneGap."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "IT Project Manager",
+    "start_date": "2021-09-01",
+    "end_date": "2024-04-30",
+    "is_current": false,
+    "description": "Banking IT projects. Project planning, execution và delivery management."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "Database Administrator",
+    "start_date": "2019-05-01",
+    "is_current": true,
+    "description": "Database administration. SQL Server clustering và performance tuning."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "Business Analyst",
+    "start_date": "2020-03-01",
+    "end_date": "2023-02-28",
+    "is_current": false,
+    "description": "Banking business analysis. Requirements documentation và user acceptance testing."
+  },
+  {
+    "company_name": "Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
+    "position": "Technical Support",
+    "start_date": "2021-11-01",
+    "is_current": true,
+    "description": "IT help desk và technical support. User assistance và system troubleshooting."
+  },
+
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Software Developer",
+    "start_date": "2019-06-01",
+    "end_date": "2022-05-31",
+    "is_current": false,
+    "description": "Airline reservation system development. Java, Oracle và mainframe integration."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Data Analyst",
+    "start_date": "2020-11-01",
+    "is_current": true,
+    "description": "Flight data analysis và revenue management. SQL, Python và business intelligence."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "System Administrator",
+    "start_date": "2018-09-01",
+    "end_date": "2021-08-31",
+    "is_current": false,
+    "description": "IT infrastructure management. Linux servers, network và security systems."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Mobile Developer",
+    "start_date": "2021-03-01",
+    "is_current": true,
+    "description": "Vietnam Airlines mobile app. iOS, Android và backend API integration."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "DevOps Engineer",
+    "start_date": "2019-12-01",
+    "end_date": "2022-11-30",
+    "is_current": false,
+    "description": "CI/CD implementation. Jenkins, Docker và cloud infrastructure."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Business Analyst",
+    "start_date": "2020-08-01",
+    "is_current": true,
+    "description": "Airline business process analysis. Requirements gathering và system design."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Security Engineer",
+    "start_date": "2021-05-01",
+    "end_date": "2024-01-31",
+    "is_current": false,
+    "description": "Information security cho aviation systems. Compliance và risk management."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Frontend Developer",
+    "start_date": "2022-01-01",
+    "is_current": true,
+    "description": "Website development cho Vietnam Airlines. React.js và booking system."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Database Administrator",
+    "start_date": "2019-04-01",
+    "end_date": "2022-03-31",
+    "is_current": false,
+    "description": "Database management cho reservation system. Oracle và high availability."
+  },
+  {
+    "company_name": "Vietnam Airlines",
+    "position": "Project Manager",
+    "start_date": "2020-06-01",
+    "is_current": true,
+    "description": "IT project management. Digital transformation initiatives và vendor management."
+  }
+]
