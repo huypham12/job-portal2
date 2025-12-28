@@ -109,8 +109,8 @@ const createJobBody = z
     // Skills (array of skill IDs)
     skill_ids: z.array(z.string().uuid()).optional(),
 
-    // Tags (array of tag IDs)
-    tag_ids: z.array(z.string().uuid()).optional(),
+    // Categories (array of category IDs)
+    category_ids: z.array(z.string().uuid()).optional(),
 
     // Work arrangements
     work_arrangements: z
@@ -169,7 +169,7 @@ const updateJobBody = z
       )
       .optional(),
     skill_ids: z.array(z.string().uuid()).optional(),
-    tag_ids: z.array(z.string().uuid()).optional(),
+    category_ids: z.array(z.string().uuid()).optional(),
     work_arrangements: z
       .object({
         is_remote_allowed: z.boolean().optional(),

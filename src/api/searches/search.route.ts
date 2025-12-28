@@ -4,11 +4,22 @@ import { suggestionsController } from './suggestions.controller'
 import { eventsController } from './events.controller'
 import { RecentSearchesController } from './recent-searches.controller'
 import {
+  searchCompaniesController,
+  companiesSuggestionsController,
+  getPopularCompaniesController
+} from './company-search.controller'
+import {
   getRecentSearchesValidator,
   deleteRecentSearchValidator,
   getPopularQueriesValidator
 } from '../../shared/validators/enhanced-features.validator'
-import { searchJobsValidator, suggestionsValidator } from './search.dto'
+import {
+  searchJobsValidator,
+  suggestionsValidator,
+  searchCompaniesValidator,
+  companiesSuggestionsValidator,
+  getPopularCompaniesValidator
+} from './search.dto'
 
 /**
  * Search routes:
@@ -19,6 +30,9 @@ import { searchJobsValidator, suggestionsValidator } from './search.dto'
  *  - DELETE /api/search/recent/:id
  *  - DELETE /api/search/recent
  *  - GET  /api/search/popular-queries
+ *  - GET  /api/search/companies
+ *  - GET  /api/search/companies/suggestions
+ *  - GET  /api/search/companies/popular
  *
  * Controller functions handle validation and responses.
  */
@@ -33,5 +47,10 @@ router.get('/recent', getRecentSearchesValidator, RecentSearchesController.getRe
 router.delete('/recent/:id', deleteRecentSearchValidator, RecentSearchesController.deleteRecentSearch)
 router.delete('/recent', RecentSearchesController.clearRecentSearches)
 router.get('/popular-queries', getPopularQueriesValidator, RecentSearchesController.getPopularQueries)
+
+// Company search routes
+router.get('/companies', searchCompaniesValidator, searchCompaniesController)
+router.get('/companies/suggestions', companiesSuggestionsValidator, companiesSuggestionsController)
+router.get('/companies/popular', getPopularCompaniesValidator, getPopularCompaniesController)
 
 export default router

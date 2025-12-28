@@ -385,6 +385,90 @@
             schema:
               $ref: '#/components/schemas/Error'
 
+/companies/me/benefits/{id}:
+  patch:
+    tags:
+      - companies
+    summary: Update company benefit (Recruiter only)
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCompanyBenefitRequest'
+    responses:
+      '200':
+        description: Benefit updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      '400':
+        description: Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter only
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+  delete:
+    tags:
+      - companies
+    summary: Delete company benefit (Recruiter only)
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: Benefit deleted
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter only
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Benefit not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
 /companies/me/benefits:
   get:
     tags:
@@ -449,48 +533,3 @@
             schema:
               $ref: '#/components/schemas/Error'
 
-/companies/me/benefits/{id}:
-  patch:
-    tags:
-      - companies
-    summary: Update company benefit (Recruiter only)
-    security:
-      - bearerAuth: []
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UpdateCompanyBenefitRequest'
-    responses:
-      '200':
-        description: Benefit updated
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SuccessResponse'
-      '400':
-        description: Validation error
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '401':
-        description: Unauthorized
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '403':
-        description: Forbidden - Recruiter only
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'

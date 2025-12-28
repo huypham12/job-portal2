@@ -60,3 +60,59 @@
     responses:
       '200': { description: OK }
       '401': { description: Unauthorized }
+
+# ================================
+# COMPANY SEARCH ENDPOINTS
+# ================================
+
+/search/companies:
+  get:
+    tags: [searches]
+    summary: Search companies
+    parameters:
+      - in: query
+        name: q
+        schema: { type: string }
+        description: Search query
+      - in: query
+        name: industry
+        schema: { type: string }
+        description: Filter by industry
+      - in: query
+        name: location
+        schema: { type: string }
+        description: Filter by location
+      - in: query
+        name: size_min
+        schema: { type: integer }
+        description: Minimum company size
+      - in: query
+        name: size_max
+        schema: { type: integer }
+        description: Maximum company size
+    responses:
+      '200': { description: OK }
+
+/search/companies/suggestions:
+  get:
+    tags: [searches]
+    summary: Get company search suggestions
+    parameters:
+      - in: query
+        name: q
+        schema: { type: string }
+        description: Partial search query
+    responses:
+      '200': { description: OK }
+
+/search/companies/popular:
+  get:
+    tags: [searches]
+    summary: Get popular companies
+    parameters:
+      - in: query
+        name: limit
+        schema: { type: integer, default: 10 }
+        description: Number of companies to return
+    responses:
+      '200': { description: OK }

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { prisma } from '../../config/database.service'
 import { ApiResponse } from '../../shared/helpers/api-response.helper'
+import { searchService } from './search.service'
 
 /**
  * Recent Searches Controller
@@ -166,28 +167,13 @@ export class RecentSearchesController {
       const limit = parseInt(req.query.limit as string) || 10
       const days = parseInt(req.query.days as string) || 7
 
-      // Calculate date threshold
-      const dateThreshold = new Date()
-      dateThreshold.setDate(dateThreshold.getDate() - days)
-
-      // Group by search query and count
-      const popularQueries = await prisma.$queryRaw`
-        SELECT
-          search_query,
-          COUNT(*) as search_count,
-          AVG(result_count) as avg_results,
-          MAX(searched_at) as last_searched
-        FROM search_history
-        WHERE searched_at >= ${dateThreshold}
-          AND search_query::text != '{}'
-        GROUP BY search_query
-        ORDER BY search_count DESC
-        LIMIT ${limit}
-      `
+      // Use searchService để sử dụng ES aggregations
+      const popularQueries = await searchService.getPopularQueries(days, limit)
 
       return ApiResponse.success(res, {
         queries: popularQueries,
-        period: `${days} days`
+        period: `${days} days`,
+        source: 'elasticsearch' // Indicate data source for debugging
       })
     } catch (error) {
       console.error('Error getting popular queries:', error)

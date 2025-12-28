@@ -3,6 +3,7 @@ import { HttpError } from '@/shared/common/http-error'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'
 import { CreateJobDTO, UpdateJobDTO, FilterJobsDTO, MyJobsDTO, SuggestedCandidatesDTO } from './job.validator'
+import { MatchingCandidatesResponseDto } from '../matching/matching.dto'
 import { job_status, Prisma } from '@prisma/client'
 import { matchingService } from '../matching/matching.service'
 import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
@@ -50,15 +51,15 @@ export class JobService {
       }
     }
 
-    // Validate all tag_ids exist (if provided)
-    if (data.tag_ids && data.tag_ids.length > 0) {
-      const tags = await prisma.tags.findMany({
-        where: { id: { in: data.tag_ids } },
+    // Validate all category_ids exist (if provided)
+    if (data.category_ids && data.category_ids.length > 0) {
+      const categories = await prisma.categories.findMany({
+        where: { id: { in: data.category_ids } },
         select: { id: true }
       })
 
-      if (tags.length !== data.tag_ids.length) {
-        throw new HttpError('One or more tag IDs are invalid.', HTTP_STATUS.BAD_REQUEST)
+      if (categories.length !== data.category_ids.length) {
+        throw new HttpError('One or more category IDs are invalid.', HTTP_STATUS.BAD_REQUEST)
       }
     }
 
@@ -97,10 +98,10 @@ export class JobService {
             }
           : undefined,
 
-        // Connect tags
-        job_tags: data.tag_ids
+        // Connect categories
+        job_categories: data.category_ids
           ? {
-              create: data.tag_ids.map((tag_id) => ({ tag_id }))
+              create: data.category_ids.map((category_id) => ({ category_id }))
             }
           : undefined,
 
@@ -133,9 +134,9 @@ export class JobService {
             skills: true
           }
         },
-        job_tags: {
+        job_categories: {
           include: {
-            tags: true
+            categories: true
           }
         },
         job_work_arrangements: true
@@ -256,9 +257,9 @@ export class JobService {
             skills: true
           }
         },
-        job_tags: {
+        job_categories: {
           include: {
-            tags: true
+            categories: true
           }
         },
         job_work_arrangements: true,
@@ -315,15 +316,15 @@ export class JobService {
       }
     }
 
-    // Validate tag_ids if provided
-    if (data.tag_ids && data.tag_ids.length > 0) {
-      const tags = await prisma.tags.findMany({
-        where: { id: { in: data.tag_ids } },
+    // Validate category_ids if provided
+    if (data.category_ids && data.category_ids.length > 0) {
+      const categories = await prisma.categories.findMany({
+        where: { id: { in: data.category_ids } },
         select: { id: true }
       })
 
-      if (tags.length !== data.tag_ids.length) {
-        throw new HttpError('One or more tag IDs are invalid.', HTTP_STATUS.BAD_REQUEST)
+      if (categories.length !== data.category_ids.length) {
+        throw new HttpError('One or more category IDs are invalid.', HTTP_STATUS.BAD_REQUEST)
       }
     }
 
@@ -369,11 +370,11 @@ export class JobService {
         })
       }
 
-      // Update tags (delete old, create new)
-      if (data.tag_ids) {
-        await tx.job_tags.deleteMany({ where: { job_id: jobId } })
-        await tx.job_tags.createMany({
-          data: data.tag_ids.map((tag_id) => ({ job_id: jobId, tag_id }))
+      // Update categories (delete old, create new)
+      if (data.category_ids) {
+        await tx.job_categories.deleteMany({ where: { job_id: jobId } })
+        await tx.job_categories.createMany({
+          data: data.category_ids.map((category_id) => ({ job_id: jobId, category_id }))
         })
       }
 
@@ -662,7 +663,7 @@ export class JobService {
     await this.getJobById(jobId, userId, true)
 
     // Get suggested candidates using matching service
-    const result = await matchingService.matchCandidatesForJob(jobId, size)
+    const result: MatchingCandidatesResponseDto = await matchingService.matchCandidatesForJob(jobId, size)
 
     return {
       job_id: jobId,

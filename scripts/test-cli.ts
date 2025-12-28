@@ -12,7 +12,6 @@
  *   npm run es:reset    - Reset all indices (DANGER)
  */
 
-import { createInterface } from 'readline'
 import { elasticsearchService } from '../src/config/elasticsearch.service'
 import { elasticsearchSyncService } from '../src/config/elasticsearch-sync.service'
 import { ElasticsearchSyncMiddleware } from '../src/middleware/elasticsearch-sync.middleware'
@@ -22,7 +21,7 @@ const command = args[0] || 'help'
 
 async function main() {
   try {
-    console.log('🚀 Elasticsearch Management CLI - DEBUG: Starting main function')
+    console.log('🚀 TEST CLI - THIS IS THE TEST VERSION')
     console.log('================================\n')
 
     switch (command) {
@@ -51,6 +50,7 @@ async function main() {
         showHelp()
         break
     }
+
   } catch (error) {
     console.error('❌ CLI Error:', error)
     process.exit(1)
@@ -79,6 +79,7 @@ async function initializeElasticsearch(): Promise<void> {
     console.log('  ✓ Completion suggesters for autocomplete')
     console.log('  ✓ Optimistic concurrency control')
     console.log('  ✓ Bulk operations with chunk processing')
+
   } catch (error) {
     console.error('❌ Initialization failed:', error)
     throw error
@@ -94,6 +95,7 @@ async function syncData(): Promise<void> {
 
     const results = await elasticsearchSyncService.syncAllData({
       chunkSize: 1000,
+      retryAttempts: 3,
       forceReindex: true
     })
 
@@ -111,10 +113,7 @@ async function syncData(): Promise<void> {
     console.log(`  📦 Processed: ${results.jobs.processed}`)
     console.log(`  ❌ Errors: ${results.jobs.errors}`)
     console.log(`  ⏱️  Duration: ${results.jobs.duration}ms`)
-    const jobsSuccessRate =
-      results.jobs.processed + results.jobs.errors === 0
-        ? 100.0
-        : (results.jobs.processed / (results.jobs.processed + results.jobs.errors)) * 100
+    const jobsSuccessRate = results.jobs.processed + results.jobs.errors === 0 ? 100.0 : ((results.jobs.processed / (results.jobs.processed + results.jobs.errors)) * 100)
     console.log(`  ✅ Success Rate: ${jobsSuccessRate.toFixed(1)}%`)
     totalProcessed += results.jobs.processed
     totalErrors += results.jobs.errors
@@ -123,10 +122,7 @@ async function syncData(): Promise<void> {
     console.log(`  📦 Processed: ${results.companies.processed}`)
     console.log(`  ❌ Errors: ${results.companies.errors}`)
     console.log(`  ⏱️  Duration: ${results.companies.duration}ms`)
-    const companiesSuccessRate =
-      results.companies.processed + results.companies.errors === 0
-        ? 100.0
-        : (results.companies.processed / (results.companies.processed + results.companies.errors)) * 100
+    const companiesSuccessRate = results.companies.processed + results.companies.errors === 0 ? 100.0 : ((results.companies.processed / (results.companies.processed + results.companies.errors)) * 100)
     console.log(`  ✅ Success Rate: ${companiesSuccessRate.toFixed(1)}%`)
     totalProcessed += results.companies.processed
     totalErrors += results.companies.errors
@@ -135,10 +131,7 @@ async function syncData(): Promise<void> {
     console.log(`  📦 Processed: ${results.profiles.processed}`)
     console.log(`  ❌ Errors: ${results.profiles.errors}`)
     console.log(`  ⏱️  Duration: ${results.profiles.duration}ms`)
-    const profilesSuccessRate =
-      results.profiles.processed + results.profiles.errors === 0
-        ? 100.0
-        : (results.profiles.processed / (results.profiles.processed + results.profiles.errors)) * 100
+    const profilesSuccessRate = results.profiles.processed + results.profiles.errors === 0 ? 100.0 : ((results.profiles.processed / (results.profiles.processed + results.profiles.errors)) * 100)
     console.log(`  ✅ Success Rate: ${profilesSuccessRate.toFixed(1)}%`)
     totalProcessed += results.profiles.processed
     totalErrors += results.profiles.errors
@@ -147,10 +140,7 @@ async function syncData(): Promise<void> {
     console.log(`  📦 Processed: ${results.applications.processed}`)
     console.log(`  ❌ Errors: ${results.applications.errors}`)
     console.log(`  ⏱️  Duration: ${results.applications.duration}ms`)
-    const applicationsSuccessRate =
-      results.applications.processed + results.applications.errors === 0
-        ? 100.0
-        : (results.applications.processed / (results.applications.processed + results.applications.errors)) * 100
+    const applicationsSuccessRate = results.applications.processed + results.applications.errors === 0 ? 100.0 : ((results.applications.processed / (results.applications.processed + results.applications.errors)) * 100)
     console.log(`  ✅ Success Rate: ${applicationsSuccessRate.toFixed(1)}%`)
     totalProcessed += results.applications.processed
     totalErrors += results.applications.errors
@@ -159,10 +149,10 @@ async function syncData(): Promise<void> {
     console.log(`  📊 Total Records: ${totalProcessed + totalErrors}`)
     console.log(`  ✅ Successfully Synced: ${totalProcessed}`)
     console.log(`  ❌ Failed: ${totalErrors}`)
-    const overallSuccessRate =
-      totalProcessed + totalErrors === 0 ? 100.0 : (totalProcessed / (totalProcessed + totalErrors)) * 100
+    const overallSuccessRate = totalProcessed + totalErrors === 0 ? 100.0 : ((totalProcessed / (totalProcessed + totalErrors)) * 100)
     console.log(`  📈 Overall Success Rate: ${overallSuccessRate.toFixed(1)}%`)
     console.log(`  ⏱️  Total Time: ${totalTime}ms`)
+
   } catch (error) {
     console.error('❌ Data synchronization failed:', error)
     throw error
@@ -215,6 +205,7 @@ async function checkHealth(): Promise<void> {
     console.log('\n🔄 Synchronization Service:')
     const syncHealthy = await ElasticsearchSyncMiddleware.healthCheck()
     console.log(`  Status: ${syncHealthy ? '✅ Healthy' : '❌ Unhealthy'}`)
+
   } catch (error) {
     console.error('❌ Health check failed:', error)
     throw error
@@ -244,9 +235,9 @@ async function showStats(): Promise<void> {
     console.log(`  Total: ${syncStats.elasticsearch.total.toLocaleString()}`)
 
     console.log('\nSync Status:')
-    const jobsSynced = (syncStats.elasticsearch.jobs / syncStats.database.jobs) * 100
-    const companiesSynced = (syncStats.elasticsearch.companies / syncStats.database.companies) * 100
-    const profilesSynced = (syncStats.elasticsearch.profiles / syncStats.database.profiles) * 100
+    const jobsSynced = syncStats.elasticsearch.jobs / syncStats.database.jobs * 100
+    const companiesSynced = syncStats.elasticsearch.companies / syncStats.database.companies * 100
+    const profilesSynced = syncStats.elasticsearch.profiles / syncStats.database.profiles * 100
 
     console.log(`  Jobs: ${jobsSynced.toFixed(1)}% synced`)
     console.log(`  Companies: ${companiesSynced.toFixed(1)}% synced`)
@@ -264,10 +255,11 @@ async function showStats(): Promise<void> {
     Object.entries(nodeStats.nodes as any).forEach(([nodeId, node]: [string, any]) => {
       console.log(`\nNode: ${node.name || nodeId.substring(0, 8)}`)
       console.log(`  CPU Usage: ${node.os?.cpu?.percent || 'N/A'}%`)
-      console.log(`  Memory Usage: ${(node.jvm?.mem?.heap_used_percent || 0).toFixed(1)}%`)
+      console.log(`  Memory Usage: ${((node.jvm?.mem?.heap_used_percent) || 0).toFixed(1)}%`)
       console.log(`  Search Queries: ${(node.indices?.search?.query_total || 0).toLocaleString()}`)
       console.log(`  Index Operations: ${(node.indices?.indexing?.index_total || 0).toLocaleString()}`)
     })
+
   } catch (error) {
     console.error('❌ Failed to retrieve statistics:', error)
     throw error
@@ -279,16 +271,13 @@ async function resetIndices(): Promise<void> {
   console.log('================================\n')
 
   // Confirmation prompt
-  const readline = createInterface({
+  const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
   })
 
   const answer = await new Promise<string>((resolve) => {
-    readline.question(
-      '❓ Are you sure you want to RESET ALL INDICES? This will DELETE all data! (type "YES" to confirm): ',
-      resolve
-    )
+    readline.question('❓ Are you sure you want to RESET ALL INDICES? This will DELETE all data! (type "YES" to confirm): ', resolve)
   })
 
   readline.close()
@@ -317,6 +306,7 @@ async function resetIndices(): Promise<void> {
 
     console.log('\n✅ Index reset completed successfully!')
     console.log('💡 Run "npm run es:sync" to populate with fresh data.')
+
   } catch (error) {
     console.error('❌ Reset operation failed:', error)
     throw error
@@ -352,14 +342,10 @@ function showHelp(): void {
 
 function getStatusIcon(status: string): string {
   switch (status) {
-    case 'green':
-      return '🟢'
-    case 'yellow':
-      return '🟡'
-    case 'red':
-      return '🔴'
-    default:
-      return '⚪'
+    case 'green': return '🟢'
+    case 'yellow': return '🟡'
+    case 'red': return '🔴'
+    default: return '⚪'
   }
 }
 

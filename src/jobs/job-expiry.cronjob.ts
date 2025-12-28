@@ -76,19 +76,6 @@ export const scheduleJobExpiry = () => {
       })
 
       console.log(`[Cronjob] Successfully expired ${expiredJobs.length} job(s)`)
-
-      // Log the action
-      await prisma.activity_logs.createMany({
-        data: expiredJobs.map((job) => ({
-          user_id: job.companies!.users!.id,
-          action: 'job_auto_expired',
-          details: {
-            job_id: job.id,
-            job_title: job.title,
-            expired_at: job.expires_at
-          }
-        }))
-      })
     } catch (error) {
       console.error('[Cronjob] Error expiring jobs:', error)
     }

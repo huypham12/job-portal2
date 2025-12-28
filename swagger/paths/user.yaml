@@ -1,10 +1,10 @@
 # ============================================
 # USER ENDPOINTS
 # ============================================
+
 /user/me:
   get:
-    tags:
-      - user
+    tags: [user]
     summary: Get current user profile
     description: Get detailed information about the currently authenticated user including profile, companies (for recruiters), and resumes (for candidates).
     operationId: getMe
@@ -49,13 +49,109 @@
             schema:
               $ref: '#/components/schemas/Error'
 
+/user/profiles/{id}/public:
+  get:
+    tags: [user]
+    summary: Get public profile of candidate (Recruiter only)
+    description: Get public profile information of a candidate for recruiters to view
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Profile ID
+    responses:
+      '200':
+        description: Public profile retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicProfileResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Profile not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
 /user/me/profile:
+  get:
+    tags: [user]
+    summary: Get complete profile with all sub-entities
+    description: Get complete profile including experiences, educations, skills, certifications, awards
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: Complete profile retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteProfileResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+  post:
+    tags: [user]
+    summary: Create new profile
+    description: Create a new profile for the authenticated candidate
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateProfileRequest'
+          example:
+            name: 'John Doe'
+            phone: '+1234567890'
+            location_id: '123e4567-e89b-12d3-a456-426614174000'
+            metadata:
+              avatar: 'https://example.com/avatar.jpg'
+              bio: 'Software developer with 5 years experience'
+    responses:
+      '201':
+        description: Profile created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   put:
-    tags:
-      - user
-    summary: Update user profile
-    description: Update profile information for the currently authenticated user. At least one field must be provided.
-    operationId: updateProfile
+    tags: [user]
+    summary: Update profile
+    description: Update main profile information. At least one field must be provided.
     security:
       - bearerAuth: []
     requestBody:
@@ -77,20 +173,112 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProfileResponse'
+              $ref: '#/components/schemas/ProfileResponse'
+      '400':
+        description: Bad request - Validation error or empty request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Profile not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+# ================================
+# EXPERIENCES ENDPOINTS
+# ================================
+
+/user/me/profile/experiences:
+  get:
+    tags: [user]
+    summary: Get all experiences with pagination
+    description: Get paginated list of user's work experiences
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        example: 1
+      - name: limit
+        in: query
+        description: 'Items per page (default: 20)'
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+        example: 20
+    responses:
+      '200':
+        description: Experiences retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperiencesResponse'
             example:
-              message: 'Profile updated'
-              profile:
-                id: '123e4567-e89b-12d3-a456-426614174002'
-                user_id: '123e4567-e89b-12d3-a456-426614174000'
-                name: 'John Doe Updated'
-                phone: '+1234567890'
-                location_id: '123e4567-e89b-12d3-a456-426614174000'
-                metadata:
-                  avatar: 'https://example.com/avatar.jpg'
-                  bio: 'Updated bio'
-                updated_at: '2024-01-01T00:00:00.000Z'
-                created_at: '2024-01-01T00:00:00.000Z'
+              message: 'Experiences retrieved successfully'
+              data:
+                experiences:
+                  - id: '123e4567-e89b-12d3-a456-426614174000'
+                    company_name: 'Tech Corp'
+                    position: 'Senior Developer'
+                    start_date: '2020-01-01'
+                    end_date: '2023-12-31'
+                    description: 'Led development team...'
+                    is_current: false
+                pagination:
+                  total: 5
+                  page: 1
+                  limit: 20
+                  totalPages: 1
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+  post:
+    tags: [user]
+    summary: Create new experience
+    description: Add a new work experience to the profile
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateExperienceRequest'
+          example:
+            company_name: 'Tech Corp'
+            position: 'Senior Developer'
+            start_date: '2020-01-01'
+            end_date: '2023-12-31'
+            description: 'Led development team of 5 people...'
+            is_current: false
+    responses:
+      '201':
+        description: Experience created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperienceResponse'
       '400':
         description: Bad request - Validation error
         content:
@@ -104,22 +292,17 @@
             schema:
               $ref: '#/components/schemas/Error'
 
-/user/profiles/{id}/public:
+/user/me/profile/experiences/{experienceId}:
   get:
-    tags:
-      - user
-    summary: Get public profile of candidate (Recruiter only)
-    description: |-
-      Get public profile information of a candidate by profile ID.
-      This endpoint allows recruiters to view candidate profiles for recruitment purposes.
-      Sensitive information like phone number and email are excluded from the response.
-    operationId: getPublicProfile
+    tags: [user]
+    summary: Get single experience
+    description: Get details of a specific work experience
     security:
       - bearerAuth: []
     parameters:
-      - name: id
+      - name: experienceId
         in: path
-        description: Profile ID (UUID)
+        description: Experience ID (UUID)
         required: true
         schema:
           type: string
@@ -127,469 +310,1001 @@
         example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
       '200':
-        description: Public profile retrieved successfully
+        description: Experience retrieved successfully
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/schemas/SuccessResponse'
-                - type: object
-                  properties:
-                    data:
-                      $ref: '#/components/schemas/PublicProfileResponse'
-            example:
-              success: true
-              message: 'Profile retrieved successfully'
-              data:
-                id: '123e4567-e89b-12d3-a456-426614174000'
-                full_name: 'John Doe'
-                display_name: 'John'
-                headline: 'Senior Software Engineer'
-                avatar_url: 'https://example.com/avatar.jpg'
-                bio: 'Experienced software developer'
-                years_of_experience: 5
-                desired_job_title: 'Full Stack Developer'
-                desired_salary_min: 20000000
-                desired_currency: 'VND'
-                desired_job_type: ['full_time', 'remote']
-                is_looking_for_job: true
-                location_text: 'Ho Chi Minh City'
-                personal_website: 'https://johndoe.dev'
-                linkedin_url: 'https://linkedin.com/in/johndoe'
-                github_url: 'https://github.com/johndoe'
-                role: 'candidate'
-                location:
-                  id: '123e4567-e89b-12d3-a456-426614174001'
-                  name: 'Ho Chi Minh City'
-                  type: 'city'
-                experiences: []
-                educations: []
-                skills: []
-                certifications: []
-                awards: []
+              $ref: '#/components/schemas/ExperienceResponse'
       '401':
         description: Unauthorized - Invalid or missing access token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-      '403':
-        description: Forbidden - Recruiter access required or profile not available for public viewing
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-            example:
-              success: false
-              message: 'This profile is not available for public viewing'
       '404':
-        description: Profile not found
+        description: Experience not found
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-            example:
-              success: false
-              message: 'Profile not found'
-      '422':
-        description: Unprocessable Entity - Invalid UUID format
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-
-# ============================================
-# USER PROFILE SUB-RESOURCES
-# ============================================
-/user/me/profile/experiences:
-  get:
-    tags: [user]
-    summary: Get list of profile experiences (candidate)
-    security: [{ bearerAuth: [] }]
-    parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-  post:
-    tags: [user]
-    summary: Create a new profile experience
-    security: [{ bearerAuth: [] }]
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              company_name: { type: string }
-              position: { type: string }
-              start_date: { type: string, format: date-time }
-              end_date: { type: string, format: date-time, nullable: true }
-              is_current: { type: boolean }
-              description: { type: string }
-    responses:
-      '201': { description: Created }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
-
-/user/me/profile/experiences/{experienceId}:
-  get:
-    tags: [user]
-    summary: Get single experience
-    security: [{ bearerAuth: [] }]
-    parameters:
-      - name: experienceId
-        in: path
-        required: true
-        schema: { type: string, format: uuid }
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '404': { description: Not found }
   put:
     tags: [user]
-    summary: Update a profile experience
-    security: [{ bearerAuth: [] }]
+    summary: Update experience
+    description: Update an existing work experience
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: experienceId
+        in: path
+        description: Experience ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/UpdateExperienceRequest'
+          example:
+            company_name: 'Tech Corp Updated'
+            position: 'Lead Developer'
+            start_date: '2020-01-01'
+            end_date: '2023-12-31'
+            description: 'Updated description...'
+            is_current: false
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '200':
+        description: Experience updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperienceResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Experience not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   delete:
     tags: [user]
-    summary: Delete a profile experience
-    security: [{ bearerAuth: [] }]
+    summary: Delete experience
+    description: Delete a work experience from the profile
+    security:
+      - bearerAuth: []
     parameters:
       - name: experienceId
         in: path
+        description: Experience ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: Deleted }
-      '401': { description: Unauthorized }
+      '200':
+        description: Experience deleted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Experience deleted successfully'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Experience not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+# ================================
+# EDUCATIONS ENDPOINTS
+# ================================
 
 /user/me/profile/educations:
   get:
     tags: [user]
-    summary: Get list of profile educations
-    security: [{ bearerAuth: [] }]
+    summary: Get all educations with pagination
+    description: Get paginated list of user's educational background
+    security:
+      - bearerAuth: []
     parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        example: 1
+      - name: limit
+        in: query
+        description: 'Items per page (default: 20)'
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+        example: 20
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Educations retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationsResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   post:
     tags: [user]
-    summary: Create a profile education
-    security: [{ bearerAuth: [] }]
+    summary: Create new education
+    description: Add a new education entry to the profile
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/CreateEducationRequest'
+          example:
+            institution_name: 'University of Technology'
+            degree: 'Bachelor of Computer Science'
+            field_of_study: 'Software Engineering'
+            start_date: '2016-09-01'
+            end_date: '2020-06-30'
+            grade: '3.8'
+            description: 'Graduated with honors...'
     responses:
-      '201': { description: Created }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '201':
+        description: Education created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /user/me/profile/educations/{educationId}:
   get:
     tags: [user]
     summary: Get single education
-    security: [{ bearerAuth: [] }]
+    description: Get details of a specific education entry
+    security:
+      - bearerAuth: []
     parameters:
       - name: educationId
         in: path
+        description: Education ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174001'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '404': { description: Not found }
+      '200':
+        description: Education retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Education not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   put:
     tags: [user]
     summary: Update education
-    security: [{ bearerAuth: [] }]
+    description: Update an existing education entry
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: educationId
+        in: path
+        description: Education ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174001'
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/UpdateEducationRequest'
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '200':
+        description: Education updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Education not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   delete:
     tags: [user]
     summary: Delete education
-    security: [{ bearerAuth: [] }]
+    description: Delete an education entry from the profile
+    security:
+      - bearerAuth: []
     parameters:
       - name: educationId
         in: path
+        description: Education ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174001'
     responses:
-      '200': { description: Deleted }
-      '401': { description: Unauthorized }
+      '200':
+        description: Education deleted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Education not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+# ================================
+# SKILLS ENDPOINTS
+# ================================
 
 /user/me/profile/skills:
   get:
     tags: [user]
-    summary: Get list of profile skills
-    security: [{ bearerAuth: [] }]
+    summary: Get all skills with pagination
+    description: Get paginated list of user's skills
+    security:
+      - bearerAuth: []
     parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        example: 1
+      - name: limit
+        in: query
+        description: 'Items per page (default: 20)'
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+        example: 20
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Skills retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillsResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   post:
     tags: [user]
-    summary: Add skill to profile
-    security: [{ bearerAuth: [] }]
+    summary: Create new skill
+    description: Add a new skill to the profile
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              skill_id: { type: string, format: uuid }
-              proficiency: { type: integer }
+            $ref: '#/components/schemas/CreateSkillRequest'
+          example:
+            skill_id: '123e4567-e89b-12d3-a456-426614174000'
+            proficiency_level: 'expert'
+            years_of_experience: 5
     responses:
-      '201': { description: Created }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '201':
+        description: Skill created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /user/me/profile/skills/{skillId}:
   get:
     tags: [user]
-    summary: Get single profile skill
-    security: [{ bearerAuth: [] }]
+    summary: Get single skill
+    description: Get details of a specific skill
+    security:
+      - bearerAuth: []
     parameters:
       - name: skillId
         in: path
+        description: Skill ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174002'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '404': { description: Not found }
+      '200':
+        description: Skill retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Skill not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   put:
     tags: [user]
-    summary: Update profile skill
-    security: [{ bearerAuth: [] }]
+    summary: Update skill
+    description: Update an existing skill entry
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: skillId
+        in: path
+        description: Skill ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174002'
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/UpdateSkillRequest'
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '200':
+        description: Skill updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Skill not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   delete:
     tags: [user]
-    summary: Delete profile skill
-    security: [{ bearerAuth: [] }]
+    summary: Delete skill
+    description: Delete a skill from the profile
+    security:
+      - bearerAuth: []
     parameters:
       - name: skillId
         in: path
+        description: Skill ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174002'
     responses:
-      '200': { description: Deleted }
-      '401': { description: Unauthorized }
+      '200':
+        description: Skill deleted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Skill not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+# ================================
+# CERTIFICATIONS ENDPOINTS
+# ================================
 
 /user/me/profile/certifications:
   get:
     tags: [user]
-    summary: Get list of profile certifications
-    security: [{ bearerAuth: [] }]
+    summary: Get all certifications with pagination
+    description: Get paginated list of user's certifications
+    security:
+      - bearerAuth: []
     parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        example: 1
+      - name: limit
+        in: query
+        description: 'Items per page (default: 20)'
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+        example: 20
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Certifications retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificationsResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   post:
     tags: [user]
-    summary: Add certification
-    security: [{ bearerAuth: [] }]
+    summary: Create new certification
+    description: Add a new certification to the profile
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/CreateCertificationRequest'
+          example:
+            certification_name: 'AWS Certified Solutions Architect'
+            issuing_organization: 'Amazon Web Services'
+            issue_date: '2023-06-15'
+            expiry_date: '2026-06-15'
+            credential_id: 'AWS-SAA-123456'
+            credential_url: 'https://aws.amazon.com/verification'
     responses:
-      '201': { description: Created }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '201':
+        description: Certification created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificationResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /user/me/profile/certifications/{certificationId}:
   get:
     tags: [user]
-    summary: Get certification detail
-    security: [{ bearerAuth: [] }]
+    summary: Get single certification
+    description: Get details of a specific certification
+    security:
+      - bearerAuth: []
     parameters:
       - name: certificationId
         in: path
+        description: Certification ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174003'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '404': { description: Not found }
+      '200':
+        description: Certification retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificationResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Certification not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   put:
     tags: [user]
     summary: Update certification
-    security: [{ bearerAuth: [] }]
+    description: Update an existing certification entry
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: certificationId
+        in: path
+        description: Certification ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174003'
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/UpdateCertificationRequest'
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '200':
+        description: Certification updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificationResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Certification not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   delete:
     tags: [user]
     summary: Delete certification
-    security: [{ bearerAuth: [] }]
+    description: Delete a certification from the profile
+    security:
+      - bearerAuth: []
     parameters:
       - name: certificationId
         in: path
+        description: Certification ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174003'
     responses:
-      '200': { description: Deleted }
-      '401': { description: Unauthorized }
+      '200':
+        description: Certification deleted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Certification not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+# ================================
+# AWARDS ENDPOINTS
+# ================================
 
 /user/me/profile/awards:
   get:
     tags: [user]
-    summary: Get list of profile awards
-    security: [{ bearerAuth: [] }]
+    summary: Get all awards with pagination
+    description: Get paginated list of user's awards and achievements
+    security:
+      - bearerAuth: []
     parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        example: 1
+      - name: limit
+        in: query
+        description: 'Items per page (default: 20)'
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+        example: 20
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Awards retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AwardsResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   post:
     tags: [user]
-    summary: Add award
-    security: [{ bearerAuth: [] }]
+    summary: Create new award
+    description: Add a new award or achievement to the profile
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/CreateAwardRequest'
+          example:
+            award_name: 'Employee of the Year 2023'
+            awarding_organization: 'Tech Corp'
+            award_date: '2023-12-15'
+            description: 'Recognized for outstanding performance and contributions to the team'
+            award_url: 'https://techcorp.com/awards/2023'
     responses:
-      '201': { description: Created }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '201':
+        description: Award created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AwardResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /user/me/profile/awards/{awardId}:
   get:
     tags: [user]
-    summary: Get award detail
-    security: [{ bearerAuth: [] }]
+    summary: Get single award
+    description: Get details of a specific award
+    security:
+      - bearerAuth: []
     parameters:
       - name: awardId
         in: path
+        description: Award ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174004'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '404': { description: Not found }
+      '200':
+        description: Award retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AwardResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Award not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   put:
     tags: [user]
     summary: Update award
-    security: [{ bearerAuth: [] }]
+    description: Update an existing award entry
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: awardId
+        in: path
+        description: Award ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174004'
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/UpdateAwardRequest'
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '200':
+        description: Award updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AwardResponse'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Award not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   delete:
     tags: [user]
     summary: Delete award
-    security: [{ bearerAuth: [] }]
+    description: Delete an award from the profile
+    security:
+      - bearerAuth: []
     parameters:
       - name: awardId
         in: path
+        description: Award ID (UUID)
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174004'
     responses:
-      '200': { description: Deleted }
-      '401': { description: Unauthorized }
+      '200':
+        description: Award deleted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Award not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+# ================================
+# PROFILE VISIBILITY & COMPLETENESS
+# ================================
 
 /user/me/profile/visibility:
   put:
     tags: [user]
-    summary: Update profile visibility (public/private)
-    security: [{ bearerAuth: [] }]
+    summary: Update profile visibility
+    description: Update profile visibility settings (public/private)
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
             type: object
+            required:
+              - is_public
             properties:
               is_public:
                 type: boolean
+                description: Whether the profile is publicly visible
+                example: true
+          example:
+            is_public: true
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '200':
+        description: Profile visibility updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Profile visibility updated successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /user/me/profile/completeness:
   get:
     tags: [user]
     summary: Get profile completeness percentage
-    security: [{ bearerAuth: [] }]
+    description: Calculate and return the profile completeness percentage based on filled sections
+    security:
+      - bearerAuth: []
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Profile completeness calculated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 'Profile completeness calculated successfully'
+                data:
+                  type: object
+                  properties:
+                    completeness_percentage:
+                      type: number
+                      minimum: 0
+                      maximum: 100
+                      example: 85
+                    completed_sections:
+                      type: array
+                      items:
+                        type: string
+                        enum: [basic_info, experiences, educations, skills, certifications, awards]
+                      example: ['basic_info', 'experiences', 'educations', 'skills']
+                    missing_sections:
+                      type: array
+                      items:
+                        type: string
+                        enum: [basic_info, experiences, educations, skills, certifications, awards]
+                      example: ['certifications', 'awards']
+            example:
+              message: 'Profile completeness calculated successfully'
+              data:
+                completeness_percentage: 85
+                completed_sections: ['basic_info', 'experiences', 'educations', 'skills']
+                missing_sections: ['certifications', 'awards']
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'

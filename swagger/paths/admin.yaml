@@ -303,3 +303,530 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+
+# ========================== JOB MANAGEMENT ROUTES ==========================
+
+/admin/jobs:
+  get:
+    tags: [admin]
+    summary: Get all jobs (Admin only)
+    description: |-
+      Get paginated list of all jobs with optional filtering and search.
+      Requires admin role and verified account.
+    operationId: getAllJobs
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: string
+          default: '1'
+        example: '1'
+      - name: limit
+        in: query
+        description: 'Number of items per page (default: 10)'
+        required: false
+        schema:
+          type: string
+          default: '10'
+        example: '20'
+      - name: search
+        in: query
+        description: Search by job title or company name
+        required: false
+        schema:
+          type: string
+        example: 'Software Engineer'
+      - name: status
+        in: query
+        description: Filter by job status
+        required: false
+        schema:
+          type: string
+          enum: [draft, approved, closed]
+        example: 'approved'
+      - name: deleted
+        in: query
+        description: Filter by deleted status (soft delete)
+        required: false
+        schema:
+          type: string
+          enum: ['true', 'false']
+        example: 'false'
+    responses:
+      '200':
+        description: Jobs retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetAllJobsResponse'
+            example:
+              message: 'Lấy danh sách công việc thành công.'
+              data:
+                jobs:
+                  - id: '123e4567-e89b-12d3-a456-426614174000'
+                    title: 'Senior Software Engineer'
+                    status: 'approved'
+                    deleted: false
+                    created_at: '2024-01-01T00:00:00.000Z'
+                pagination:
+                  total: 100
+                  page: 1
+                  limit: 20
+                  totalPages: 5
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/jobs/pending:
+  get:
+    tags: [admin]
+    summary: Get pending jobs for approval (Admin only)
+    description: |-
+      Get paginated list of jobs waiting for admin approval.
+      Requires admin role and verified account.
+    operationId: getPendingJobs
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: page
+        in: query
+        description: 'Page number (default: 1)'
+        required: false
+        schema:
+          type: string
+          default: '1'
+        example: '1'
+      - name: limit
+        in: query
+        description: 'Number of items per page (default: 10)'
+        required: false
+        schema:
+          type: string
+          default: '10'
+        example: '20'
+    responses:
+      '200':
+        description: Pending jobs retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPendingJobsResponse'
+            example:
+              message: 'Lấy danh sách tin chờ duyệt thành công.'
+              data:
+                jobs:
+                  - id: '123e4567-e89b-12d3-a456-426614174000'
+                    title: 'Junior Developer'
+                    status: 'draft'
+                    created_at: '2024-01-01T00:00:00.000Z'
+                pagination:
+                  total: 25
+                  page: 1
+                  limit: 10
+                  totalPages: 3
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/jobs/{id}:
+  get:
+    tags: [admin]
+    summary: Get job details by ID (Admin only)
+    description: |-
+      Get detailed information about a specific job by its ID (admin view).
+      Requires admin role and verified account.
+    operationId: getJobDetails
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Job ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: Job details retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobDetailsResponse'
+            example:
+              message: 'Lấy chi tiết công việc thành công.'
+              data:
+                id: '123e4567-e89b-12d3-a456-426614174000'
+                title: 'Senior Software Engineer'
+                description: 'We are looking for...'
+                status: 'approved'
+                created_at: '2024-01-01T00:00:00.000Z'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/jobs/{id}/approve:
+  patch:
+    tags: [admin]
+    summary: Approve job posting (Admin only)
+    description: |-
+      Approve a job posting and sync to Elasticsearch.
+      Requires admin role and verified account.
+    operationId: approveJob
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Job ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: Job approved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Duyệt tin tuyển dụng thành công.'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/jobs/{id}/reject:
+  patch:
+    tags: [admin]
+    summary: Reject job posting (Admin only)
+    description: |-
+      Reject a job posting with reason.
+      Requires admin role and verified account.
+    operationId: rejectJob
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Job ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - reason
+            properties:
+              reason:
+                type: string
+                minLength: 10
+                maxLength: 500
+                description: Reason for rejection
+                example: 'Job posting violates community guidelines.'
+          example:
+            reason: 'Job posting violates community guidelines and contains inappropriate content.'
+    responses:
+      '200':
+        description: Job rejected successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Từ chối tin tuyển dụng thành công.'
+      '400':
+        description: Bad request - Validation error or body is empty
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/jobs/{id}/label:
+  patch:
+    tags: [admin]
+    summary: Update job labels (Admin only)
+    description: |-
+      Update job labels (hot, urgent, featured).
+      Requires admin role and verified account.
+    operationId: updateJobLabels
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Job ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              hot:
+                type: boolean
+                description: Mark as hot job
+                example: true
+              urgent:
+                type: boolean
+                description: Mark as urgent job
+                example: false
+              featured:
+                type: boolean
+                description: Mark as featured job
+                example: true
+          example:
+            hot: true
+            featured: true
+    responses:
+      '200':
+        description: Job labels updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Cập nhật nhãn công việc thành công.'
+      '400':
+        description: Bad request - Validation error or body is empty
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/jobs/{id}/violation:
+  delete:
+    tags: [admin]
+    summary: Delete job for violation (Admin only)
+    description: |-
+      Soft delete a job due to violation of terms.
+      Requires admin role and verified account.
+    operationId: deleteJobForViolation
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Job ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: Job deleted for violation successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Xóa tin vi phạm thành công.'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/admin/jobs/{id}/restore:
+  post:
+    tags: [admin]
+    summary: Restore deleted job (Admin only)
+    description: |-
+      Restore a previously deleted job.
+      Requires admin role and verified account.
+    operationId: restoreJob
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Job ID (UUID)
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: Job restored successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              message: 'Khôi phục công việc thành công.'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Admin access required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '422':
+        description: Unprocessable Entity - Validation error (invalid UUID format)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'

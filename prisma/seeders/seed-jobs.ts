@@ -316,6 +316,25 @@ export async function seedJobs() {
                 }
               })
 
+              // Create job skills (random selection from existing skills)
+              const skillsPerJob = Math.floor(Math.random() * 3) + 3 // 3-5 skills per job
+              const allSkills = await prisma.skills.findMany({
+                select: { id: true }
+              })
+              const shuffledSkills = [...allSkills].sort(() => 0.5 - Math.random())
+              const selectedSkills = shuffledSkills.slice(0, Math.min(skillsPerJob, allSkills.length))
+
+              await Promise.all(
+                selectedSkills.map((skill) =>
+                  prisma.job_skills.create({
+                    data: {
+                      job_id: job.id,
+                      skill_id: skill.id
+                    }
+                  })
+                )
+              )
+
               // Sync to Elasticsearch if available
               if (isElasticsearchAvailable && isElasticsearchEnabled) {
                 try {

@@ -377,16 +377,6 @@ export class AdminService {
         },
         job_requirements: true,
         job_benefits: true,
-        job_tags: {
-          include: {
-            tags: {
-              select: {
-                id: true,
-                name: true
-              }
-            }
-          }
-        },
         job_work_arrangements: true,
         _count: {
           select: {

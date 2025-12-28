@@ -87,6 +87,199 @@ export const elasticsearchService = {
     return { took, total, hits }
   },
 
+  /**
+   * Enhanced search with business-aware scoring for job portal
+   * Optimized for Elasticsearch 8.15.2 with clear boost rationale
+   */
+  async searchJobs(
+    params: SearchParams & {
+      userExperienceLevel?: number
+      userLocationId?: string
+      prioritizeFreshJobs?: boolean
+      userPrefersRemote?: boolean
+      userSkills?: string[]
+      userDesiredSalaryMin?: number
+      userDesiredSalaryMax?: number
+    }
+  ): Promise<SearchResponse<any>> {
+    const client = getClient()
+    const {
+      index,
+      query,
+      from = 0,
+      size = 10,
+      sort,
+      userExperienceLevel,
+      userLocationId,
+      prioritizeFreshJobs = true,
+      userPrefersRemote = false,
+      userSkills = [],
+      userDesiredSalaryMin,
+      userDesiredSalaryMax
+    } = params
+
+    const body: any = {}
+
+    // Handle different query types with optimized scoring for ES 8.15.2
+    if (query && typeof query === 'object' && ('query' in query || 'bool' in query || 'multi_match' in query)) {
+      // Use provided query directly if it's already a complete Elasticsearch query
+      body.query = query
+    } else if (query && typeof query === 'object') {
+      // Build optimized bool query for job search
+      const mustClauses = []
+      const shouldClauses = []
+      const filterClauses = []
+
+      // Extract existing query components
+      if (query && typeof query === 'object' && 'bool' in query && query.bool && typeof query.bool === 'object') {
+        const boolQuery = query.bool as any
+        if (boolQuery.must && Array.isArray(boolQuery.must)) {
+          mustClauses.push(...boolQuery.must)
+        }
+        if (boolQuery.filter && Array.isArray(boolQuery.filter)) {
+          filterClauses.push(...boolQuery.filter)
+        }
+        if (boolQuery.should && Array.isArray(boolQuery.should)) {
+          shouldClauses.push(...boolQuery.should)
+        }
+      }
+
+      // Apply business logic filters (use filter for mandatory conditions)
+      if (userLocationId) {
+        filterClauses.push({
+          term: { location_id: userLocationId }
+        })
+      }
+
+      if (userExperienceLevel !== undefined) {
+        filterClauses.push({
+          term: { experience_level: userExperienceLevel }
+        })
+      }
+
+      // Salary range as filter (mandatory business requirement)
+      if (userDesiredSalaryMin !== undefined || userDesiredSalaryMax !== undefined) {
+        const salaryConditions = []
+        if (userDesiredSalaryMin !== undefined) {
+          salaryConditions.push({
+            range: { salary_min: { gte: userDesiredSalaryMin * 0.8 } } // Accept 80% of desired minimum
+          })
+        }
+        if (userDesiredSalaryMax !== undefined) {
+          salaryConditions.push({
+            range: { salary_max: { lte: userDesiredSalaryMax * 1.2 } } // Accept up to 120% of desired maximum
+          })
+        }
+        if (salaryConditions.length > 0) {
+          filterClauses.push({
+            bool: {
+              should: salaryConditions,
+              minimum_should_match: Math.min(1, salaryConditions.length)
+            }
+          })
+        }
+      }
+
+      // Skills matching as filter (mandatory for job requirements)
+      if (userSkills && userSkills.length > 0) {
+        filterClauses.push({
+          nested: {
+            path: 'skills',
+            query: {
+              bool: {
+                must: [
+                  { terms: { 'skills.name': userSkills } },
+                  { range: { 'skills.proficiency': { gte: 3 } } } // Require proficiency level 3+
+                ]
+              }
+            }
+          }
+        })
+      }
+
+      // Apply preference-based boosts (should clauses with clear rationale)
+      // Fresh jobs boost: Recent jobs are more likely to be active positions
+      if (prioritizeFreshJobs) {
+        shouldClauses.push({
+          range: {
+            posted_at: {
+              gte: 'now-7d/d',
+              boost: 1.1 // 10% boost for jobs posted in last 7 days
+            }
+          }
+        })
+      }
+
+      // Remote work preference boost: When user prefers remote, prioritize remote jobs
+      if (userPrefersRemote) {
+        shouldClauses.push({
+          term: {
+            is_remote_allowed: {
+              value: true,
+              boost: 1.15 // 15% boost for remote-allowed jobs when user prefers remote
+            }
+          }
+        })
+        // Additional boost for highly remote positions
+        shouldClauses.push({
+          range: {
+            remote_percentage: {
+              gte: 80,
+              boost: 1.05 // Additional 5% boost for 80%+ remote jobs
+            }
+          }
+        })
+      }
+
+      // Flexible hours boost: Work-life balance preference
+      shouldClauses.push({
+        term: {
+          flexible_hours: {
+            value: true,
+            boost: 1.05 // 5% boost for flexible hours jobs
+          }
+        }
+      })
+
+      // Construct final bool query
+      body.query = {
+        bool: {
+          must: mustClauses.length > 0 ? mustClauses : undefined,
+          should: shouldClauses.length > 0 ? shouldClauses : undefined,
+          filter: filterClauses.length > 0 ? filterClauses : undefined,
+          minimum_should_match: shouldClauses.length > 0 ? 0 : undefined
+        }
+      }
+    } else {
+      body.query = { match_all: {} }
+    }
+
+    if (sort) body.sort = sort
+
+    const resp = await client.search({
+      index,
+      body,
+      from,
+      size
+    })
+
+    const took = resp.took ?? 0
+    const hitsRaw = (resp.hits && resp.hits.hits) || []
+    const totalRaw = resp.hits && resp.hits.total
+    const total =
+      typeof totalRaw === 'object' && totalRaw !== null
+        ? (totalRaw as any).value
+        : ((totalRaw as number | undefined) ?? hitsRaw.length)
+
+    const hits = hitsRaw.map((h: any) => ({
+      id: h._id,
+      _source: h._source,
+      _score: h._score
+    }))
+
+    return { took, total, hits }
+  },
+
   async suggest(params: SuggestParams): Promise<SuggestResponse> {
     const client = getClient()
     const { index, prefix, size = 10, context } = params
@@ -198,8 +391,9 @@ export const elasticsearchService = {
     const companiesIndex = this.getIndexName('companies')
     const profilesIndex = this.getIndexName('profiles')
     const applicationsIndex = this.getIndexName('applications')
+    const searchEventsIndex = this.getIndexName('search_events')
 
-    // Jobs mapping
+    // Jobs mapping - Optimized for job portal search
     const jobsMapping = {
       mappings: {
         properties: {
@@ -207,7 +401,6 @@ export const elasticsearchService = {
           title: {
             type: 'text',
             analyzer: 'standard',
-            boost: 3.0,
             fields: {
               keyword: { type: 'keyword' },
               autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
@@ -218,22 +411,78 @@ export const elasticsearchService = {
           description: {
             type: 'text',
             analyzer: 'standard',
-            boost: 1.5,
             fields: {
               keyword: { type: 'keyword' }
             }
           },
-          skills: { type: 'keyword' },
+          skills: {
+            type: 'keyword'
+          },
           tags: { type: 'keyword' },
           company_id: { type: 'keyword' },
-          company_name: { type: 'text' },
+          company_name: {
+            type: 'text',
+            analyzer: 'standard',
+            fields: {
+              keyword: { type: 'keyword' },
+              suggest: { type: 'completion' }
+            }
+          },
+          company_size: { type: 'integer' }, // For company reputation boost
           location_id: { type: 'keyword' },
-          location_name: { type: 'text' },
+          location_name: {
+            type: 'text',
+            analyzer: 'standard',
+            fields: {
+              keyword: { type: 'keyword' } // Add keyword variant for exact matching
+            }
+          },
+          // Location fields for hierarchical search (province + district)
+          location_province: {
+            type: 'text',
+            fields: {
+              keyword: { type: 'keyword' },
+              autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+            }
+          },
+          location_district: {
+            type: 'text',
+            fields: {
+              keyword: { type: 'keyword' },
+              autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+            }
+          },
+          // Combined field for flexible search
+          location_combined: {
+            type: 'text',
+            analyzer: 'standard',
+            fields: {
+              keyword: { type: 'keyword' }
+            }
+          },
           salary_range: { type: 'text' },
           salary_min: { type: 'integer' },
           salary_max: { type: 'integer' },
           job_type: { type: 'keyword' },
           experience_level: { type: 'integer' },
+          // Job requirements - Critical for matching
+          job_requirements_title: {
+            type: 'text',
+            analyzer: 'standard'
+          },
+          job_requirements_years_experience: { type: 'integer' },
+          job_requirements_is_required: { type: 'boolean' },
+          // Work arrangements - Critical for work-life balance matching
+          is_remote_allowed: { type: 'boolean' },
+          flexible_hours: { type: 'boolean' },
+          remote_percentage: { type: 'integer' },
+          travel_requirement: { type: 'keyword' },
+          // Job categories for better filtering
+          job_category: { type: 'keyword' },
+          job_category_type: { type: 'keyword' }, // industry, technical, work_type
+          // Job benefits for enhanced matching
+          job_benefits_type: { type: 'keyword' },
+          job_benefits_value_amount: { type: 'integer' },
           status: { type: 'keyword' },
           posted_at: { type: 'date' },
           expires_at: { type: 'date' },
@@ -253,15 +502,15 @@ export const elasticsearchService = {
             edge_ngram_tokenizer: {
               type: 'edge_ngram',
               min_gram: 1,
-              max_gram: 20,
-              token_chars: ['letter', 'digit']
+              max_gram: 15, // Optimized for job titles
+              token_chars: ['letter', 'digit', 'whitespace']
             }
           }
         }
       }
     }
 
-    // Profiles mapping
+    // Profiles mapping - Optimized for candidate search and matching
     const profilesMapping = {
       mappings: {
         properties: {
@@ -277,7 +526,6 @@ export const elasticsearchService = {
           display_name: {
             type: 'text',
             analyzer: 'standard',
-            boost: 2.0,
             fields: {
               keyword: { type: 'keyword' }
             }
@@ -285,17 +533,18 @@ export const elasticsearchService = {
           headline: {
             type: 'text',
             analyzer: 'standard',
-            boost: 3.0,
             fields: {
               keyword: { type: 'keyword' },
               suggest: { type: 'completion' }
             }
           },
-          bio: { type: 'text', analyzer: 'standard' },
+          bio: {
+            type: 'text',
+            analyzer: 'standard'
+          },
           desired_job_title: {
             type: 'text',
             analyzer: 'standard',
-            boost: 2.5,
             fields: {
               keyword: { type: 'keyword' },
               suggest: { type: 'completion' }
@@ -304,9 +553,37 @@ export const elasticsearchService = {
           desired_salary_min: { type: 'integer' },
           desired_salary_max: { type: 'integer' },
           years_of_experience: { type: 'integer' },
-          skills: { type: 'keyword' },
+          skills: {
+            type: 'nested', // Use nested for structured skill data
+            properties: {
+              name: { type: 'keyword' },
+              proficiency: {
+                type: 'integer'
+              },
+              level: { type: 'keyword' },
+              category: { type: 'keyword' }, // Skills taxonomy
+              category_type: { type: 'keyword' } // industry, technical, etc.
+            }
+          },
+          skills_flat: {
+            type: 'keyword'
+          },
           location_id: { type: 'keyword' },
-          location_text: { type: 'text' },
+          location_text: {
+            type: 'text',
+            analyzer: 'standard',
+            fields: {
+              keyword: { type: 'keyword' }
+            }
+          },
+          // Education and experience data
+          education_degree: { type: 'keyword' },
+          education_field_of_study: { type: 'text', analyzer: 'standard' },
+          certifications_skills_acquired: {
+            type: 'text',
+            analyzer: 'standard'
+          },
+          current_employment: { type: 'boolean' }, // Is currently employed
           is_looking_for_job: { type: 'boolean' },
           last_active_at: { type: 'date' },
           resume_url: { type: 'keyword' },
@@ -326,15 +603,15 @@ export const elasticsearchService = {
             edge_ngram_tokenizer: {
               type: 'edge_ngram',
               min_gram: 1,
-              max_gram: 20,
-              token_chars: ['letter', 'digit']
+              max_gram: 15, // Optimized for profile headlines
+              token_chars: ['letter', 'digit', 'whitespace']
             }
           }
         }
       }
     }
 
-    // Companies mapping
+    // Companies mapping - Optimized for company search and filtering
     const companiesMapping = {
       mappings: {
         properties: {
@@ -343,31 +620,34 @@ export const elasticsearchService = {
             type: 'text',
             analyzer: 'standard',
             fields: {
+              keyword: { type: 'keyword' },
               autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
               suggest: { type: 'completion' }
             }
           },
-          description: { type: 'text', analyzer: 'standard' },
+          description: {
+            type: 'text',
+            analyzer: 'standard'
+          },
           recruiter_id: { type: 'keyword' },
           logo_url: { type: 'keyword' },
           size: { type: 'integer' },
-          contact_email: { type: 'keyword' },
-          contact_phone: { type: 'keyword' },
-          contact_address: { type: 'text', analyzer: 'standard' },
-          linkedin_url: { type: 'keyword' },
-          facebook_url: { type: 'keyword' },
-          twitter_url: { type: 'keyword' },
-          tax_code: { type: 'keyword' },
+          // Contact info - not indexed for search privacy
           industry: { type: 'keyword' },
           founded_year: { type: 'integer' },
           employee_count_min: { type: 'integer' },
           employee_count_max: { type: 'integer' },
           website_url: { type: 'keyword' },
-          headquarters_location: { type: 'text', analyzer: 'standard' },
+          headquarters_location: {
+            type: 'text',
+            analyzer: 'standard'
+          },
           company_type: { type: 'keyword' },
           revenue_range: { type: 'keyword' },
-          stock_symbol: { type: 'keyword' },
-          culture_description: { type: 'text', analyzer: 'standard' }
+          culture_description: {
+            type: 'text',
+            analyzer: 'standard'
+          }
         }
       },
       settings: {
@@ -383,7 +663,53 @@ export const elasticsearchService = {
       }
     }
 
-    // Applications mapping
+    // Search Events mapping - Optimized for analytics and user behavior tracking
+    const searchEventsMapping = {
+      mappings: {
+        properties: {
+          id: { type: 'keyword' },
+          user_id: { type: 'keyword' },
+          event_type: { type: 'keyword' },
+          job_id: { type: 'keyword' },
+          profile_id: { type: 'keyword' },
+          query: {
+            type: 'text',
+            analyzer: 'standard',
+            fields: {
+              keyword: { type: 'keyword' } // For exact matching in aggregations
+            }
+          },
+          position: { type: 'integer' },
+          filters: { type: 'object' },
+          result_count: { type: 'integer' },
+          timestamp_ms: { type: 'date' },
+          created_at: { type: 'date' },
+          session_id: { type: 'keyword' },
+          user_agent: { type: 'text' },
+          ip_address: { type: 'ip' },
+          // Performance metrics
+          search_duration_ms: { type: 'integer' },
+          es_took_ms: { type: 'integer' },
+          // Business context
+          user_location: { type: 'keyword' },
+          user_experience_level: { type: 'integer' },
+          user_job_type_preference: { type: 'keyword' }
+        }
+      },
+      settings: {
+        analysis: {
+          analyzer: {
+            autocomplete_analyzer: {
+              type: 'custom',
+              tokenizer: 'standard',
+              filter: ['lowercase', 'asciifolding']
+            }
+          }
+        }
+      }
+    }
+
+    // Applications mapping - Optimized for recruitment analytics and tracking
     const applicationsMapping = {
       mappings: {
         properties: {
@@ -396,33 +722,63 @@ export const elasticsearchService = {
           first_viewed_at: { type: 'date' },
           last_viewed_at: { type: 'date' },
           view_count: { type: 'integer' },
-          // Candidate info
-          candidate_name: { type: 'text', analyzer: 'standard' },
+          // Candidate info - for analytics and filtering
+          candidate_name: {
+            type: 'text',
+            analyzer: 'standard'
+          },
           candidate_email: { type: 'keyword' },
-          candidate_headline: { type: 'text', analyzer: 'standard' },
+          candidate_headline: {
+            type: 'text',
+            analyzer: 'standard'
+          },
           candidate_location: { type: 'text', analyzer: 'standard' },
           candidate_years_experience: { type: 'integer' },
           candidate_desired_salary_min: { type: 'integer' },
           candidate_desired_salary_max: { type: 'integer' },
-          candidate_skills: { type: 'keyword' },
+          candidate_skills: {
+            type: 'nested',
+            properties: {
+              name: { type: 'keyword' },
+              proficiency: { type: 'integer' },
+              category: { type: 'keyword' }
+            }
+          },
+          candidate_skills_flat: {
+            type: 'keyword'
+          },
           candidate_education: { type: 'keyword' },
-          // Job info
-          job_title: { type: 'text', analyzer: 'standard' },
+          candidate_current_employment: { type: 'boolean' },
+          // Job info with requirements matching
+          job_title: {
+            type: 'text',
+            analyzer: 'standard'
+          },
           job_company_name: { type: 'text', analyzer: 'standard' },
           job_location: { type: 'text', analyzer: 'standard' },
           job_type: { type: 'keyword' },
           job_salary_min: { type: 'integer' },
           job_salary_max: { type: 'integer' },
-          // Application stages
+          job_experience_level: { type: 'integer' },
+          job_is_remote_allowed: { type: 'boolean' },
+          job_requirements_years_experience: { type: 'integer' },
+          // Application stages - detailed pipeline data
           current_stage_name: { type: 'keyword' },
           current_stage_status: { type: 'keyword' },
           stages_count: { type: 'integer' },
           completed_stages_count: { type: 'integer' },
           average_rating: { type: 'float' },
-          // Metadata
-          has_notes: { type: 'boolean' },
           has_rating: { type: 'boolean' },
-          is_shortlisted: { type: 'boolean' }
+          // Timeline analytics
+          days_since_applied: { type: 'integer' },
+          days_since_first_viewed: { type: 'integer' },
+          days_since_last_viewed: { type: 'integer' },
+          total_view_time: { type: 'integer' }, // in seconds
+          // Metadata and flags
+          has_notes: { type: 'boolean' },
+          is_shortlisted: { type: 'boolean' },
+          is_withdrawn: { type: 'boolean' },
+          last_updated: { type: 'date' }
         }
       },
       settings: {
@@ -452,5 +808,6 @@ export const elasticsearchService = {
     await createIfNotExists(companiesIndex, companiesMapping)
     await createIfNotExists(profilesIndex, profilesMapping)
     await createIfNotExists(applicationsIndex, applicationsMapping)
+    await createIfNotExists(searchEventsIndex, searchEventsMapping)
   }
 }

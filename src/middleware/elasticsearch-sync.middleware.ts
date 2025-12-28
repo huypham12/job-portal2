@@ -8,15 +8,33 @@ interface SyncableData {
   action: 'create' | 'update' | 'delete' | 'bulk_update'
   data?: any
   job_ids?: string[]
+  company_ids?: string[]
+  profile_ids?: string[]
   application_ids?: string[]
 }
 
 export class ElasticsearchSyncMiddleware {
+  private static isBulkSyncRunning = false
+
   /**
    * Get middleware instance for routes
    */
   static getMiddleware() {
     return this.syncToElasticsearch
+  }
+
+  /**
+   * Mark bulk sync as running/stopped
+   */
+  static setBulkSyncRunning(running: boolean): void {
+    this.isBulkSyncRunning = running
+  }
+
+  /**
+   * Check if bulk sync is currently running
+   */
+  static isBulkSyncInProgress(): boolean {
+    return this.isBulkSyncRunning
   }
   /**
    * Middleware to automatically sync data changes to Elasticsearch
@@ -32,6 +50,12 @@ export class ElasticsearchSyncMiddleware {
       // Async sync to Elasticsearch (don't block response)
       setImmediate(async () => {
         try {
+          // Skip individual syncs if bulk sync is running to prevent conflicts
+          if (ElasticsearchSyncMiddleware.isBulkSyncInProgress()) {
+            console.log('🔄 Skipping middleware sync - bulk sync in progress')
+            return
+          }
+
           const syncData = await ElasticsearchSyncMiddleware.extractSyncData(req, data)
           if (syncData) {
             await ElasticsearchSyncMiddleware.performSync(syncData)
@@ -197,7 +221,21 @@ export class ElasticsearchSyncMiddleware {
         case 'create':
         case 'update': {
           if (syncData.id) {
-            const success = await elasticsearchSyncService.syncJobById(syncData.id, 'upsert')
+            let success = false
+            switch (syncData.type) {
+              case 'job':
+                success = await elasticsearchSyncService.syncJobById(syncData.id, 'upsert')
+                break
+              case 'company':
+                success = await elasticsearchSyncService.syncCompanyById(syncData.id, 'upsert')
+                break
+              case 'profile':
+                success = await elasticsearchSyncService.syncProfileById(syncData.id, 'upsert')
+                break
+              case 'application':
+                success = await elasticsearchSyncService.syncApplicationById(syncData.id, 'upsert')
+                break
+            }
             if (success) {
               console.log(`✅ Synced ${syncData.action} for ${syncData.type}:${syncData.id}`)
             }
@@ -210,6 +248,24 @@ export class ElasticsearchSyncMiddleware {
             const success = await elasticsearchSyncService.bulkSyncJobsByIds(syncData.job_ids, 'upsert')
             if (success) {
               console.log(`✅ Bulk synced ${syncData.job_ids.length} jobs to Elasticsearch`)
+            }
+          }
+          // Handle bulk updates for companies
+          if (syncData.company_ids && Array.isArray(syncData.company_ids)) {
+            const success = await Promise.all(
+              syncData.company_ids.map((id) => elasticsearchSyncService.syncCompanyById(id, 'upsert'))
+            )
+            if (success) {
+              console.log(`✅ Bulk synced ${syncData.company_ids.length} companies to Elasticsearch`)
+            }
+          }
+          // Handle bulk updates for profiles
+          if (syncData.profile_ids && Array.isArray(syncData.profile_ids)) {
+            const success = await Promise.all(
+              syncData.profile_ids.map((id) => elasticsearchSyncService.syncProfileById(id, 'upsert'))
+            )
+            if (success) {
+              console.log(`✅ Bulk synced ${syncData.profile_ids.length} profiles to Elasticsearch`)
             }
           }
           // Handle bulk updates for applications
@@ -225,8 +281,22 @@ export class ElasticsearchSyncMiddleware {
         }
         case 'delete': {
           if (syncData.id) {
-            const deleted = await elasticsearchSyncService.syncJobById(syncData.id, 'delete')
-            if (deleted) {
+            let success = false
+            switch (syncData.type) {
+              case 'job':
+                success = await elasticsearchSyncService.syncJobById(syncData.id, 'delete')
+                break
+              case 'company':
+                success = await elasticsearchSyncService.syncCompanyById(syncData.id, 'delete')
+                break
+              case 'profile':
+                success = await elasticsearchSyncService.syncProfileById(syncData.id, 'delete')
+                break
+              case 'application':
+                success = await elasticsearchSyncService.syncApplicationById(syncData.id, 'delete')
+                break
+            }
+            if (success) {
               console.log(`✅ Synced delete for ${syncData.type}:${syncData.id}`)
             }
           }
@@ -431,31 +501,58 @@ export class ElasticsearchSyncMiddleware {
     if (items.length === 0) return
 
     try {
-      // Group by type for efficient bulk operations
-      const jobIds = items.filter((item) => item.type === 'job' && item.id).map((item) => item.id!)
-      const companyIds = items.filter((item) => item.type === 'company' && item.id).map((item) => item.id!)
-      const profileIds = items.filter((item) => item.type === 'profile' && item.id).map((item) => item.id!)
-
       const promises = []
 
-      if (jobIds.length > 0) {
-        promises.push(elasticsearchSyncService.bulkSyncJobsByIds(jobIds, 'upsert'))
+      // Handle individual items
+      const individualItems = items.filter((item) => item.id && item.action !== 'bulk_update')
+      if (individualItems.length > 0) {
+        const jobIds = individualItems.filter((item) => item.type === 'job').map((item) => item.id!)
+        const companyIds = individualItems.filter((item) => item.type === 'company').map((item) => item.id!)
+        const profileIds = individualItems.filter((item) => item.type === 'profile').map((item) => item.id!)
+        const applicationIds = individualItems.filter((item) => item.type === 'application').map((item) => item.id!)
+
+        if (jobIds.length > 0) {
+          promises.push(elasticsearchSyncService.bulkSyncJobsByIds(jobIds, 'upsert'))
+        }
+
+        if (companyIds.length > 0) {
+          promises.push(Promise.all(companyIds.map((id) => elasticsearchSyncService.syncCompanyById(id, 'upsert'))))
+        }
+
+        if (profileIds.length > 0) {
+          promises.push(Promise.all(profileIds.map((id) => elasticsearchSyncService.syncProfileById(id, 'upsert'))))
+        }
+
+        if (applicationIds.length > 0) {
+          promises.push(
+            Promise.all(applicationIds.map((id) => elasticsearchSyncService.syncApplicationById(id, 'upsert')))
+          )
+        }
       }
 
-      if (companyIds.length > 0) {
-        promises.push(Promise.all(companyIds.map((id) => elasticsearchSyncService.syncCompanyById(id, 'upsert'))))
-      }
-
-      if (profileIds.length > 0) {
-        promises.push(Promise.all(profileIds.map((id) => elasticsearchSyncService.syncProfileById(id, 'upsert'))))
-      }
-
-      // Sync applications if any
-      const applicationIds = items.filter((item) => item.type === 'application' && item.id).map((item) => item.id!)
-      if (applicationIds.length > 0) {
-        promises.push(
-          Promise.all(applicationIds.map((id) => elasticsearchSyncService.syncApplicationById(id, 'upsert')))
-        )
+      // Handle bulk update items
+      const bulkItems = items.filter((item) => item.action === 'bulk_update')
+      for (const bulkItem of bulkItems) {
+        if (bulkItem.job_ids?.length) {
+          promises.push(elasticsearchSyncService.bulkSyncJobsByIds(bulkItem.job_ids, 'upsert'))
+        }
+        if (bulkItem.company_ids?.length) {
+          promises.push(
+            Promise.all(bulkItem.company_ids.map((id) => elasticsearchSyncService.syncCompanyById(id, 'upsert')))
+          )
+        }
+        if (bulkItem.profile_ids?.length) {
+          promises.push(
+            Promise.all(bulkItem.profile_ids.map((id) => elasticsearchSyncService.syncProfileById(id, 'upsert')))
+          )
+        }
+        if (bulkItem.application_ids?.length) {
+          promises.push(
+            Promise.all(
+              bulkItem.application_ids.map((id) => elasticsearchSyncService.syncApplicationById(id, 'upsert'))
+            )
+          )
+        }
       }
 
       await Promise.all(promises)

@@ -79,25 +79,68 @@ export const searchRepo = {
 
   async saveEvent(event: import('./events.dto').EventRequestDto): Promise<void> {
     try {
-      await prisma.activity_logs.create({
-        data: {
-          user_id: event.user_id ?? null,
-          action: event.event_type,
-          details: {
-            job_id: event.job_id ?? null,
-            profile_id: event.profile_id ?? null,
-            query: event.query ?? null,
-            position: event.position ?? null,
-            filters: event.filters ?? null,
-            timestamp_ms: event.timestamp_ms ?? Date.now()
+      // For search events, save to search_history if it's an impression event
+      if (event.event_type === 'impression' && event.query) {
+        await prisma.search_history.create({
+          data: {
+            profile_id: event.user_id || '', // Need to get profile_id from user_id
+            search_query: event.query,
+            search_type: 'job',
+            result_count: event.result_count || 0,
+            filters_used: event.filters || {},
+            // session_id: event.session_id // Not in EventRequestDto yet
           }
-        }
-      })
+        })
+      }
+      // For other events, we rely on ES storage for now
     } catch (e) {
       // Non-fatal: surface to caller by rethrowing if needed; for now, log and continue.
-
       console.error('searchRepo.saveEvent error', e)
       throw e
     }
+  },
+
+  async getJobById(id: string) {
+    return await prisma.jobs.findUnique({
+      where: { id },
+      include: {
+        companies: {
+          select: {
+            id: true,
+            name: true,
+            logo_url: true,
+            description: true
+          }
+        }
+      }
+    })
+  },
+
+  async getProfileById(id: string) {
+    return await prisma.profiles.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        user_id: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        bio: true,
+        avatar_url: true
+      }
+    })
+  },
+
+  async getCompanyById(id: string) {
+    return await prisma.companies.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        logo_url: true,
+        description: true,
+        status: true
+      }
+    })
   }
 }

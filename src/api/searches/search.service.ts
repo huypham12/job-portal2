@@ -3,6 +3,7 @@ import { elasticsearchService } from '../../config/elasticsearch.service'
 import { searchRepo } from './search.repo'
 import { redisService } from '../../config/redis.service'
 import { metrics } from '../../shared/utils/metrics.util'
+import { prisma } from '../../config/database.service'
 
 /**
  * Search service: build ES query (pseudocode), call elasticsearchService, map to response.
@@ -23,7 +24,15 @@ export const searchService = {
       must.push({
         multi_match: {
           query: q,
-          fields: ['title^4', 'skills^3', 'company_name^2', 'description'],
+          fields: [
+            'title^4',
+            'skills^3',
+            'company_name^2',
+            'description',
+            'location_province^2',     // Boost province search
+            'location_district^2',     // Boost district search
+            'location_combined^1.5'    // Boost combined search
+          ],
           fuzziness: 'AUTO',
           operator: 'and'
         }
@@ -63,12 +72,17 @@ export const searchService = {
     }
 
     const timerDone = metrics.startTimer('search.jobs.duration')
-    const esResp = await elasticsearchService.search({
+
+    // Sử dụng searchJobs advanced method với business-aware scoring
+    const esResp = await elasticsearchService.searchJobs({
       index: 'jobs',
       query: esQuery,
       from,
-      size
+      size,
+      // Thêm user context cho enhanced scoring (có thể mở rộng sau)
+      prioritizeFreshJobs: true
     })
+
     timerDone()
     metrics.increment('search.jobs.request')
     // cache results for short period
@@ -282,7 +296,11 @@ export const searchService = {
   async logEvent(eventDto: import('./events.dto').EventRequestDto): Promise<void> {
     // minimal guard: event_type should be one of allowed (controller already validated)
     try {
-      await searchRepo.saveEvent(eventDto as any)
+      // Dual-write: ES + DB với graceful fallback
+      await Promise.allSettled([
+        this.logEventToES(eventDto),
+        searchRepo.saveEvent(eventDto as any)
+      ])
     } catch (e) {
       // Logging should not crash caller; rethrow if you want to surface errors.
       // For now, swallow and log to console for observability in dev.
@@ -290,5 +308,204 @@ export const searchService = {
 
       console.error('searchService.logEvent error', e)
     }
+  },
+
+  /**
+   * Log search event to Elasticsearch for analytics
+   */
+  async logEventToES(eventDto: import('./events.dto').EventRequestDto): Promise<void> {
+    const doc = {
+      user_id: eventDto.user_id,
+      event_type: eventDto.event_type,
+      job_id: eventDto.job_id,
+      profile_id: eventDto.profile_id,
+      query: eventDto.query,
+      position: eventDto.position,
+      filters: eventDto.filters,
+      result_count: eventDto.result_count,
+      timestamp_ms: eventDto.timestamp_ms,
+      created_at: new Date(),
+      user_agent: eventDto.user_agent,
+      ip_address: eventDto.ip_address,
+      search_duration_ms: eventDto.search_duration_ms,
+      es_took_ms: eventDto.es_took_ms
+    }
+
+    await elasticsearchService.search({
+      index: 'search_events',
+      query: {
+        index: {
+          _index: elasticsearchService.getIndexName('search_events'),
+          _id: `${eventDto.user_id}_${eventDto.event_type}_${eventDto.timestamp_ms}`,
+          body: doc
+        }
+      }
+    })
+  },
+
+  /**
+   * Get popular queries using ES aggregations with DB fallback
+   */
+  async getPopularQueries(days: number = 7, limit: number = 10) {
+    try {
+      // Try ES first for real-time analytics
+      return await this.getPopularQueriesFromES(days, limit)
+    } catch (e) {
+      // Fallback to DB if ES unavailable
+      console.warn('ES popular queries failed, falling back to DB', e)
+      return await this.getPopularQueriesFromDB(days, limit)
+    }
+  },
+
+  /**
+   * Get popular queries from Elasticsearch aggregations
+   */
+  async getPopularQueriesFromES(days: number = 7, limit: number = 10) {
+    const dateThreshold = new Date()
+    dateThreshold.setDate(dateThreshold.getDate() - days)
+
+    try {
+      const client = elasticsearchService.getClient()
+      const esResp = await client.search({
+        index: elasticsearchService.getIndexName('search_events'),
+        body: {
+          query: {
+            bool: {
+              must: [
+                { term: { event_type: 'impression' } },
+                { range: { created_at: { gte: dateThreshold } } }
+              ]
+            }
+          },
+          aggs: {
+            popular_queries: {
+              terms: {
+                field: 'query.keyword',
+                size: limit,
+                order: { _count: 'desc' }
+              },
+              aggs: {
+                avg_results: { avg: { field: 'result_count' } },
+                last_searched: { max: { field: 'created_at' } }
+              }
+            }
+          },
+          size: 0
+        }
+      })
+
+      const response = esResp as any
+      return response.aggregations?.popular_queries?.buckets.map((bucket: any) => ({
+        search_query: bucket.key,
+        search_count: bucket.doc_count,
+        avg_results: bucket.avg_results?.value || 0,
+        last_searched: bucket.last_searched?.value
+      })) || []
+    } catch (e) {
+      console.warn('ES aggregations failed', e)
+      throw e
+    }
+  },
+
+  /**
+   * Get popular queries from database (fallback)
+   */
+  async getPopularQueriesFromDB(days: number = 7, limit: number = 10) {
+    const dateThreshold = new Date()
+    dateThreshold.setDate(dateThreshold.getDate() - days)
+
+    // Use raw SQL for performance (similar to existing implementation)
+    const popularQueries = await prisma.$queryRaw`
+      SELECT
+        search_query,
+        COUNT(*) as search_count,
+        AVG(result_count) as avg_results,
+        MAX(searched_at) as last_searched
+      FROM search_history
+      WHERE searched_at >= ${dateThreshold}
+        AND search_query::text != '{}'
+      GROUP BY search_query
+      ORDER BY search_count DESC
+      LIMIT ${limit}
+    `
+
+    return popularQueries
+  },
+
+  /**
+   * Get document by ID from Elasticsearch
+   */
+  async getJobById(id: string) {
+    try {
+      return await elasticsearchService.getById({
+        index: 'jobs',
+        id
+      })
+    } catch (e) {
+      console.warn(`ES getJobById failed for ${id}, falling back to DB`, e)
+      return await searchRepo.getJobById(id)
+    }
+  },
+
+  /**
+   * Get profile by ID from Elasticsearch
+   */
+  async getProfileById(id: string) {
+    try {
+      return await elasticsearchService.getById({
+        index: 'profiles',
+        id
+      })
+    } catch (e) {
+      console.warn(`ES getProfileById failed for ${id}, falling back to DB`, e)
+      return await searchRepo.getProfileById(id)
+    }
+  },
+
+  /**
+   * Get company by ID from Elasticsearch
+   */
+  async getCompanyById(id: string) {
+    try {
+      return await elasticsearchService.getById({
+        index: 'companies',
+        id
+      })
+    } catch (e) {
+      console.warn(`ES getCompanyById failed for ${id}, falling back to DB`, e)
+      return await searchRepo.getCompanyById(id)
+    }
+  },
+
+  /**
+   * Check Elasticsearch health and connection
+   */
+  async checkESHealth(): Promise<boolean> {
+    try {
+      return await elasticsearchService.checkConnection()
+    } catch (e) {
+      console.error('ES health check failed', e)
+      return false
+    }
+  },
+
+  /**
+   * Initialize Elasticsearch indices (call during app startup)
+   */
+  async initializeESIndices(): Promise<void> {
+    try {
+      await elasticsearchService.initializeIndices()
+      console.log('Elasticsearch indices initialized successfully')
+    } catch (e) {
+      console.error('Failed to initialize ES indices', e)
+      throw e
+    }
+  },
+
+  /**
+   * Get raw Elasticsearch client for advanced operations
+   */
+  getESClient() {
+    return elasticsearchService.getClient()
   }
 }

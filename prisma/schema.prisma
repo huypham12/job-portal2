@@ -9,17 +9,6 @@ datasource db {
   // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model activity_logs {
-  id        BigInt    @id @default(autoincrement())
-  user_id   String?   @db.Uuid
-  action    String
-  details   Json?
-  timestamp DateTime? @default(now()) @db.Timestamp(6)
-
-  @@index([user_id], map: "idx_activity_logs_user")
-  @@index([user_id, timestamp], map: "idx_user_activity_timeline")
-}
-
 model applications {
   id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   job_id                String                  @db.Uuid
@@ -91,20 +80,6 @@ model application_documents {
 
   @@index([application_id], map: "idx_application_documents_app")
   @@index([document_type], map: "idx_application_documents_type")
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model audits {
-  id         BigInt    @id @default(autoincrement())
-  table_name String
-  record_id  String?
-  action     String
-  old_data   Json?
-  new_data   Json?
-  user_id    String?   @db.Uuid
-  timestamp  DateTime? @default(now()) @db.Timestamp(6)
-
-  @@index([table_name, record_id], map: "idx_audits_table_record")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -224,7 +199,6 @@ model jobs {
   job_requirements      job_requirements[]
   job_skills            job_skills[]
   job_categories        job_categories[]
-  job_tags              job_tags[]
   job_views             job_views[]
   referrer_views        job_views[]            @relation("JobReferrals")
   job_work_arrangements job_work_arrangements?
@@ -556,29 +530,6 @@ model skills {
   profile_skills profile_skills[]
 
   @@index([category_id], map: "idx_skills_category")
-}
-
-model tags {
-  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String      @unique @db.VarChar(100)
-  slug       String      @unique @db.VarChar(100)
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  job_tags   job_tags[]
-
-  @@index([name])
-  @@index([slug])
-}
-
-model job_tags {
-  job_id String @db.Uuid
-  tag_id String @db.Uuid
-  jobs   jobs   @relation(fields: [job_id], references: [id], onDelete: Cascade)
-  tags   tags   @relation(fields: [tag_id], references: [id], onDelete: Cascade)
-
-  @@id([job_id, tag_id])
-  @@index([job_id])
-  @@index([tag_id])
 }
 
 model connection_interests {

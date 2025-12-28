@@ -27,10 +27,7 @@ export async function seedLocations() {
   console.log('🌍 Starting locations seeding...')
 
   try {
-    // Clear existing data
-    console.log('🧹 Clearing existing locations data...')
-    await prisma.locations.deleteMany({})
-    console.log('✅ Cleared existing locations data')
+    // Note: Locations are already cleared in main seed.ts, skipping individual clear
 
     // Read cities and districts data
     const citiesPath = path.join(__dirname, 'data', 'cities.json')

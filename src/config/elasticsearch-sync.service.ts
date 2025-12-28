@@ -1,6 +1,7 @@
 import { elasticsearchService } from './elasticsearch.service'
 import { prisma } from './database.service'
 import { jobToESDoc, profileToESDoc, companyToESDoc, applicationToESDoc } from '../shared/utils/es-transformers'
+import { ElasticsearchSyncMiddleware } from '../middleware/elasticsearch-sync.middleware'
 
 export interface SyncStats {
   database: {
@@ -76,12 +77,16 @@ export class ElasticsearchSyncService {
         return true
       }
 
-      // Fetch job with relations
+      // Fetch job with relations including location hierarchy
       const job = await prisma.jobs.findUnique({
         where: { id: jobId },
         include: {
           companies: true,
-          locations: true,
+          locations: {
+            include: {
+              parent: true  // Include parent province for location hierarchy
+            }
+          },
           job_skills: {
             include: { skills: true }
           }
@@ -304,12 +309,34 @@ export class ElasticsearchSyncService {
 
     console.log(`🔄 Starting ${forceReindex ? 'full reindex' : 'sync'} with chunk size ${chunkSize}`)
 
+    // Mark bulk sync as running to prevent middleware conflicts
+    ElasticsearchSyncMiddleware.setBulkSyncRunning(true)
+
     const result: SyncAllResult = {
       jobs: { processed: 0, errors: 0, duration: 0 },
       companies: { processed: 0, errors: 0, duration: 0 },
       profiles: { processed: 0, errors: 0, duration: 0 },
       applications: { processed: 0, errors: 0, duration: 0 },
       totalTime: 0
+    }
+
+    // If force reindex is enabled, clear all indices first
+    if (forceReindex) {
+      console.log('🗑️ Force reindex enabled - clearing all indices...')
+      const indices = ['jobs', 'companies', 'profiles', 'applications']
+      for (const index of indices) {
+        try {
+          await elasticsearchService.deleteIndex(index)
+          console.log(`✅ Cleared ${index} index`)
+        } catch (error) {
+          console.warn(`⚠️ Failed to clear ${index} index (may not exist):`, error)
+        }
+      }
+
+      // Recreate indices with fresh mappings
+      console.log('🔧 Recreating indices with mappings...')
+      await elasticsearchService.initializeIndices()
+      console.log('✅ Indices recreated successfully')
     }
 
     try {
@@ -381,10 +408,16 @@ export class ElasticsearchSyncService {
       console.log(`✅ Synced ${result.applications.processed} applications (${result.applications.errors} errors)`)
     } catch (error) {
       console.error('❌ Sync failed:', error)
+      // Clear bulk sync flag even on error
+      ElasticsearchSyncMiddleware.setBulkSyncRunning(false)
     }
 
     result.totalTime = Date.now() - startTime
     console.log(`✅ Sync completed in ${result.totalTime}ms`)
+
+    // Clear bulk sync flag
+    ElasticsearchSyncMiddleware.setBulkSyncRunning(false)
+
     return result
   }
 
