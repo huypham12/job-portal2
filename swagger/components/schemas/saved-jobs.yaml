@@ -1,0 +1,10 @@
+components:
+  schemas:
+    # ============================================
+    # Saved Job Schemas
+    # ============================================
+    SaveJobRequest:
+      type: object
+      required: [job_id]
+      properties:
+        job_id: { type: string, format: uuid }

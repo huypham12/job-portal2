@@ -7,7 +7,6 @@ export class RegisterBodyDto {
     public email: string,
     public password: string,
     public confirm_password: string,
-    public date_of_birth: string,
     public role: 'candidate' | 'recruiter' | 'admin'
   ) {}
 }

@@ -1,0 +1,408 @@
+# ============================================
+# APPLICATION ENDPOINTS (Candidate)
+# ============================================
+/applications:
+  post:
+    tags: [applications]
+    summary: Create application (Candidate)
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateApplicationRequest'
+    responses:
+      '201': { description: Created }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+  get:
+    tags: [applications]
+    summary: List my applications
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: string, default: '1' }
+        description: 'Page number (will be converted to integer, default: 1)'
+      - in: query
+        name: limit
+        schema: { type: string, default: '20' }
+        description: 'Items per page (will be converted to integer, 1-100, default: 20)'
+      - in: query
+        name: status
+        schema: { $ref: '#/components/schemas/ApplicationStatus' }
+      - in: query
+        name: sort_by
+        schema: { type: string, enum: [applied_at, status], default: applied_at }
+        description: 'Sort field (default: applied_at)'
+      - in: query
+        name: order
+        schema: { type: string, enum: [asc, desc], default: desc }
+        description: 'Sort order (default: desc)'
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+
+/applications/{id}:
+  get:
+    tags: [applications]
+    summary: Get application by id
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '404': { description: Not found }
+  delete:
+    tags: [applications]
+    summary: Withdraw application
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: Withdrawn }
+      '401': { description: Unauthorized }
+
+/applications/{id}/stages:
+  get:
+    tags: [applications]
+    summary: Get application stages
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+
+/applications/{id}/documents:
+  get:
+    tags: [applications]
+    summary: Get application documents
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+  post:
+    tags: [applications]
+    summary: Upload application document
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+              document_type:
+                type: string
+                maxLength: 50
+    responses:
+      '200': { description: Uploaded }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
+# ============================================
+# APPLICATION ENDPOINTS (Recruiter)
+# ============================================
+/applications/job/{jobId}:
+  get:
+    tags: [applications]
+    summary: List applications for a job (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: jobId
+        required: true
+        schema: { type: string, format: uuid }
+      - in: query
+        name: page
+        schema: { type: string, default: '1' }
+        description: 'Page number (will be converted to integer, default: 1)'
+      - in: query
+        name: limit
+        schema: { type: string, default: '20' }
+        description: 'Items per page (will be converted to integer, 1-100, default: 20)'
+      - in: query
+        name: status
+        schema: { $ref: '#/components/schemas/ApplicationStatus' }
+      - in: query
+        name: stage
+        schema: { type: string }
+        description: Filter by stage name
+      - in: query
+        name: sort_by
+        schema: { type: string, enum: [applied_at, rating, name], default: applied_at }
+        description: 'Sort field (default: applied_at)'
+      - in: query
+        name: order
+        schema: { type: string, enum: [asc, desc], default: desc }
+        description: 'Sort order (default: desc)'
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+# ============================================
+# RECRUITER EXTRA FEATURES (shortlist, compare, shortlist list)
+# ============================================
+/applications/shortlist:
+  post:
+    tags: [applications]
+    summary: Add or remove candidate from shortlist
+    description: Add or remove a candidate to/from the recruiter's shortlist for later review.
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [application_id, action]
+            properties:
+              application_id:
+                type: string
+                format: uuid
+              action:
+                type: string
+                enum: [add, remove]
+              note:
+                type: string
+    responses:
+      '200': { description: OK }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/shortlisted:
+  get:
+    tags: [applications]
+    summary: Get shortlisted candidates
+    description: Return the list of shortlisted candidates for the authenticated recruiter (supports pagination).
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+      - in: query
+        name: limit
+        schema: { type: integer, default: 20 }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/compare:
+  post:
+    tags: [applications]
+    summary: Compare multiple candidates side-by-side
+    description: Provide a comparison view between selected application IDs.
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [application_ids]
+            properties:
+              application_ids:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+                minItems: 2
+    responses:
+      '200': { description: Comparison result }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/:id/timeline:
+  # Note: certain routers expose /applications/:id/timeline under recruiter routes.
+  # Keep this here for completeness (alias of recruiter timeline endpoint).
+  get:
+    tags: [applications]
+    summary: Get full application timeline with all stages (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/job/{jobId}/stats:
+  get:
+    tags: [applications]
+    summary: Get job application stats (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: jobId
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/bulk-update:
+  post:
+    tags: [applications]
+    summary: Bulk update applications (Recruiter)
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkUpdateApplicationsRequest'
+    responses:
+      '200': { description: Updated }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/{id}/cv:
+  get:
+    tags: [applications]
+    summary: View application CV (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/{id}/status:
+  patch:
+    tags: [applications]
+    summary: Update application status (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateApplicationStatusRequest'
+    responses:
+      '200': { description: Updated }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/{id}/stage:
+  patch:
+    tags: [applications]
+    summary: Update application stage (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateApplicationStageRequest'
+    responses:
+      '200': { description: Updated }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+  post:
+    tags: [applications]
+    summary: Create application stage (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateApplicationStageRequest'
+    responses:
+      '201': { description: Created }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/{id}/notes:
+  post:
+    tags: [applications]
+    summary: Add application note (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AddApplicationNoteRequest'
+    responses:
+      '201': { description: Created }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }
+
+/applications/{id}/contact:
+  post:
+    tags: [applications]
+    summary: Contact candidate (Recruiter)
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ContactCandidateRequest'
+    responses:
+      '200': { description: Sent }
+      '401': { description: Unauthorized }
+      '403': { description: Forbidden }

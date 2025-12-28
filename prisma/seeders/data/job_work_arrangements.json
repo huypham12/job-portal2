@@ -1,0 +1,2402 @@
+[
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "rotating"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": false,
+    "travel_requirement": "rare",
+    "overtime_expected": true,
+    "shift_type": "fixed"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  },
+  {
+    "is_remote_allowed": false,
+    "remote_percentage": 0,
+    "flexible_hours": true,
+    "travel_requirement": "occasional",
+    "overtime_expected": false,
+    "shift_type": "regular"
+  }
+]

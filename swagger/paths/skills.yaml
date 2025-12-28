@@ -1,0 +1,21 @@
+# ============================================
+# SKILL ENDPOINTS
+# ============================================
+/skills:
+  get:
+    tags: [skills]
+    summary: Search skills (public)
+    parameters:
+      - in: query
+        name: q
+        required: false
+        schema: { type: string }
+    responses:
+      '200': { description: OK }
+
+/skills/categories:
+  get:
+    tags: [skills]
+    summary: Get skill categories (public)
+    responses:
+      '200': { description: OK }

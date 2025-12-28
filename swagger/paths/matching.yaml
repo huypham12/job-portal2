@@ -1,0 +1,26 @@
+# ============================================
+# MATCHING ENDPOINTS
+# ============================================
+/matching/job/{jobId}/candidates:
+  post:
+    tags: [matching]
+    summary: Match candidates for a job
+    parameters:
+      - in: path
+        name: jobId
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+
+/matching/profile/{profileId}/jobs:
+  post:
+    tags: [matching]
+    summary: Match jobs for a candidate profile
+    parameters:
+      - in: path
+        name: profileId
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }

@@ -87,6 +87,13 @@ interface EnvConfig {
     sesFromAddress: string
     s3BucketName: string
   }
+  elasticsearch: {
+    node: string
+    username?: string
+    password?: string
+    indexPrefix: string
+    enableSecurity: boolean
+  }
 }
 
 /**
@@ -207,9 +214,16 @@ export const envConfig: EnvConfig = {
     region: getEnvVar('AWS_REGION', false, 'ap-southeast-1'),
     sesFromAddress: getEnvVar('SES_FROM_ADDRESS', false),
     s3BucketName: (process.env.S3_BUCKET_NAME || process.env.AWS_S3_BUCKET_NAME || 'job-portal-uploads').replace(
-      /^['"]|['"]$/g,
+      /^['"']|['"']$/g,
       ''
     )
+  },
+  elasticsearch: {
+    node: getEnvVar('ELASTICSEARCH_NODE', false, 'http://localhost:9200'),
+    username: getEnvVar('ELASTICSEARCH_USERNAME', false),
+    password: getEnvVar('ELASTICSEARCH_PASSWORD', false),
+    indexPrefix: getEnvVar('ELASTICSEARCH_INDEX_PREFIX', false, 'job_portal'),
+    enableSecurity: getEnvVar('ELASTIC_ENABLE_SECURITY', false, 'false').toLowerCase() === 'true'
   }
 }
 

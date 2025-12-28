@@ -1,0 +1,2402 @@
+[
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm phát triển phần mềm chuyên nghiệp",
+    "description": "Ít nhất 5 năm kinh nghiệm phát triển ứng dụng web/mobile với kiến trúc microservices, RESTful APIs và database design.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 5
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm DevOps và Cloud",
+    "description": "Kinh nghiệm 3-5 năm với AWS/Azure/GCP, Docker, Kubernetes và CI/CD pipelines.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm phát triển phần mềm chuyên nghiệp",
+    "description": "Ít nhất 5 năm kinh nghiệm phát triển ứng dụng web/mobile với kiến trúc microservices, RESTful APIs và database design.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 5
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm DevOps và Cloud",
+    "description": "Kinh nghiệm 3-5 năm với AWS/Azure/GCP, Docker, Kubernetes và CI/CD pipelines.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Professional Experience",
+    "title": "Kinh nghiệm chuyên môn 2-3 năm",
+    "description": "Kinh nghiệm 2-3 năm trong lĩnh vực liên quan, kỹ năng giao tiếp và làm việc nhóm tốt.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Professional Experience",
+    "title": "Kinh nghiệm chuyên môn 2-3 năm",
+    "description": "Kinh nghiệm 2-3 năm trong lĩnh vực liên quan, kỹ năng giao tiếp và làm việc nhóm tốt.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Professional Experience",
+    "title": "Kinh nghiệm chuyên môn 2-3 năm",
+    "description": "Kinh nghiệm 2-3 năm trong lĩnh vực liên quan, kỹ năng giao tiếp và làm việc nhóm tốt.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm phát triển phần mềm chuyên nghiệp",
+    "description": "Ít nhất 5 năm kinh nghiệm phát triển ứng dụng web/mobile với kiến trúc microservices, RESTful APIs và database design.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 5
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm DevOps và Cloud",
+    "description": "Kinh nghiệm 3-5 năm với AWS/Azure/GCP, Docker, Kubernetes và CI/CD pipelines.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Certification",
+    "title": "Chứng chỉ kỹ thuật dầu khí/chế biến",
+    "description": "Chứng chỉ kỹ sư dầu khí hoặc kinh nghiệm 3-5 năm trong ngành dầu khí, hóa chất.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Certification",
+    "title": "Chứng chỉ kỹ thuật dầu khí/chế biến",
+    "description": "Chứng chỉ kỹ sư dầu khí hoặc kinh nghiệm 3-5 năm trong ngành dầu khí, hóa chất.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Professional Experience",
+    "title": "Kinh nghiệm chuyên môn 2-3 năm",
+    "description": "Kinh nghiệm 2-3 năm trong lĩnh vực liên quan, kỹ năng giao tiếp và làm việc nhóm tốt.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm phát triển phần mềm chuyên nghiệp",
+    "description": "Ít nhất 5 năm kinh nghiệm phát triển ứng dụng web/mobile với kiến trúc microservices, RESTful APIs và database design.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 5
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm DevOps và Cloud",
+    "description": "Kinh nghiệm 3-5 năm với AWS/Azure/GCP, Docker, Kubernetes và CI/CD pipelines.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm phát triển phần mềm chuyên nghiệp",
+    "description": "Ít nhất 5 năm kinh nghiệm phát triển ứng dụng web/mobile với kiến trúc microservices, RESTful APIs và database design.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 5
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Technical Skills",
+    "title": "Kinh nghiệm DevOps và Cloud",
+    "description": "Kinh nghiệm 3-5 năm với AWS/Azure/GCP, Docker, Kubernetes và CI/CD pipelines.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Engineering Degree",
+    "title": "Bằng kỹ sư điện/điện tử hoặc cơ khí",
+    "description": "Bằng cử nhân kỹ thuật điện/điện tử/cơ khí, kinh nghiệm 2-4 năm trong ngành điện lực.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Safety Certification",
+    "title": "Chứng chỉ an toàn lao động",
+    "description": "Chứng chỉ an toàn lao động, kinh nghiệm 2-4 năm trong bảo trì thiết bị và an toàn công nghiệp.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Sales Experience",
+    "title": "Kinh nghiệm bán hàng/khách hàng doanh nghiệp",
+    "description": "Kinh nghiệm 2-4 năm trong bán hàng B2B, xây dựng và duy trì mối quan hệ khách hàng, đạt KPI doanh số.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Management Experience",
+    "title": "Kinh nghiệm quản lý dự án/dự án sản phẩm",
+    "description": "Kinh nghiệm 3-5 năm trong quản lý dự án phần mềm hoặc quản lý sản phẩm, sử dụng Agile/Scrum methodology.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 3
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Quality Certification",
+    "title": "Chứng chỉ quản lý chất lượng",
+    "description": "Chứng chỉ ISO 9001, kinh nghiệm 2-3 năm trong kiểm soát chất lượng và cải tiến quy trình.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Analytical Skills",
+    "title": "Kỹ năng phân tích nghiệp vụ và dữ liệu",
+    "description": "Kinh nghiệm 2-3 năm phân tích yêu cầu nghiệp vụ, tạo báo cáo, sử dụng SQL/Excel và công cụ BI.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  },
+  {
+    "requirement_type": "Operations Management",
+    "title": "Kinh nghiệm quản lý vận hành sản xuất",
+    "description": "Kinh nghiệm 4-6 năm quản lý đội ngũ sản xuất, tối ưu hóa quy trình và quản lý chất lượng.",
+    "is_required": true,
+    "level": "Senior",
+    "years_experience": 4
+  },
+  {
+    "requirement_type": "Marketing Experience",
+    "title": "Kinh nghiệm marketing số và thương hiệu",
+    "description": "Kinh nghiệm 2-4 năm trong digital marketing, brand management và content creation.",
+    "is_required": true,
+    "level": "Mid",
+    "years_experience": 2
+  }
+]

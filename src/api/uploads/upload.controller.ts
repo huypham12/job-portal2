@@ -107,6 +107,7 @@ export class UploadController {
   uploadResume: PostHandler<any, UploadResumeResponse> = async (req, res) => {
     const { user_id } = req.decoded_authorization as TokenPayload
     const { profileId } = req.params
+    const { title } = req.body
 
     if (!req.file) {
       res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -120,7 +121,8 @@ export class UploadController {
     const result = await this.uploadService.uploadResume({
       file: req.file,
       profileId,
-      userId: user_id
+      userId: user_id,
+      title: title || req.file.originalname
     })
 
     res.status(HTTP_STATUS.OK).json({

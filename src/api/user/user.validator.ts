@@ -32,28 +32,49 @@ const zodValidate = (parts: SchemaParts): RequestHandler => {
       return
     }
 
-    // Safely assign parsed data
-    if (parts.body) req.body = parsed.data.body
-    if (parts.query) {
-      try {
-        Object.assign(req.query, parsed.data.query)
-      } catch {
-        req.query = parsed.data.query
-      }
+    // Store validated data in req.validated, DO NOT mutate req.*
+    req.validated = {
+      body: parts.body ? parsed.data.body : undefined,
+      query: parts.query ? parsed.data.query : undefined,
+      params: parts.params ? parsed.data.params : undefined
     }
-    if (parts.params) {
-      try {
-        Object.assign(req.params, parsed.data.params)
-      } catch {
-        req.params = parsed.data.params
-      }
-    }
+
     next()
   }
 }
 
 const phoneRegex = /^[+]?[0-9\s\-().]{7,20}$/
 const urlRegex = /^https?:\/\/.+\..+/
+
+// Safe date validation that doesn't throw on invalid dates
+const safeDate = z
+  .string()
+  .refine(
+    (val) => {
+      const date = new Date(val)
+      return !isNaN(date.getTime())
+    },
+    {
+      message: 'Invalid date format'
+    }
+  )
+  .transform((val) => new Date(val))
+
+// Custom URL validation that's less strict than Zod's built-in url()
+const urlSchema = z.string().refine(
+  (val) => {
+    try {
+      new URL(val)
+      return true
+    } catch {
+      // Fallback to regex for URLs without protocol
+      return urlRegex.test(val)
+    }
+  },
+  {
+    message: 'Invalid URL format'
+  }
+)
 
 // Enum values from Prisma
 const jobTypeEnum = z.nativeEnum(job_type)
@@ -66,18 +87,14 @@ const updateProfileBody = z
     full_name: z.string().trim().min(1, 'Full name cannot be empty').max(255).optional(),
     display_name: z.string().trim().max(255).optional(),
     headline: z.string().trim().max(255).optional(),
-    date_of_birth: z
-      .string()
-      .date()
-      .transform((str) => new Date(str))
-      .optional(),
+    date_of_birth: safeDate.optional(),
     gender: z.string().max(20).optional(),
 
     // Contact info
     phone_number: z.string().min(7).max(20).optional(),
-    personal_website: z.string().url('Invalid website URL').or(z.string().regex(urlRegex)).optional(),
-    linkedin_url: z.string().url('Invalid LinkedIn URL').or(z.string().min(1)).optional(),
-    github_url: z.string().url('Invalid GitHub URL').or(z.string().min(1)).optional(),
+    personal_website: urlSchema.or(z.string().regex(urlRegex)).optional(),
+    linkedin_url: urlSchema.or(z.string().min(1)).optional(),
+    github_url: urlSchema.or(z.string().min(1)).optional(),
 
     // Location
     location_text: z.string().max(100).optional(),
@@ -90,9 +107,8 @@ const updateProfileBody = z
     // Job preferences
     desired_job_title: z.string().trim().max(255).optional(),
     desired_salary_min: z.number().int().min(0).optional(),
-    desired_currency: z.string().max(10).default('VND').optional(),
+    desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
-    is_looking_for_job: z.boolean().optional()
   })
   .strict()
   .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
@@ -104,18 +120,14 @@ const createProfileBody = z
     full_name: z.string().trim().min(1, 'Full name is required').max(255),
     display_name: z.string().trim().max(255).optional(),
     headline: z.string().trim().max(255).optional(),
-    date_of_birth: z
-      .string()
-      .date()
-      .transform((str) => new Date(str))
-      .optional(),
+    date_of_birth: safeDate.optional(),
     gender: z.string().max(20).optional(),
 
     // Contact info
     phone_number: z.string().min(7).max(20).optional(),
-    personal_website: z.string().url('Invalid website URL').or(z.string().regex(urlRegex)).optional(),
-    linkedin_url: z.string().url('Invalid LinkedIn URL').or(z.string().min(1)).optional(),
-    github_url: z.string().url('Invalid GitHub URL').or(z.string().min(1)).optional(),
+    personal_website: urlSchema.or(z.string().regex(urlRegex)).optional(),
+    linkedin_url: urlSchema.or(z.string().min(1)).optional(),
+    github_url: urlSchema.or(z.string().min(1)).optional(),
 
     // Location
     location_text: z.string().max(100).optional(),
@@ -128,9 +140,8 @@ const createProfileBody = z
     // Job preferences
     desired_job_title: z.string().trim().max(255).optional(),
     desired_salary_min: z.number().int().min(0).optional(),
-    desired_currency: z.string().max(10).default('VND').optional(),
+    desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
-    is_looking_for_job: z.boolean().optional()
   })
   .strict()
 
@@ -145,17 +156,44 @@ const updateUserBody = z
 
 // Get users with filters
 const getUsersQuery = z.object({
-  page: z.coerce.number().int().min(1).default(1).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(10).optional(),
+  page: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1)
+    .optional()
+    .default(1),
+  limit: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1 && val <= 100)
+    .optional()
+    .default(10),
   role: userRoleEnum.optional(),
-  verified: z.coerce.boolean().optional(),
+  verified: z
+    .union([z.literal('true'), z.literal('false')])
+    .transform((val) => val === 'true')
+    .optional(),
   search: z.string().trim().min(1).optional()
 })
 
 // Pagination query for applications/saved-jobs/activity
 const paginationQuery = z.object({
-  page: z.coerce.number().int().min(1).default(1).optional(),
-  limit: z.coerce.number().int().min(1).max(50).default(10).optional()
+  page: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1)
+    .optional()
+    .default(1),
+  limit: z
+    .string()
+    .regex(/^\d+$/)
+    .transform((val) => parseInt(val))
+    .refine((val) => val >= 1 && val <= 50)
+    .optional()
+    .default(10)
 })
 
 // User ID param validation
@@ -167,15 +205,8 @@ const userIdParam = z.object({
 const profileExperienceBody = z.object({
   company_name: z.string().trim().min(1).max(255),
   position: z.string().trim().min(1).max(255),
-  start_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
-  end_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str))
-    .optional(),
+  start_date: safeDate,
+  end_date: safeDate.optional(),
   is_current: z.boolean().default(false),
   description: z.string().max(2000).optional()
 })
@@ -185,15 +216,8 @@ const profileEducationBody = z.object({
   school_name: z.string().trim().min(1).max(255),
   degree: z.string().trim().max(255).optional(),
   field_of_study: z.string().trim().max(255).optional(),
-  start_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
-  end_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str))
-    .optional()
+  start_date: safeDate,
+  end_date: safeDate.optional()
 })
 
 // Profile skill validation
@@ -208,16 +232,9 @@ const profileCertificationBody = z.object({
   name: z.string().trim().min(1).max(255),
   issuing_org: z.string().trim().min(1).max(255),
   credential_id: z.string().trim().max(255).optional(),
-  credential_url: z.string().url().or(z.string().min(1)).optional(),
-  issue_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
-  expiry_date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str))
-    .optional(),
+  credential_url: urlSchema.or(z.string().min(1)).optional(),
+  issue_date: safeDate,
+  expiry_date: safeDate.optional(),
   never_expires: z.boolean().default(false),
   description: z.string().max(2000).optional(),
   skills_acquired: z.string().max(2000).optional()
@@ -227,12 +244,9 @@ const profileCertificationBody = z.object({
 const profileAwardBody = z.object({
   title: z.string().trim().min(1).max(255),
   issuer: z.string().trim().min(1).max(255),
-  date: z
-    .string()
-    .date()
-    .transform((str) => new Date(str)),
+  date: safeDate,
   description: z.string().max(2000).optional(),
-  url: z.string().url().or(z.string().min(1)).optional(),
+  url: urlSchema.or(z.string().min(1)).optional(),
   category: z.enum(['academic', 'professional', 'competition', 'volunteer', 'other']).optional(),
   level: z.enum(['international', 'national', 'regional', 'local', 'organizational']).optional()
 })
@@ -240,7 +254,13 @@ const profileAwardBody = z.object({
 // Update profile sub-entities (for PATCH operations)
 const updateProfileExperienceBody = profileExperienceBody.partial()
 const updateProfileEducationBody = profileEducationBody.partial()
-const updateProfileSkillBody = profileSkillBody.partial()
+// For skills, only allow updating proficiency and level, not skill_id
+const updateProfileSkillBody = z
+  .object({
+    proficiency: z.number().int().min(1).max(5).optional(),
+    level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional()
+  })
+  .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
 const updateProfileCertificationBody = profileCertificationBody.partial()
 const updateProfileAwardBody = profileAwardBody.partial()
 
@@ -250,6 +270,7 @@ const educationIdParam = z.object({ educationId: z.string().uuid() })
 const skillIdParam = z.object({ skillId: z.string().uuid() })
 const certificationIdParam = z.object({ certificationId: z.string().uuid() })
 const awardIdParam = z.object({ awardId: z.string().uuid() })
+const profileIdParam = z.object({ id: z.string().uuid('Invalid profile ID format') })
 
 // Combined param validators (userId + sub-entity ID)
 const userExperienceParam = z.object({
@@ -369,6 +390,22 @@ export const paginationValidator = zodValidate({
   query: paginationQuery
 })
 
+// Profile ID validator for public profile
+export const profileIdValidator = zodValidate({
+  params: profileIdParam
+})
+
+// Profile visibility validator
+const updateProfileVisibilityBody = z.object({
+  is_public: z.boolean()
+})
+
+export const updateProfileVisibilityValidator = zodValidate({
+  body: updateProfileVisibilityBody
+})
+
+// Profile completeness - no validator needed (GET endpoint with no params)
+
 // Export generated types from Zod schemas
 export type GetUsersQuery = z.infer<typeof getUsersQuery>
 export type PaginationQuery = z.infer<typeof paginationQuery>
@@ -385,3 +422,4 @@ export type CreateCertificationDto = z.infer<typeof profileCertificationBody>
 export type UpdateCertificationDto = z.infer<typeof updateProfileCertificationBody>
 export type CreateAwardDto = z.infer<typeof profileAwardBody>
 export type UpdateAwardDto = z.infer<typeof updateProfileAwardBody>
+export type UpdateProfileVisibilityDto = z.infer<typeof updateProfileVisibilityBody>

@@ -168,16 +168,7 @@ export const registerValidator = validate(
           })
           .trim(),
         password: passwordSchema,
-        confirm_password: passwordSchema,
-        date_of_birth: z.string().refine(
-          (value) => {
-            const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-            if (!dateRegex.test(value)) return false
-            const date = new Date(value)
-            return !isNaN(date.getTime())
-          },
-          { message: MESSAGES.DATE_OF_BIRTH_MUST_BE_YYYY_MM_DD }
-        )
+        confirm_password: passwordSchema
       })
     })
     .refine((data) => data.body.password === data.body.confirm_password, {
@@ -259,7 +250,12 @@ export const changePasswordValidator = validate(
           .string({ message: MESSAGES.OLD_PASSWORD_MUST_BE_STRING })
           .min(1, MESSAGES.OLD_PASSWORD_IS_REQUIRED),
         new_password: passwordSchema,
-        confirm_password: z.string().min(1, MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED)
+        confirm_password: z.string().min(1, MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED),
+        logout_all_devices: z
+          .boolean({
+            message: 'logout_all_devices must be a boolean'
+          })
+          .optional()
       })
     })
     .refine((data) => data.body.new_password === data.body.confirm_password, {

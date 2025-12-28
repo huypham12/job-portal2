@@ -10,6 +10,8 @@ import {
 import { HttpError } from '@/shared/common/http-error'
 import { MESSAGES } from '@/shared/constants/messages'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
+import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
+import { companyToESDoc } from '@/shared/utils/es-transformers'
 
 export class CompanyService {
   /**
@@ -32,8 +34,28 @@ export class CompanyService {
       data: {
         ...data,
         recruiter_id: recruiterId
+      },
+      include: {
+        company_details: {
+          include: {
+            headquarters_location: {
+              select: { name: true }
+            }
+          }
+        }
       }
     })
+
+    // Sync to Elasticsearch
+    setImmediate(async () => {
+      try {
+        const esDocument = companyToESDoc(company)
+        await elasticsearchSyncService.syncToElasticsearch('companies', company.id, esDocument)
+      } catch (error) {
+        console.error(`Company create sync failed: ${company.id}`, error)
+      }
+    })
+
     return company
   }
 
@@ -69,8 +91,28 @@ export class CompanyService {
       // Cập nhật trực tiếp bằng recruiter_id (đã có unique constraint)
       const updatedCompany = await prisma.companies.update({
         where: { recruiter_id: recruiterId },
-        data
+        data,
+        include: {
+          company_details: {
+            include: {
+              headquarters_location: {
+                select: { name: true }
+              }
+            }
+          }
+        }
       })
+
+      // Sync to Elasticsearch
+      setImmediate(async () => {
+        try {
+          const esDocument = companyToESDoc(updatedCompany)
+          await elasticsearchSyncService.syncToElasticsearch('companies', updatedCompany.id, esDocument)
+        } catch (error) {
+          console.error(`Company update sync failed: ${updatedCompany.id}`, error)
+        }
+      })
+
       return updatedCompany
     } catch (error: any) {
       // Nếu không tìm thấy record để update
@@ -92,17 +134,37 @@ export class CompanyService {
       const company = await prisma.companies.findUnique({
         where: { id: companyId },
         include: {
-          company_details: true,
+          company_details: {
+            include: {
+              headquarters_location: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              }
+            }
+          },
           company_benefits: true,
           jobs: {
             where: { status: 'approved', deleted: false },
             select: {
               id: true,
               title: true,
+              description: true,
               posted_at: true,
               expires_at: true,
               job_type: true,
-              salary_range: true
+              experience_level: true,
+              salary_range: true,
+              location_id: true,
+              locations: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              }
             }
           }
         }
@@ -158,7 +220,7 @@ export class CompanyService {
       throw new HttpError(MESSAGES.COMPANY_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
     }
 
-    return await prisma.company_details.upsert({
+    const updatedDetails = await prisma.company_details.upsert({
       where: { company_id: company.id },
       update: detailsData,
       create: {
@@ -166,6 +228,20 @@ export class CompanyService {
         ...detailsData
       }
     })
+
+    // Sync updated company to Elasticsearch
+    setImmediate(async () => {
+      try {
+        // Fetch complete company data for sync
+        const companyData = await this.getCompanyById(company.id, true)
+        const esDocument = companyToESDoc(companyData)
+        await elasticsearchSyncService.syncToElasticsearch('companies', company.id, esDocument)
+      } catch (error) {
+        console.error(`Company details update sync failed: ${company.id}`, error)
+      }
+    })
+
+    return updatedDetails
   }
 
   /**

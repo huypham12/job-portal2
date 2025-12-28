@@ -1,0 +1,11 @@
+{
+  "name": "20251228120000_drop_audit_triggers",
+  "checksum": "auto",
+  "finishedAt": null,
+  "startedAt": null,
+  "appliedStepsCount": 0,
+  "totalStepsCount": 0,
+  "rolledBackAt": null,
+  "rolledBackStepsCount": 0,
+  "schema": "prisma/schema.prisma"
+}

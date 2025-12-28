@@ -1,0 +1,96 @@
+components:
+  schemas:
+    # ============================================
+    # Application Schemas
+    # ============================================
+    ApplicationStatus:
+      type: string
+      enum: [pending, reviewed, accepted, rejected, withdrawn]
+
+    CreateApplicationRequest:
+      type: object
+      required: [job_id]
+      properties:
+        job_id: { type: string, format: uuid }
+        resume_id: { type: string, format: uuid }
+        metadata: { type: object, additionalProperties: true }
+
+    UpdateApplicationStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [pending, reviewed, accepted, rejected] }
+        reason: { type: string }
+
+    UpdateApplicationStageRequest:
+      type: object
+      required: [stage_id, status]
+      properties:
+        stage_id: { type: string, format: uuid }
+        status: { type: string, minLength: 1, maxLength: 50 }
+        feedback: { type: string }
+        rating:
+          oneOf:
+            - type: integer
+              minimum: 1
+              maximum: 5
+            - type: string
+              description: Will be converted to integer (must be between 1 and 5)
+          description: Rating from 1 to 5 (accepts integer or string that will be converted)
+        interviewer_notes: { type: string }
+        completed_at:
+          type: string
+          description: ISO 8601 datetime format (e.g., '2024-01-01T00:00:00.000Z')
+          example: '2024-01-01T00:00:00.000Z'
+
+    CreateApplicationStageRequest:
+      type: object
+      required: [stage_name, stage_order]
+      properties:
+        stage_name: { type: string, minLength: 1, maxLength: 100 }
+        stage_order:
+          oneOf:
+            - type: integer
+              minimum: 1
+            - type: string
+              description: Will be converted to positive integer
+          description: Stage order (accepts integer or string that will be converted to positive integer)
+        scheduled_at:
+          type: string
+          description: ISO 8601 datetime format (e.g., '2024-01-01T00:00:00.000Z')
+          example: '2024-01-01T00:00:00.000Z'
+        interviewer_notes: { type: string }
+
+    AddApplicationNoteRequest:
+      type: object
+      required: [note]
+      properties:
+        note: { type: string, minLength: 1 }
+
+    ContactCandidateRequest:
+      type: object
+      required: [subject, message]
+      properties:
+        subject: { type: string, minLength: 1 }
+        message: { type: string, minLength: 1 }
+        send_email:
+          oneOf:
+            - type: boolean
+            - type: string
+              enum: ['true', 'false', '1', '0', '']
+              description: Will be converted to boolean ('true'/'1' = true, 'false'/'0'/'' = false)
+          default: false
+          description: Whether to send email notification (accepts boolean or string that will be converted)
+
+    BulkUpdateApplicationsRequest:
+      type: object
+      required: [application_ids, action]
+      properties:
+        application_ids:
+          type: array
+          items: { type: string, format: uuid }
+          minItems: 1
+        action:
+          type: string
+          enum: [reject, accept, review]
+        reason: { type: string }

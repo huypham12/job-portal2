@@ -27,6 +27,7 @@ export interface UploadResumeParams {
   file: Express.Multer.File
   profileId: string
   userId: string // để check ownership
+  title: string
 }
 
 export interface UploadApplicationDocumentParams {
@@ -181,7 +182,12 @@ export class UploadService {
     const resume = await prisma.resumes.create({
       data: {
         profile_id: profileId,
-        file_url: uploadResult.url
+        file_url: uploadResult.url,
+        title: params.title || file.originalname,
+        source_type: 'uploaded',
+        file_name: file.originalname,
+        file_size: file.size,
+        mime_type: file.mimetype
       }
     })
 

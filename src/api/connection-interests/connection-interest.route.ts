@@ -1,0 +1,63 @@
+import { Router } from 'express'
+import * as ConnectionInterestController from './connection-interest.controller'
+import { CreateInterestSchema, GetInterestsSchema, InterestIdSchema } from './connection-interest.validator'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import { authorize, recruiter, candidate } from '@/middleware/authorize.middleware'
+import { validateDto } from '@/middleware/validateDto.middleware'
+import { UserRole } from '@/shared/constants/enums/user.enum'
+
+const router = Router()
+
+// All routes require authentication
+router.use(authenticateAccessToken)
+
+/**
+ * GET /api/connection-interests/stats
+ * Get connection interest statistics
+ * Accessible by: Candidate, Recruiter
+ */
+router.get(
+  '/stats',
+  authorize([UserRole.Candidate, UserRole.Recruiter]),
+  ConnectionInterestController.getConnectionInterestStats
+)
+
+/**
+ * POST /api/connection-interests
+ * Create a new connection interest
+ * Accessible by: Recruiter only
+ */
+router.post('/', recruiter, validateDto(CreateInterestSchema), ConnectionInterestController.createConnectionInterest)
+
+/**
+ * GET /api/connection-interests
+ * Get connection interests list with filters
+ * Accessible by: Candidate, Recruiter
+ */
+router.get(
+  '/',
+  authorize([UserRole.Candidate, UserRole.Recruiter]),
+  validateDto(GetInterestsSchema),
+  ConnectionInterestController.getConnectionInterests
+)
+
+/**
+ * GET /api/connection-interests/:id
+ * Get connection interest details by ID
+ * Accessible by: Candidate, Recruiter
+ */
+router.get(
+  '/:id',
+  authorize([UserRole.Candidate, UserRole.Recruiter]),
+  validateDto(InterestIdSchema),
+  ConnectionInterestController.getConnectionInterestById
+)
+
+/**
+ * DELETE /api/connection-interests/:id
+ * Delete connection interest
+ * Accessible by: Recruiter only
+ */
+router.delete('/:id', recruiter, validateDto(InterestIdSchema), ConnectionInterestController.deleteConnectionInterest)
+
+export default router

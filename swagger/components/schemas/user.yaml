@@ -1,0 +1,373 @@
+components:
+  schemas:
+    # ============================================
+    # User Request Schemas
+    # ============================================
+    UpdateProfileRequest:
+      type: object
+      description: At least one field must be provided
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: 'John Doe'
+          description: User's full name (1-100 characters)
+        phone:
+          type: string
+          pattern: '^\+?[0-9\s\-().]{7,20}$'
+          example: '+1234567890'
+          description: Phone number in international format
+        location_id:
+          type: string
+          format: uuid
+          nullable: true
+          example: '123e4567-e89b-12d3-a456-426614174000'
+          description: Location ID (UUID) or null
+        metadata:
+          type: object
+          additionalProperties: true
+          example:
+            avatar: 'https://example.com/avatar.jpg'
+            bio: 'Software developer'
+          description: Additional metadata as JSON object
+
+    # ============================================
+    # User Response Schemas
+    # ============================================
+    UserProfileResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        email:
+          type: string
+          format: email
+          example: 'john.doe@example.com'
+        role:
+          $ref: '#/components/schemas/UserRole'
+        verified:
+          type: boolean
+          example: true
+        profiles:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: 'John Doe'
+              phone:
+                type: string
+                example: '+1234567890'
+              metadata:
+                type: object
+                additionalProperties: true
+                example:
+                  avatar: 'https://example.com/avatar.jpg'
+                  bio: 'Software developer'
+        companies:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              logo_url:
+                type: string
+              size:
+                type: string
+          description: Companies associated with the user (for recruiters)
+        resumes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              content:
+                type: object
+                additionalProperties: true
+                example:
+                  skills: ['JavaScript', 'TypeScript']
+                  experience_years: 5
+              file_url:
+                type: string
+              updated_at:
+                type: string
+                format: date-time
+
+    UpdateProfileResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Profile updated'
+        profile:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            user_id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            phone:
+              type: string
+            location_id:
+              type: string
+              format: uuid
+              nullable: true
+            metadata:
+              type: object
+              additionalProperties: true
+            updated_at:
+              type: string
+              format: date-time
+            created_at:
+              type: string
+              format: date-time
+
+    PublicProfileResponse:
+      type: object
+      description: Public profile information for recruiters (excludes sensitive data like phone and email)
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        full_name:
+          type: string
+          example: 'John Doe'
+        display_name:
+          type: string
+          nullable: true
+          example: 'John'
+        headline:
+          type: string
+          nullable: true
+          example: 'Senior Software Engineer'
+        avatar_url:
+          type: string
+          nullable: true
+          example: 'https://example.com/avatar.jpg'
+        bio:
+          type: string
+          nullable: true
+          example: 'Experienced software developer'
+        years_of_experience:
+          type: integer
+          nullable: true
+          example: 5
+        desired_job_title:
+          type: string
+          nullable: true
+          example: 'Full Stack Developer'
+        desired_salary_min:
+          type: integer
+          nullable: true
+          example: 20000000
+        desired_currency:
+          type: string
+          nullable: true
+          example: 'VND'
+        desired_job_type:
+          type: array
+          items:
+            type: string
+          nullable: true
+          example: ['full_time', 'remote']
+        is_looking_for_job:
+          type: boolean
+          nullable: true
+          example: true
+        location_text:
+          type: string
+          nullable: true
+          example: 'Ho Chi Minh City'
+        personal_website:
+          type: string
+          nullable: true
+          example: 'https://johndoe.dev'
+        linkedin_url:
+          type: string
+          nullable: true
+          example: 'https://linkedin.com/in/johndoe'
+        github_url:
+          type: string
+          nullable: true
+          example: 'https://github.com/johndoe'
+        role:
+          type: string
+          example: 'candidate'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        location:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            type:
+              type: string
+            parent:
+              type: object
+              nullable: true
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+                type:
+                  type: string
+        experiences:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              company_name:
+                type: string
+              position:
+                type: string
+              start_date:
+                type: string
+                format: date-time
+              end_date:
+                type: string
+                format: date-time
+                nullable: true
+              is_current:
+                type: boolean
+              description:
+                type: string
+                nullable: true
+        educations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              school_name:
+                type: string
+              degree:
+                type: string
+                nullable: true
+              field_of_study:
+                type: string
+                nullable: true
+              start_date:
+                type: string
+                format: date-time
+              end_date:
+                type: string
+                format: date-time
+                nullable: true
+        skills:
+          type: array
+          items:
+            type: object
+            properties:
+              skill_id:
+                type: string
+                format: uuid
+              proficiency:
+                type: integer
+                nullable: true
+              level:
+                type: string
+                nullable: true
+                enum: [beginner, intermediate, advanced, expert]
+              skills:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  category:
+                    type: string
+                    nullable: true
+        certifications:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              issuing_org:
+                type: string
+              credential_id:
+                type: string
+                nullable: true
+              credential_url:
+                type: string
+                nullable: true
+              issue_date:
+                type: string
+                format: date-time
+              expiry_date:
+                type: string
+                format: date-time
+                nullable: true
+              never_expires:
+                type: boolean
+              description:
+                type: string
+                nullable: true
+              skills_acquired:
+                type: string
+                nullable: true
+        awards:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              title:
+                type: string
+              issuer:
+                type: string
+              date:
+                type: string
+                format: date-time
+              description:
+                type: string
+                nullable: true
+              url:
+                type: string
+                nullable: true
+              category:
+                type: string
+                nullable: true
+                enum: [academic, professional, competition, volunteer, other]
+              level:
+                type: string
+                nullable: true
+                enum: [international, national, regional, local, organizational]

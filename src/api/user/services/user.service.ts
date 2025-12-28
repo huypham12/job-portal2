@@ -1,5 +1,7 @@
 import { prisma } from '@/config/database.service'
 import { job_type } from '@prisma/client'
+import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
+import { profileToESDoc } from '@/shared/utils/es-transformers'
 export class UserService {
   getUserById = async (userId: string) => {
     return await prisma.users.findUnique({
@@ -38,7 +40,6 @@ export class UserService {
             desired_salary_min: true,
             desired_currency: true,
             desired_job_type: true,
-            is_looking_for_job: true,
             created_at: true,
             updated_at: true,
             // Location với parent hierarchy
@@ -239,6 +240,20 @@ export class UserService {
     })
   }
 
+  // Ensure we always work with an existing profile before mutating child tables
+  private getProfileIdOrThrow = async (userId: string) => {
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    return profile.id
+  }
+
   // Tạo profile mới
   async createProfile(
     userId: string,
@@ -260,11 +275,10 @@ export class UserService {
       desired_salary_min?: number
       desired_currency?: string
       desired_job_type?: job_type[]
-      is_looking_for_job?: boolean
     }
   ) {
     // Kiểm tra xem profile đã tồn tại chưa
-    const existing = await prisma.profiles.findFirst({
+    const existing = await prisma.profiles.findUnique({
       where: { user_id: userId }
     })
 
@@ -272,7 +286,7 @@ export class UserService {
       throw new Error('Profile already exists')
     }
 
-    return await prisma.profiles.create({
+    const created = await prisma.profiles.create({
       data: {
         user_id: userId,
         full_name: data.full_name,
@@ -291,8 +305,7 @@ export class UserService {
         desired_job_title: data.desired_job_title,
         desired_salary_min: data.desired_salary_min,
         desired_currency: data.desired_currency || 'VND',
-        desired_job_type: data.desired_job_type || [],
-        is_looking_for_job: data.is_looking_for_job ?? true
+        desired_job_type: data.desired_job_type || []
       },
       select: {
         id: true,
@@ -306,6 +319,7 @@ export class UserService {
         personal_website: true,
         linkedin_url: true,
         github_url: true,
+        avatar_url: true,
         location_id: true,
         location_text: true,
         bio: true,
@@ -314,11 +328,22 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        is_looking_for_job: true,
         created_at: true,
         updated_at: true
       }
     })
+
+    // Sync to Elasticsearch
+    setImmediate(async () => {
+      try {
+        const esDocument = profileToESDoc(created)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', created.id, esDocument)
+      } catch (error) {
+        console.error(`Profile create sync failed: ${created.id}`, error)
+      }
+    })
+
+    return created
   }
 
   // Thêm mới: cập nhật/khởi tạo profile theo user_id
@@ -337,15 +362,13 @@ export class UserService {
       desired_salary_min?: number
       desired_currency?: string
       desired_job_type?: job_type[]
-      is_looking_for_job?: boolean
     }
   ) {
     // Lọc bỏ các field undefined để tránh overwrite ngoài ý muốn
     const cleaned = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined))
 
-    const existing = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      orderBy: { created_at: 'asc' }
+    const existing = await prisma.profiles.findUnique({
+      where: { user_id: userId }
     })
 
     if (existing) {
@@ -359,6 +382,7 @@ export class UserService {
           display_name: true,
           headline: true,
           phone_number: true,
+          avatar_url: true,
           location_id: true,
           location_text: true,
           bio: true,
@@ -367,11 +391,21 @@ export class UserService {
           desired_salary_min: true,
           desired_currency: true,
           desired_job_type: true,
-          is_looking_for_job: true,
           updated_at: true,
           created_at: true
         }
       })
+
+      // Sync to Elasticsearch
+      setImmediate(async () => {
+        try {
+          const esDocument = profileToESDoc(updated)
+          await elasticsearchSyncService.syncToElasticsearch('profiles', updated.id, esDocument)
+        } catch (error) {
+          console.error(`Profile update sync failed: ${updated.id}`, error)
+        }
+      })
+
       return updated
     }
 
@@ -388,6 +422,7 @@ export class UserService {
         display_name: true,
         headline: true,
         phone_number: true,
+        avatar_url: true,
         location_id: true,
         location_text: true,
         bio: true,
@@ -396,7 +431,6 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        is_looking_for_job: true,
         updated_at: true,
         created_at: true
       }
@@ -435,7 +469,6 @@ export class UserService {
             desired_salary_min: true,
             desired_currency: true,
             desired_job_type: true,
-            is_looking_for_job: true,
             created_at: true,
             updated_at: true,
             location: {
@@ -613,6 +646,7 @@ export class UserService {
               display_name: true,
               headline: true,
               phone_number: true,
+              avatar_url: true,
               location_text: true,
               is_looking_for_job: true
             }
@@ -636,19 +670,11 @@ export class UserService {
 
   // === PROFILE EXPERIENCE METHODS ===
   async createProfileExperience(userId: string, data: any) {
-    // Get profile ID first
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
+    const profileId = await this.getProfileIdOrThrow(userId)
 
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_experiences.create({
+    const experience = await prisma.profile_experiences.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -661,23 +687,34 @@ export class UserService {
         description: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile experience create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return experience
   }
 
   async updateProfileExperience(userId: string, experienceId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const experience = await prisma.profile_experiences.findFirst({
+      where: { id: experienceId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!experience) {
+      throw new Error('Experience not found')
     }
 
-    return await prisma.profile_experiences.update({
-      where: {
-        id: experienceId,
-        profile_id: profile.id
-      },
+    const updatedExperience = await prisma.profile_experiences.update({
+      where: { id: experience.id },
       data,
       select: {
         id: true,
@@ -689,40 +726,57 @@ export class UserService {
         description: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile experience update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedExperience
   }
 
   async deleteProfileExperience(userId: string, experienceId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const experience = await prisma.profile_experiences.findFirst({
+      where: { id: experienceId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!experience) {
+      throw new Error('Experience not found')
     }
 
-    return await prisma.profile_experiences.delete({
-      where: {
-        id: experienceId,
-        profile_id: profile.id
+    await prisma.profile_experiences.delete({
+      where: { id: experience.id }
+    })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile experience delete sync failed for profile: ${profileId}`, error)
       }
     })
+
+    return { message: 'Experience deleted successfully' }
   }
 
   // === PROFILE EDUCATION METHODS ===
   async createProfileEducation(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
+    const profileId = await this.getProfileIdOrThrow(userId)
 
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_educations.create({
+    const education = await prisma.profile_educations.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -734,23 +788,34 @@ export class UserService {
         end_date: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile education create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return education
   }
 
   async updateProfileEducation(userId: string, educationId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const education = await prisma.profile_educations.findFirst({
+      where: { id: educationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!education) {
+      throw new Error('Education not found')
     }
 
-    return await prisma.profile_educations.update({
-      where: {
-        id: educationId,
-        profile_id: profile.id
-      },
+    const updatedEducation = await prisma.profile_educations.update({
+      where: { id: education.id },
       data,
       select: {
         id: true,
@@ -761,40 +826,82 @@ export class UserService {
         end_date: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile education update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedEducation
   }
 
   async deleteProfileEducation(userId: string, educationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const education = await prisma.profile_educations.findFirst({
+      where: { id: educationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!education) {
+      throw new Error('Education not found')
     }
 
-    return await prisma.profile_educations.delete({
-      where: {
-        id: educationId,
-        profile_id: profile.id
+    await prisma.profile_educations.delete({
+      where: { id: education.id }
+    })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile education delete sync failed for profile: ${profileId}`, error)
       }
     })
+
+    return { message: 'Education deleted successfully' }
   }
 
   // === PROFILE SKILL METHODS ===
   async createProfileSkill(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+
+    // Validate skill exists
+    const skillExists = await prisma.skills.findUnique({
+      where: { id: data.skill_id },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!skillExists) {
+      throw new Error('Skill not found. Please select a valid skill from the list.')
     }
 
-    return await prisma.profile_skills.create({
+    // Check if skill already added to profile
+    const existingSkill = await prisma.profile_skills.findUnique({
+      where: {
+        profile_id_skill_id: {
+          profile_id: profileId,
+          skill_id: data.skill_id
+        }
+      },
+      select: { skill_id: true }
+    })
+
+    if (existingSkill) {
+      throw new Error('This skill has already been added to your profile.')
+    }
+
+    const skill = await prisma.profile_skills.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -810,25 +917,41 @@ export class UserService {
         }
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile skill create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return skill
   }
 
   async updateProfileSkill(userId: string, skillId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const where = {
+      profile_id_skill_id: {
+        profile_id: profileId,
+        skill_id: skillId
+      }
     }
 
-    return await prisma.profile_skills.update({
-      where: {
-        profile_id_skill_id: {
-          profile_id: profile.id,
-          skill_id: skillId
-        }
-      },
+    const existing = await prisma.profile_skills.findUnique({ where, select: { skill_id: true } })
+
+    if (!existing) {
+      throw new Error('Skill not found in your profile.')
+    }
+
+    // Only validate data fields, not skill_id (can't change skill_id in update)
+    // Just update proficiency and level
+
+    const updatedSkill = await prisma.profile_skills.update({
+      where,
       data,
       select: {
         skill_id: true,
@@ -843,42 +966,59 @@ export class UserService {
         }
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile skill update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedSkill
   }
 
   async deleteProfileSkill(userId: string, skillId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const where = {
+      profile_id_skill_id: {
+        profile_id: profileId,
+        skill_id: skillId
+      }
     }
 
-    return await prisma.profile_skills.delete({
-      where: {
-        profile_id_skill_id: {
-          profile_id: profile.id,
-          skill_id: skillId
-        }
+    const existing = await prisma.profile_skills.findUnique({ where, select: { skill_id: true } })
+
+    if (!existing) {
+      throw new Error('Skill not found in your profile.')
+    }
+
+    await prisma.profile_skills.delete({ where })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile skill delete sync failed for profile: ${profileId}`, error)
       }
     })
+
+    return { message: 'Skill removed successfully' }
   }
 
   // === PROFILE CERTIFICATION METHODS ===
   async createProfileCertification(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
+    const profileId = await this.getProfileIdOrThrow(userId)
 
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_certifications.create({
+    const certification = await prisma.profile_certifications.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -896,23 +1036,34 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile certification create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return certification
   }
 
   async updateProfileCertification(userId: string, certificationId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const certification = await prisma.profile_certifications.findFirst({
+      where: { id: certificationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!certification) {
+      throw new Error('Certification not found')
     }
 
-    return await prisma.profile_certifications.update({
-      where: {
-        id: certificationId,
-        profile_id: profile.id
-      },
+    const updatedCertification = await prisma.profile_certifications.update({
+      where: { id: certification.id },
       data,
       select: {
         id: true,
@@ -929,40 +1080,57 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile certification update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedCertification
   }
 
   async deleteProfileCertification(userId: string, certificationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const certification = await prisma.profile_certifications.findFirst({
+      where: { id: certificationId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!certification) {
+      throw new Error('Certification not found')
     }
 
-    return await prisma.profile_certifications.delete({
-      where: {
-        id: certificationId,
-        profile_id: profile.id
+    await prisma.profile_certifications.delete({
+      where: { id: certification.id }
+    })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile certification delete sync failed for profile: ${profileId}`, error)
       }
     })
+
+    return { message: 'Certification deleted successfully' }
   }
 
   // === PROFILE AWARD METHODS ===
   async createProfileAward(userId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
+    const profileId = await this.getProfileIdOrThrow(userId)
 
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_awards.create({
+    const award = await prisma.profile_awards.create({
       data: {
-        profile_id: profile.id,
+        profile_id: profileId,
         ...data
       },
       select: {
@@ -978,23 +1146,34 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile award create sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return award
   }
 
   async updateProfileAward(userId: string, awardId: string, data: any) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const award = await prisma.profile_awards.findFirst({
+      where: { id: awardId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!award) {
+      throw new Error('Award not found')
     }
 
-    return await prisma.profile_awards.update({
-      where: {
-        id: awardId,
-        profile_id: profile.id
-      },
+    const updatedAward = await prisma.profile_awards.update({
+      where: { id: award.id },
       data,
       select: {
         id: true,
@@ -1009,24 +1188,48 @@ export class UserService {
         updated_at: true
       }
     })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile award update sync failed for profile: ${profileId}`, error)
+      }
+    })
+
+    return updatedAward
   }
 
   async deleteProfileAward(userId: string, awardId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const award = await prisma.profile_awards.findFirst({
+      where: { id: awardId, profile_id: profileId },
       select: { id: true }
     })
 
-    if (!profile) {
-      throw new Error('Profile not found')
+    if (!award) {
+      throw new Error('Award not found')
     }
 
-    return await prisma.profile_awards.delete({
-      where: {
-        id: awardId,
-        profile_id: profile.id
+    await prisma.profile_awards.delete({
+      where: { id: award.id }
+    })
+
+    // Re-fetch and sync profile
+    setImmediate(async () => {
+      try {
+        const updatedProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(updatedProfile)
+        await elasticsearchSyncService.syncToElasticsearch('profiles', profileId, esDocument)
+      } catch (error) {
+        console.error(`Profile award delete sync failed for profile: ${profileId}`, error)
       }
     })
+
+    return { message: 'Award deleted successfully' }
   }
 
   // === SPECIALIZED GET METHODS ===
@@ -1047,8 +1250,8 @@ export class UserService {
             full_name: true,
             display_name: true,
             headline: true,
+            avatar_url: true,
             years_of_experience: true,
-            is_looking_for_job: true,
             location_text: true
           }
         }
@@ -1058,7 +1261,7 @@ export class UserService {
 
   // Get complete profile data (for profile page)
   async getCompleteProfile(userId: string) {
-    return await prisma.profiles.findFirst({
+    return await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         id: true,
@@ -1072,6 +1275,7 @@ export class UserService {
         personal_website: true,
         linkedin_url: true,
         github_url: true,
+        avatar_url: true,
         location_text: true,
         location_id: true,
         bio: true,
@@ -1080,7 +1284,6 @@ export class UserService {
         desired_salary_min: true,
         desired_currency: true,
         desired_job_type: true,
-        is_looking_for_job: true,
         created_at: true,
         updated_at: true,
         // Location with hierarchy
@@ -1181,7 +1384,7 @@ export class UserService {
     const skip = (page - 1) * limit
 
     // Get profile first
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1248,7 +1451,7 @@ export class UserService {
     const skip = (page - 1) * limit
 
     // Get profile first
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1312,7 +1515,7 @@ export class UserService {
     const skip = (page - 1) * limit
 
     // Get profile for candidate interests
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1443,7 +1646,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         applications: {
@@ -1483,7 +1686,7 @@ export class UserService {
 
   // Get candidate resumes (moved from users to profiles)
   async getCandidateResumes(userId: string) {
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         resumes: {
@@ -1508,7 +1711,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         saved_jobs: {
@@ -1558,7 +1761,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: {
         candidate_interests: {
@@ -1626,9 +1829,9 @@ export class UserService {
             id: true,
             display_name: true,
             headline: true,
+            avatar_url: true,
             location_id: true,
             location_text: true,
-            is_looking_for_job: true,
             location: {
               select: {
                 name: true,
@@ -1656,20 +1859,9 @@ export class UserService {
 
   // === GET INDIVIDUAL SUB-RESOURCES ===
   async getProfileExperience(userId: string, experienceId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_experiences.findFirst({
-      where: {
-        id: experienceId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const experience = await prisma.profile_experiences.findFirst({
+      where: { id: experienceId, profile_id: profileId },
       select: {
         id: true,
         company_name: true,
@@ -1680,23 +1872,18 @@ export class UserService {
         description: true
       }
     })
+
+    if (!experience) {
+      throw new Error('Experience not found')
+    }
+
+    return experience
   }
 
   async getProfileEducation(userId: string, educationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_educations.findFirst({
-      where: {
-        id: educationId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const education = await prisma.profile_educations.findFirst({
+      where: { id: educationId, profile_id: profileId },
       select: {
         id: true,
         school_name: true,
@@ -1706,23 +1893,18 @@ export class UserService {
         end_date: true
       }
     })
+
+    if (!education) {
+      throw new Error('Education not found')
+    }
+
+    return education
   }
 
   async getProfileSkill(userId: string, skillId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_skills.findFirst({
-      where: {
-        profile_id: profile.id,
-        skill_id: skillId
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const skill = await prisma.profile_skills.findFirst({
+      where: { profile_id: profileId, skill_id: skillId },
       select: {
         skill_id: true,
         proficiency: true,
@@ -1736,23 +1918,18 @@ export class UserService {
         }
       }
     })
+
+    if (!skill) {
+      throw new Error('Skill not found')
+    }
+
+    return skill
   }
 
   async getProfileCertification(userId: string, certificationId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_certifications.findFirst({
-      where: {
-        id: certificationId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const certification = await prisma.profile_certifications.findFirst({
+      where: { id: certificationId, profile_id: profileId },
       select: {
         id: true,
         name: true,
@@ -1768,23 +1945,18 @@ export class UserService {
         updated_at: true
       }
     })
+
+    if (!certification) {
+      throw new Error('Certification not found')
+    }
+
+    return certification
   }
 
   async getProfileAward(userId: string, awardId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      select: { id: true }
-    })
-
-    if (!profile) {
-      throw new Error('Profile not found')
-    }
-
-    return await prisma.profile_awards.findFirst({
-      where: {
-        id: awardId,
-        profile_id: profile.id
-      },
+    const profileId = await this.getProfileIdOrThrow(userId)
+    const award = await prisma.profile_awards.findFirst({
+      where: { id: awardId, profile_id: profileId },
       select: {
         id: true,
         title: true,
@@ -1798,6 +1970,12 @@ export class UserService {
         updated_at: true
       }
     })
+
+    if (!award) {
+      throw new Error('Award not found')
+    }
+
+    return award
   }
 
   // === GET COLLECTIONS WITH PAGINATION ===
@@ -1805,7 +1983,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1848,7 +2026,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1890,7 +2068,7 @@ export class UserService {
     const { page = 1, limit = 20 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1938,7 +2116,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -1986,7 +2164,7 @@ export class UserService {
     const { page = 1, limit = 10 } = options
     const skip = (page - 1) * limit
 
-    const profile = await prisma.profiles.findFirst({
+    const profile = await prisma.profiles.findUnique({
       where: { user_id: userId },
       select: { id: true }
     })
@@ -2026,5 +2204,357 @@ export class UserService {
         totalPages: Math.ceil(total / limit)
       }
     }
+  }
+
+  /**
+   * Get public profile information for recruiters to view candidate profiles
+   * Excludes sensitive information like phone_number, email
+   */
+  async getPublicProfile(profileId: string) {
+    const profile = await prisma.profiles.findUnique({
+      where: { id: profileId },
+      select: {
+        id: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        avatar_url: true,
+        bio: true,
+        years_of_experience: true,
+        desired_job_title: true,
+        desired_salary_min: true,
+        desired_currency: true,
+        desired_job_type: true,
+        location_text: true,
+        personal_website: true,
+        linkedin_url: true,
+        github_url: true,
+        created_at: true,
+        updated_at: true,
+        // Location with hierarchy
+        location: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            parent: {
+              select: {
+                id: true,
+                name: true,
+                type: true
+              }
+            }
+          }
+        },
+        // Public profile sub-entities
+        experiences: {
+          select: {
+            id: true,
+            company_name: true,
+            position: true,
+            start_date: true,
+            end_date: true,
+            is_current: true,
+            description: true
+          },
+          orderBy: { start_date: 'desc' }
+        },
+        educations: {
+          select: {
+            id: true,
+            school_name: true,
+            degree: true,
+            field_of_study: true,
+            start_date: true,
+            end_date: true
+          },
+          orderBy: { start_date: 'desc' }
+        },
+        skills: {
+          select: {
+            skill_id: true,
+            proficiency: true,
+            level: true,
+            skills: {
+              select: {
+                id: true,
+                name: true,
+                category: true
+              }
+            }
+          },
+          orderBy: {
+            skills: { name: 'asc' }
+          }
+        },
+        certifications: {
+          select: {
+            id: true,
+            name: true,
+            issuing_org: true,
+            credential_id: true,
+            credential_url: true,
+            issue_date: true,
+            expiry_date: true,
+            never_expires: true,
+            description: true,
+            skills_acquired: true
+          },
+          orderBy: { issue_date: 'desc' }
+        },
+        awards: {
+          select: {
+            id: true,
+            title: true,
+            issuer: true,
+            date: true,
+            description: true,
+            url: true,
+            category: true,
+            level: true
+          },
+          orderBy: { date: 'desc' }
+        },
+        // Basic user info (without email)
+        users: {
+          select: {
+            id: true,
+            role: true,
+            verified: true
+          }
+        }
+      }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    // Only return profiles of candidates
+    if (profile.users?.role !== 'candidate') {
+      throw new Error('Profile is not available for public viewing')
+    }
+
+    // Remove users object from response, only keep role info if needed
+    const { users, ...publicProfile } = profile
+
+    return {
+      ...publicProfile,
+      role: users?.role
+    }
+  }
+
+  /**
+   * Update profile visibility (public/private)
+   */
+  async updateProfileVisibility(userId: string, isPublic: boolean) {
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true, is_public: true }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    const updatedProfile = await prisma.profiles.update({
+      where: { id: profile.id },
+      data: { is_public: isPublic },
+      select: {
+        id: true,
+        user_id: true,
+        is_public: true,
+        updated_at: true
+      }
+    })
+
+    return updatedProfile
+  }
+
+  /**
+   * Calculate and return profile completeness percentage
+   */
+  async getProfileCompleteness(userId: string) {
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: {
+        id: true,
+        full_name: true,
+        display_name: true,
+        headline: true,
+        avatar_url: true,
+        bio: true,
+        date_of_birth: true,
+        gender: true,
+        phone_number: true,
+        personal_website: true,
+        linkedin_url: true,
+        github_url: true,
+        location_text: true,
+        location_id: true,
+        years_of_experience: true,
+        desired_job_title: true,
+        desired_salary_min: true,
+        desired_job_type: true,
+        experiences: {
+          select: { id: true }
+        },
+        educations: {
+          select: { id: true }
+        },
+        skills: {
+          select: { skill_id: true }
+        },
+        certifications: {
+          select: { id: true }
+        },
+        awards: {
+          select: { id: true }
+        }
+      }
+    })
+
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    // Define completeness criteria
+    const criteria = {
+      // Basic info (required) - 40% total
+      basicInfo: {
+        full_name: !!profile.full_name?.trim(),
+        display_name: !!profile.display_name?.trim(),
+        headline: !!profile.headline?.trim(),
+        avatar_url: !!profile.avatar_url,
+        bio: !!profile.bio?.trim()
+      },
+
+      // Contact info (optional but recommended) - 20% total
+      contactInfo: {
+        phone_number: !!profile.phone_number,
+        personal_website: !!profile.personal_website,
+        linkedin_url: !!profile.linkedin_url,
+        github_url: !!profile.github_url
+      },
+
+      // Professional info (recommended) - 20% total
+      professionalInfo: {
+        date_of_birth: !!profile.date_of_birth,
+        gender: !!profile.gender,
+        location_text: !!profile.location_text || !!profile.location_id,
+        years_of_experience: !!profile.years_of_experience,
+        desired_job_title: !!profile.desired_job_title,
+        desired_salary_min: !!profile.desired_salary_min,
+        desired_job_type: !!profile.desired_job_type && profile.desired_job_type.length > 0
+      },
+
+      // Career data (optional but valuable) - 20% total
+      careerData: {
+        experiences: (profile.experiences?.length || 0) > 0,
+        educations: (profile.educations?.length || 0) > 0,
+        skills: (profile.skills?.length || 0) > 0,
+        certifications: (profile.certifications?.length || 0) > 0,
+        awards: (profile.awards?.length || 0) > 0
+      }
+    }
+
+    // Calculate completion percentages
+    const basicInfoComplete =
+      Object.values(criteria.basicInfo).filter(Boolean).length / Object.keys(criteria.basicInfo).length
+    const contactInfoComplete =
+      Object.values(criteria.contactInfo).filter(Boolean).length / Object.keys(criteria.contactInfo).length
+    const professionalInfoComplete =
+      Object.values(criteria.professionalInfo).filter(Boolean).length / Object.keys(criteria.professionalInfo).length
+    const careerDataComplete =
+      Object.values(criteria.careerData).filter(Boolean).length / Object.keys(criteria.careerData).length
+
+    // Weighted total percentage
+    const totalPercentage = Math.round(
+      (basicInfoComplete * 0.4 +
+        contactInfoComplete * 0.2 +
+        professionalInfoComplete * 0.2 +
+        careerDataComplete * 0.2) *
+        100
+    )
+
+    // Return detailed completeness info
+    return {
+      percentage: totalPercentage,
+      completed: totalPercentage >= 100,
+      sections: {
+        basicInfo: {
+          percentage: Math.round(basicInfoComplete * 100),
+          completed: Object.values(criteria.basicInfo).filter(Boolean).length,
+          total: Object.keys(criteria.basicInfo).length,
+          items: criteria.basicInfo
+        },
+        contactInfo: {
+          percentage: Math.round(contactInfoComplete * 100),
+          completed: Object.values(criteria.contactInfo).filter(Boolean).length,
+          total: Object.keys(criteria.contactInfo).length,
+          items: criteria.contactInfo
+        },
+        professionalInfo: {
+          percentage: Math.round(professionalInfoComplete * 100),
+          completed: Object.values(criteria.professionalInfo).filter(Boolean).length,
+          total: Object.keys(criteria.professionalInfo).length,
+          items: criteria.professionalInfo
+        },
+        careerData: {
+          percentage: Math.round(careerDataComplete * 100),
+          completed: Object.values(criteria.careerData).filter(Boolean).length,
+          total: Object.keys(criteria.careerData).length,
+          items: {
+            experiences: profile.experiences?.length || 0,
+            educations: profile.educations?.length || 0,
+            skills: profile.skills?.length || 0,
+            certifications: profile.certifications?.length || 0,
+            awards: profile.awards?.length || 0
+          }
+        }
+      },
+      recommendations: this.getCompletenessRecommendations(totalPercentage, criteria)
+    }
+  }
+
+  /**
+   * Generate recommendations based on profile completeness
+   */
+  private getCompletenessRecommendations(percentage: number, criteria: any) {
+    const recommendations = []
+
+    if (percentage < 100) {
+      // Basic info recommendations
+      if (!criteria.basicInfo.full_name) recommendations.push('Add your full name')
+      if (!criteria.basicInfo.display_name) recommendations.push('Add a display name')
+      if (!criteria.basicInfo.headline) recommendations.push('Add a professional headline')
+      if (!criteria.basicInfo.avatar_url) recommendations.push('Upload a profile picture')
+      if (!criteria.basicInfo.bio) recommendations.push('Write a professional bio')
+
+      // Contact info recommendations
+      if (!criteria.contactInfo.phone_number) recommendations.push('Add your phone number')
+      if (!criteria.contactInfo.personal_website) recommendations.push('Add your personal website')
+      if (!criteria.contactInfo.linkedin_url) recommendations.push('Add your LinkedIn profile')
+      if (!criteria.contactInfo.github_url) recommendations.push('Add your GitHub profile')
+
+      // Professional info recommendations
+      if (!criteria.professionalInfo.date_of_birth) recommendations.push('Add your date of birth')
+      if (!criteria.professionalInfo.gender) recommendations.push('Specify your gender')
+      if (!criteria.professionalInfo.location_text && !criteria.professionalInfo.location_id)
+        recommendations.push('Add your location')
+      if (!criteria.professionalInfo.years_of_experience) recommendations.push('Add your years of experience')
+      if (!criteria.professionalInfo.desired_job_title) recommendations.push('Add your desired job title')
+      if (!criteria.professionalInfo.desired_salary_min) recommendations.push('Add your desired salary range')
+      if (!criteria.professionalInfo.desired_job_type) recommendations.push('Specify your preferred job types')
+
+      // Career data recommendations
+      if (!criteria.careerData.experiences) recommendations.push('Add your work experience')
+      if (!criteria.careerData.educations) recommendations.push('Add your education background')
+      if (!criteria.careerData.skills) recommendations.push('Add your skills')
+      if (!criteria.careerData.certifications) recommendations.push('Add your certifications')
+      if (!criteria.careerData.awards) recommendations.push('Add your awards and achievements')
+    }
+
+    return recommendations.slice(0, 5) // Return top 5 recommendations
   }
 }

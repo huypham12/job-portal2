@@ -1,0 +1,102 @@
+components:
+  schemas:
+    # ============================================
+    # Job Schemas
+    # ============================================
+    JobType:
+      type: string
+      enum: [full_time, part_time, contract, internship, freelance, remote, hybrid]
+    JobStatus:
+      type: string
+      enum: [draft, approved, closed]
+
+    SalaryRange:
+      type: object
+      properties:
+        min: { type: integer, minimum: 0 }
+        max: { type: integer, minimum: 0 }
+        currency: { type: string, default: VND }
+      required: [min, max]
+
+    JobRequirement:
+      type: object
+      properties:
+        requirement_type: { type: string, maxLength: 50 }
+        title: { type: string, maxLength: 255 }
+        description: { type: string }
+        is_required: { type: boolean, default: true }
+        level: { type: string, maxLength: 50 }
+        years_experience: { type: integer, minimum: 0 }
+
+    JobBenefit:
+      type: object
+      properties:
+        benefit_type: { type: string, maxLength: 50 }
+        title: { type: string, maxLength: 255 }
+        description: { type: string }
+        value_amount: { type: string }
+        value_currency: { type: string, maxLength: 10, default: VND }
+
+    WorkArrangements:
+      type: object
+      properties:
+        is_remote_allowed: { type: boolean, default: false }
+        remote_percentage: { type: integer, minimum: 0, maximum: 100, default: 0 }
+        flexible_hours: { type: boolean, default: false }
+        travel_requirement: { type: string, maxLength: 50 }
+        overtime_expected: { type: boolean, default: false }
+        shift_type: { type: string, maxLength: 50 }
+
+    CreateJobRequest:
+      type: object
+      required: [title, description, company_id, job_type]
+      properties:
+        title: { type: string, minLength: 10, maxLength: 255 }
+        description: { type: string, minLength: 50 }
+        company_id: { type: string, format: uuid }
+        location_id: { type: string, format: uuid, nullable: true }
+        salary_range: { $ref: '#/components/schemas/SalaryRange' }
+        job_type: { $ref: '#/components/schemas/JobType' }
+        experience_level: { type: integer, minimum: 0, maximum: 30, nullable: true }
+        expires_at: { type: string, format: date-time }
+        metadata: { type: object, additionalProperties: true }
+        requirements:
+          type: array
+          items: { $ref: '#/components/schemas/JobRequirement' }
+        benefits:
+          type: array
+          items: { $ref: '#/components/schemas/JobBenefit' }
+        skill_ids:
+          type: array
+          items: { type: string, format: uuid }
+        tag_ids:
+          type: array
+          items: { type: string, format: uuid }
+        work_arrangements:
+          $ref: '#/components/schemas/WorkArrangements'
+
+    UpdateJobRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreateJobRequest'
+
+    UpdateJobStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [approved, closed]
+
+    BulkJobActionsRequest:
+      type: object
+      required: [action, job_ids]
+      properties:
+        action: { type: string, enum: [close, delete, publish] }
+        job_ids: { type: array, items: { type: string, format: uuid } }
+
+    BulkExtendExpiryRequest:
+      type: object
+      required: [job_ids, new_expiry_date]
+      properties:
+        job_ids: { type: array, items: { type: string, format: uuid } }
+        new_expiry_date: { type: string, format: date-time }

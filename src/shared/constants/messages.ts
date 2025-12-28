@@ -127,5 +127,8 @@ export const MESSAGES = {
   FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Forgot password token is required',
   INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot password token',
   // Date of birth
-  DATE_OF_BIRTH_MUST_BE_YYYY_MM_DD: 'Date of birth must be in YYYY-MM-DD format'
+  DATE_OF_BIRTH_MUST_BE_YYYY_MM_DD: 'Date of birth must be in YYYY-MM-DD format',
+
+  // Job messages
+  JOB_NOT_FOUND: 'Không tìm thấy tin tuyển dụng'
 }

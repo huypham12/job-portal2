@@ -1,0 +1,87 @@
+openapi: 3.0.4
+info:
+  title: Job Portal API
+  description: |-
+    API documentation for Job Portal - A comprehensive job search and recruitment platform.
+
+    This API provides endpoints for authentication, user management, and administrative operations.
+  version: 1.0.0
+  contact:
+    email: support@jobportal.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:4000/api
+    description: Local development server
+  - url: http://localhost:3000/api
+    description: Frontend dev proxy (if applicable)
+  - url: https://api.jobportal.com/api
+    description: Production server
+
+tags:
+  - name: auth
+    description: Authentication operations (register, login, logout, password management)
+  - name: user
+    description: User profile management operations
+  - name: admin
+    description: Administrative operations (user management, system administration)
+  - name: companies
+    description: Company profile management operations
+  - name: jobs
+    description: Job postings and listings (public + recruiter)
+  - name: saved-jobs
+    description: Candidate saved jobs
+  - name: skills
+    description: Public skill search and categories
+  - name: uploads
+    description: File uploads (avatar, company logo, resume, application docs)
+  - name: resumes
+    description: Candidate resume management
+  - name: applications
+    description: Job applications (candidate + recruiter workflows)
+  - name: connection-interests
+    description: Connection interest between recruiters and candidates
+  - name: notifications
+    description: Notification management
+  - name: searches
+    description: Job search and recommendations
+  - name: locations
+    description: Location data (provinces, districts)
+  - name: matching
+    description: Job-candidate matching algorithms
+
+paths:
+  <<:
+    - $ref: './paths/auth.yaml'
+    - $ref: './paths/user.yaml'
+    - $ref: './paths/admin.yaml'
+    - $ref: './paths/jobs.yaml'
+    - $ref: './paths/companies.yaml'
+    - $ref: './paths/saved-jobs.yaml'
+    - $ref: './paths/skills.yaml'
+    - $ref: './paths/uploads.yaml'
+    - $ref: './paths/resumes.yaml'
+    - $ref: './paths/applications.yaml'
+    - $ref: './paths/connection-interests.yaml'
+    - $ref: './paths/notifications.yaml'
+    - $ref: './paths/searches.yaml'
+    - $ref: './paths/locations.yaml'
+    - $ref: './paths/matching.yaml'
+
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/components/securitySchemes'
+  schemas:
+    <<:
+      - $ref: './components/schemas/common.yaml'
+      - $ref: './components/schemas/auth.yaml'
+      - $ref: './components/schemas/user.yaml'
+      - $ref: './components/schemas/admin.yaml'
+      - $ref: './components/schemas/jobs.yaml'
+      - $ref: './components/schemas/companies.yaml'
+      - $ref: './components/schemas/saved-jobs.yaml'
+      - $ref: './components/schemas/resumes.yaml'
+      - $ref: './components/schemas/applications.yaml'
+      - $ref: './components/schemas/connection-interests.yaml'

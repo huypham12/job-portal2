@@ -1,0 +1,602 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Technology",
+    "slug": "technology",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "name": "Healthcare",
+    "slug": "healthcare",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "name": "Finance",
+    "slug": "finance",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "name": "Education",
+    "slug": "education",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "name": "Retail",
+    "slug": "retail",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "name": "Manufacturing",
+    "slug": "manufacturing",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "name": "Consulting",
+    "slug": "consulting",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "name": "Marketing",
+    "slug": "marketing",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "name": "Real Estate",
+    "slug": "real-estate",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440009",
+    "name": "Transportation",
+    "slug": "transportation",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440010",
+    "name": "Food & Beverage",
+    "slug": "food-beverage",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440011",
+    "name": "Construction",
+    "slug": "construction",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440012",
+    "name": "Legal",
+    "slug": "legal",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440013",
+    "name": "Government",
+    "slug": "government",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440014",
+    "name": "Non-Profit",
+    "slug": "non-profit",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440015",
+    "name": "Media & Entertainment",
+    "slug": "media-entertainment",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440016",
+    "name": "Energy",
+    "slug": "energy",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440017",
+    "name": "Telecommunications",
+    "slug": "telecommunications",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440018",
+    "name": "Insurance",
+    "slug": "insurance",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440019",
+    "name": "Automotive",
+    "slug": "automotive",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440020",
+    "name": "Agriculture",
+    "slug": "agriculture",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440021",
+    "name": "Pharmaceuticals",
+    "slug": "pharmaceuticals",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440022",
+    "name": "Aerospace",
+    "slug": "aerospace",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440023",
+    "name": "Hospitality",
+    "slug": "hospitality",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440024",
+    "name": "Sports & Recreation",
+    "slug": "sports-recreation",
+    "type": "industry"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440025",
+    "name": "JavaScript",
+    "slug": "javascript",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440026",
+    "name": "Python",
+    "slug": "python",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440027",
+    "name": "Java",
+    "slug": "java",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440028",
+    "name": "C#",
+    "slug": "csharp",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440029",
+    "name": "PHP",
+    "slug": "php",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440030",
+    "name": "Ruby",
+    "slug": "ruby",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440031",
+    "name": "Go",
+    "slug": "go",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440032",
+    "name": "Rust",
+    "slug": "rust",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440033",
+    "name": "Swift",
+    "slug": "swift",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440034",
+    "name": "Kotlin",
+    "slug": "kotlin",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440035",
+    "name": "TypeScript",
+    "slug": "typescript",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440036",
+    "name": "C++",
+    "slug": "cpp",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440037",
+    "name": "C",
+    "slug": "c",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440038",
+    "name": "Scala",
+    "slug": "scala",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440039",
+    "name": "R",
+    "slug": "r",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440040",
+    "name": "SQL",
+    "slug": "sql",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440041",
+    "name": "MongoDB",
+    "slug": "mongodb",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440042",
+    "name": "PostgreSQL",
+    "slug": "postgresql",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440043",
+    "name": "MySQL",
+    "slug": "mysql",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440044",
+    "name": "Redis",
+    "slug": "redis",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440045",
+    "name": "Elasticsearch",
+    "slug": "elasticsearch",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440046",
+    "name": "Docker",
+    "slug": "docker",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440047",
+    "name": "Kubernetes",
+    "slug": "kubernetes",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440048",
+    "name": "AWS",
+    "slug": "aws",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440049",
+    "name": "Azure",
+    "slug": "azure",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440050",
+    "name": "Google Cloud",
+    "slug": "google-cloud",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440051",
+    "name": "React",
+    "slug": "react",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440052",
+    "name": "Vue.js",
+    "slug": "vue-js",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440053",
+    "name": "Angular",
+    "slug": "angular",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440054",
+    "name": "Node.js",
+    "slug": "nodejs",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440055",
+    "name": "Express.js",
+    "slug": "expressjs",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440056",
+    "name": "Django",
+    "slug": "django",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440057",
+    "name": "Spring Boot",
+    "slug": "spring-boot",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440058",
+    "name": "Laravel",
+    "slug": "laravel",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440059",
+    "name": "Ruby on Rails",
+    "slug": "ruby-on-rails",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440060",
+    "name": "Flutter",
+    "slug": "flutter",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440061",
+    "name": "React Native",
+    "slug": "react-native",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440062",
+    "name": "TensorFlow",
+    "slug": "tensorflow",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440063",
+    "name": "PyTorch",
+    "slug": "pytorch",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440064",
+    "name": "Machine Learning",
+    "slug": "machine-learning",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440065",
+    "name": "Artificial Intelligence",
+    "slug": "artificial-intelligence",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440066",
+    "name": "Data Science",
+    "slug": "data-science",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440067",
+    "name": "DevOps",
+    "slug": "devops",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440068",
+    "name": "Cybersecurity",
+    "slug": "cybersecurity",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440069",
+    "name": "Blockchain",
+    "slug": "blockchain",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440070",
+    "name": "Full Stack",
+    "slug": "full-stack",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440071",
+    "name": "Frontend",
+    "slug": "frontend",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440072",
+    "name": "Backend",
+    "slug": "backend",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440073",
+    "name": "Mobile Development",
+    "slug": "mobile-development",
+    "type": "technical"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440074",
+    "name": "Remote",
+    "slug": "remote",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440075",
+    "name": "Onsite",
+    "slug": "onsite",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440076",
+    "name": "Hybrid",
+    "slug": "hybrid",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440077",
+    "name": "Contract",
+    "slug": "contract",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440078",
+    "name": "Freelance",
+    "slug": "freelance",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440079",
+    "name": "Part-time",
+    "slug": "part-time",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440080",
+    "name": "Full-time",
+    "slug": "full-time",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440081",
+    "name": "Internship",
+    "slug": "internship",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440082",
+    "name": "Temporary",
+    "slug": "temporary",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440083",
+    "name": "Consulting Work",
+    "slug": "consulting-work",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440084",
+    "name": "Project-based",
+    "slug": "project-based",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440085",
+    "name": "Gig Economy",
+    "slug": "gig-economy",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440086",
+    "name": "Shift Work",
+    "slug": "shift-work",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440087",
+    "name": "Night Shift",
+    "slug": "night-shift",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440088",
+    "name": "Weekend Work",
+    "slug": "weekend-work",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440089",
+    "name": "Flexible Hours",
+    "slug": "flexible-hours",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440090",
+    "name": "Work from Home",
+    "slug": "work-from-home",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440091",
+    "name": "Office-based",
+    "slug": "office-based",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440092",
+    "name": "Field Work",
+    "slug": "field-work",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440093",
+    "name": "Travel Required",
+    "slug": "travel-required",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440094",
+    "name": "No Travel",
+    "slug": "no-travel",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440095",
+    "name": "Business Travel",
+    "slug": "business-travel",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440096",
+    "name": "International",
+    "slug": "international",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440097",
+    "name": "Local Only",
+    "slug": "local-only",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440098",
+    "name": "Entry Level",
+    "slug": "entry-level",
+    "type": "work_type"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440099",
+    "name": "Senior Level",
+    "slug": "senior-level",
+    "type": "work_type"
+  }
+]

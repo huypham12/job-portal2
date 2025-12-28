@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Senior Full-Stack Software Engineer - 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        line-height: 1.6;
+        color: #2d3748;
+        background: #f7fafc;
+        padding: 20px;
+      }
+
+      .resume-container {
+        max-width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        background: white;
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        display: flex;
+        overflow: hidden;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 280px;
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        color: white;
+        padding: 40px 30px;
+        flex-shrink: 0;
+      }
+
+      .profile-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: white;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        font-weight: 700;
+        color: #1e293b;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .sidebar h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 8px;
+        line-height: 1.2;
+      }
+
+      .sidebar-section {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .sidebar-section:first-of-type {
+        margin-top: 20px;
+        padding-top: 0;
+        border-top: none;
+      }
+
+      .sidebar-section h3 {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 15px;
+        opacity: 0.9;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .contact-item i {
+        width: 20px;
+        margin-right: 10px;
+        opacity: 0.9;
+        font-size: 14px;
+      }
+
+      .contact-item a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .skill-item {
+        margin-bottom: 12px;
+      }
+
+      .skill-name {
+        font-size: 13px;
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+
+      .skill-level {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .skill-level-fill {
+        height: 100%;
+        background: white;
+        border-radius: 3px;
+        transition: width 0.3s ease;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 40px 45px;
+        overflow: hidden;
+      }
+
+      .bio {
+        font-size: 14px;
+        color: #4a5568;
+        margin-bottom: 30px;
+        line-height: 1.7;
+        text-align: justify;
+      }
+
+      .section {
+        margin-bottom: 35px;
+      }
+
+      .section-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 3px solid #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-title i {
+        font-size: 20px;
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 25px;
+        border-left: 2px solid #e2e8f0;
+      }
+
+      .timeline-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #1e293b;
+        border: 2px solid white;
+        box-shadow: 0 0 0 2px #1e293b;
+      }
+
+      .timeline-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
+        gap: 15px;
+      }
+
+      .timeline-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a202c;
+        line-height: 1.3;
+      }
+
+      .timeline-subtitle {
+        font-size: 14px;
+        color: #1e293b;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .timeline-date {
+        font-size: 12px;
+        color: #718096;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .timeline-date i {
+        font-size: 11px;
+      }
+
+      .timeline-description {
+        font-size: 13px;
+        color: #4a5568;
+        line-height: 1.6;
+        margin-top: 8px;
+      }
+
+      .certification-item,
+      .award-item {
+        padding: 15px;
+        background: #f7fafc;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        border-left: 3px solid #1e293b;
+      }
+
+      .cert-name,
+      .award-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a202c;
+        margin-bottom: 4px;
+      }
+
+      .cert-issuer,
+      .award-issuer {
+        font-size: 13px;
+        color: #1e293b;
+        margin-bottom: 4px;
+      }
+
+      .cert-date,
+      .award-date {
+        font-size: 12px;
+        color: #718096;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .cert-date i,
+      .award-date i {
+        font-size: 11px;
+      }
+
+      .cert-credential {
+        font-size: 12px;
+        color: #718096;
+        margin-top: 6px;
+      }
+
+      .cert-credential a {
+        color: #1e293b;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      /* Responsive */
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+
+        .resume-container {
+          box-shadow: none;
+          max-width: 100%;
+          min-height: auto;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .resume-container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+        }
+
+        .main-content {
+          padding: 30px 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="resume-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="profile-photo">NV</div>
+        <h1>Nguyen Van Huy</h1>
+
+        <div class="sidebar-section">
+          <h3>Contact</h3>
+
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:nguyenvanhuy.dev@gmail.com">nguyenvanhuy.dev@gmail.com</a>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <span>+84 912 345 678</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Skills</h3>
+
+          <div class="skill-item">
+            <div class="skill-name">JavaScript</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">TypeScript</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Node.js</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">React</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Next.js</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Vue.js</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Express.js</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">NestJS</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">GraphQL</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">REST API</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">PostgreSQL</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">MongoDB</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Redis</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Prisma ORM</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Docker</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Kubernetes</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 60%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">AWS (EC2, S3, Lambda, RDS)</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Google Cloud Platform</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 60%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">CI/CD (GitHub Actions, Jenkins)</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Git & GitHub</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Microservices Architecture</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Test-Driven Development (TDD)</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Jest & Cypress</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Agile/Scrum</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">WebSocket & Real-time</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Elasticsearch</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 60%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">RabbitMQ</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 60%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Nginx</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">System Design</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">Performance Optimization</div>
+            <div class="skill-level">
+              <div class="skill-level-fill" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="bio">
+          Highly motivated and results-oriented Senior Full-Stack Software Engineer with 7+ years of experience in
+          designing, developing, and deploying scalable web applications and microservices architectures. Proven
+          expertise in JavaScript/TypeScript ecosystems, cloud infrastructure, and modern DevOps practices. Passionate
+          about clean code, performance optimization, and mentoring junior developers. Successfully led multiple
+          high-impact projects from conception to production, improving system performance by 40% and reducing
+          deployment time by 60%. Seeking challenging opportunities to leverage technical expertise and leadership
+          skills in building innovative solutions.
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">
+            <i class="fas fa-briefcase"></i>
+            Work Experience
+          </h2>
+
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <div>
+                <div class="timeline-title">Senior Full-Stack Software Engineer</div>
+                <div class="timeline-subtitle">TechVision Solutions JSC</div>
+              </div>
+              <div class="timeline-date">
+                <i class="far fa-calendar"></i>
+                Mar 2022 - Present
+              </div>
+            </div>
+            <div class="timeline-description">
+              Leading development of enterprise-grade SaaS platform serving 50,000+ users across Southeast Asia.
+              Architected and implemented microservices-based backend infrastructure using Node.js, NestJS, and
+              PostgreSQL, resulting in 40% improvement in system performance and 99.9% uptime. Spearheaded migration
+              from monolithic to microservices architecture, reducing deployment time from 2 hours to 15 minutes.
+              Designed and built real-time notification system using WebSocket and Redis Pub/Sub, handling 100,000+
+              concurrent connections. Implemented comprehensive API documentation with Swagger/OpenAPI and established
+              coding standards that improved team productivity by 30%. Mentored team of 5 junior developers through code
+              reviews, pair programming sessions, and technical workshops. Collaborated with product managers and
+              designers to translate business requirements into technical solutions. Optimized database queries and
+              implemented caching strategies, reducing average API response time from 800ms to 200ms. Established
+              automated testing pipeline with 85% code coverage using Jest and Supertest. Technologies: TypeScript,
+              Node.js, NestJS, React, Next.js, PostgreSQL, Redis, Docker, Kubernetes, AWS (EC2, S3, RDS, Lambda),
+              GraphQL, Prisma ORM, Jest, GitHub Actions.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <div>
+                <div class="timeline-title">Full-Stack Developer</div>
+                <div class="timeline-subtitle">Digital Innovation Hub</div>
+              </div>
+              <div class="timeline-date">
+                <i class="far fa-calendar"></i>
+                Jun 2020 - Feb 2022
+              </div>
+            </div>
+            <div class="timeline-description">
+              Developed and maintained multiple client-facing web applications and internal tools using modern
+              JavaScript frameworks. Built responsive e-commerce platform handling 10,000+ daily transactions using
+              React, Node.js, and MongoDB, achieving 99.5% uptime. Implemented RESTful APIs and integrated third-party
+              payment gateways (Stripe, PayPal, VNPay) with comprehensive error handling and logging. Designed and
+              developed admin dashboard with complex data visualization using Chart.js and D3.js, improving business
+              insights and decision-making capabilities. Optimized frontend bundle size by 60% through code splitting,
+              lazy loading, and image optimization techniques. Implemented OAuth 2.0 authentication and role-based
+              access control (RBAC) ensuring secure user management. Collaborated in Agile/Scrum environment with 2-week
+              sprints, participating in daily standups, sprint planning, and retrospectives. Conducted performance
+              profiling and optimization, reducing initial page load time from 5s to 1.8s. Created comprehensive
+              technical documentation and API specifications for development team and stakeholders. Technologies:
+              JavaScript, TypeScript, React, Redux, Node.js, Express.js, MongoDB, MySQL, Redis, Docker, AWS S3, JWT,
+              OAuth 2.0, Jest, Webpack, Git.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <div>
+                <div class="timeline-title">Backend Developer</div>
+                <div class="timeline-subtitle">StartupX Technology</div>
+              </div>
+              <div class="timeline-date">
+                <i class="far fa-calendar"></i>
+                Aug 2018 - May 2020
+              </div>
+            </div>
+            <div class="timeline-description">
+              Contributed to development of mobile app backend infrastructure serving 20,000+ active users in fintech
+              domain. Built scalable RESTful APIs using Node.js and Express.js with comprehensive input validation and
+              error handling. Designed and optimized PostgreSQL database schema with proper indexing, improving query
+              performance by 50%. Implemented background job processing system using Bull queue and Redis for handling
+              asynchronous tasks like email notifications and report generation. Integrated multiple third-party APIs
+              including SMS gateways, payment processors, and banking systems with proper rate limiting and retry
+              mechanisms. Implemented request logging, monitoring, and alerting system using Winston and CloudWatch.
+              Participated in security audits and implemented best practices including SQL injection prevention, XSS
+              protection, and data encryption. Wrote unit and integration tests achieving 75% code coverage using Mocha
+              and Chai. Deployed applications to AWS EC2 instances with automated CI/CD pipeline using Jenkins.
+              Collaborated with mobile developers to define API contracts and optimize data transfer protocols.
+              Technologies: Node.js, Express.js, PostgreSQL, Redis, Bull, AWS (EC2, RDS, S3), JWT, Mocha, Chai, Jenkins,
+              Nginx, Git.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <div>
+                <div class="timeline-title">Junior Web Developer</div>
+                <div class="timeline-subtitle">WebCraft Solutions</div>
+              </div>
+              <div class="timeline-date">
+                <i class="far fa-calendar"></i>
+                Jul 2017 - Jul 2018
+              </div>
+            </div>
+            <div class="timeline-description">
+              Started professional career developing corporate websites and small-scale web applications for local
+              businesses. Built responsive websites using HTML5, CSS3, JavaScript, and jQuery with cross-browser
+              compatibility. Implemented content management systems (WordPress, custom PHP solutions) allowing clients
+              to manage their content independently. Integrated contact forms, email newsletters, and basic e-commerce
+              functionality using PHP and MySQL. Learned version control best practices using Git and participated in
+              code reviews to improve code quality. Assisted senior developers in debugging production issues and
+              implementing bug fixes. Gained experience in client communication, requirement gathering, and project
+              estimation. Technologies: HTML5, CSS3, JavaScript, jQuery, PHP, MySQL, WordPress, Git, Bootstrap,
+              Photoshop.
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">
+            <i class="fas fa-graduation-cap"></i>
+            Education
+          </h2>
+
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <div>
+                <div class="timeline-title">Bachelor of Science in Computer Science</div>
+                <div class="timeline-subtitle">Ho Chi Minh University of Technology (HCMUT)</div>
+              </div>
+              <div class="timeline-date">
+                <i class="far fa-calendar"></i>
+                Sep 2013 - Jun 2017
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <div>
+                <div class="timeline-title">Professional Certificate in Advanced Full-Stack Web Development</div>
+                <div class="timeline-subtitle">FPT Software Academy</div>
+              </div>
+              <div class="timeline-date">
+                <i class="far fa-calendar"></i>
+                Jan 2017 - Jun 2017
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">
+            <i class="fas fa-certificate"></i>
+            Certifications
+          </h2>
+
+          <div class="certification-item">
+            <div class="cert-name">AWS Certified Solutions Architect - Associate</div>
+            <div class="cert-issuer">Amazon Web Services</div>
+            <div class="cert-date">
+              <i class="far fa-calendar"></i>
+              Issued Aug 2023 - Expires Aug 2026
+            </div>
+
+            <div class="cert-credential">
+              Credential ID: AWS-ASA-12345678
+              <a href="https://aws.amazon.com/verification/AWS-ASA-12345678" target="_blank">View Certificate</a>
+            </div>
+          </div>
+
+          <div class="certification-item">
+            <div class="cert-name">Professional Scrum Master I (PSM I)</div>
+            <div class="cert-issuer">Scrum.org</div>
+            <div class="cert-date">
+              <i class="far fa-calendar"></i>
+              Issued Nov 2022
+            </div>
+
+            <div class="cert-credential">
+              Credential ID: PSM-987654
+              <a href="https://www.scrum.org/certificates/PSM-987654" target="_blank">View Certificate</a>
+            </div>
+          </div>
+
+          <div class="certification-item">
+            <div class="cert-name">MongoDB Certified Developer Associate</div>
+            <div class="cert-issuer">MongoDB University</div>
+            <div class="cert-date">
+              <i class="far fa-calendar"></i>
+              Issued May 2021 - Expires May 2024
+            </div>
+
+            <div class="cert-credential">
+              Credential ID: MONGO-DEV-456789
+              <a href="https://university.mongodb.com/verify/MONGO-DEV-456789" target="_blank">View Certificate</a>
+            </div>
+          </div>
+
+          <div class="certification-item">
+            <div class="cert-name">Meta Front-End Developer Professional Certificate</div>
+            <div class="cert-issuer">Meta (via Coursera)</div>
+            <div class="cert-date">
+              <i class="far fa-calendar"></i>
+              Issued Dec 2020
+            </div>
+
+            <div class="cert-credential">
+              Credential ID: COURSERA-FE-789456
+              <a href="https://www.coursera.org/verify/COURSERA-FE-789456" target="_blank">View Certificate</a>
+            </div>
+          </div>
+
+          <div class="certification-item">
+            <div class="cert-name">Docker Certified Associate (DCA)</div>
+            <div class="cert-issuer">Docker Inc.</div>
+            <div class="cert-date">
+              <i class="far fa-calendar"></i>
+              Issued Mar 2023 - Expires Mar 2025
+            </div>
+
+            <div class="cert-credential">
+              Credential ID: DCA-2023-123456
+              <a href="https://www.docker.com/certificates/DCA-2023-123456" target="_blank">View Certificate</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">
+            <i class="fas fa-trophy"></i>
+            Awards & Honors
+          </h2>
+
+          <div class="award-item">
+            <div class="award-title">Employee of the Year 2024</div>
+            <div class="award-issuer">TechVision Solutions JSC</div>
+            <div class="award-date">
+              <i class="far fa-calendar"></i>
+              Dec 2024
+            </div>
+            <div class="timeline-description" style="margin-top: 8px">
+              Recognized for outstanding technical leadership, successfully delivering critical projects ahead of
+              schedule, and mentoring junior team members. Led initiative that improved system performance by 40% and
+              reduced infrastructure costs by 25%.
+            </div>
+          </div>
+
+          <div class="award-item">
+            <div class="award-title">Best Innovation Award - Hackathon 2023</div>
+            <div class="award-issuer">Vietnam Tech Community</div>
+            <div class="award-date">
+              <i class="far fa-calendar"></i>
+              Oct 2023
+            </div>
+            <div class="timeline-description" style="margin-top: 8px">
+              First place winner in national hackathon competition with 150+ participants. Developed AI-powered job
+              matching platform using machine learning algorithms, Node.js, and React. Project was recognized for
+              technical excellence and business potential.
+            </div>
+          </div>
+
+          <div class="award-item">
+            <div class="award-title">Outstanding Project Delivery Award</div>
+            <div class="award-issuer">Digital Innovation Hub</div>
+            <div class="award-date">
+              <i class="far fa-calendar"></i>
+              Jul 2021
+            </div>
+            <div class="timeline-description" style="margin-top: 8px">
+              Awarded for successfully delivering complex e-commerce platform 2 weeks ahead of schedule while
+              maintaining 100% test coverage and zero critical bugs in production during first 3 months of operation.
+            </div>
+          </div>
+
+          <div class="award-item">
+            <div class="award-title">Dean's List for Academic Excellence</div>
+            <div class="award-issuer">Ho Chi Minh University of Technology</div>
+            <div class="award-date">
+              <i class="far fa-calendar"></i>
+              Jun 2016
+            </div>
+            <div class="timeline-description" style="margin-top: 8px">
+              Achieved GPA of 3.8/4.0 and ranked in top 5% of Computer Science class. Received scholarship for
+              outstanding academic performance and contribution to university programming club.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+components:
+  schemas:
+    # ============================================
+    # Connection Interest Schemas
+    # ============================================
+    CreateConnectionInterestRequest:
+      type: object
+      required: [candidate_id, interest_type]
+      properties:
+        candidate_id: { type: string, format: uuid }
+        job_id: { type: string, format: uuid }
+        interest_type:
+          type: string
+          enum: [job_invitation, profile_view, network_connection]
+        message: { type: string }
+        contact_info:
+          type: object
+          properties:
+            email: { type: string, format: email }
+            phone: { type: string }
+
+    RespondConnectionInterestRequest:
+      type: object
+      required: [action]
+      properties:
+        action:
+          type: string
+          enum: [accept, reject]
+        message: { type: string }

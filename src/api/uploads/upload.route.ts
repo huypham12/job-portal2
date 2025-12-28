@@ -3,7 +3,7 @@ import { UploadController } from './upload.controller'
 import { UploadService } from './services/upload.service'
 import { S3Service } from './services/s3.service'
 import { wrapController } from '@/shared/utils/wrap-controller'
-import { authenticateAccessToken } from '@/shared/middleware/verify.middleware'
+import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { accessTokenValidator } from '../auth/auth.validator'
 import {
   uploadAvatarValidator,
@@ -17,7 +17,7 @@ import {
   uploadApplicationDocument as multerUploadApplicationDocument,
   handleMulterError
 } from './middleware/upload.middleware'
-import { candidate, recruiter } from '@/shared/middleware/authorize.middleware'
+import { candidate, recruiter } from '@/middleware/authorize.middleware'
 
 const uploadRouter = Router()
 

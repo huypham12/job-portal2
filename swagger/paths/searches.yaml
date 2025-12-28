@@ -1,0 +1,118 @@
+# ============================================
+# SEARCH ENDPOINTS
+# ============================================
+/search/jobs:
+  get:
+    tags: [searches]
+    summary: Search jobs
+    responses:
+      '200': { description: OK }
+
+/search/suggestions:
+  get:
+    tags: [searches]
+    summary: Get search suggestions
+    responses:
+      '200': { description: OK }
+
+/search/events:
+  post:
+    tags: [searches]
+    summary: Track search events
+    responses:
+      '200': { description: OK }
+
+/search/recent:
+  get:
+    tags: [searches]
+    summary: Get recent searches
+    security: [{ bearerAuth: [] }]
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+  delete:
+    tags: [searches]
+    summary: Clear recent searches
+    security: [{ bearerAuth: [] }]
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+
+/search/recent/{id}:
+  delete:
+    tags: [searches]
+    summary: Delete recent search
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+
+/search/popular-queries:
+  get:
+    tags: [searches]
+    summary: Get popular search queries
+    security: [{ bearerAuth: [] }]
+    responses:
+      '200': { description: OK }
+      '401': { description: Unauthorized }
+
+# ================================
+# COMPANY SEARCH ENDPOINTS
+# ================================
+
+/search/companies:
+  get:
+    tags: [searches]
+    summary: Search companies
+    parameters:
+      - in: query
+        name: q
+        schema: { type: string }
+        description: Search query
+      - in: query
+        name: industry
+        schema: { type: string }
+        description: Filter by industry
+      - in: query
+        name: location
+        schema: { type: string }
+        description: Filter by location
+      - in: query
+        name: size_min
+        schema: { type: integer }
+        description: Minimum company size
+      - in: query
+        name: size_max
+        schema: { type: integer }
+        description: Maximum company size
+    responses:
+      '200': { description: OK }
+
+/search/companies/suggestions:
+  get:
+    tags: [searches]
+    summary: Get company search suggestions
+    parameters:
+      - in: query
+        name: q
+        schema: { type: string }
+        description: Partial search query
+    responses:
+      '200': { description: OK }
+
+/search/companies/popular:
+  get:
+    tags: [searches]
+    summary: Get popular companies
+    parameters:
+      - in: query
+        name: limit
+        schema: { type: integer, default: 10 }
+        description: Number of companies to return
+    responses:
+      '200': { description: OK }
