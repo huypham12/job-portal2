@@ -8,6 +8,16 @@ import { searchService } from './search.service'
  */
 export async function searchJobsController(req: Request, res: Response) {
   const query: JobSearchRequestDto = req.validated!.query
-  const result = await searchService.searchJobs(query)
+
+  // Extract recruiterId from authenticated user if they are a recruiter
+  // This enables tenant isolation for authenticated recruiters while allowing public search for candidates
+  const recruiterId = req.decoded_authorization?.role === 'recruiter'
+    ? req.decoded_authorization.user_id
+    : undefined
+
+  const result = await searchService.searchJobs({
+    ...query,
+    recruiterId
+  })
   return res.json(result)
 }

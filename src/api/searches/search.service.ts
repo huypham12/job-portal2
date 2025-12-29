@@ -5,12 +5,41 @@ import { redisService } from '../../config/redis.service'
 import { metrics } from '../../shared/utils/metrics.util'
 import { prisma } from '../../config/database.service'
 import { Prisma } from '@prisma/client'
+import { buildJobSearchQuery, buildJobSuggestionsQuery } from '../../search/jobSearch.builder'
+import { QueryContext } from '../../search/search.types'
+import { envConfig } from '../../config/getEnvConfig'
 
 /**
  * Search service: build ES query (pseudocode), call elasticsearchService, map to response.
  * - Keep ES query details as pseudocode per project constraints.
  * - Return snake_case response shape as defined by DTO.
  */
+/**
+ * Check if new search builder should be used based on rollout percentage
+ */
+function shouldUseNewSearchBuilder(userId?: string): boolean {
+  const percentage = envConfig.rollout.newSearchBuilderPercentage
+  if (percentage >= 100) return true
+  if (percentage <= 0) return false
+
+  // Use user ID for consistent rollout (same user always gets same experience)
+  const hash = userId ? simpleHash(userId) : Math.random() * 100
+  return (hash % 100) < percentage
+}
+
+/**
+ * Simple hash function for consistent user assignment to rollout groups
+ */
+function simpleHash(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32-bit integer
+  }
+  return Math.abs(hash)
+}
+
 export const searchService = {
   async searchJobs(
     dto: JobSearchRequestDto & {
@@ -20,7 +49,7 @@ export const searchService = {
       userSkills?: string[]
       userDesiredSalaryMin?: number
       userDesiredSalaryMax?: number
-      recruiterId?: string  // MANDATORY for tenant isolation
+      recruiterId?: string  // Optional for tenant isolation (only for authenticated recruiters)
     }
   ): Promise<JobSearchResponseDto> {
     const {
@@ -39,119 +68,93 @@ export const searchService = {
       userSkills,
       userDesiredSalaryMin,
       userDesiredSalaryMax,
-      recruiterId  // MANDATORY for tenant isolation
+      recruiterId  // Optional: only present for authenticated recruiters
     } = dto
 
-    const from = (page - 1) * size
+    // Check if new search builder should be used (use default hash for anonymous users)
+    const useNewBuilder = shouldUseNewSearchBuilder(recruiterId || 'anonymous')
 
-    // Build ES query using multi_match + filters for fuzzy search
-    const must: any[] = []
-    const filter: any[] = []
-
-    // CRITICAL: Enforce recruiter isolation - reject if no recruiter context
-    if (!recruiterId) {
-      throw new Error('recruiterId is required for job search to ensure tenant isolation')
+    if (!useNewBuilder) {
+      // Fallback to old implementation
+      return this.searchJobsLegacy(dto)
     }
 
-    // Add mandatory recruiter ownership filter
-    filter.push({ term: { recruiter_id: recruiterId } })
-
-    if (q && q.length) {
-      must.push({
-        multi_match: {
-          query: q,
-          fields: [
-            'title^4',
-            'skills^3',
-            'company_name^2',
-            'description',
-            'location_province^2', // Boost province search
-            'location_district^2', // Boost district search
-            'location_combined^1.5' // Boost combined search
-          ],
-          fuzziness: 'AUTO',
-          operator: 'and'
-        }
-      })
-    } else {
-      must.push({ match_all: {} })
-    }
-
-    // Handle location filtering with province/district hierarchy
-    if (location) {
-      const locationIds = await searchRepo.getLocationIdsForFilter(location)
-      if (locationIds.length > 0) {
-        filter.push({ terms: { location_id: locationIds } })
+    // Build standardized QueryContext from DTO
+    const queryContext: QueryContext = {
+      q,
+      userSkills,
+      userLocationId,
+      userExperienceLevel,
+      userPrefersRemote,
+      userDesiredSalaryMin,
+      userDesiredSalaryMax,
+      filters: {
+        location_name: location,
+        job_type: jobType,
+        experience_level: experienceLevel,
+        skill_names: skills,
+        recruiter_id: recruiterId // Optional: only filter by tenant if recruiterId provided
+      },
+      pagination: { page, size },
+      options: {
+        explain: process.env.ES_EXPLAIN_QUERIES === 'true',
+        profile: process.env.ES_PROFILE_QUERIES === 'true'
       }
     }
-    if (jobType) filter.push({ term: { job_type: jobType } })
-    if (typeof experienceLevel === 'number') filter.push({ term: { experience_level: experienceLevel } })
-    if (skills && Array.isArray(skills) && skills.length) filter.push({ terms: { skills } })
 
-    const esQuery = { bool: { must, filter } }
-    const cacheKey = `search:jobs:${JSON.stringify(esQuery)}:from:${from}:size:${size}:userCtx:${JSON.stringify({
-      userExperienceLevel,
-      userLocationId,
-      userPrefersRemote,
-      userSkills: userSkills?.slice(0, 5), // Limit for cache key
-      userDesiredSalaryMin,
-      userDesiredSalaryMax
-    })}`
+    // Create cache key from normalized context (include recruiterId for tenant isolation)
+    const cacheKey = `search:jobs:v2:${JSON.stringify(queryContext)}:recruiterId:${recruiterId || 'public'}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
       metrics.increment('search.jobs.cache_hit')
-      return {
-        total: cacheHit.total,
-        took_ms: cacheHit.took,
-        hits: cacheHit.hits.map((h) => ({
-          id: h.id,
-          title: (h._source as any)?.title,
-          company: { id: (h._source as any)?.company_id, name: (h._source as any)?.company_name },
-          score: h._score ?? undefined,
-          highlight: undefined,
-          _source: h._source
-        }))
-      }
+      return await this.formatJobSearchResponse(cacheHit, highlight)
     }
 
     const timerDone = metrics.startTimer('search.jobs.duration')
 
-    let esResp: any
     try {
-      // Sử dụng searchJobs advanced method với business-aware scoring
-      esResp = await elasticsearchService.searchJobs({
-        index: 'jobs',
-        query: esQuery,
-        from,
-        size,
-        // Enhanced user context cho personalized scoring
-        userExperienceLevel,
-        userLocationId,
-        prioritizeFreshJobs: true,
-        userPrefersRemote,
-        userSkills,
-        userDesiredSalaryMin,
-        userDesiredSalaryMax
-      })
+      // Use new standardized query builder
+      const esQuery = buildJobSearchQuery(queryContext)
+
+      // Use standardized search entrypoint
+      const esResp = await elasticsearchService.searchWithTemplate(
+        'jobs',
+        esQuery,
+        queryContext.options
+      )
+
+      timerDone()
+      metrics.increment('search.jobs.request')
+
+      // Cache results for short period
+      try {
+        await redisService.setSearchResponse(cacheKey, esResp, 30)
+      } catch (e) {
+        // non-fatal
+      }
+
+      return await this.formatJobSearchResponse(esResp, highlight)
+
     } catch (esError) {
       console.warn('ES search failed, falling back to DB search', esError)
       metrics.increment('search.jobs.es_fallback')
+      timerDone()
 
       // Fallback to database search
-      esResp = await this.searchJobsFromDB(dto)
+      const esResp = await this.searchJobsFromDB(dto)
+      return await this.formatJobSearchResponse(esResp, highlight)
     }
+  },
 
-    timerDone()
-    metrics.increment('search.jobs.request')
-    // cache results for short period
-    try {
-      await redisService.setSearchResponse(cacheKey, esResp, 30)
-    } catch (e) {
-      // non-fatal
-    }
-
+  /**
+   * Format ES response to standardized JobSearchResponseDto
+   */
+  async formatJobSearchResponse(esResp: any, highlight?: boolean): Promise<JobSearchResponseDto> {
     // Optional enrichment: fetch companies for hits that need extra info
-    const companyIds = Array.from(new Set(esResp.hits.map((h: any) => (h._source as any)?.company_id).filter(Boolean)))
+    const companyIds = Array.from(new Set(
+      esResp.hits.map((h: any) => (h._source as any)?.company_id).filter(Boolean)
+    ))
+
     let companyMap: Record<string, unknown> = {}
     if (companyIds.length) {
       try {
@@ -212,8 +215,8 @@ export const searchService = {
       enhancedContext.skills = userSkills.slice(0, 5) // Limit for performance
     }
 
-    // call ES suggester via wrapper with enhanced context
-    const cacheKey = `search:suggest:${index}:${dto.q}:${dto.size}:${JSON.stringify(enhancedContext)}`
+    // Use new query builder for suggestions
+    const cacheKey = `search:suggest:v2:${index}:${dto.q}:${dto.size}:${JSON.stringify(enhancedContext)}`
     const cached = await redisService.getSuggestResponse(cacheKey)
     if (cached) {
       metrics.increment('search.suggest.cache_hit')
@@ -221,56 +224,57 @@ export const searchService = {
     }
 
     const timerDone = metrics.startTimer('search.suggest.duration')
-    const esResp = await elasticsearchService.suggest({
-      index,
-      prefix: dto.q,
-      size: dto.size,
-      context: enhancedContext
-    })
-    timerDone()
-    metrics.increment('search.suggest.request')
+
     try {
-      await redisService.setSuggestResponse(cacheKey, esResp, 20)
-    } catch (e) {
-      // Silently ignore Redis caching errors to avoid breaking the search functionality
-      console.warn('Failed to cache suggest response:', e)
-    }
+      // Try completion suggester first
+      const esResp = await elasticsearchService.suggest({
+        index: elasticsearchService.getIndexName(index),
+        prefix: dto.q,
+        size: dto.size,
+        context: enhancedContext
+      })
 
-    // esResp.suggestions is expected to be [{ text, payload, score }]
-    // If empty, fallback to ngram/autocomplete-based search
-    let suggestions = esResp.suggestions || []
-    if ((!suggestions || suggestions.length === 0) && dto.q && dto.q.length > 0) {
-      try {
-        const fallbackQuery = {
-          bool: {
-            should: [
-              { match_phrase_prefix: { 'title.autocomplete': { query: dto.q } } },
-              { match_phrase_prefix: { title: { query: dto.q } } }
-            ]
-          }
+      let suggestions = esResp.suggestions || []
+
+      // Fallback to query-based suggestions if completion suggester returns empty
+      if ((!suggestions || suggestions.length === 0) && dto.q && dto.q.length > 0) {
+        try {
+          const fallbackQuery = buildJobSuggestionsQuery(dto.q, dto.size ?? 10)
+          const fallbackResp = await elasticsearchService.searchWithTemplate(index, fallbackQuery)
+
+          suggestions = (fallbackResp.hits || []).map((h) => ({
+            text: (h._source as any)?.title ?? h.id,
+            payload: h._source,
+            score: h._score
+          }))
+        } catch (e) {
+          // ignore fallback errors
         }
-        const fallbackResp = await elasticsearchService.search({
-          index,
-          query: fallbackQuery,
-          from: 0,
-          size: dto.size ?? 10
-        })
-        suggestions = (fallbackResp.hits || []).map((h) => ({
-          text: (h._source as any)?.title ?? h.id,
-          payload: h._source,
-          score: h._score
-        }))
-      } catch (e) {
-        // ignore fallback errors
       }
-    }
 
-    return {
-      suggestions: suggestions.map((s: any) => ({
-        text: s.text,
-        payload: s.payload,
-        score: s.score
-      }))
+      timerDone()
+      metrics.increment('search.suggest.request')
+
+      // Cache results
+      try {
+        await redisService.setSuggestResponse(cacheKey, { suggestions }, 20)
+      } catch (e) {
+        console.warn('Failed to cache suggest response:', e)
+      }
+
+      return {
+        suggestions: suggestions.map((s: any) => ({
+          text: s.text,
+          payload: s.payload,
+          score: s.score
+        }))
+      }
+
+    } catch (error) {
+      console.warn('ES suggest failed:', error)
+      timerDone()
+      // Return empty suggestions on error
+      return { suggestions: [] }
     }
   },
 
@@ -281,21 +285,19 @@ export const searchService = {
     q?: string
     page?: number
     size?: number
-    recruiterId: string  // MANDATORY for tenant isolation
+    recruiterId?: string  // Optional for public search, mandatory for tenant isolation
   }): Promise<{ total: number; hits: any[]; took_ms: number }> {
     const { q, page = 1, size = 20, recruiterId } = dto
     const from = (page - 1) * size
 
-    // CRITICAL: Enforce recruiter isolation
-    if (!recruiterId) {
-      throw new Error('recruiterId is required for company search to ensure tenant isolation')
-    }
-
     const must: any[] = []
     const filter: any[] = []
 
-    // Add mandatory recruiter ownership filter
-    filter.push({ term: { recruiter_id: recruiterId } })
+    // Optional: Add recruiter ownership filter only if recruiterId provided
+    // This allows public company search while still supporting tenant isolation for authenticated recruiters
+    if (recruiterId) {
+      filter.push({ term: { recruiter_id: recruiterId } })
+    }
 
     if (q && q.length) {
       must.push({
@@ -784,6 +786,168 @@ export const searchService = {
         total: 0,
         hits: []
       }
+    }
+  },
+
+  /**
+   * Legacy search implementation - kept for gradual rollout
+   * @deprecated Will be removed after full rollout of new builder
+   */
+  async searchJobsLegacy(
+    dto: JobSearchRequestDto & {
+      userExperienceLevel?: number
+      userLocationId?: string
+      userPrefersRemote?: boolean
+      userSkills?: string[]
+      userDesiredSalaryMin?: number
+      userDesiredSalaryMax?: number
+      recruiterId?: string  // Optional for tenant isolation
+    }
+  ): Promise<JobSearchResponseDto> {
+    const {
+      q,
+      location,
+      jobType,
+      experienceLevel,
+      skills,
+      page = 1,
+      size = 20,
+      highlight,
+      userExperienceLevel,
+      userLocationId,
+      userPrefersRemote,
+      userSkills,
+      userDesiredSalaryMin,
+      userDesiredSalaryMax,
+      recruiterId
+    } = dto
+
+    const from = (page - 1) * size
+
+    // Build ES query using multi_match + filters for fuzzy search
+    const must: any[] = []
+    const filter: any[] = []
+
+    // Optional: Add recruiter ownership filter only if recruiterId provided
+    // This allows public search (candidates) while still supporting tenant isolation for authenticated recruiters
+    if (recruiterId) {
+      filter.push({ term: { recruiter_id: recruiterId } })
+    }
+
+    if (q && q.length) {
+      must.push({
+        multi_match: {
+          query: q,
+          fields: [
+            'title^4',
+            'skills^3',
+            'company_name^2',
+            'description',
+            'location_province^2',
+            'location_district^2',
+            'location_combined^1.5'
+          ],
+          fuzziness: 'AUTO',
+          operator: 'and'
+        }
+      })
+    } else {
+      must.push({ match_all: {} })
+    }
+
+    // Handle location filtering with province/district hierarchy
+    if (location) {
+      const locationIds = await searchRepo.getLocationIdsForFilter(location)
+      if (locationIds.length > 0) {
+        filter.push({ terms: { location_id: locationIds } })
+      }
+    }
+    if (jobType) filter.push({ term: { job_type: jobType } })
+    if (typeof experienceLevel === 'number') filter.push({ term: { experience_level: experienceLevel } })
+    if (skills && Array.isArray(skills) && skills.length) filter.push({ terms: { skills } })
+
+    const esQuery = { bool: { must, filter } }
+    const cacheKey = `search:jobs:legacy:${JSON.stringify(esQuery)}:from:${from}:size:${size}:recruiterId:${recruiterId || 'public'}:userCtx:${JSON.stringify({
+      userExperienceLevel,
+      userLocationId,
+      userPrefersRemote,
+      userSkills: userSkills?.slice(0, 5),
+      userDesiredSalaryMin,
+      userDesiredSalaryMax
+    })}`
+    const cacheHit = await redisService.getSearchResponse(cacheKey)
+    if (cacheHit) {
+      metrics.increment('search.jobs.legacy.cache_hit')
+      return this.formatJobSearchResponse(cacheHit, highlight)
+    }
+
+    const timerDone = metrics.startTimer('search.jobs.legacy.duration')
+
+    let esResp: any
+    try {
+      // Use old searchJobs advanced method with business-aware scoring
+      esResp = await elasticsearchService.searchJobs({
+        index: 'jobs',
+        query: esQuery,
+        from,
+        size,
+        // Enhanced user context for personalized scoring
+        userExperienceLevel,
+        userLocationId,
+        prioritizeFreshJobs: true,
+        userPrefersRemote,
+        userSkills,
+        userDesiredSalaryMin,
+        userDesiredSalaryMax
+      })
+    } catch (esError) {
+      console.warn('ES search failed, falling back to DB search', esError)
+      metrics.increment('search.jobs.legacy.es_fallback')
+
+      // Fallback to database search
+      esResp = await this.searchJobsFromDB(dto)
+    }
+
+    timerDone()
+    metrics.increment('search.jobs.legacy.request')
+    // cache results for short period
+    try {
+      await redisService.setSearchResponse(cacheKey, esResp, 30)
+    } catch (e) {
+      // non-fatal
+    }
+
+    // Optional enrichment: fetch companies for hits that need extra info
+    const companyIds = Array.from(new Set(esResp.hits.map((h: any) => (h._source as any)?.company_id).filter(Boolean)))
+    let companyMap: Record<string, unknown> = {}
+    if (companyIds.length) {
+      try {
+        const companies = await searchRepo.getCompaniesByIds(companyIds as string[])
+        companyMap = companies.reduce((acc: any, c: any) => {
+          if (c && (c as any).id) acc[(c as any).id] = c
+          return acc
+        }, {})
+      } catch (e) {
+        // keep enrichment optional and non-fatal
+      }
+    }
+
+    const hits = esResp.hits.map((h: any) => {
+      const src = h._source as any
+      return {
+        id: h.id,
+        title: src?.title,
+        company: companyMap[src?.company_id] ?? { id: src?.company_id, name: src?.company_name },
+        score: h._score ?? undefined,
+        highlight: highlight ? (h as any)._highlight : undefined,
+        _source: src
+      }
+    })
+
+    return {
+      total: esResp.total,
+      took_ms: esResp.took,
+      hits
     }
   }
 }

@@ -40,7 +40,7 @@ import { Client } from '@elastic/elasticsearch'
 const ES_NODE = envConfig.elasticsearch.nodeUrl || envConfig.elasticsearch.host || envConfig.elasticsearch.node
 
 // Enhanced Vietnamese analyzer configuration optimized for job portal search
-const vietnameseAnalyzers = {
+export const vietnameseAnalyzers = {
   analysis: {
     filter: {
       // Optimized stop words - removed overly common words that might filter out relevant terms
@@ -449,6 +449,130 @@ export const elasticsearchService = {
       throw e
     }
   },
+  /**
+   * Standardized search with template support
+   * Central entrypoint for all search operations with logging and debugging
+   */
+  async searchWithTemplate(
+    indexName: string,
+    queryBody: any,
+    options?: {
+      explain?: boolean
+      profile?: boolean
+      timeout?: string
+    }
+  ): Promise<SearchResponse<any>> {
+    const client = getClient()
+    const index = this.getEffectiveIndexName(indexName)
+
+    // Merge options into query body
+    const searchBody = { ...queryBody }
+    if (options?.explain) searchBody.explain = true
+    if (options?.profile) searchBody.profile = true
+    if (options?.timeout) searchBody.timeout = options.timeout
+
+    // Add metrics and logging
+    const startTime = Date.now()
+
+    try {
+      const response = await client.search({
+        index,
+        body: searchBody
+      })
+
+      const duration = Date.now() - startTime
+
+      // Log search performance (only in development or for slow queries)
+      if (duration > 1000 || process.env.NODE_ENV === 'development') {
+        console.log(`🔍 [ES] Search ${indexName} (${index}): ${duration}ms, total=${response.hits?.total || 0}`)
+      }
+
+      return this.normalizeSearchResponse(response)
+    } catch (error) {
+      console.error(`❌ [ES] Search failed for ${indexName} (${index}):`, error)
+      throw error
+    }
+  },
+
+  /**
+   * Normalize Elasticsearch response to consistent format
+   */
+  normalizeSearchResponse(response: any): SearchResponse<any> {
+    const took = response.took ?? 0
+    const hitsRaw = (response.hits && response.hits.hits) || []
+    const totalRaw = response.hits && response.hits.total
+
+    const total =
+      typeof totalRaw === 'object' && totalRaw !== null
+        ? (totalRaw as any).value
+        : ((totalRaw as number | undefined) ?? hitsRaw.length)
+
+    const hits = hitsRaw.map((h: any) => ({
+      id: h._id,
+      _source: h._source,
+      _score: h._score
+    }))
+
+    return { took, total, hits }
+  },
+
+  /**
+   * Explain query scoring for debugging
+   */
+  async explainQuery(indexName: string, documentId: string, query: any): Promise<any> {
+    const client = getClient()
+    const index = this.getEffectiveIndexName(indexName)
+
+    try {
+      const response = await client.explain({
+        index,
+        id: documentId,
+        body: { query }
+      })
+      return response
+    } catch (error) {
+      console.error(`❌ [ES] Explain failed for ${indexName} (${index})/${documentId}:`, error)
+      throw error
+    }
+  },
+
+  /**
+   * Profile query performance
+   */
+  async profileQuery(indexName: string, query: any): Promise<any> {
+    const client = getClient()
+    const index = this.getEffectiveIndexName(indexName)
+
+    try {
+      const response = await client.search({
+        index,
+        body: {
+          ...query,
+          profile: true
+        }
+      })
+      return response.profile
+    } catch (error) {
+      console.error(`❌ [ES] Profile failed for ${indexName}:`, error)
+      throw error
+    }
+  },
+
+  /**
+   * Get index name with alias support for zero-downtime reindexing
+   * Supports override for canary deployments
+   */
+  getEffectiveIndexName(baseName: string): string {
+    // Support temporary index override for testing (e.g., jobs_v2)
+    const override = process.env[`ES_INDEX_OVERRIDE_${baseName.toUpperCase()}`]
+    if (override) {
+      return override
+    }
+
+    // Default: use base index name (will be aliased in Phase 2)
+    return this.getIndexName(baseName)
+  },
+
   // Expose raw client for advanced operations (used by CLI)
   getClient(): Client {
     return getClient()

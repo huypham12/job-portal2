@@ -4,6 +4,8 @@ import { redisService } from '../../config/redis.service'
 import { metrics } from '../../shared/utils/metrics.util'
 import { computeScoreComponents, normalizeScore, DEFAULT_SCORE_WEIGHTS } from '../../shared/utils/scoring.util'
 import { formatBreakdown } from '../../shared/utils/explain.util'
+import { buildJobSearchQuery } from '../../search/jobSearch.builder'
+import { QueryContext } from '../../search/search.types'
 
 /**
  * Use min-max normalization of ES raw _score across the retrieved topN hits
@@ -32,7 +34,7 @@ export const matchingService = {
       return { jobId, total: 0, candidates: [] }
     }
 
-    const topN = Math.max(size, 200)
+    const topN = Math.min(size * 2, 100) // Get at most 2x requested size, max 100
 
     // Build advanced ES query for profiles matching với business-aware scoring
     const profileQuery = buildProfileMatchingQuery(jobPayload, filters)
@@ -112,6 +114,27 @@ export const matchingService = {
       const profileId = (src as any).profile_id ?? (src as any).id ?? null
       const userId = (src as any).user_id ?? null
 
+      // Only include essential fields from _source to reduce response size
+      const essentialSource = {
+        id: src.id,
+        profile_id: src.profile_id,
+        user_id: src.user_id,
+        full_name: src.full_name,
+        headline: src.headline,
+        bio: src.bio,
+        skills: src.skills,
+        skills_flat: src.skills_flat,
+        years_of_experience: src.years_of_experience,
+        location_text: src.location_text,
+        location_id: src.location_id,
+        is_looking_for_job: src.is_looking_for_job,
+        updated_at: src.updated_at,
+        prefers_remote: src.prefers_remote,
+        prefers_flexible_hours: src.prefers_flexible_hours,
+        desired_salary_min: src.desired_salary_min,
+        desired_salary_max: src.desired_salary_max
+      }
+
       return {
         id: profileId ?? h.id,
         es_id: h.id,
@@ -119,7 +142,7 @@ export const matchingService = {
         user_id: userId,
         score_percent,
         explanation,
-        _source: src
+        _source: essentialSource
       }
     })
 
@@ -156,25 +179,40 @@ export const matchingService = {
       return { profileId, total: 0, jobs: [] }
     }
 
-    const topN = Math.max(size, 200)
+    const topN = Math.min(size * 2, 100) // Get at most 2x requested size, max 100
 
-    // Build advanced ES query for job-profile matching với business-aware scoring
-    const jobQuery = buildJobMatchingQuery(profilePayload, filters)
-    const esResp = await elasticsearchService.searchJobs({
-      index: elasticsearchService.getIndexName('jobs'),
-      query: jobQuery,
-      from: 0,
-      size: topN,
-      // Add profile preferences for enhanced scoring
+    // Build QueryContext from profile payload
+    const queryContext: QueryContext = {
+      // Use profile headline as search query
+      q: (profilePayload as any).headline || (profilePayload as any).desired_job_title,
+
+      // User preferences from profile
+      userSkills: (profilePayload as any).skills_flat || (profilePayload as any).skills?.map((s: any) => s.name),
+      userLocationId: (profilePayload as any).location_id,
       userExperienceLevel: (profilePayload as any).years_of_experience ?
         Math.floor((profilePayload as any).years_of_experience / 2) : undefined,
-      userLocationId: (profilePayload as any).location_id,
-      prioritizeFreshJobs: true, // Always prefer recent jobs for candidates
-      userPrefersRemote: (profilePayload as any).location_text?.toLowerCase().includes('remote'),
-      userSkills: (profilePayload as any).skills_flat || (profilePayload as any).skills?.map((s: any) => s.name),
+      userPrefersRemote: (profilePayload as any).location_text?.toLowerCase().includes('remote') ||
+                         (profilePayload as any).prefers_remote,
+      userPrefersFlexibleHours: (profilePayload as any).prefers_flexible_hours,
       userDesiredSalaryMin: (profilePayload as any).desired_salary_min,
-      userDesiredSalaryMax: (profilePayload as any).desired_salary_max
-    })
+      userDesiredSalaryMax: (profilePayload as any).desired_salary_max,
+      userDesiredBenefits: (profilePayload as any).desired_benefits,
+      userPreferredCategories: (profilePayload as any).preferred_categories,
+      userRemotePercentageMin: (profilePayload as any).prefers_remote ? 50 : undefined,
+
+      // Additional filters from method params
+      filters: filters,
+
+      // Pagination for top-N
+      pagination: { page: 1, size: topN },
+
+      // Always prioritize fresh jobs for candidates
+      options: { prioritizeFreshJobs: true }
+    }
+
+    // Use standardized query builder
+    const esQuery = buildJobSearchQuery(queryContext)
+    const esResp = await elasticsearchService.searchWithTemplate('jobs', esQuery)
 
     const hits = esResp.hits
     timerDone()
@@ -240,11 +278,33 @@ export const matchingService = {
       const score_percent = normalizeScore(weightedRaw)
       const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
 
+      // Only include essential fields from _source to reduce response size
+      const essentialSource = {
+        id: src.id,
+        title: src.title,
+        description: src.description,
+        company_name: src.company_name,
+        location_name: src.location_name,
+        location_id: src.location_id,
+        salary_min: src.salary_min,
+        salary_max: src.salary_max,
+        job_type: src.job_type,
+        is_remote_allowed: src.is_remote_allowed,
+        remote_percentage: src.remote_percentage,
+        flexible_hours: src.flexible_hours,
+        skills: src.skills,
+        experience_level: src.experience_level,
+        posted_at: src.posted_at,
+        status: src.status,
+        job_categories: src.job_categories,
+        job_benefits: src.job_benefits
+      }
+
       return {
         id: h.id,
         score_percent,
         explanation,
-        _source: src
+        _source: essentialSource
       }
     })
 

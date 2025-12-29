@@ -20,6 +20,10 @@ import {
   getPopularQueriesValidator
 } from '../../shared/validators/enhanced-features.validator'
 import {
+  getCandidateRecommendationsValidator,
+  getRecruiterRecommendationsValidator
+} from '../recommendations/recommendations.validator'
+import {
   searchJobsValidator,
   suggestionsValidator,
   searchCompaniesValidator,
@@ -28,6 +32,7 @@ import {
 } from './search.dto'
 import { authenticateAccessToken } from '../../middleware/verify.middleware'
 import { authenticatedUser } from '../../middleware/authorize.middleware'
+import { checkResourceOwnership } from '../../middleware/resource-ownership.middleware'
 import { envConfig } from '../../config/getEnvConfig'
 
 // Import moved controllers from jobs module
@@ -36,8 +41,14 @@ import { PopularJobsController } from './popular-jobs.controller'
 import { JobRecommendationsController } from './job-recommendations.controller'
 import { RecentlyViewedController } from './recently-viewed.controller'
 
+// Import moved controllers from recommendations module
+import { recommendationsController } from '../recommendations/recommendations.controller'
+
 // Import moved validators
 import { filterJobsValidator } from '../jobs/job.validator'
+
+// Import moved utilities from recommendations module
+import { rolloutMetricsMiddleware } from '../../shared/utils/rollout-monitoring.util'
 
 const router = Router()
 
@@ -88,6 +99,8 @@ function simpleHash(str: string): number {
  *  - GET  /api/search/recent (get recent searches)
  *  - DELETE /api/search/recent/:id (delete specific recent search)
  *  - DELETE /api/search/recent (clear all recent searches)
+ *  - GET  /api/search/recommendations/for-candidate (job recommendations for candidates)
+ *  - GET  /api/search/recommendations/for-recruiter (candidate recommendations for recruiters)
  *
  * Controller functions handle validation and responses.
  */
@@ -210,5 +223,32 @@ router.get('/popular-queries', getPopularQueriesValidator, RecentSearchesControl
 router.get('/companies', searchCompaniesValidator, searchCompaniesController)
 router.get('/companies/suggestions', companiesSuggestionsValidator, companiesSuggestionsController)
 router.get('/companies/popular', getPopularCompaniesValidator, getPopularCompaniesController)
+
+// ==================== RECOMMENDATIONS ROUTES (MOVED) ====================
+
+/**
+ * GET /api/search/recommendations/for-candidate
+ * Get personalized job recommendations for authenticated candidate
+ */
+router.get(
+  '/recommendations/for-candidate',
+  rolloutMetricsMiddleware('recommendations_candidate'),
+  authenticateAccessToken,
+  getCandidateRecommendationsValidator,
+  recommendationsController.getCandidateRecommendations
+)
+
+/**
+ * GET /api/search/recommendations/for-recruiter
+ * Get candidate recommendations for recruiter's jobs
+ */
+router.get(
+  '/recommendations/for-recruiter',
+  rolloutMetricsMiddleware('recommendations_recruiter'),
+  authenticateAccessToken,
+  checkResourceOwnership('company'),
+  getRecruiterRecommendationsValidator,
+  recommendationsController.getRecruiterRecommendations
+)
 
 export default router

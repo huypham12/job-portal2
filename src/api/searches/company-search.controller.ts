@@ -12,7 +12,17 @@ import { CompanySearchRequestDto, CompanySuggestionsRequestDto, PopularCompanies
  */
 export async function searchCompaniesController(req: Request, res: Response) {
   const query: CompanySearchRequestDto = req.validated!.query
-  const result = await companySearchService.searchCompanies(query)
+
+  // Extract recruiterId from authenticated user if they are a recruiter
+  // This enables tenant isolation for authenticated recruiters while allowing public search for candidates
+  const recruiterId = req.decoded_authorization?.role === 'recruiter'
+    ? req.decoded_authorization.user_id
+    : undefined
+
+  const result = await companySearchService.searchCompanies({
+    ...query,
+    recruiterId
+  })
   return res.json(result)
 }
 

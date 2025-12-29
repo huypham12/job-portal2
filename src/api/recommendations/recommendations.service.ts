@@ -1,6 +1,8 @@
 import { elasticsearchService } from '../../config/elasticsearch.service'
 import { prisma } from '../../config/database.service'
 import { metrics } from '../../shared/utils/metrics.util'
+import { buildJobSearchQuery } from '../../search/jobSearch.builder'
+import { QueryContext } from '../../search/search.types'
 
 /**
  * Recommendations Service
@@ -79,12 +81,13 @@ export const recommendationsService = {
         return []
       }
 
-      // Generate recommendations based on variant
-      const recommendations = await this.generateCandidateRecommendations(
-        profileData,
-        variant,
-        limit
-      )
+    // Generate recommendations based on variant
+    const recommendations = await this.generateCandidateRecommendations(
+      profileData,
+      variant,
+      limit,
+      userId // Pass userId for potential personalization
+    )
 
       metrics.increment('recommendations.candidate.success')
       return recommendations
@@ -196,33 +199,41 @@ export const recommendationsService = {
   async generateCandidateRecommendations(
     profileData: any,
     variant: RecommendationVariant,
-    limit: number
+    limit: number,
+    userId?: string
   ): Promise<CandidateRecommendation[]> {
-    const baseQuery = this.buildBaseCandidateQuery(profileData)
+    // Build QueryContext from profile data
+    const queryContext: QueryContext = {
+      // Use profile headline as search query for recommendations
+      q: profileData.headline || profileData.desired_job_title,
 
-    // Apply variant-specific modifications
-    const variantQuery = this.applyVariantModifications(baseQuery, variant, 'candidate')
-
-    const esResponse = await elasticsearchService.searchJobs({
-      index: elasticsearchService.getIndexName('jobs'),
-      query: variantQuery,
-      from: 0,
-      size: limit * 2, // Get more for better scoring
-      // Apply enhanced user preferences for advanced scoring
+      // User preferences from profile
+      userSkills: profileData.skills_flat || profileData.skills?.map((s: any) => s.name),
+      userLocationId: profileData.location_id,
       userExperienceLevel: profileData.years_of_experience ?
         Math.floor(profileData.years_of_experience / 2) : undefined,
-      userLocationId: profileData.location_id,
-      prioritizeFreshJobs: true,
       userPrefersRemote: profileData.location_text?.toLowerCase().includes('remote') ||
                          (profileData as any).prefers_remote,
       userPrefersFlexibleHours: (profileData as any).prefers_flexible_hours,
-      userSkills: profileData.skills_flat || profileData.skills?.map((s: any) => s.name),
       userDesiredSalaryMin: profileData.desired_salary_min,
       userDesiredSalaryMax: profileData.desired_salary_max,
       userDesiredBenefits: (profileData as any).desired_benefits,
       userPreferredCategories: (profileData as any).preferred_categories,
-      userRemotePercentageMin: (profileData as any).prefers_remote ? 50 : undefined // Prefer at least 50% remote if user wants remote
-    })
+      userRemotePercentageMin: (profileData as any).prefers_remote ? 50 : undefined,
+
+      // Pagination for recommendations
+      pagination: { page: 1, size: limit * 2 }, // Get more for better scoring
+
+      // Always prioritize fresh jobs for candidates
+      options: { prioritizeFreshJobs: true }
+    }
+
+    // Apply variant-specific modifications to the query context
+    const modifiedContext = this.applyVariantModificationsToContext(queryContext, variant, 'candidate')
+
+    // Use standardized query builder
+    const esQuery = buildJobSearchQuery(modifiedContext)
+    const esResponse = await elasticsearchService.searchWithTemplate('jobs', esQuery)
 
     return esResponse.hits.map(hit => ({
       job_id: hit.id,
@@ -387,115 +398,82 @@ export const recommendationsService = {
   },
 
   /**
-   * Apply experiment variant modifications to query
+   * Apply experiment variant modifications to QueryContext
    */
-  applyVariantModifications(query: any, variant: RecommendationVariant, type: 'candidate' | 'recruiter') {
-    const modifiedQuery = { ...query }
+  applyVariantModificationsToContext(
+    context: QueryContext,
+    variant: RecommendationVariant,
+    type: 'candidate' | 'recruiter'
+  ): QueryContext {
+    const modifiedContext = { ...context }
+
+    // Ensure options exists
+    if (!modifiedContext.options) {
+      modifiedContext.options = {}
+    }
 
     switch (variant) {
       case RECOMMENDATION_VARIANTS.ENHANCED_SKILLS:
-        // Boost skill matching importance
-        if (type === 'candidate') {
-          modifiedQuery.bool.should.push({
-            nested: {
-              path: 'skills',
-              query: { terms: { 'skills.name': [] } }, // Will be filled by ES service
-              boost: 2.0
-            }
-          })
-        }
+        // Enhanced skill matching - already handled by default scoring
+        // Could add skill-specific filters here if needed
         break
 
       case RECOMMENDATION_VARIANTS.LOCATION_WEIGHTED:
-        // Stronger location preferences
-        modifiedQuery.bool.should.push({
-          term: { location_id: { boost: 3.0 } }
-        })
+        // Stronger location emphasis - already handled by scoring templates
         break
 
       case RECOMMENDATION_VARIANTS.TRENDING_BOOST:
-        // Boost recently posted jobs
-        if (type === 'candidate') {
-          modifiedQuery.bool.should.push({
-            range: {
-              posted_at: {
-                gte: 'now-7d',
-                boost: 1.5
-              }
-            }
-          })
-        }
-        break
-
-      case RECOMMENDATION_VARIANTS.HYBRID:
-        // Combination of multiple enhancements
-        if (type === 'candidate') {
-          modifiedQuery.bool.should.push(
-            { term: { location_id: { boost: 2.0 } } },
-            { range: { posted_at: { gte: 'now-7d', boost: 1.3 } } },
-            { term: { is_remote_allowed: { boost: 1.2 } } }
-          )
-        }
+        // Enhanced fresh job prioritization
+        modifiedContext.options.prioritizeFreshJobs = true
         break
 
       case RECOMMENDATION_VARIANTS.WORK_LIFE_BALANCE:
-        // Focus on work arrangements and flexibility
-        if (type === 'candidate') {
-          modifiedQuery.bool.should.push(
-            { term: { is_remote_allowed: { boost: 2.5 } } },
-            { term: { flexible_hours: { boost: 2.5 } } },
-            { range: { remote_percentage: { gte: 50, boost: 2.0 } } }
-          )
-        }
+        // Enhanced work arrangement preferences
+        modifiedContext.userPrefersRemote = true
+        modifiedContext.userPrefersFlexibleHours = true
+        modifiedContext.userRemotePercentageMin = 50
         break
 
       case RECOMMENDATION_VARIANTS.BENEFITS_FOCUSED:
-        // Prioritize jobs with attractive benefits and salary
-        if (type === 'candidate') {
-          modifiedQuery.bool.should.push(
-            { exists: { field: 'job_benefits', boost: 2.0 } },
-            { range: { salary_min: { boost: 1.5 } } },
-            { range: { salary_max: { boost: 1.5 } } }
-          )
-        }
+        // Focus on benefits and salary - already handled by scoring templates
         break
 
       case RECOMMENDATION_VARIANTS.CATEGORY_ALIGNED:
-        // Boost category and industry alignment
-        if (type === 'candidate') {
-          modifiedQuery.bool.should.push(
-            { exists: { field: 'job_category', boost: 2.5 } },
-            { term: { company_size: { boost: 1.5 } } } // Larger companies often have better category alignment
-          )
-        }
+        // Enhanced category alignment - already handled by scoring templates
         break
 
       case RECOMMENDATION_VARIANTS.COMPREHENSIVE:
-        // All enhancements combined with balanced weights
-        if (type === 'candidate') {
-          modifiedQuery.bool.should.push(
-            // Skills and matching
-            { nested: { path: 'skills', query: { terms: { 'skills.name': [] } }, boost: 1.8 } },
-            // Location and work arrangements
-            { term: { location_id: { boost: 1.6 } } },
-            { term: { is_remote_allowed: { boost: 1.4 } } },
-            { term: { flexible_hours: { boost: 1.4 } } },
-            // Benefits and category
-            { exists: { field: 'job_benefits', boost: 1.3 } },
-            { exists: { field: 'job_category', boost: 1.3 } },
-            // Fresh content
-            { range: { posted_at: { gte: 'now-7d', boost: 1.2 } } }
-          )
-        }
+        // All enhancements
+        modifiedContext.options.prioritizeFreshJobs = true
+        modifiedContext.userPrefersRemote = true
+        modifiedContext.userPrefersFlexibleHours = true
+        modifiedContext.userRemotePercentageMin = 50
+        break
+
+      case RECOMMENDATION_VARIANTS.HYBRID:
+        // Balanced enhancements
+        modifiedContext.options.prioritizeFreshJobs = true
+        modifiedContext.userPrefersRemote = true
         break
 
       case RECOMMENDATION_VARIANTS.BASELINE:
       default:
-        // No modifications
+        // No modifications - use default scoring
         break
     }
 
-    return modifiedQuery
+    return modifiedContext
+  },
+
+  /**
+   * Legacy method - kept for backward compatibility during rollout
+   * @deprecated Use applyVariantModificationsToContext instead
+   */
+  applyVariantModifications(query: any, variant: RecommendationVariant, type: 'candidate' | 'recruiter') {
+    // This method is now deprecated and will be removed in Phase 3
+    // Keeping for backward compatibility during rollout
+    console.warn('applyVariantModifications is deprecated, use applyVariantModificationsToContext')
+    return query
   },
 
   /**

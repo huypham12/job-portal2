@@ -24,7 +24,6 @@ import { uploadRouter } from './api/uploads/upload.route'
 import notificationRouter from './api/notifications/notifications.routes'
 import searchRouter from './api/searches/search.route'
 import matchingRouter from './api/matching/matching.routes'
-import recommendationsRouter from './api/recommendations/recommendations.route'
 import syncRouter from './api/sync/sync.route'
 import { socketService } from './socket/socket.service'
 import { initializeCronjobs } from './jobs'
@@ -154,7 +153,6 @@ const main = async () => {
     app.use('/api/locations', locationRouter)
     app.use('/api/search', searchRouter)
     app.use('/api/matching', matchingRouter)
-    app.use('/api/recommendations', recommendationsRouter)
     app.use('/api/sync', syncRouter)
 
     // Health check endpoint

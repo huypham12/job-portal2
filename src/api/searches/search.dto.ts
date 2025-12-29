@@ -156,7 +156,8 @@ export const CompanySearchRequestSchema = z.object({
         return parsed
       }
       return val
-    })
+    }),
+  recruiterId: z.string().optional() // Optional for tenant isolation
 })
 
 export const CompanySuggestionsRequestSchema = z.object({
