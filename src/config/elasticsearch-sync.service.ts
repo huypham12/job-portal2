@@ -21,6 +21,12 @@ export interface SyncStats {
   timestamp: string
   lastSyncAt: Date | null
   errors: number
+  syncStatus?: {
+    pending: number
+    success: number
+    failed: number
+    total: number
+  }
 }
 
 export interface SyncAllResult {
@@ -41,6 +47,84 @@ export interface SyncOptions {
  * Handles synchronization between database and Elasticsearch
  */
 export class ElasticsearchSyncService {
+  /**
+   * Update sync status in database
+   */
+  private async updateSyncStatus(
+    entityType: string,
+    entityId: string,
+    status: 'pending' | 'success' | 'failed',
+    error?: string
+  ): Promise<void> {
+    try {
+      await (prisma as any).sync_status.upsert({
+        where: {
+          entity_type_entity_id: {
+            entity_type: entityType,
+            entity_id: entityId
+          }
+        },
+        update: {
+          sync_status: status,
+          last_attempt_at: new Date(),
+          retry_count: status === 'failed' ? { increment: 1 } : 0,
+          error_message: error,
+          updated_at: new Date()
+        },
+        create: {
+          entity_type: entityType,
+          entity_id: entityId,
+          sync_status: status,
+          error_message: error
+        }
+      })
+    } catch (dbError) {
+      console.error(`Failed to update sync status for ${entityType}:${entityId}`, dbError)
+    }
+  }
+
+  /**
+   * Enhanced sync method with retry logic
+   */
+  async syncToElasticsearchWithRetry(index: string, id: string, document: any, maxRetries = 3): Promise<boolean> {
+    let lastError: any
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        // Mark as pending before attempt
+        await this.updateSyncStatus(index.replace('s', ''), id, 'pending')
+
+        // Attempt sync
+        await this.syncDocument(index, id, document)
+
+        // Mark as success
+        await this.updateSyncStatus(index.replace('s', ''), id, 'success')
+
+        console.log(`✅ Synced ${index}:${id} successfully`)
+        return true
+      } catch (error) {
+        lastError = error
+        console.warn(
+          `ES sync attempt ${attempt + 1}/${maxRetries + 1} failed for ${index}:${id}:`,
+          (error as any)?.message || error
+        )
+
+        // Exponential backoff delay (1s, 2s, 4s, 8s...)
+        if (attempt < maxRetries) {
+          const delay = Math.pow(2, attempt) * 1000
+          console.log(`⏳ Retrying in ${delay}ms...`)
+          await new Promise((resolve) => setTimeout(resolve, delay))
+        }
+      }
+    }
+
+    // All retries failed - mark as failed
+    await this.updateSyncStatus(index.replace('s', ''), id, 'failed', lastError?.message || 'Unknown error')
+
+    console.error(`❌ All sync attempts failed for ${index}:${id}`)
+    return false
+  }
+
   /**
    * Helper method to sync to Elasticsearch
    */
@@ -68,37 +152,57 @@ export class ElasticsearchSyncService {
   }
 
   /**
-   * Sync a job by ID
+   * Sync a job by ID with ownership validation
    */
-  async syncJobById(jobId: string, action: 'upsert' | 'delete'): Promise<boolean> {
+  async syncJobById(jobId: string, userId: string | null, action: 'upsert' | 'delete'): Promise<boolean> {
     try {
       if (action === 'delete') {
         await elasticsearchSyncService.deleteFromElasticsearch('jobs', jobId)
         return true
       }
 
-      // Fetch job with relations including location hierarchy
+      // ENFORCE: Job ownership qua company
       const job = await prisma.jobs.findUnique({
-        where: { id: jobId },
+        where: {
+          id: jobId,
+          deleted: false  // Chỉ sync active jobs
+        },
         include: {
-          companies: true,
+          companies: {
+            include: {
+              users: true // Include recruiter user info for ownership
+            }
+          },
           locations: {
             include: {
-              parent: true  // Include parent province for location hierarchy
+              parent: true // Include parent province for location hierarchy
             }
           },
           job_skills: {
             include: { skills: true }
-          }
+          },
+          job_requirements: true,
+          job_categories: {
+            include: { categories: true }
+          },
+          job_benefits: true,
+          job_work_arrangements: true
         }
       })
 
       if (!job) {
-        console.log(`⚠️ Job ${jobId} not found`)
+        console.log(`⚠️ Job ${jobId} not found or deleted`)
         return false
       }
 
-      const document = jobToESDoc(job)
+      // Validate ownership nếu có userId context
+      if (userId && job.companies?.recruiter_id !== userId) {
+        console.error(`Job ${jobId} ownership violation - user ${userId} vs owner ${job.companies?.recruiter_id}`)
+        return false
+      }
+
+      const document = jobToESDoc(job) // Will throw if ownership missing
+      // ES _id chuẩn hóa = jobId (DB id) để đồng bộ với PostgreSQL và các chỗ khác gọi getById/syncToElasticsearch
       await this.syncDocument('jobs', jobId, document)
       return true
     } catch (error) {
@@ -108,19 +212,20 @@ export class ElasticsearchSyncService {
   }
 
   /**
-   * Sync a company by ID
+   * Sync a company by ID with ownership validation
    */
-  async syncCompanyById(companyId: string, action: 'upsert' | 'delete'): Promise<boolean> {
+  async syncCompanyById(companyId: string, userId: string | null, action: 'upsert' | 'delete'): Promise<boolean> {
     try {
       if (action === 'delete') {
         await elasticsearchSyncService.deleteFromElasticsearch('companies', companyId)
         return true
       }
 
-      // Fetch company with details
+      // ENFORCE: Company direct ownership
       const company = await prisma.companies.findUnique({
         where: { id: companyId },
         include: {
+          users: true, // Include recruiter user info for ownership
           company_details: {
             include: {
               headquarters_location: true
@@ -134,33 +239,14 @@ export class ElasticsearchSyncService {
         return false
       }
 
-      const document = {
-        id: company.id,
-        name: company.name,
-        description: company.description,
-        recruiter_id: company.recruiter_id,
-        logo_url: company.logo_url,
-        size: company.size,
-        contact_email: company.contact_email,
-        contact_phone: company.contact_phone,
-        contact_address: company.contact_address,
-        linkedin_url: company.linkedin_url,
-        facebook_url: company.facebook_url,
-        twitter_url: company.twitter_url,
-        tax_code: company.tax_code,
-        // From company_details
-        industry: company.company_details?.industry,
-        founded_year: company.company_details?.founded_year,
-        employee_count_min: company.company_details?.employee_count_min,
-        employee_count_max: company.company_details?.employee_count_max,
-        website_url: company.company_details?.website_url,
-        headquarters_location: company.company_details?.headquarters_location?.name,
-        company_type: company.company_details?.company_type,
-        revenue_range: company.company_details?.revenue_range,
-        stock_symbol: company.company_details?.stock_symbol,
-        culture_description: company.company_details?.culture_description
+      // Validate ownership nếu có userId context
+      if (userId && company.recruiter_id !== userId) {
+        console.error(`Company ${companyId} ownership violation - user ${userId} vs owner ${company.recruiter_id}`)
+        return false
       }
 
+      const document = companyToESDoc(company) // Will throw if ownership missing
+      // ES _id chuẩn hóa = companyId (DB id)
       await this.syncDocument('companies', companyId, document)
       return true
     } catch (error) {
@@ -170,22 +256,26 @@ export class ElasticsearchSyncService {
   }
 
   /**
-   * Sync a profile by ID
+   * Sync a profile by ID with ownership validation
    */
-  async syncProfileById(profileId: string, action: 'upsert' | 'delete'): Promise<boolean> {
+  async syncProfileById(profileId: string, userId: string | null, action: 'upsert' | 'delete'): Promise<boolean> {
     try {
       if (action === 'delete') {
         await elasticsearchSyncService.deleteFromElasticsearch('profiles', profileId)
         return true
       }
 
-      // Fetch profile with relations
+      // ENFORCE: Profile user ownership
       const profile = await prisma.profiles.findUnique({
         where: { id: profileId },
         include: {
+          users: true, // Include user info for role
           skills: {
-            include: { skills: true }
-          }
+            include: { skills: { include: { category: true } } }
+          },
+          educations: true,
+          experiences: true,
+          certifications: true
         }
       })
 
@@ -194,7 +284,14 @@ export class ElasticsearchSyncService {
         return false
       }
 
-      const document = profileToESDoc(profile)
+      // Validate ownership nếu có userId context
+      if (userId && profile.user_id !== userId) {
+        console.error(`Profile ${profileId} ownership violation - user ${userId} vs owner ${profile.user_id}`)
+        return false
+      }
+
+      const document = profileToESDoc(profile) // Will throw if ownership missing
+      // ES _id chuẩn hóa = profileId (DB id)
       await this.syncDocument('profiles', profileId, document)
       return true
     } catch (error) {
@@ -204,23 +301,25 @@ export class ElasticsearchSyncService {
   }
 
   /**
-   * Sync an application by ID
+   * Sync an application by ID with dual ownership validation
    */
-  async syncApplicationById(applicationId: string, action: 'upsert' | 'delete'): Promise<boolean> {
+  async syncApplicationById(applicationId: string, userId: string | null, action: 'upsert' | 'delete'): Promise<boolean> {
     try {
       if (action === 'delete') {
         await elasticsearchSyncService.deleteFromElasticsearch('applications', applicationId)
         return true
       }
 
-      // Fetch application with full relations
+      // ENFORCE: Dual ownership validation
       const application = (await prisma.applications.findUnique({
         where: { id: applicationId },
         include: {
           jobs: {
             include: {
               companies: true,
-              locations: true
+              locations: true,
+              job_requirements: true,
+              job_work_arrangements: true
             }
           },
           profiles: {
@@ -229,8 +328,12 @@ export class ElasticsearchSyncService {
               skills: {
                 include: { skills: true }
               },
-              educations: true
+              educations: true,
+              experiences: true
             }
+          },
+          application_stages: {
+            orderBy: { stage_order: 'desc' }
           }
         }
       })) as any // Cast to any to bypass Prisma type issues
@@ -240,17 +343,33 @@ export class ElasticsearchSyncService {
         return false
       }
 
+      // Validate dual ownership nếu có userId context
+      const recruiterId = application.jobs?.companies?.recruiter_id
+      const candidateId = application.profiles?.user_id
+
+      if (userId) {
+        const hasRecruiterAccess = recruiterId === userId
+        const hasCandidateAccess = candidateId === userId
+
+        if (!hasRecruiterAccess && !hasCandidateAccess) {
+          console.error(`Application ${applicationId} ownership violation - user ${userId} has no access`)
+          return false
+        }
+      }
+
       // Transform to match applicationToESDoc format
       const transformedApplication = {
         ...application,
         profiles: {
           ...application.profiles,
           skills: application.profiles?.skills,
-          educations: application.profiles?.educations
+          educations: application.profiles?.educations,
+          experiences: application.profiles?.experiences
         }
       }
 
-      const document = applicationToESDoc(transformedApplication)
+      const document = applicationToESDoc(transformedApplication) // Will throw if ownership missing
+      // ES _id chuẩn hóa = applicationId (DB id)
       await this.syncDocument('applications', applicationId, document)
       return true
     } catch (error) {
@@ -260,14 +379,35 @@ export class ElasticsearchSyncService {
   }
 
   /**
-   * Bulk sync jobs by IDs
+   * Bulk sync jobs by IDs with ownership validation
    */
-  async bulkSyncJobsByIds(jobIds: string[], action: 'upsert' | 'delete'): Promise<{ synced: number; errors: number }> {
+  async bulkSyncJobsByIds(jobIds: string[], userId: string | null, action: 'upsert' | 'delete'): Promise<{ synced: number; errors: number }> {
     let synced = 0
     let errors = 0
 
+    // Pre-validate ownership for all jobs if userId provided
+    if (userId) {
+      const ownedJobs = await prisma.jobs.findMany({
+        where: {
+          id: { in: jobIds },
+          companies: { recruiter_id: userId },
+          deleted: false
+        },
+        select: { id: true }
+      })
+
+      const ownedJobIds = ownedJobs.map(j => j.id)
+      const notOwnedJobs = jobIds.filter(id => !ownedJobIds.includes(id))
+
+      if (notOwnedJobs.length > 0) {
+        console.error(`Bulk job sync ownership violation - user ${userId} doesn't own jobs: ${notOwnedJobs.join(', ')}`)
+        errors += notOwnedJobs.length
+        jobIds = ownedJobIds // Only sync owned jobs
+      }
+    }
+
     for (const jobId of jobIds) {
-      const success = await this.syncJobById(jobId, action)
+      const success = await this.syncJobById(jobId, userId, action)
       if (success) {
         synced++
       } else {
@@ -279,17 +419,20 @@ export class ElasticsearchSyncService {
   }
 
   /**
-   * Bulk sync applications by IDs
+   * Bulk sync applications by IDs with dual ownership validation
    */
   async bulkSyncApplicationsByIds(
     applicationIds: string[],
+    userId: string | null,
     action: 'upsert' | 'delete'
   ): Promise<{ synced: number; errors: number }> {
     let synced = 0
     let errors = 0
 
+    // For applications, ownership is complex (recruiter OR candidate)
+    // We'll validate during individual sync calls
     for (const applicationId of applicationIds) {
-      const success = await this.syncApplicationById(applicationId, action)
+      const success = await this.syncApplicationById(applicationId, userId, action)
       if (success) {
         synced++
       } else {
@@ -348,7 +491,7 @@ export class ElasticsearchSyncService {
       for (const company of companies) {
         try {
           console.log(`Syncing company ${company.id}...`)
-          await elasticsearchSyncService.syncCompanyById(company.id, 'upsert')
+          await elasticsearchSyncService.syncCompanyById(company.id, null, 'upsert') // null = skip ownership check for initial sync
           result.companies.processed++
           console.log(`✅ Synced company ${company.id}`)
         } catch (error) {
@@ -365,7 +508,7 @@ export class ElasticsearchSyncService {
       const profiles = await prisma.profiles.findMany({ select: { id: true } })
       for (const profile of profiles) {
         try {
-          await elasticsearchSyncService.syncProfileById(profile.id, 'upsert')
+          await elasticsearchSyncService.syncProfileById(profile.id, null, 'upsert') // null = skip ownership check for initial sync
           result.profiles.processed++
         } catch (error) {
           result.profiles.errors++
@@ -381,7 +524,7 @@ export class ElasticsearchSyncService {
       const jobs = await prisma.jobs.findMany({ select: { id: true } })
       for (const job of jobs) {
         try {
-          await elasticsearchSyncService.syncJobById(job.id, 'upsert')
+          await elasticsearchSyncService.syncJobById(job.id, null, 'upsert') // null = skip ownership check for initial sync
           result.jobs.processed++
         } catch (error) {
           result.jobs.errors++
@@ -397,7 +540,7 @@ export class ElasticsearchSyncService {
       const applications = await prisma.applications.findMany({ select: { id: true } })
       for (const application of applications) {
         try {
-          await elasticsearchSyncService.syncApplicationById(application.id, 'upsert')
+          await elasticsearchSyncService.syncApplicationById(application.id, null, 'upsert') // null = skip ownership check for initial sync
           result.applications.processed++
         } catch (error) {
           result.applications.errors++
@@ -452,6 +595,16 @@ export class ElasticsearchSyncService {
         getEsCount('applications')
       ])
 
+      // Get sync status counts
+      const syncStatusCounts = await (prisma as any).sync_status.groupBy({
+        by: ['sync_status'],
+        _count: { sync_status: true }
+      })
+
+      const pendingCount = syncStatusCounts.find((s: any) => s.sync_status === 'pending')?._count?.sync_status || 0
+      const successCount = syncStatusCounts.find((s: any) => s.sync_status === 'success')?._count?.sync_status || 0
+      const failedCount = syncStatusCounts.find((s: any) => s.sync_status === 'failed')?._count?.sync_status || 0
+
       return {
         database: {
           jobs: jobsCount,
@@ -468,8 +621,14 @@ export class ElasticsearchSyncService {
           total: jobsEsCount + companiesEsCount + profilesEsCount + applicationsEsCount
         },
         timestamp: new Date().toISOString(),
-        lastSyncAt: null, // TODO: Track last sync time
-        errors: 0 // TODO: Track errors
+        lastSyncAt: null,
+        errors: failedCount,
+        syncStatus: {
+          pending: pendingCount,
+          success: successCount,
+          failed: failedCount,
+          total: pendingCount + successCount + failedCount
+        }
       }
     } catch (error) {
       console.error('Failed to get sync stats:', error)
@@ -486,8 +645,8 @@ export class ElasticsearchSyncService {
   /**
    * Simple sync methods for seeding (no DB fetch, just sync provided document)
    */
-  async syncToElasticsearch(index: string, id: string, document: any): Promise<void> {
-    return this.syncDocument(index, id, document)
+  async syncToElasticsearch(index: string, id: string, document: any): Promise<boolean> {
+    return this.syncToElasticsearchWithRetry(index, id, document)
   }
 
   /**

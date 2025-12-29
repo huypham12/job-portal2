@@ -15,5 +15,5 @@
     }
   },
   "files": ["src/type.d.ts"],
-  "include": ["src/**/*", "prisma/**/*"]
+  "include": ["src/**/*", "prisma/**/*", "scripts/**/*"]
 }

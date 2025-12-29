@@ -4,6 +4,7 @@ import { ResumeService } from './resume.service'
 import { wrapController } from '@/shared/utils/wrap-controller'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { accessTokenValidator } from '../auth/auth.validator'
+import { envConfig } from '@/config/getEnvConfig'
 import {
   createResumeValidator,
   updateResumeValidator,
@@ -30,7 +31,7 @@ const authMiddleware = [accessTokenValidator, authenticateAccessToken, candidate
 
 // Dev-only request body logger to help debug validation issues
 const logRequestBody = (req: Request, _res: Response, next: NextFunction) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (envConfig.app.nodeEnv !== 'production') {
     try {
       const preview = JSON.stringify(req.body, (_k, v) =>
         typeof v === 'string' && v.length > 10000 ? `${v.slice(0, 10000)}...[truncated]` : v

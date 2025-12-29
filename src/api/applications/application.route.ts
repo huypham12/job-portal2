@@ -10,6 +10,7 @@ import {
 } from './application.validator'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { candidate } from '@/middleware/authorize.middleware'
+import { checkResourceOwnership } from '@/middleware/resource-ownership.middleware'
 import { uploadApplicationDocument, handleMulterError } from '@/api/uploads/middleware/upload.middleware'
 import recruiterRouter from './recruiter/recruiter.route'
 
@@ -43,19 +44,19 @@ router.get('/', validateDto(GetApplicationsSchema), applicationController.getApp
  * GET /api/applications/:id
  * Get application details by ID
  */
-router.get('/:id', validateDto(UUIDParamSchema), applicationController.getApplicationById)
+router.get('/:id', checkResourceOwnership('application'), validateDto(UUIDParamSchema), applicationController.getApplicationById)
 
 /**
  * GET /api/applications/:id/stages
  * Get application stages history
  */
-router.get('/:id/stages', validateDto(UUIDParamSchema), applicationController.getApplicationStages)
+router.get('/:id/stages', checkResourceOwnership('application'), validateDto(UUIDParamSchema), applicationController.getApplicationStages)
 
 /**
  * GET /api/applications/:id/documents
  * Get application documents
  */
-router.get('/:id/documents', validateDto(UUIDParamSchema), applicationController.getApplicationDocuments)
+router.get('/:id/documents', checkResourceOwnership('application'), validateDto(UUIDParamSchema), applicationController.getApplicationDocuments)
 
 /**
  * POST /api/applications/:id/documents
@@ -63,6 +64,7 @@ router.get('/:id/documents', validateDto(UUIDParamSchema), applicationController
  */
 router.post(
   '/:id/documents',
+  checkResourceOwnership('application'),
   uploadApplicationDocument.single('file'),
   handleMulterError,
   validateDto(UploadDocumentSchema),
@@ -73,7 +75,7 @@ router.post(
  * DELETE /api/applications/:id
  * Withdraw application
  */
-router.delete('/:id', validateDto(UUIDParamSchema), applicationController.withdrawApplication)
+router.delete('/:id', checkResourceOwnership('application'), validateDto(UUIDParamSchema), applicationController.withdrawApplication)
 
 /**
  * PATCH /api/applications/:id/stages/:stageId/feedback
@@ -81,6 +83,7 @@ router.delete('/:id', validateDto(UUIDParamSchema), applicationController.withdr
  */
 router.patch(
   '/:id/stages/:stageId/feedback',
+  checkResourceOwnership('application'),
   validateDto(StageFeedbackSchema),
   applicationController.submitStageFeedback
 )

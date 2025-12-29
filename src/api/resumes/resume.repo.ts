@@ -7,6 +7,8 @@ export type Profile = {
   locationId?: string
   lastActiveAtMs?: number
   metadata?: Record<string, unknown>
+  updatedAt?: Date | string
+  isLookingForJob?: boolean
 }
 
 /**

@@ -4,6 +4,7 @@ import { socketAuthMiddleware } from './socket.middleware'
 import { notificationService } from '@/api/notifications/notifications.service'
 import { socketNotificationReadSchema } from '@/api/notifications/notifications.validator'
 import { NotificationType } from '@/shared/constants/notification-types'
+import { envConfig } from '@/config/getEnvConfig'
 
 /**
  * Socket.IO Service
@@ -19,7 +20,7 @@ export class SocketService {
   initialize(httpServer: HttpServer) {
     this.io = new Server(httpServer, {
       cors: {
-        origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+        origin: envConfig.cors.origin,
         credentials: true
       }
     })

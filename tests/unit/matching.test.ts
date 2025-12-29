@@ -4,67 +4,92 @@ import { elasticsearchService } from '../../src/config/elasticsearch.service'
 import { searchService } from '../../src/api/searches/search.service'
 
 export async function testMatchingService() {
-  // Stub ES getById for job
+  // Stub ES functions
   const origGetById = elasticsearchService.getById
-  const origSearchProfilesForJob = (searchService as any).searchProfilesForJob
-  const origSearchJobsForProfile = (searchService as any).searchJobsForProfile
+  const origSearch = elasticsearchService.search
+  const origSearchJobs = elasticsearchService.searchJobs
 
   try {
-    ;(elasticsearchService as any).getById = async () => {
-      return {
-        id: 'job-1',
-        title: 'Senior Backend Engineer',
-        skills: ['nodejs', 'typescript'],
-        location_id: 'hanoi',
-        experience_level: 3,
-        posted_at: new Date().toISOString()
+    // Mock getById for job lookup
+    ;(elasticsearchService as any).getById = async ({ index }: any) => {
+      if (index.includes('jobs')) {
+        return {
+          id: 'job-1',
+          title: 'Senior Backend Engineer',
+          skills: ['nodejs', 'typescript'],
+          location_id: 'hanoi',
+          experience_level: 3,
+          posted_at: new Date().toISOString()
+        }
+      } else if (index.includes('profiles')) {
+        return {
+          id: 'profile-1',
+          skills: ['nodejs'],
+          years_of_experience: 4,
+          location_id: 'hanoi',
+          desired_job_title: 'Backend Developer',
+          headline: 'Senior Backend Developer',
+          is_looking_for_job: true
+        }
       }
-    }
-    ;(searchService as any).searchProfilesForJob = async () => {
-      return [
-        {
-          id: 'p1',
-          _score: 5.0,
-          _source: {
-            skills: ['nodejs'],
-            years_of_experience: 4,
-            location_id: 'hanoi',
-            last_active_at: new Date().toISOString()
-          }
-        },
-        {
-          id: 'p2',
-          _score: 2.0,
-          _source: {
-            skills: ['python'],
-            years_of_experience: 2,
-            location_id: 'hanoi',
-            last_active_at: new Date().toISOString()
-          }
-        }
-      ]
-    }
-    ;(searchService as any).searchJobsForProfile = async () => {
-      return [
-        {
-          id: 'j1',
-          _score: 7.0,
-          _source: {
-            skills: ['nodejs'],
-            experience_level: 3,
-            location_id: 'hanoi',
-            posted_at: new Date().toISOString()
-          }
-        },
-        {
-          id: 'j2',
-          _score: 1.0,
-          _source: { skills: ['java'], experience_level: 2, location_id: 'hanoi', posted_at: new Date().toISOString() }
-        }
-      ]
+      return null
     }
 
-    const candResp = await matchingService.matchCandidatesForJob('job-1', 10)
+    // Mock search for candidates
+    ;(elasticsearchService as any).search = async ({ index }: any) => {
+      if (index.includes('profiles')) {
+        return {
+          hits: [
+            {
+              id: 'p1',
+              _score: 5.0,
+              _source: {
+                skills: ['nodejs'],
+                years_of_experience: 4,
+                location_id: 'hanoi',
+                last_active_at: new Date().toISOString()
+              }
+            },
+            {
+              id: 'p2',
+              _score: 2.0,
+              _source: {
+                skills: ['python'],
+                years_of_experience: 2,
+                location_id: 'hanoi',
+                last_active_at: new Date().toISOString()
+              }
+            }
+          ]
+        }
+      }
+      return { hits: [] }
+    }
+
+    // Mock searchJobs for profile-job matching
+    ;(elasticsearchService as any).searchJobs = async () => {
+      return {
+        hits: [
+          {
+            id: 'j1',
+            _score: 7.0,
+            _source: {
+              skills: ['nodejs'],
+              experience_level: 3,
+              location_id: 'hanoi',
+              posted_at: new Date().toISOString()
+            }
+          },
+          {
+            id: 'j2',
+            _score: 1.0,
+            _source: { skills: ['java'], experience_level: 2, location_id: 'hanoi', posted_at: new Date().toISOString() }
+          }
+        ]
+      }
+    }
+
+    const candResp = await matchingService.matchCandidatesForJob('job-1', 10, {})
     assert.ok(candResp && Array.isArray((candResp as any).candidates))
     assert.ok((candResp as any).candidates.length > 0)
     for (const c of (candResp as any).candidates) {
@@ -73,7 +98,7 @@ export async function testMatchingService() {
       assert.ok(c.explanation && typeof c.explanation === 'object')
     }
 
-    const jobResp = await matchingService.matchJobsForProfile('profile-1', 10)
+    const jobResp = await matchingService.matchJobsForProfile('profile-1', 10, {})
     assert.ok(jobResp && Array.isArray((jobResp as any).jobs))
     assert.ok((jobResp as any).jobs.length > 0)
     for (const j of (jobResp as any).jobs) {
@@ -86,7 +111,7 @@ export async function testMatchingService() {
   } finally {
     // restore
     ;(elasticsearchService as any).getById = origGetById
-    ;(searchService as any).searchProfilesForJob = origSearchProfilesForJob
-    ;(searchService as any).searchJobsForProfile = origSearchJobsForProfile
+    ;(elasticsearchService as any).search = origSearch
+    ;(elasticsearchService as any).searchJobs = origSearchJobs
   }
 }

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Socket } from 'socket.io'
+import { envConfig } from '@/config/getEnvConfig'
 
 /**
  * Socket.IO authentication middleware
@@ -15,7 +16,7 @@ export const socketAuthMiddleware = (socket: Socket, next: (err?: Error) => void
     }
 
     // Verify token
-    const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
+    const JWT_SECRET = envConfig.secrets.jwt.access
     const decoded = jwt.verify(token, JWT_SECRET) as {
       userId: string
       role: string

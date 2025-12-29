@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { PrismaClient, job_status, job_type } from '@prisma/client'
 import * as fs from 'fs'
 import * as path from 'path'
+import { envConfig } from '../../src/config/getEnvConfig'
 // import { elasticsearchSyncService } from '../../../src/shared/services/elasticsearch-sync.service'
 
 const prisma = new PrismaClient()
 
 // Check if Elasticsearch is available and enabled
-const isElasticsearchEnabled = process.env.DISABLE_ELASTICSEARCH !== 'true'
+const isElasticsearchEnabled = !envConfig.elasticsearch.disableElasticsearch
 let isElasticsearchAvailable = false
 
 // Interfaces for JSON data
@@ -56,69 +58,6 @@ interface JobWorkArrangementData {
   shift_type: string | null
 }
 
-interface CategoryData {
-  id: string
-  name: string
-  slug: string
-  type: string
-}
-
-// Industry to job mapping logic
-function getRelevantJobsForIndustry(industry: string | null, allJobs: JobData[]): JobData[] {
-  if (!industry) return allJobs.slice(0, 5) // Default fallback
-
-  const industryLower = industry.toLowerCase()
-
-  // Map industries to relevant job keywords
-  const industryMappings: Record<string, string[]> = {
-    technology: [
-      'Software Engineer',
-      'Developer',
-      'IT',
-      'Tech',
-      'Engineer',
-      'Developer',
-      'Data',
-      'AI',
-      'Cloud',
-      'Cybersecurity'
-    ],
-    telecommunications: ['Network', 'Telecom', 'Mobile', 'Communication', 'Infrastructure', 'System'],
-    finance: ['Financial', 'Bank', 'Investment', 'Accounting', 'Finance', 'Analyst', 'Credit'],
-    banking: ['Bank', 'Financial', 'Credit', 'Loan', 'Investment', 'Risk'],
-    healthcare: ['Medical', 'Healthcare', 'Health', 'Clinical', 'Patient', 'Pharma', 'Doctor', 'Nurse'],
-    retail: ['Sales', 'Retail', 'Customer', 'Store', 'Merchandise', 'Shop', 'Commerce'],
-    manufacturing: ['Manufacturing', 'Production', 'Quality', 'Supply Chain', 'Operations', 'Engineering'],
-    education: ['Education', 'Teaching', 'Academic', 'Training', 'Learning', 'School'],
-    consulting: ['Consultant', 'Advisory', 'Strategy', 'Management', 'Business'],
-    marketing: ['Marketing', 'Brand', 'Digital', 'Content', 'Advertising', 'Media'],
-    'real estate': ['Real Estate', 'Property', 'Construction', 'Development', 'Housing'],
-    automotive: ['Automotive', 'Car', 'Vehicle', 'Manufacturing', 'Engineering'],
-    'food & beverage': ['Food', 'Beverage', 'Restaurant', 'Hospitality', 'Chef', 'Service'],
-    energy: ['Energy', 'Oil', 'Gas', 'Power', 'Renewable', 'Utility'],
-    logistics: ['Logistics', 'Supply Chain', 'Transportation', 'Warehouse', 'Delivery']
-  }
-
-  const keywords = industryMappings[industryLower] || ['General', 'Business', 'Management']
-
-  // Filter jobs that match the industry keywords
-  const relevantJobs = allJobs.filter((job) => {
-    const titleLower = job.title.toLowerCase()
-    const descLower = job.description.toLowerCase()
-    return keywords.some(
-      (keyword) => titleLower.includes(keyword.toLowerCase()) || descLower.includes(keyword.toLowerCase())
-    )
-  })
-
-  // If we don't have enough relevant jobs, supplement with general jobs
-  if (relevantJobs.length < 5) {
-    const generalJobs = allJobs.filter((job) => !relevantJobs.includes(job))
-    relevantJobs.push(...generalJobs.slice(0, 5 - relevantJobs.length))
-  }
-
-  return relevantJobs.slice(0, 5)
-}
-
 export async function seedJobs() {
   console.log('💼 Starting jobs seeding...')
 
@@ -126,10 +65,10 @@ export async function seedJobs() {
     // Check Elasticsearch availability
     if (isElasticsearchEnabled) {
       try {
-        // @ts-ignore - Optional elasticsearch dependency
-        isElasticsearchAvailable = await import('../../../src/config/elasticsearch.service').then(
-          ({ elasticsearchService }: any) => elasticsearchService.checkConnection()
-        ).catch(() => false)
+        // @ts-expect-error - Optional elasticsearch dependency
+        isElasticsearchAvailable = await import('../../../src/config/elasticsearch.service')
+          .then(({ elasticsearchService }: any) => elasticsearchService.checkConnection())
+          .catch(() => false)
         if (isElasticsearchAvailable) {
           console.log('✅ Elasticsearch is available for job sync')
         } else {
@@ -147,7 +86,6 @@ export async function seedJobs() {
     const jobCategoriesPath = path.join(__dirname, 'data', 'job_categories.json')
     const jobRequirementsPath = path.join(__dirname, 'data', 'job_requirements.json')
     const jobWorkArrangementsPath = path.join(__dirname, 'data', 'job_work_arrangements.json')
-    const categoriesPath = path.join(__dirname, 'data', 'categories.json')
 
     const jobsData: JobData[] = JSON.parse(fs.readFileSync(jobsPath, 'utf-8'))
     const jobBenefitsData: JobBenefitData[] = JSON.parse(fs.readFileSync(jobBenefitsPath, 'utf-8'))
@@ -156,7 +94,6 @@ export async function seedJobs() {
     const jobWorkArrangementsData: JobWorkArrangementData[] = JSON.parse(
       fs.readFileSync(jobWorkArrangementsPath, 'utf-8')
     )
-    const categoriesData: CategoryData[] = JSON.parse(fs.readFileSync(categoriesPath, 'utf-8'))
 
     console.log(
       `📊 Loaded ${jobsData.length} jobs, ${jobBenefitsData.length} job benefits, ${jobCategoriesData.length} job categories, ${jobRequirementsData.length} job requirements, ${jobWorkArrangementsData.length} work arrangements`
@@ -181,8 +118,9 @@ export async function seedJobs() {
 
     console.log(`🏢 Found ${companies.length} companies to create jobs for`)
 
-    // Clear existing job-related data
+    // Clear existing job-related data (delete jobs first to trigger cascade deletes)
     console.log('🧹 Clearing existing job data...')
+    await prisma.jobs.deleteMany({}) // Delete jobs first to cascade delete related records
     await prisma.job_views.deleteMany({})
     await prisma.job_skills.deleteMany({})
     await prisma.job_categories.deleteMany({})
@@ -192,8 +130,20 @@ export async function seedJobs() {
     await prisma.saved_jobs.deleteMany({})
     await prisma.connection_interests.deleteMany({})
     await prisma.applications.deleteMany({})
-    await prisma.jobs.deleteMany({})
     console.log('✅ Cleared existing job data')
+
+    // Create a pool of all 300 jobs and track used indices to ensure no duplicates
+    const jobPool = [...jobsData]
+
+    // Shuffle indices to randomize assignment order
+    const shuffledIndices = Array.from({ length: jobPool.length }, (_, i) => i).sort(() => Math.random() - 0.5)
+
+    let indexPointer = 0 // Track which shuffled index we're assigning
+
+    // Calculate jobs per company for even distribution with some variation
+    const totalJobsToCreate = Math.min(jobPool.length, companies.length * 5) // Max 5 jobs per company
+    const baseJobsPerCompany = Math.floor(totalJobsToCreate / companies.length)
+    const extraJobs = totalJobsToCreate % companies.length
 
     // Process companies in batches
     const batchSize = 5 // Process 5 companies at a time
@@ -206,17 +156,27 @@ export async function seedJobs() {
         `📦 Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(companies.length / batchSize)} (${batch.length} companies)`
       )
 
-      const batchPromises = batch.map(async (company) => {
+      const batchPromises = batch.map(async (company, batchIndex) => {
         try {
           const industry = company.company_details?.industry || null
           const locationId = company.company_details?.headquarters_location_id || null
 
-          // Get 5 relevant jobs for this company
-          const relevantJobs = getRelevantJobsForIndustry(industry, jobsData)
+          // Calculate jobs for this company (base + extra for first companies)
+          const companyGlobalIndex = i + batchIndex
+          const jobsForThisCompany = baseJobsPerCompany + (companyGlobalIndex < extraJobs ? 1 : 0)
 
-          const companyJobs = await Promise.all(
-            relevantJobs.map(async (jobData, jobIndex) => {
-              // Create job
+          // Assign unique jobs from shuffled pool to this company (each job data used exactly once)
+          const companyJobs = []
+          for (let j = 0; j < jobsForThisCompany && indexPointer < shuffledIndices.length; j++) {
+            const jobIndex = shuffledIndices[indexPointer]
+            const jobData = jobPool[jobIndex]
+            companyJobs.push(jobData)
+            indexPointer++
+          }
+
+          const createdJobs = await Promise.all(
+            companyJobs.map(async (jobData, jobIndex) => {
+              // Create job (no duplicate check needed as we ensure unique assignment)
               const job = await prisma.jobs.create({
                 data: {
                   title: jobData.title,
@@ -261,8 +221,11 @@ export async function seedJobs() {
                 )
               )
 
-              // Create job categories (random industry categories)
-              const industryCategories = categoriesData.filter((cat) => cat.type === 'industry')
+              // Create job categories (random industry categories from DB)
+              const industryCategories = await prisma.categories.findMany({
+                where: { type: 'industry' },
+                select: { id: true }
+              })
               const categoriesPerJob = 2
               const shuffledCategories = [...industryCategories].sort(() => 0.5 - Math.random())
               const selectedCategories = shuffledCategories.slice(0, categoriesPerJob)
@@ -338,8 +301,17 @@ export async function seedJobs() {
               // Sync to Elasticsearch if available
               if (isElasticsearchAvailable && isElasticsearchEnabled) {
                 try {
-                  // @ts-ignore - Optional elasticsearch dependency
-                  const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
+                  // Optional elasticsearch dependency
+                  // Use try/catch with require to avoid type errors and missing module
+                  let elasticsearchSyncService: any
+                  try {
+                    // eslint-disable-next-line @typescript-eslint/no-require-imports
+                    elasticsearchSyncService =
+                      require('../../../src/config/elasticsearch-sync.service').elasticsearchSyncService
+                  } catch (err) {
+                    throw new Error('Elasticsearch sync service not found: ' + err)
+                  }
+
                   const esDoc = {
                     id: job.id,
                     title: job.title,

@@ -7,6 +7,9 @@ export type ScoreBreakdown = {
   experience: number
   recency: number
   activity: number
+  work_arrangement: number
+  benefits: number
+  category: number
 }
 
 /**
@@ -27,15 +30,21 @@ export function formatBreakdown(
     experience?: number
     recency?: number
     activity?: number
+    work_arrangement?: number
+    benefits?: number
+    category?: number
   } = {}
 ): ScoreBreakdown {
   const defaultWeights = {
-    text: 0.35,
-    skills: 0.3,
-    location: 0.15,
-    experience: 0.1,
-    recency: 0.05,
-    activity: 0.05
+    text: 0.25,
+    skills: 0.25,
+    location: 0.12,
+    experience: 0.08,
+    recency: 0.06,
+    activity: 0.04,
+    work_arrangement: 0.08,
+    benefits: 0.06,
+    category: 0.04
   }
   const w = { ...defaultWeights, ...weights }
 
@@ -45,8 +54,11 @@ export function formatBreakdown(
   const experience = components.experience * w.experience
   const recency = components.recency * w.recency
   const activity = components.activity * w.activity
+  const work_arrangement = components.work_arrangement * w.work_arrangement
+  const benefits = components.benefits * w.benefits
+  const category = components.category * w.category
 
-  const total = text + skills + location + experience + recency + activity
+  const total = text + skills + location + experience + recency + activity + work_arrangement + benefits + category
   // Normalize each to percent of total (if total > 0) and scale to 0..100
   if (total <= 0) {
     return {
@@ -55,7 +67,10 @@ export function formatBreakdown(
       location: 0,
       experience: 0,
       recency: 0,
-      activity: 0
+      activity: 0,
+      work_arrangement: 0,
+      benefits: 0,
+      category: 0
     }
   }
 
@@ -66,6 +81,9 @@ export function formatBreakdown(
     location: Math.round(location * factor * 10) / 10,
     experience: Math.round(experience * factor * 10) / 10,
     recency: Math.round(recency * factor * 10) / 10,
-    activity: Math.round(activity * factor * 10) / 10
+    activity: Math.round(activity * factor * 10) / 10,
+    work_arrangement: Math.round(work_arrangement * factor * 10) / 10,
+    benefits: Math.round(benefits * factor * 10) / 10,
+    category: Math.round(category * factor * 10) / 10
   }
 }

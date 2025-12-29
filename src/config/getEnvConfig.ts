@@ -19,6 +19,9 @@ interface EnvConfig {
   app: {
     port: number
     host: string
+    nodeEnv: string
+    publicOrigin: string
+    enableSwagger: boolean
   }
   cors: {
     origin: string[]
@@ -89,10 +92,27 @@ interface EnvConfig {
   }
   elasticsearch: {
     node: string
+    nodeUrl?: string // alias for ELASTICSEARCH_URL
+    host?: string // alias for ELASTICSEARCH_HOST
     username?: string
     password?: string
     indexPrefix: string
+    esIndexPrefix?: string // alias for ES_INDEX_PREFIX
     enableSecurity: boolean
+    disableElasticsearch: boolean
+  }
+  redis: {
+    url: string
+  }
+  seeding: {
+    candidateLimit: number
+  },
+  rollout: {
+    searchJobsPercentage: number
+    searchPopularPercentage: number
+    recommendationsPercentage: number
+    matchingPercentage: number
+    maxErrorRate: number
   }
 }
 
@@ -146,7 +166,10 @@ const dbTables = {
 export const envConfig: EnvConfig = {
   app: {
     port: parseInt(getEnvVar('PORT', true, '4000')),
-    host: getEnvVar('HOST', true, 'http://localhost:4000')
+    host: getEnvVar('HOST', true, 'http://localhost:4000'),
+    nodeEnv: getEnvVar('NODE_ENV', false, 'development'),
+    publicOrigin: getEnvVar('PUBLIC_ORIGIN', false, 'http://localhost:3000'),
+    enableSwagger: getEnvVar('ENABLE_SWAGGER', false, 'false').toLowerCase() === 'true'
   },
   cors: {
     origin: getEnvVar('CORS_ORIGIN', false, 'http://localhost:3000,http://localhost:5173').split(',')
@@ -220,10 +243,27 @@ export const envConfig: EnvConfig = {
   },
   elasticsearch: {
     node: getEnvVar('ELASTICSEARCH_NODE', false, 'http://localhost:9200'),
+    nodeUrl: getEnvVar('ELASTICSEARCH_URL', false),
+    host: getEnvVar('ELASTICSEARCH_HOST', false),
     username: getEnvVar('ELASTICSEARCH_USERNAME', false),
     password: getEnvVar('ELASTICSEARCH_PASSWORD', false),
     indexPrefix: getEnvVar('ELASTICSEARCH_INDEX_PREFIX', false, 'job_portal'),
-    enableSecurity: getEnvVar('ELASTIC_ENABLE_SECURITY', false, 'false').toLowerCase() === 'true'
+    esIndexPrefix: getEnvVar('ES_INDEX_PREFIX', false),
+    enableSecurity: getEnvVar('ELASTIC_ENABLE_SECURITY', false, 'false').toLowerCase() === 'true',
+    disableElasticsearch: getEnvVar('DISABLE_ELASTICSEARCH', false, 'false').toLowerCase() === 'true'
+  },
+  redis: {
+    url: getEnvVar('REDIS_URL', false, 'redis://localhost:6379')
+  },
+  seeding: {
+    candidateLimit: parseInt(getEnvVar('CANDIDATE_SEED_LIMIT', false, '1000'))
+  },
+  rollout: {
+    searchJobsPercentage: parseInt(getEnvVar('SEARCH_JOBS_ROLLOUT_PERCENTAGE', false, '0')),
+    searchPopularPercentage: parseInt(getEnvVar('SEARCH_POPULAR_ROLLOUT_PERCENTAGE', false, '0')),
+    recommendationsPercentage: parseInt(getEnvVar('RECOMMENDATIONS_ROLLOUT_PERCENTAGE', false, '0')),
+    matchingPercentage: parseInt(getEnvVar('MATCHING_ROLLOUT_PERCENTAGE', false, '0')),
+    maxErrorRate: parseFloat(getEnvVar('MAX_ERROR_RATE', false, '0.05'))
   }
 }
 

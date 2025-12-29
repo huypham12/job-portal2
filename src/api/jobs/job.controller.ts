@@ -13,6 +13,7 @@ import {
   MyJobsDTO
 } from './job.validator'
 import { prisma } from '@/config/database.service'
+import { checkResourceOwnership } from '@/middleware/resource-ownership.middleware'
 
 export class JobController {
   private jobService: JobService
@@ -29,10 +30,10 @@ export class JobController {
    */
   createJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.decoded_authorization!.user_id
       const data: CreateJobDTO = req.validated!.body
 
-      const job = await this.jobService.createJob(userId, data)
+      // Company ownership is verified by middleware, so we can use data.company_id directly
+      const job = await this.jobService.createJob(data.company_id, data)
 
       res.status(HTTP_STATUS.CREATED).json({
         message: 'Job created successfully. Pending approval.',
@@ -70,9 +71,9 @@ export class JobController {
   getJobForManage = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.validated!.params
-      const userId = req.decoded_authorization!.user_id
 
-      const job = await this.jobService.getJobById(id, userId, true)
+      // REMOVED: userId and checkOwnership - middleware handles authorization
+      const job = await this.jobService.getJobById(id)
 
       res.status(HTTP_STATUS.OK).json({
         message: 'Job retrieved successfully',
@@ -90,10 +91,10 @@ export class JobController {
   updateJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.validated!.params
-      const userId = req.decoded_authorization!.user_id
       const data: UpdateJobDTO = req.validated!.body
 
-      const job = await this.jobService.updateJob(id, userId, data)
+      // Job ownership is verified by middleware
+      const job = await this.jobService.updateJob(id, data)
 
       res.status(HTTP_STATUS.OK).json({
         message: 'Job updated successfully',
@@ -111,9 +112,9 @@ export class JobController {
   deleteJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.validated!.params
-      const userId = req.decoded_authorization!.user_id
 
-      const result = await this.jobService.deleteJob(id, userId)
+      // Job ownership is verified by middleware
+      const result = await this.jobService.deleteJob(id)
 
       res.status(HTTP_STATUS.OK).json(result)
     } catch (error) {
@@ -128,10 +129,10 @@ export class JobController {
   updateJobStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.validated!.params
-      const userId = req.decoded_authorization!.user_id
       const { status }: UpdateJobStatusDTO = req.validated!.body
 
-      const result = await this.jobService.updateJobStatus(id, userId, status)
+      // Job ownership is verified by middleware
+      const result = await this.jobService.updateJobStatus(id, status)
 
       res.status(HTTP_STATUS.OK).json(result)
     } catch (error) {
@@ -146,9 +147,9 @@ export class JobController {
   publishJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.validated!.params
-      const userId = req.decoded_authorization!.user_id
 
-      const result = await this.jobService.publishJob(id, userId)
+      // Job ownership is verified by middleware
+      const result = await this.jobService.publishJob(id)
 
       res.status(HTTP_STATUS.OK).json(result)
     } catch (error) {
@@ -165,7 +166,17 @@ export class JobController {
       const userId = req.decoded_authorization!.user_id
       const { action, job_ids }: BulkJobActionsDTO = req.validated!.body
 
-      const result = await this.jobService.bulkJobActions(userId, action, job_ids)
+      // Get company ID for the user (company ownership verified by middleware)
+      const company = await prisma.companies.findUnique({
+        where: { recruiter_id: userId },
+        select: { id: true }
+      })
+
+      if (!company) {
+        throw new Error('You must have a company to perform bulk actions')
+      }
+
+      const result = await this.jobService.bulkJobActions(company.id, action, job_ids)
 
       res.status(HTTP_STATUS.OK).json(result)
     } catch (error) {
@@ -182,7 +193,17 @@ export class JobController {
       const userId = req.decoded_authorization!.user_id
       const { job_ids, new_expires_at }: BulkExtendExpiryDTO = req.validated!.body
 
-      const result = await this.jobService.bulkExtendExpiry(userId, job_ids, new_expires_at)
+      // Get company ID for the user (company ownership verified by middleware)
+      const company = await prisma.companies.findUnique({
+        where: { recruiter_id: userId },
+        select: { id: true }
+      })
+
+      if (!company) {
+        throw new Error('You must have a company to perform bulk actions')
+      }
+
+      const result = await this.jobService.bulkExtendExpiry(company.id, job_ids, new_expires_at)
 
       res.status(HTTP_STATUS.OK).json(result)
     } catch (error) {
@@ -190,26 +211,6 @@ export class JobController {
     }
   }
 
-  /**
-   * GET /api/jobs/:id/suggested-candidates
-   * Get suggested candidates for a job
-   */
-  getSuggestedCandidates = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.validated!.params
-      const userId = req.decoded_authorization!.user_id
-      const { size }: SuggestedCandidatesDTO = req.validated!.query
-
-      const result = await this.jobService.getSuggestedCandidates(id, userId, size)
-
-      res.status(HTTP_STATUS.OK).json({
-        message: 'Suggested candidates retrieved successfully',
-        data: result
-      })
-    } catch (error) {
-      next(error)
-    }
-  }
 
   /**
    * GET /api/jobs/:id/stats
@@ -218,9 +219,9 @@ export class JobController {
   getJobStats = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.validated!.params
-      const userId = req.decoded_authorization!.user_id
 
-      const stats = await this.jobService.getJobStats(id, userId)
+      // Job ownership is verified by middleware
+      const stats = await this.jobService.getJobStats(id)
 
       res.status(HTTP_STATUS.OK).json({
         message: 'Job statistics retrieved successfully',

@@ -58,7 +58,9 @@ export class ElasticsearchSyncMiddleware {
 
           const syncData = await ElasticsearchSyncMiddleware.extractSyncData(req, data)
           if (syncData) {
-            await ElasticsearchSyncMiddleware.performSync(syncData)
+            // Extract user ID from request context
+            const userId = req.user?.id || req.user?.userId
+            await ElasticsearchSyncMiddleware.performSync(syncData, userId)
           }
         } catch (error) {
           console.error('🔄 Elasticsearch sync error:', error)
@@ -213,9 +215,9 @@ export class ElasticsearchSyncMiddleware {
   }
 
   /**
-   * Perform the actual sync to Elasticsearch
+   * Perform the actual sync to Elasticsearch with user context
    */
-  private static async performSync(syncData: SyncableData): Promise<void> {
+  private static async performSync(syncData: SyncableData, userId?: string): Promise<void> {
     try {
       switch (syncData.action) {
         case 'create':
@@ -224,16 +226,16 @@ export class ElasticsearchSyncMiddleware {
             let success = false
             switch (syncData.type) {
               case 'job':
-                success = await elasticsearchSyncService.syncJobById(syncData.id, 'upsert')
+                success = await elasticsearchSyncService.syncJobById(syncData.id, userId || null, 'upsert')
                 break
               case 'company':
-                success = await elasticsearchSyncService.syncCompanyById(syncData.id, 'upsert')
+                success = await elasticsearchSyncService.syncCompanyById(syncData.id, userId || null, 'upsert')
                 break
               case 'profile':
-                success = await elasticsearchSyncService.syncProfileById(syncData.id, 'upsert')
+                success = await elasticsearchSyncService.syncProfileById(syncData.id, userId || null, 'upsert')
                 break
               case 'application':
-                success = await elasticsearchSyncService.syncApplicationById(syncData.id, 'upsert')
+                success = await elasticsearchSyncService.syncApplicationById(syncData.id, userId || null, 'upsert')
                 break
             }
             if (success) {
@@ -245,7 +247,7 @@ export class ElasticsearchSyncMiddleware {
         case 'bulk_update': {
           // Handle bulk updates for jobs
           if (syncData.job_ids && Array.isArray(syncData.job_ids)) {
-            const success = await elasticsearchSyncService.bulkSyncJobsByIds(syncData.job_ids, 'upsert')
+            const success = await elasticsearchSyncService.bulkSyncJobsByIds(syncData.job_ids, userId || null, 'upsert')
             if (success) {
               console.log(`✅ Bulk synced ${syncData.job_ids.length} jobs to Elasticsearch`)
             }
@@ -253,7 +255,7 @@ export class ElasticsearchSyncMiddleware {
           // Handle bulk updates for companies
           if (syncData.company_ids && Array.isArray(syncData.company_ids)) {
             const success = await Promise.all(
-              syncData.company_ids.map((id) => elasticsearchSyncService.syncCompanyById(id, 'upsert'))
+              syncData.company_ids.map((id) => elasticsearchSyncService.syncCompanyById(id, userId || null, 'upsert'))
             )
             if (success) {
               console.log(`✅ Bulk synced ${syncData.company_ids.length} companies to Elasticsearch`)
@@ -262,7 +264,7 @@ export class ElasticsearchSyncMiddleware {
           // Handle bulk updates for profiles
           if (syncData.profile_ids && Array.isArray(syncData.profile_ids)) {
             const success = await Promise.all(
-              syncData.profile_ids.map((id) => elasticsearchSyncService.syncProfileById(id, 'upsert'))
+              syncData.profile_ids.map((id) => elasticsearchSyncService.syncProfileById(id, userId || null, 'upsert'))
             )
             if (success) {
               console.log(`✅ Bulk synced ${syncData.profile_ids.length} profiles to Elasticsearch`)
@@ -271,7 +273,9 @@ export class ElasticsearchSyncMiddleware {
           // Handle bulk updates for applications
           if (syncData.application_ids && Array.isArray(syncData.application_ids)) {
             const success = await Promise.all(
-              syncData.application_ids.map((id) => elasticsearchSyncService.syncApplicationById(id, 'upsert'))
+              syncData.application_ids.map((id) =>
+                elasticsearchSyncService.syncApplicationById(id, userId || null, 'upsert')
+              )
             )
             if (success) {
               console.log(`✅ Bulk synced ${syncData.application_ids.length} applications to Elasticsearch`)
@@ -284,16 +288,16 @@ export class ElasticsearchSyncMiddleware {
             let success = false
             switch (syncData.type) {
               case 'job':
-                success = await elasticsearchSyncService.syncJobById(syncData.id, 'delete')
+                success = await elasticsearchSyncService.syncJobById(syncData.id, userId || null, 'delete')
                 break
               case 'company':
-                success = await elasticsearchSyncService.syncCompanyById(syncData.id, 'delete')
+                success = await elasticsearchSyncService.syncCompanyById(syncData.id, userId || null, 'delete')
                 break
               case 'profile':
-                success = await elasticsearchSyncService.syncProfileById(syncData.id, 'delete')
+                success = await elasticsearchSyncService.syncProfileById(syncData.id, userId || null, 'delete')
                 break
               case 'application':
-                success = await elasticsearchSyncService.syncApplicationById(syncData.id, 'delete')
+                success = await elasticsearchSyncService.syncApplicationById(syncData.id, userId || null, 'delete')
                 break
             }
             if (success) {
@@ -512,20 +516,24 @@ export class ElasticsearchSyncMiddleware {
         const applicationIds = individualItems.filter((item) => item.type === 'application').map((item) => item.id!)
 
         if (jobIds.length > 0) {
-          promises.push(elasticsearchSyncService.bulkSyncJobsByIds(jobIds, 'upsert'))
+          promises.push(elasticsearchSyncService.bulkSyncJobsByIds(jobIds, null, 'upsert')) // null = skip ownership for manual sync
         }
 
         if (companyIds.length > 0) {
-          promises.push(Promise.all(companyIds.map((id) => elasticsearchSyncService.syncCompanyById(id, 'upsert'))))
+          promises.push(
+            Promise.all(companyIds.map((id) => elasticsearchSyncService.syncCompanyById(id, null, 'upsert')))
+          )
         }
 
         if (profileIds.length > 0) {
-          promises.push(Promise.all(profileIds.map((id) => elasticsearchSyncService.syncProfileById(id, 'upsert'))))
+          promises.push(
+            Promise.all(profileIds.map((id) => elasticsearchSyncService.syncProfileById(id, null, 'upsert')))
+          )
         }
 
         if (applicationIds.length > 0) {
           promises.push(
-            Promise.all(applicationIds.map((id) => elasticsearchSyncService.syncApplicationById(id, 'upsert')))
+            Promise.all(applicationIds.map((id) => elasticsearchSyncService.syncApplicationById(id, null, 'upsert')))
           )
         }
       }
@@ -534,22 +542,22 @@ export class ElasticsearchSyncMiddleware {
       const bulkItems = items.filter((item) => item.action === 'bulk_update')
       for (const bulkItem of bulkItems) {
         if (bulkItem.job_ids?.length) {
-          promises.push(elasticsearchSyncService.bulkSyncJobsByIds(bulkItem.job_ids, 'upsert'))
+          promises.push(elasticsearchSyncService.bulkSyncJobsByIds(bulkItem.job_ids, null, 'upsert')) // null = skip ownership for manual sync
         }
         if (bulkItem.company_ids?.length) {
           promises.push(
-            Promise.all(bulkItem.company_ids.map((id) => elasticsearchSyncService.syncCompanyById(id, 'upsert')))
+            Promise.all(bulkItem.company_ids.map((id) => elasticsearchSyncService.syncCompanyById(id, null, 'upsert')))
           )
         }
         if (bulkItem.profile_ids?.length) {
           promises.push(
-            Promise.all(bulkItem.profile_ids.map((id) => elasticsearchSyncService.syncProfileById(id, 'upsert')))
+            Promise.all(bulkItem.profile_ids.map((id) => elasticsearchSyncService.syncProfileById(id, null, 'upsert')))
           )
         }
         if (bulkItem.application_ids?.length) {
           promises.push(
             Promise.all(
-              bulkItem.application_ids.map((id) => elasticsearchSyncService.syncApplicationById(id, 'upsert'))
+              bulkItem.application_ids.map((id) => elasticsearchSyncService.syncApplicationById(id, null, 'upsert'))
             )
           )
         }
@@ -594,7 +602,7 @@ export class ElasticsearchSyncMiddleware {
       })
 
       const applicationIds = applications.map((app) => app.id)
-      const success = await elasticsearchSyncService.bulkSyncApplicationsByIds(applicationIds, 'upsert')
+      const success = await elasticsearchSyncService.bulkSyncApplicationsByIds(applicationIds, null, 'upsert')
 
       if (success) {
         console.log(`✅ Synced ${applicationIds.length} applications to Elasticsearch`)

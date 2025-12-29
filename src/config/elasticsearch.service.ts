@@ -1,3 +1,5 @@
+import { envConfig } from './getEnvConfig'
+
 export type SearchParams = {
   index: string
   query: unknown
@@ -35,7 +37,73 @@ export type SuggestResponse = { suggestions: Suggestion[] }
  */
 import { Client } from '@elastic/elasticsearch'
 
-const ES_NODE = process.env.ELASTICSEARCH_URL || process.env.ELASTICSEARCH_HOST || 'http://localhost:9200'
+const ES_NODE = envConfig.elasticsearch.nodeUrl || envConfig.elasticsearch.host || envConfig.elasticsearch.node
+
+// Enhanced Vietnamese analyzer configuration optimized for job portal search
+const vietnameseAnalyzers = {
+  analysis: {
+    filter: {
+      // Optimized stop words - removed overly common words that might filter out relevant terms
+      vi_stop: {
+        type: 'stop',
+        stopwords: [
+          'của', 'và', 'là', 'có', 'được', 'trong', 'người', 'đã', 'từ', 'với',
+          'cho', 'như', 'này', 'đó', 'theo', 'về', 'ở', 'vào', 'sẽ', 'để',
+          'ra', 'đi', 'đến', 'tại', 'nhưng', 'vẫn', 'cũng', 'bị', 'một', 'hai',
+          'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'
+        ]
+      },
+      // Improved stemmer for Vietnamese
+      vi_stem: {
+        type: 'stemmer',
+        language: 'light_english' // Better than porter2 for Vietnamese context
+      },
+      // Asciifolding for normalizers - must not preserve original for keyword fields
+      asciifolding_filter: {
+        type: 'asciifolding',
+        preserve_original: false
+      },
+      // Additional filters for better Vietnamese text processing
+      vi_word_delimiter: {
+        type: 'word_delimiter',
+        generate_word_parts: true,
+        generate_number_parts: false,
+        catenate_words: true,
+        catenate_numbers: false,
+        catenate_all: false,
+        split_on_case_change: false,
+        preserve_original: true,
+        split_on_numerics: false
+      }
+    },
+    analyzer: {
+      // Main analyzer for indexing - optimized for Vietnamese job descriptions
+      vi_analyzer: {
+        type: 'custom',
+        tokenizer: 'standard',
+        filter: ['lowercase', 'vi_word_delimiter', 'asciifolding_filter', 'vi_stop', 'vi_stem']
+      },
+      // Search analyzer - more permissive for queries
+      vi_search_analyzer: {
+        type: 'custom',
+        tokenizer: 'standard',
+        filter: ['lowercase', 'vi_word_delimiter', 'asciifolding_filter', 'vi_stop']
+      },
+      // Specialized analyzer for job titles and short texts
+      vi_title_analyzer: {
+        type: 'custom',
+        tokenizer: 'standard',
+        filter: ['lowercase', 'asciifolding_filter'] // Minimal filtering for titles
+      }
+    },
+    normalizer: {
+      lc_normalizer: {
+        type: 'custom',
+        filter: ['lowercase', 'asciifolding_filter']
+      }
+    }
+  }
+}
 
 let esClient: Client | null = null
 function getClient(): Client {
@@ -97,9 +165,13 @@ export const elasticsearchService = {
       userLocationId?: string
       prioritizeFreshJobs?: boolean
       userPrefersRemote?: boolean
+      userPrefersFlexibleHours?: boolean
       userSkills?: string[]
       userDesiredSalaryMin?: number
       userDesiredSalaryMax?: number
+      userDesiredBenefits?: string[]
+      userPreferredCategories?: string[]
+      userRemotePercentageMin?: number
     }
   ): Promise<SearchResponse<any>> {
     const client = getClient()
@@ -113,9 +185,13 @@ export const elasticsearchService = {
       userLocationId,
       prioritizeFreshJobs = true,
       userPrefersRemote = false,
+      userPrefersFlexibleHours,
       userSkills = [],
       userDesiredSalaryMin,
-      userDesiredSalaryMax
+      userDesiredSalaryMax,
+      userDesiredBenefits,
+      userPreferredCategories,
+      userRemotePercentageMin
     } = params
 
     const body: any = {}
@@ -231,15 +307,48 @@ export const elasticsearchService = {
         })
       }
 
-      // Flexible hours boost: Work-life balance preference
+      // Flexible hours boost: Work-life balance preference (higher boost if user prefers it)
+      const flexibleBoost = userPrefersFlexibleHours ? 1.15 : 1.05
       shouldClauses.push({
         term: {
           flexible_hours: {
             value: true,
-            boost: 1.05 // 5% boost for flexible hours jobs
+            boost: flexibleBoost
           }
         }
       })
+
+      // Benefits alignment boost
+      if (userDesiredBenefits && userDesiredBenefits.length > 0) {
+        shouldClauses.push({
+          terms: {
+            job_benefits_type: userDesiredBenefits,
+            boost: 1.1
+          }
+        })
+      }
+
+      // Category alignment boost
+      if (userPreferredCategories && userPreferredCategories.length > 0) {
+        shouldClauses.push({
+          terms: {
+            job_category: userPreferredCategories,
+            boost: 1.1
+          }
+        })
+      }
+
+      // Remote percentage preference boost
+      if (userRemotePercentageMin !== undefined) {
+        shouldClauses.push({
+          range: {
+            remote_percentage: {
+              gte: userRemotePercentageMin,
+              boost: 1.05
+            }
+          }
+        })
+      }
 
       // Construct final bool query
       body.query = {
@@ -369,7 +478,7 @@ export const elasticsearchService = {
   },
   getIndexName(name: string): string {
     // Allow optional prefix via env var ES_INDEX_PREFIX
-    const prefix = process.env.ES_INDEX_PREFIX || ''
+    const prefix = envConfig.elasticsearch.esIndexPrefix || envConfig.elasticsearch.indexPrefix
     return `${prefix}${name}`
   },
   async deleteIndex(name: string): Promise<boolean> {
@@ -398,21 +507,26 @@ export const elasticsearchService = {
       mappings: {
         properties: {
           id: { type: 'keyword' },
+          job_id: { type: 'keyword' },
           title: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_title_analyzer', // Use specialized analyzer for titles
+            search_analyzer: 'vi_search_analyzer',
             fields: {
-              keyword: { type: 'keyword' },
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
               autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
               suggest: { type: 'completion' },
-              raw: { type: 'keyword' }
+              raw: { type: 'keyword' },
+              // Enhanced title search with main analyzer
+              analyzed: { type: 'text', analyzer: 'vi_analyzer' }
             }
           },
           description: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
+            search_analyzer: 'vi_search_analyzer',
             fields: {
-              keyword: { type: 'keyword' }
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
             }
           },
           skills: {
@@ -422,42 +536,47 @@ export const elasticsearchService = {
           company_id: { type: 'keyword' },
           company_name: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' },
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
               suggest: { type: 'completion' }
             }
           },
           company_size: { type: 'integer' }, // For company reputation boost
+          // Ownership information for security verification
+          recruiter_id: { type: 'keyword' },
+          recruiter_role: { type: 'keyword' },
           location_id: { type: 'keyword' },
           location_name: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' } // Add keyword variant for exact matching
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
             }
           },
           // Location fields for hierarchical search (province + district)
           location_province: {
             type: 'text',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' },
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
               autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
             }
           },
           location_district: {
             type: 'text',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' },
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
               autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
             }
           },
           // Combined field for flexible search
           location_combined: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' }
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
             }
           },
           salary_range: { type: 'text' },
@@ -468,7 +587,7 @@ export const elasticsearchService = {
           // Job requirements - Critical for matching
           job_requirements_title: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
           job_requirements_years_experience: { type: 'integer' },
           job_requirements_is_required: { type: 'boolean' },
@@ -490,12 +609,15 @@ export const elasticsearchService = {
         }
       },
       settings: {
+        ...vietnameseAnalyzers,
         analysis: {
+          ...vietnameseAnalyzers.analysis,
           analyzer: {
+            ...vietnameseAnalyzers.analysis.analyzer,
             autocomplete_analyzer: {
               type: 'custom',
               tokenizer: 'edge_ngram_tokenizer',
-              filter: ['lowercase', 'asciifolding']
+              filter: ['lowercase', 'asciifolding_filter']
             }
           },
           tokenizer: {
@@ -515,38 +637,40 @@ export const elasticsearchService = {
       mappings: {
         properties: {
           id: { type: 'keyword' },
+          profile_id: { type: 'keyword' },
           user_id: { type: 'keyword' },
+          user_role: { type: 'keyword' }, // Ownership context
           full_name: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' }
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
             }
           },
           display_name: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' }
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
             }
           },
           headline: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' },
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
               suggest: { type: 'completion' }
             }
           },
           bio: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
           desired_job_title: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' },
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
               suggest: { type: 'completion' }
             }
           },
@@ -571,17 +695,17 @@ export const elasticsearchService = {
           location_id: { type: 'keyword' },
           location_text: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' }
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
             }
           },
           // Education and experience data
           education_degree: { type: 'keyword' },
-          education_field_of_study: { type: 'text', analyzer: 'standard' },
+          education_field_of_study: { type: 'text', analyzer: 'vi_analyzer' },
           certifications_skills_acquired: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
           current_employment: { type: 'boolean' }, // Is currently employed
           is_looking_for_job: { type: 'boolean' },
@@ -591,12 +715,15 @@ export const elasticsearchService = {
         }
       },
       settings: {
+        ...vietnameseAnalyzers,
         analysis: {
+          ...vietnameseAnalyzers.analysis,
           analyzer: {
+            ...vietnameseAnalyzers.analysis.analyzer,
             autocomplete_analyzer: {
               type: 'custom',
               tokenizer: 'edge_ngram_tokenizer',
-              filter: ['lowercase', 'asciifolding']
+              filter: ['lowercase', 'asciifolding_filter']
             }
           },
           tokenizer: {
@@ -616,20 +743,22 @@ export const elasticsearchService = {
       mappings: {
         properties: {
           id: { type: 'keyword' },
+          company_id: { type: 'keyword' },
           name: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' },
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
               autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
               suggest: { type: 'completion' }
             }
           },
           description: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
           recruiter_id: { type: 'keyword' },
+          recruiter_role: { type: 'keyword' }, // Ownership information
           logo_url: { type: 'keyword' },
           size: { type: 'integer' },
           // Contact info - not indexed for search privacy
@@ -640,23 +769,26 @@ export const elasticsearchService = {
           website_url: { type: 'keyword' },
           headquarters_location: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
           company_type: { type: 'keyword' },
           revenue_range: { type: 'keyword' },
           culture_description: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           }
         }
       },
       settings: {
+        ...vietnameseAnalyzers,
         analysis: {
+          ...vietnameseAnalyzers.analysis,
           analyzer: {
+            ...vietnameseAnalyzers.analysis.analyzer,
             autocomplete_analyzer: {
               type: 'custom',
               tokenizer: 'standard',
-              filter: ['lowercase', 'asciifolding']
+              filter: ['lowercase', 'asciifolding_filter']
             }
           }
         }
@@ -674,9 +806,9 @@ export const elasticsearchService = {
           profile_id: { type: 'keyword' },
           query: {
             type: 'text',
-            analyzer: 'standard',
+            analyzer: 'vi_analyzer',
             fields: {
-              keyword: { type: 'keyword' } // For exact matching in aggregations
+              keyword: { type: 'keyword', normalizer: 'lc_normalizer' } // For exact matching in aggregations
             }
           },
           position: { type: 'integer' },
@@ -697,12 +829,15 @@ export const elasticsearchService = {
         }
       },
       settings: {
+        ...vietnameseAnalyzers,
         analysis: {
+          ...vietnameseAnalyzers.analysis,
           analyzer: {
+            ...vietnameseAnalyzers.analysis.analyzer,
             autocomplete_analyzer: {
               type: 'custom',
               tokenizer: 'standard',
-              filter: ['lowercase', 'asciifolding']
+              filter: ['lowercase', 'asciifolding_filter']
             }
           }
         }
@@ -714,6 +849,7 @@ export const elasticsearchService = {
       mappings: {
         properties: {
           id: { type: 'keyword' },
+          application_id: { type: 'keyword' },
           job_id: { type: 'keyword' },
           profile_id: { type: 'keyword' },
           user_id: { type: 'keyword' },
@@ -725,14 +861,14 @@ export const elasticsearchService = {
           // Candidate info - for analytics and filtering
           candidate_name: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
           candidate_email: { type: 'keyword' },
           candidate_headline: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
-          candidate_location: { type: 'text', analyzer: 'standard' },
+          candidate_location: { type: 'text', analyzer: 'vi_analyzer' },
           candidate_years_experience: { type: 'integer' },
           candidate_desired_salary_min: { type: 'integer' },
           candidate_desired_salary_max: { type: 'integer' },
@@ -752,10 +888,10 @@ export const elasticsearchService = {
           // Job info with requirements matching
           job_title: {
             type: 'text',
-            analyzer: 'standard'
+            analyzer: 'vi_analyzer'
           },
-          job_company_name: { type: 'text', analyzer: 'standard' },
-          job_location: { type: 'text', analyzer: 'standard' },
+          job_company_name: { type: 'text', analyzer: 'vi_analyzer' },
+          job_location: { type: 'text', analyzer: 'vi_analyzer' },
           job_type: { type: 'keyword' },
           job_salary_min: { type: 'integer' },
           job_salary_max: { type: 'integer' },
@@ -782,12 +918,15 @@ export const elasticsearchService = {
         }
       },
       settings: {
+        ...vietnameseAnalyzers,
         analysis: {
+          ...vietnameseAnalyzers.analysis,
           analyzer: {
+            ...vietnameseAnalyzers.analysis.analyzer,
             autocomplete_analyzer: {
               type: 'custom',
               tokenizer: 'standard',
-              filter: ['lowercase', 'asciifolding']
+              filter: ['lowercase', 'asciifolding_filter']
             }
           }
         }

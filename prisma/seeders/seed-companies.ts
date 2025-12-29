@@ -2,12 +2,13 @@ import { PrismaClient, user_role, LocationType } from '@prisma/client'
 import * as fs from 'fs'
 import * as path from 'path'
 import { generateHash } from '../../src/shared/utils/crypto'
+import { envConfig } from '../../src/config/getEnvConfig'
 // import { elasticsearchSyncService } from '../../../src/shared/services/elasticsearch-sync.service'
 
 const prisma = new PrismaClient()
 
 // Check if Elasticsearch is available and enabled
-const isElasticsearchEnabled = process.env.DISABLE_ELASTICSEARCH !== 'true'
+const isElasticsearchEnabled = !envConfig.elasticsearch.disableElasticsearch
 let isElasticsearchAvailable = false
 
 // Interfaces for JSON data
@@ -55,10 +56,10 @@ export async function seedCompanies() {
     // Check Elasticsearch availability
     if (isElasticsearchEnabled) {
       try {
-        // @ts-ignore - Optional elasticsearch dependency
-        isElasticsearchAvailable = await import('../../../src/config/elasticsearch.service').then(
-          ({ elasticsearchService }: any) => elasticsearchService.checkConnection()
-        ).catch(() => false)
+        // @ts-expect-error - Optional elasticsearch dependency
+        isElasticsearchAvailable = await import('../../../src/config/elasticsearch.service')
+          .then(({ elasticsearchService }: any) => elasticsearchService.checkConnection())
+          .catch(() => false)
         if (isElasticsearchAvailable) {
           console.log('✅ Elasticsearch is available for company sync')
         } else {
@@ -89,18 +90,53 @@ export async function seedCompanies() {
     }
 
     // Get available district locations for headquarters
-    console.log('📍 Fetching available district locations...')
-    const districts = await prisma.locations.findMany({
+    console.log('📍 Fetching available district locations from database...')
+    const allDistricts = await prisma.locations.findMany({
       where: { type: LocationType.district },
-      select: { id: true, name: true, parent_id: true },
+      select: {
+        id: true,
+        name: true,
+        parent_id: true,
+        parent: {
+          select: {
+            name: true
+          }
+        }
+      },
       orderBy: { name: 'asc' }
     })
 
-    if (districts.length === 0) {
+    if (allDistricts.length === 0) {
       throw new Error('No district locations found. Please run locations seeding first.')
     }
 
-    console.log(`📍 Found ${districts.length} districts available for company headquarters`)
+    // Major cities in Vietnam where most jobs are located
+    const majorCityKeywords = ['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ', 'Biên Hòa', 'Đồng Nai']
+
+    // Separate districts by major cities vs others
+    const majorCityDistricts = allDistricts.filter((district) =>
+      majorCityKeywords.some((keyword) => district.parent?.name.includes(keyword))
+    )
+    const otherDistricts = allDistricts.filter(
+      (district) => !majorCityKeywords.some((keyword) => district.parent?.name.includes(keyword))
+    )
+
+    console.log(`📍 Found ${allDistricts.length} total districts`)
+    console.log(`🏙️  ${majorCityDistricts.length} districts in major cities (80% weight)`)
+    console.log(`🌄 ${otherDistricts.length} districts in other areas (20% weight)`)
+    console.log(`ℹ️  Company locations will be weighted toward major cities for realistic job distribution`)
+
+    // Helper function to get a weighted random district (80% major cities, 20% others)
+    const getWeightedRandomDistrict = () => {
+      const useMajorCity = Math.random() < 0.8 // 80% chance
+      const sourceArray =
+        useMajorCity && majorCityDistricts.length > 0
+          ? majorCityDistricts
+          : otherDistricts.length > 0
+            ? otherDistricts
+            : allDistricts
+      return sourceArray[Math.floor(Math.random() * sourceArray.length)]
+    }
 
     // Clear existing company data and recruiter users
     console.log('🧹 Clearing existing company data and recruiter users...')
@@ -123,6 +159,9 @@ export async function seedCompanies() {
     const recruiterPassword = 'P@ssw0rd123'
     const hashedPassword = await generateHash(recruiterPassword)
     console.log('🔐 Password hashed for all recruiters')
+
+    // Track used benefit indices to prevent duplicates across companies
+    const usedBenefitIndices = new Set<number>()
 
     // Create recruiters and their companies in batches
     const batchSize = 10
@@ -164,7 +203,7 @@ export async function seedCompanies() {
               size: companyData.size,
               contact_email: companyData.contact_email,
               contact_phone: companyData.contact_phone,
-              contact_address: companyData.contact_address,
+              contact_address: null, // Location will be managed through headquarters_location_id
               linkedin_url: companyData.linkedin_url,
               facebook_url: companyData.facebook_url,
               twitter_url: companyData.twitter_url,
@@ -179,7 +218,7 @@ export async function seedCompanies() {
           })
 
           // 3. Create company details
-          const randomDistrict = districts[Math.floor(Math.random() * districts.length)]
+          const randomDistrict = getWeightedRandomDistrict()
           const companyDetail = await prisma.company_details.create({
             data: {
               company_id: company.id,
@@ -198,10 +237,20 @@ export async function seedCompanies() {
             }
           })
 
-          // 4. Create company benefits (assign random benefits to each company)
+          // 4. Create company benefits (assign random unique benefits to each company)
           const benefitsPerCompany = 5 // Each company gets 5 random benefits
-          const shuffledBenefits = [...companyBenefitsData].sort(() => 0.5 - Math.random())
-          const selectedBenefits = shuffledBenefits.slice(0, benefitsPerCompany)
+          const selectedBenefits: CompanyBenefitData[] = []
+
+          // Random selection ensuring no duplicates across all companies
+          let attempts = 0
+          while (selectedBenefits.length < benefitsPerCompany && attempts < companyBenefitsData.length * 2) {
+            const randomIndex = Math.floor(Math.random() * companyBenefitsData.length)
+            if (!usedBenefitIndices.has(randomIndex)) {
+              usedBenefitIndices.add(randomIndex)
+              selectedBenefits.push(companyBenefitsData[randomIndex])
+            }
+            attempts++
+          }
 
           const benefitPromises = selectedBenefits.map((benefitData) =>
             prisma.company_benefits.create({
@@ -220,6 +269,7 @@ export async function seedCompanies() {
           // 5. Sync to Elasticsearch if available
           if (isElasticsearchAvailable && isElasticsearchEnabled) {
             try {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore - Optional elasticsearch dependency
               const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
               const esDoc = {

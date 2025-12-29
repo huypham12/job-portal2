@@ -24,8 +24,11 @@ import { uploadRouter } from './api/uploads/upload.route'
 import notificationRouter from './api/notifications/notifications.routes'
 import searchRouter from './api/searches/search.route'
 import matchingRouter from './api/matching/matching.routes'
+import recommendationsRouter from './api/recommendations/recommendations.route'
+import syncRouter from './api/sync/sync.route'
 import { socketService } from './socket/socket.service'
 import { initializeCronjobs } from './jobs'
+import { SyncRetryWorker } from './workers/sync-retry.worker'
 // import { elasticsearchService } from './config/elasticsearch.service'
 import YAML from 'yaml'
 import swaggerUi from 'swagger-ui-express'
@@ -111,14 +114,14 @@ const main = async () => {
     app.use(compression())
 
     // Logging middleware
-    if (process.env.NODE_ENV === 'production') {
+    if (envConfig.app.nodeEnv === 'production') {
       app.use(morgan('combined'))
     } else {
       app.use(morgan('dev'))
     }
 
     // Trust proxy for production (behind load balancer/reverse proxy)
-    if (process.env.NODE_ENV === 'production') {
+    if (envConfig.app.nodeEnv === 'production') {
       app.set('trust proxy', 1)
     }
 
@@ -130,7 +133,7 @@ const main = async () => {
     app.use(
       '/uploads',
       express.static('uploads', {
-        maxAge: process.env.NODE_ENV === 'production' ? '1y' : 0,
+        maxAge: envConfig.app.nodeEnv === 'production' ? '1y' : 0,
         etag: true,
         lastModified: true
       })
@@ -151,6 +154,8 @@ const main = async () => {
     app.use('/api/locations', locationRouter)
     app.use('/api/search', searchRouter)
     app.use('/api/matching', matchingRouter)
+    app.use('/api/recommendations', recommendationsRouter)
+    app.use('/api/sync', syncRouter)
 
     // Health check endpoint
     app.get('/api/health', (req: Request, res: Response) => {
@@ -158,15 +163,31 @@ const main = async () => {
         status: 'OK',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        environment: process.env.NODE_ENV || 'development',
-        version: process.env.npm_package_version || '1.0.0'
+        environment: envConfig.app.nodeEnv,
+        version: '1.0.0'
+      })
+    })
+
+    // Rollout monitoring endpoint
+    app.get('/api/rollout/status', (req: Request, res: Response) => {
+      const { RolloutMonitor } = require('./shared/utils/rollout-monitoring.util')
+      res.status(200).json({
+        timestamp: new Date().toISOString(),
+        rollout_flags: {
+          search_jobs: envConfig.rollout.searchJobsPercentage,
+          search_popular: envConfig.rollout.searchPopularPercentage,
+          recommendations: envConfig.rollout.recommendationsPercentage,
+          matching: envConfig.rollout.matchingPercentage
+        },
+        metrics: RolloutMonitor.getAllMetrics(),
+        report: RolloutMonitor.generateReport()
       })
     })
 
     app.use(errorHandler)
 
     // Chỉ enable Swagger trong development hoặc khi được config
-    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_SWAGGER === 'true') {
+    if (envConfig.app.nodeEnv !== 'production' || envConfig.app.enableSwagger) {
       app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions, swaggerUiOptions))
     }
 
@@ -185,14 +206,17 @@ const main = async () => {
     // Initialize cronjobs
     initializeCronjobs()
 
+    // Initialize sync retry worker
+    SyncRetryWorker.start()
+
     server.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server is running on http://0.0.0.0:${PORT}`)
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`)
+      console.log(`🌍 Environment: ${envConfig.app.nodeEnv}`)
       console.log(`📚 API Docs: http://localhost:${PORT}/api-docs`)
       console.log(`❤️  Health Check: http://localhost:${PORT}/api/health`)
       console.log(`🔌 WebSocket server is ready for connections`)
 
-      if (process.env.NODE_ENV === 'production') {
+      if (envConfig.app.nodeEnv === 'production') {
         console.log(`🔒 CORS Origins: ${allowedOrigins.join(', ')}`)
       }
     })
@@ -229,7 +253,7 @@ process.on('SIGINT', () => {
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason)
   // In production, you might want to exit the process
-  if (process.env.NODE_ENV === 'production') {
+  if (envConfig.app.nodeEnv === 'production') {
     process.exit(1)
   }
 })
@@ -237,7 +261,7 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error)
   // In production, you might want to exit the process
-  if (process.env.NODE_ENV === 'production') {
+  if (envConfig.app.nodeEnv === 'production') {
     process.exit(1)
   }
 })

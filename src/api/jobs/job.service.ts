@@ -3,30 +3,32 @@ import { HttpError } from '@/shared/common/http-error'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'
 import { CreateJobDTO, UpdateJobDTO, FilterJobsDTO, MyJobsDTO, SuggestedCandidatesDTO } from './job.validator'
-import { MatchingCandidatesResponseDto } from '../matching/matching.dto'
 import { job_status, Prisma } from '@prisma/client'
 import { matchingService } from '../matching/matching.service'
 import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
+import { elasticsearchService } from '@/config/elasticsearch.service'
 import { jobToESDoc } from '@/shared/utils/es-transformers'
 
 export class JobService {
+  // ==================== OWNERSHIP VERIFICATION ====================
+
+  // REMOVED: Ownership verification methods - moved to middleware
+
   // ==================== EMPLOYER METHODS ====================
 
   /**
    * Create a new job posting
+   * Note: Company ownership is verified by middleware, so we just need to validate the company exists and is verified
    */
-  async createJob(userId: string, data: CreateJobDTO) {
-    // Verify company belongs to user
+  async createJob(companyId: string, data: CreateJobDTO) {
+    // Verify company exists and is verified (ownership already checked by middleware)
     const company = await prisma.companies.findUnique({
-      where: { id: data.company_id }
+      where: { id: companyId },
+      select: { id: true, is_verified: true, name: true }
     })
 
     if (!company) {
       throw new HttpError('Company not found', HTTP_STATUS.NOT_FOUND)
-    }
-
-    if (company.recruiter_id !== userId) {
-      throw new HttpError('You do not have permission to post jobs for this company', HTTP_STATUS.FORBIDDEN)
     }
 
     // Verify company is verified
@@ -68,7 +70,7 @@ export class JobService {
       data: {
         title: data.title,
         description: data.description,
-        company_id: data.company_id,
+        company_id: companyId,
         location_id: data.location_id,
         salary_range: data.salary_range as any,
         job_type: data.job_type,
@@ -228,9 +230,9 @@ export class JobService {
   }
 
   /**
-   * Get job by ID (with ownership check for employer)
+   * Get job by ID (business logic only - authorization handled by middleware)
    */
-  async getJobById(jobId: string, userId?: string, checkOwnership = false) {
+  async getJobById(jobId: string) {
     const job = await prisma.jobs.findUnique({
       where: { id: jobId },
       include: {
@@ -240,7 +242,12 @@ export class JobService {
             name: true,
             logo_url: true,
             description: true,
-            recruiter_id: true
+            recruiter_id: true,
+            users: {
+              select: {
+                role: true
+              }
+            }
           }
         },
         locations: {
@@ -277,22 +284,16 @@ export class JobService {
       throw new HttpError('Job not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    // Check ownership if required
-    if (checkOwnership && userId) {
-      if (job.companies?.recruiter_id !== userId) {
-        throw new HttpError('You do not have permission to access this job', HTTP_STATUS.FORBIDDEN)
-      }
-    }
-
+    // REMOVED: Ownership checks - handled by middleware
     return job
   }
 
   /**
    * Update job
    */
-  async updateJob(jobId: string, userId: string, data: UpdateJobDTO) {
-    // Check ownership
-    const existingJob = await this.getJobById(jobId, userId, true)
+  async updateJob(jobId: string, data: UpdateJobDTO) {
+    // Ownership check handled by middleware
+    const existingJob = await this.getJobById(jobId)
 
     // Cannot update if job is deleted
     if (existingJob.deleted) {
@@ -409,9 +410,9 @@ export class JobService {
   /**
    * Soft delete job
    */
-  async deleteJob(jobId: string, userId: string) {
-    // Check ownership
-    await this.getJobById(jobId, userId, true)
+  async deleteJob(jobId: string) {
+    // REMOVED: Ownership check - handled by middleware
+    await this.getJobById(jobId)
 
     await prisma.jobs.update({
       where: { id: jobId },
@@ -436,9 +437,9 @@ export class JobService {
   /**
    * Update job status (open/close)
    */
-  async updateJobStatus(jobId: string, userId: string, status: 'approved' | 'closed') {
-    // Check ownership
-    const job = await this.getJobById(jobId, userId, true)
+  async updateJobStatus(jobId: string, status: 'approved' | 'closed') {
+    // REMOVED: Ownership check - handled by middleware
+    const job = await this.getJobById(jobId)
 
     // Can only activate if job was previously approved or draft
     if (job.status === job_status.closed && status === 'approved') {
@@ -471,9 +472,9 @@ export class JobService {
   /**
    * Publish a draft job (change status from draft to approved)
    */
-  async publishJob(jobId: string, userId: string) {
-    // Check ownership
-    const job = await this.getJobById(jobId, userId, true)
+  async publishJob(jobId: string) {
+    // REMOVED: Ownership check - handled by middleware
+    const job = await this.getJobById(jobId)
 
     // Only draft jobs can be published
     if (job.status !== job_status.draft) {
@@ -504,15 +505,14 @@ export class JobService {
 
   /**
    * Bulk job actions (close, delete, publish)
+   * Note: Company ownership is verified by middleware, jobs ownership verified individually
    */
-  async bulkJobActions(userId: string, action: 'close' | 'delete' | 'publish', jobIds: string[]) {
-    // Get all jobs that belong to this user
+  async bulkJobActions(companyId: string, action: 'close' | 'delete' | 'publish', jobIds: string[]) {
+    // Get all jobs that belong to this company (ownership already verified by middleware)
     const jobs = await prisma.jobs.findMany({
       where: {
         id: { in: jobIds },
-        companies: {
-          recruiter_id: userId
-        },
+        company_id: companyId,
         deleted: false
       },
       select: {
@@ -522,14 +522,14 @@ export class JobService {
       }
     })
 
-    // Check if all requested jobs belong to this user
+    // Check if all requested jobs exist and belong to the company
     const foundJobIds = jobs.map((job) => job.id)
-    const notOwnedJobs = jobIds.filter((id) => !foundJobIds.includes(id))
+    const notFoundJobs = jobIds.filter((id) => !foundJobIds.includes(id))
 
-    if (notOwnedJobs.length > 0) {
+    if (notFoundJobs.length > 0) {
       throw new HttpError(
-        `You don't have permission to perform this action on jobs: ${notOwnedJobs.join(', ')}`,
-        HTTP_STATUS.FORBIDDEN
+        `Jobs not found or do not belong to your company: ${notFoundJobs.join(', ')}`,
+        HTTP_STATUS.NOT_FOUND
       )
     }
 
@@ -593,15 +593,14 @@ export class JobService {
 
   /**
    * Bulk extend job expiry dates
+   * Note: Company ownership is verified by middleware, jobs ownership verified individually
    */
-  async bulkExtendExpiry(userId: string, jobIds: string[], newExpiresAt: Date) {
-    // Get all jobs that belong to this user and are not deleted
+  async bulkExtendExpiry(companyId: string, jobIds: string[], newExpiresAt: Date) {
+    // Get all jobs that belong to this company and are not deleted
     const jobs = await prisma.jobs.findMany({
       where: {
         id: { in: jobIds },
-        companies: {
-          recruiter_id: userId
-        },
+        company_id: companyId,
         deleted: false,
         status: job_status.approved // Only extend active jobs
       },
@@ -612,14 +611,14 @@ export class JobService {
       }
     })
 
-    // Check if all requested jobs belong to this user and are active
+    // Check if all requested jobs exist and belong to the company
     const foundJobIds = jobs.map((job) => job.id)
-    const notOwnedOrInactiveJobs = jobIds.filter((id) => !foundJobIds.includes(id))
+    const notFoundJobs = jobIds.filter((id) => !foundJobIds.includes(id))
 
-    if (notOwnedOrInactiveJobs.length > 0) {
+    if (notFoundJobs.length > 0) {
       throw new HttpError(
-        `Cannot extend expiry for jobs: ${notOwnedOrInactiveJobs.join(', ')}. Jobs must be owned by you and active.`,
-        HTTP_STATUS.FORBIDDEN
+        `Cannot extend expiry for jobs: ${notFoundJobs.join(', ')}. Jobs must belong to your company and be active.`,
+        HTTP_STATUS.NOT_FOUND
       )
     }
 
@@ -655,42 +654,13 @@ export class JobService {
     }
   }
 
-  /**
-   * Get suggested candidates for a job
-   */
-  async getSuggestedCandidates(jobId: string, userId: string, size: number = 20) {
-    // Check ownership
-    await this.getJobById(jobId, userId, true)
-
-    // Get suggested candidates using matching service
-    const result: MatchingCandidatesResponseDto = await matchingService.matchCandidatesForJob(jobId, size)
-
-    return {
-      job_id: jobId,
-      total: result.total,
-      candidates: result.candidates.map((candidate) => ({
-        id: candidate.id,
-        score_percent: candidate.score_percent,
-        explanation: candidate.explanation,
-        profile: {
-          full_name: candidate._source?.full_name,
-          display_name: candidate._source?.display_name,
-          headline: candidate._source?.headline,
-          location_text: candidate._source?.location_text,
-          years_of_experience: candidate._source?.years_of_experience,
-          is_looking_for_job: candidate._source?.is_looking_for_job,
-          avatar_url: candidate._source?.avatar_url
-        }
-      }))
-    }
-  }
 
   /**
    * Get job statistics
    */
-  async getJobStats(jobId: string, userId: string) {
-    // Check ownership
-    await this.getJobById(jobId, userId, true)
+  async getJobStats(jobId: string) {
+    // Ownership check handled by middleware
+    await this.getJobById(jobId)
 
     const [applicationStats, viewStats] = await Promise.all([
       // Application statistics
@@ -747,15 +717,17 @@ export class JobService {
   // ==================== PUBLIC METHODS ====================
 
   /**
-   * Get all active jobs with filters (public)
+   * Search jobs using Elasticsearch with fallback to PostgreSQL
+   * Optimized for performance with full-text search and filtering
    */
-  async getJobs(query: FilterJobsDTO) {
+  private async getJobsFromES(query: FilterJobsDTO) {
     const {
       page,
       limit,
       search,
       skill_names,
       location_name,
+      tags,
       company_id,
       location_id,
       job_type,
@@ -765,6 +737,563 @@ export class JobService {
       salary_max,
       posted_after,
       posted_before,
+      is_remote,
+      flexible_hours,
+      remote_percentage_min,
+      job_category,
+      job_category_type,
+      benefits_type,
+      sort_by,
+      sort_order
+    } = query
+
+    const pageNum = typeof page === 'number' ? page : parseInt(String(page), 10) || 1
+    const limitNum = typeof limit === 'number' ? limit : parseInt(String(limit), 10) || 20
+    const skip = (pageNum - 1) * limitNum
+
+    // Build Elasticsearch query
+    const mustClauses: any[] = []
+    const filterClauses: any[] = []
+    const shouldClauses: any[] = []
+
+    // Base filters - always applied
+    filterClauses.push({ term: { status: status || 'approved' } })
+    filterClauses.push({ range: { expires_at: { gt: 'now' } } })
+
+    // Full-text search - optimized for both Vietnamese and English
+    if (search && search.trim()) {
+      const searchQuery = search.trim()
+
+      // Enhanced Vietnamese character detection for better query optimization
+      const vietnameseRegex =
+        /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/u
+      const hasVietnameseChars = vietnameseRegex.test(searchQuery)
+
+      // Optimized query parameters for Vietnamese vs English
+      // Vietnamese: more flexible to account for analyzer normalization
+      // English: can be stricter due to better analyzer support
+      const operator = hasVietnameseChars ? 'or' : 'and'
+      const minShouldMatch = hasVietnameseChars ? '30%' : '60%' // More lenient for Vietnamese
+
+      // Enhanced search fields covering all searchable content for comprehensive job discovery
+      const searchFields = [
+        'title^4', // Highest priority - job title
+        'description^2.5', // High priority - job description
+        'company_name^2', // High priority - company name
+        'job_requirements_title^1.5', // Medium-high priority - requirements
+        'job_benefits_type^1.2', // Medium priority - benefits
+        'job_category^1', // Medium priority - categories
+        'location_name^1', // Medium priority - location
+        'location_combined^0.8', // Lower priority - combined location
+        'tags^0.8' // Lower priority - tags
+      ]
+
+      // Single optimized multi_match query for Vietnamese
+      mustClauses.push({
+        multi_match: {
+          query: searchQuery,
+          fields: searchFields,
+          type: 'best_fields',
+          operator: operator,
+          minimum_should_match: minShouldMatch,
+          fuzziness: 0 // Disable fuzziness for Vietnamese
+        }
+      })
+    }
+
+    // Skill names filter (support multiple skills)
+    if (skill_names && skill_names.trim()) {
+      const skillNameList = skill_names
+        .trim()
+        .split(/[\s,]+/)
+        .filter((s) => s.length > 0)
+        .map((s) => s.trim().toLowerCase())
+
+      if (skillNameList.length > 0) {
+        filterClauses.push({
+          terms: { skills: skillNameList }
+        })
+      }
+    }
+
+    // Tags filter (support multiple tags)
+    if (tags && tags.trim()) {
+      const tagList = tags
+        .trim()
+        .split(/[\s,]+/)
+        .filter((t) => t.length > 0)
+        .map((t) => t.trim().toLowerCase())
+
+      if (tagList.length > 0) {
+        filterClauses.push({
+          terms: { tags: tagList }
+        })
+      }
+    }
+
+    // Work arrangements filters
+    if (is_remote !== undefined) {
+      filterClauses.push({ term: { is_remote_allowed: is_remote } })
+    }
+
+    if (flexible_hours !== undefined) {
+      filterClauses.push({ term: { flexible_hours } })
+    }
+
+    if (remote_percentage_min !== undefined && remote_percentage_min > 0) {
+      filterClauses.push({
+        range: { remote_percentage: { gte: remote_percentage_min } }
+      })
+    }
+
+    // Location filters
+    if (location_id) {
+      filterClauses.push({ term: { location_id } })
+    }
+
+    if (location_name && location_name.trim()) {
+      const locationQuery = location_name.trim()
+
+      // Enhanced location search with hierarchical matching
+      shouldClauses.push({
+        match: {
+          location_name: {
+            query: locationQuery,
+            operator: 'and'
+          }
+        }
+      })
+      shouldClauses.push({
+        match: {
+          location_combined: {
+            query: locationQuery,
+            operator: 'and'
+          }
+        }
+      })
+      shouldClauses.push({
+        match: {
+          location_province: {
+            query: locationQuery,
+            operator: 'and'
+          }
+        }
+      })
+      shouldClauses.push({
+        match: {
+          location_district: {
+            query: locationQuery,
+            operator: 'and'
+          }
+        }
+      })
+    }
+
+    // Company filter
+    if (company_id) {
+      filterClauses.push({ term: { company_id } })
+    }
+
+    // Job type filter
+    if (job_type) {
+      filterClauses.push({ term: { job_type } })
+    }
+
+    // Experience level filter
+    if (experience_level !== undefined && experience_level !== null) {
+      const expLevel = typeof experience_level === 'number' ? experience_level : parseInt(String(experience_level), 10)
+      if (!isNaN(expLevel)) {
+        filterClauses.push({ term: { experience_level: expLevel } })
+      }
+    }
+
+    // Job category filters
+    if (job_category && job_category.trim()) {
+      filterClauses.push({ term: { job_category: job_category.trim() } })
+    }
+
+    if (job_category_type) {
+      filterClauses.push({ term: { job_category_type } })
+    }
+
+    // Benefits type filter (support multiple benefit types)
+    if (benefits_type && benefits_type.trim()) {
+      const benefitTypeList = benefits_type
+        .trim()
+        .split(/[\s,]+/)
+        .filter((b) => b.length > 0)
+        .map((b) => b.trim())
+
+      if (benefitTypeList.length > 0) {
+        filterClauses.push({
+          terms: { job_benefits_type: benefitTypeList }
+        })
+      }
+    }
+
+    // Salary range filter
+    if (salary_min !== undefined && salary_min !== null) {
+      filterClauses.push({
+        range: {
+          salary_max: { gte: salary_min }
+        }
+      })
+    }
+
+    if (salary_max !== undefined && salary_max !== null) {
+      filterClauses.push({
+        range: {
+          salary_min: { lte: salary_max }
+        }
+      })
+    }
+
+    // Date filters
+    if (posted_after) {
+      filterClauses.push({
+        range: {
+          posted_at: { gte: posted_after.toISOString() }
+        }
+      })
+    }
+
+    if (posted_before) {
+      filterClauses.push({
+        range: {
+          posted_at: { lte: posted_before.toISOString() }
+        }
+      })
+    }
+
+    // Business-aware scoring boosts for better UX
+    // Fresh jobs boost: Recent jobs are more likely to be active positions
+    shouldClauses.push({
+      range: {
+        posted_at: {
+          gte: 'now-7d/d',
+          boost: 1.2 // 20% boost for jobs posted in last 7 days
+        }
+      }
+    })
+
+    // Remote work boost: Remote jobs are increasingly popular
+    if (is_remote !== false) { // Don't boost if user explicitly filtered out remote jobs
+      shouldClauses.push({
+        term: {
+          is_remote_allowed: {
+            value: true,
+            boost: 1.1 // 10% boost for remote-allowed jobs
+          }
+        }
+      })
+    }
+
+    // Flexible hours boost: Work-life balance preference
+    shouldClauses.push({
+      term: {
+        flexible_hours: {
+          value: true,
+          boost: 1.05 // 5% boost for flexible hours jobs
+        }
+      }
+    })
+
+    // Company size boost: Larger companies may offer more stability
+    shouldClauses.push({
+      range: {
+        company_size: {
+          gte: 50,
+          boost: 1.05 // 5% boost for companies with 50+ employees
+        }
+      }
+    })
+
+    // Build ES query
+    const esQuery: any = {
+      bool: {
+        must: mustClauses.length > 0 ? mustClauses : undefined,
+        filter: filterClauses.length > 0 ? filterClauses : undefined,
+        should: shouldClauses.length > 0 ? shouldClauses : undefined,
+        minimum_should_match: shouldClauses.length > 0 ? 1 : undefined
+      }
+    }
+
+    // Build sort with enhanced options
+    const esSort: any[] = []
+    if (sort_by === 'salary_min') {
+      esSort.push({ salary_min: { order: sort_order || 'asc', missing: '_last' } })
+    } else if (sort_by === 'posted_at') {
+      esSort.push({ posted_at: { order: sort_order || 'desc' } })
+    } else if (sort_by === 'title') {
+      esSort.push({ 'title.keyword': { order: sort_order || 'asc' } })
+    } else if (sort_by === 'expires_at') {
+      esSort.push({ expires_at: { order: sort_order || 'asc' } })
+    } else if (sort_by === 'relevance') {
+      // Pure relevance-based sorting
+      esSort.push({ _score: { order: sort_order || 'desc' } })
+      esSort.push({ posted_at: { order: 'desc' } }) // Tie-breaker
+    } else {
+      // Default: relevance score + posted_at (best for general search)
+      esSort.push({ _score: { order: 'desc' } })
+      esSort.push({ posted_at: { order: 'desc' } })
+    }
+
+    // Execute ES search with optimized scoring for Vietnamese and English
+    const indexName = elasticsearchService.getIndexName('jobs')
+
+    // Detect Vietnamese for scoring optimization (reuse regex pattern)
+    const vietnameseRegexForScore =
+      /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/u
+    const hasVietnameseCharsForScore = search && search.trim() ? vietnameseRegexForScore.test(search.trim()) : false
+
+    const searchBody: any = {
+      index: indexName,
+      query: esQuery,
+      from: skip,
+      size: limitNum,
+      sort: esSort
+    }
+
+    // Optimized minimum_score based on search type and language
+    // Much lower thresholds to ensure matches, especially for Vietnamese
+    if (search && search.trim() && mustClauses.length > 0) {
+      // Very low threshold for Vietnamese (0.001) to account for analyzer normalization
+      // Slightly higher for English (0.01) but still very permissive
+      searchBody.min_score = hasVietnameseCharsForScore ? 0.001 : 0.01
+    }
+
+    // Debug logging for ES query
+    if (search && search.trim()) {
+      console.log('🔍 [ES] Query details:', {
+        searchQuery: search.trim(),
+        hasVietnameseChars: hasVietnameseCharsForScore,
+        index: indexName,
+        queryStructure: JSON.stringify(esQuery, null, 2).substring(0, 500),
+        minScore: searchBody.min_score,
+        mustClausesCount: mustClauses.length,
+        filterClausesCount: filterClauses.length
+      })
+    }
+
+    const esResponse = await elasticsearchService.search(searchBody)
+
+    // Debug logging for ES response
+    if (search && search.trim()) {
+      console.log('📊 [ES] Response:', {
+        total: esResponse.total,
+        hitsCount: esResponse.hits.length,
+        topScores: esResponse.hits.slice(0, 3).map((h) => ({
+          id: h.id,
+          score: h._score,
+          title: h._source?.title
+        }))
+      })
+    }
+
+    console.log(`🔍 [ES] ES response: total=${esResponse.total}, hits=${esResponse.hits.length}`)
+
+    // DEBUG: Log score filtering
+    if (search && search.trim()) {
+      /* empty */
+    }
+
+    // Extract job IDs from ES results
+    // ES _id is the job UUID, but we prefer job_id from _source for safety
+    // Filter out results with very low scores when search is provided
+    let hits = esResponse.hits
+
+    // Optimized score filtering for search queries
+    // Much more lenient to ensure relevant results are not filtered out
+    if (search && search.trim() && hits.length > 0) {
+      const vietnameseRegex =
+        /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/u
+      const hasVietnameseChars = vietnameseRegex.test(search.trim())
+      const topScore = hits[0]._score ?? 0
+
+      // Very lenient thresholds to ensure matches
+      // Vietnamese: 5% of top score or minimum 0.001 (extremely lenient)
+      // English: 10% of top score or minimum 0.01 (still very permissive)
+      const minScoreThreshold = hasVietnameseChars ? Math.max(topScore * 0.05, 0.001) : Math.max(topScore * 0.1, 0.01)
+
+      hits = hits.filter((hit) => (hit._score ?? 0) >= minScoreThreshold)
+    }
+
+    const jobIds = hits.map((hit) => {
+      // Prefer job_id from _source (most reliable)
+      if (hit._source?.job_id) {
+        return hit._source.job_id
+      }
+      // Fallback to ES _id (should be the job UUID)
+      const id = hit.id
+      // Remove prefix if exists (job_${uuid} -> uuid)
+      return id.startsWith('job_') ? id.substring(4) : id
+    })
+
+    if (jobIds.length === 0) {
+      return {
+        data: [],
+        pagination: {
+          page: pageNum,
+          limit: limitNum,
+          total: 0,
+          total_pages: 0
+        }
+      }
+    }
+
+    // Hydrate full job data from PostgreSQL with relations
+    const jobs = await prisma.jobs.findMany({
+      where: {
+        id: { in: jobIds },
+        deleted: false
+      },
+      include: {
+        companies: {
+          select: {
+            id: true,
+            name: true,
+            logo_url: true
+          }
+        },
+        locations: {
+          select: {
+            id: true,
+            name: true,
+            type: true
+          }
+        },
+        job_requirements: true,
+        job_skills: {
+          include: {
+            skills: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          },
+          take: 5
+        },
+        _count: {
+          select: {
+            applications: true
+          }
+        }
+      }
+    })
+
+    // Preserve ES sort order
+    const jobMap = new Map(jobs.map((job) => [job.id, job]))
+    const orderedJobs = jobIds.map((id) => jobMap.get(id)).filter(Boolean) as typeof jobs
+
+    // Calculate total: if we filtered hits by score, use filtered count
+    // Otherwise use ES total (which already accounts for min_score in query)
+    const filteredTotal =
+      search && search.trim() && hits.length < esResponse.hits.length
+        ? hits.length // We filtered some out, so use filtered count
+        : esResponse.total // Use ES total (already filtered by min_score if applied)
+
+    return {
+      data: orderedJobs,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total: filteredTotal,
+        total_pages: Math.ceil(filteredTotal / limitNum)
+      }
+    }
+  }
+
+  /**
+   * Get all active jobs with filters (public)
+   * Uses Elasticsearch for optimal performance with fallback to PostgreSQL
+   */
+  async getJobs(query: FilterJobsDTO) {
+    // Try Elasticsearch first, fallback to PostgreSQL if ES fails or is disabled
+    try {
+      const esEnabled = !process.env.DISABLE_ELASTICSEARCH || process.env.DISABLE_ELASTICSEARCH === 'false'
+      if (esEnabled) {
+        const isConnected = await elasticsearchService.checkConnection()
+        if (isConnected) {
+          console.log(`🔍 [ES] Searching jobs with enhanced query:`, {
+            search: query.search,
+            filters: {
+              skill_names: query.skill_names,
+              location_name: query.location_name,
+              tags: query.tags,
+              job_type: query.job_type,
+              experience_level: query.experience_level,
+              is_remote: query.is_remote,
+              flexible_hours: query.flexible_hours,
+              remote_percentage_min: query.remote_percentage_min,
+              job_category: query.job_category,
+              job_category_type: query.job_category_type,
+              benefits_type: query.benefits_type
+            },
+            pagination: { page: query.page, limit: query.limit },
+            sort: { sort_by: query.sort_by, sort_order: query.sort_order }
+          })
+          console.log(`🔍 [ES] About to call getJobsFromES`)
+          const result = await this.getJobsFromES(query)
+          console.log(`✅ [ES] Search successful, found ${result.data.length} jobs, total: ${result.pagination.total}`)
+          if (result.data.length > 0) {
+            return result
+          }
+          // If ES returns empty, fallback to PostgreSQL
+          console.log(`⚠️ [ES] Returned empty results, falling back to PostgreSQL`)
+          throw new Error('ES returned empty results')
+        } else {
+          console.log('⚠️ [ES] Not connected, falling back to PostgreSQL')
+        }
+      } else {
+        console.log('⚠️ [ES] Disabled, using PostgreSQL')
+      }
+    } catch (error) {
+      console.warn('❌ [ES] Search failed, falling back to PostgreSQL:', error)
+      // Fall through to PostgreSQL implementation
+    }
+
+    console.log(`📊 [PostgreSQL] Searching jobs with enhanced query:`, {
+      search: query.search,
+      filters: {
+        skill_names: query.skill_names,
+        location_name: query.location_name,
+        tags: query.tags,
+        job_type: query.job_type,
+        experience_level: query.experience_level,
+        is_remote: query.is_remote,
+        flexible_hours: query.flexible_hours,
+        remote_percentage_min: query.remote_percentage_min,
+        job_category: query.job_category,
+        job_category_type: query.job_category_type,
+        benefits_type: query.benefits_type
+      },
+      sort: { sort_by: query.sort_by, sort_order: query.sort_order }
+    })
+
+    // Fallback to PostgreSQL implementation
+    const {
+      page,
+      limit,
+      search,
+      skill_names,
+      location_name,
+      tags,
+      company_id,
+      location_id,
+      job_type,
+      experience_level,
+      status,
+      salary_min,
+      salary_max,
+      posted_after,
+      posted_before,
+      is_remote,
+      flexible_hours,
+      remote_percentage_min,
+      job_category,
+      job_category_type,
+      benefits_type,
       sort_by,
       sort_order
     } = query
@@ -782,7 +1311,7 @@ export class JobService {
           : parseInt(String(experience_level), 10)
         : undefined
 
-    // Build base where clause
+    // Build base where clause with enhanced filters
     const where: Prisma.jobsWhereInput = {
       deleted: false,
       status: status || job_status.approved, // Default to approved jobs only
@@ -793,11 +1322,54 @@ export class JobService {
       ...(posted_after && { posted_at: { gte: posted_after } }),
       ...(posted_before && { posted_at: { lte: posted_before } }),
 
-      // Search in title and description
+      // Work arrangements filters
+      ...(is_remote !== undefined && {
+        job_work_arrangements: {
+          is_remote_allowed: is_remote
+        }
+      }),
+      ...(flexible_hours !== undefined && {
+        job_work_arrangements: {
+          flexible_hours
+        }
+      }),
+      ...(remote_percentage_min !== undefined && {
+        job_work_arrangements: {
+          remote_percentage: { gte: remote_percentage_min }
+        }
+      }),
+
+      // Job categories and benefits filters
+      ...(job_category && {
+        job_categories: {
+          some: {
+            categories: {
+              name: { contains: job_category, mode: 'insensitive' }
+            }
+          }
+        }
+      }),
+      ...(benefits_type && {
+        job_benefits: {
+          some: {
+            benefit_type: { contains: benefits_type, mode: 'insensitive' }
+          }
+        }
+      }),
+
+      // Search in title, description, and job requirements
       ...(search && {
         OR: [
           { title: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } }
+          { description: { contains: search, mode: 'insensitive' } },
+          // Search in job requirements titles
+          {
+            job_requirements: {
+              some: {
+                title: { contains: search, mode: 'insensitive' }
+              }
+            }
+          }
         ]
       }),
 
@@ -922,6 +1494,7 @@ export class JobService {
             },
             take: 5 // Limit skills shown in list
           },
+          job_requirements: true, // Include job requirements for search results
           _count: {
             select: {
               applications: true

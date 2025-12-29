@@ -7,6 +7,7 @@ import { compareHash, generateHash } from '@/shared/utils/crypto'
 import { prisma } from '@/config/database.service'
 import { TokenExpiredError } from 'jsonwebtoken'
 import { TokenPayload } from '@/types/token-payload.type'
+import { envConfig } from '@/config/getEnvConfig'
 
 // Schema cho password
 const passwordSchema = z
@@ -37,87 +38,27 @@ export const confirmPasswordSchema = z
     path: ['body', 'confirm_password']
   })
 
-// Schema cho forgot password token
+// Schema cho forgot password token (chỉ validate format, không kiểm tra DB)
 const forgotPasswordTokenSchema = z
   .string({
     message: MESSAGES.FORGOT_PASSWORD_TOKEN_IS_REQUIRED
   })
   .min(1, MESSAGES.FORGOT_PASSWORD_TOKEN_IS_REQUIRED)
   .superRefine(async (token, ctx) => {
-    // Đổi tên 'value' -> 'token'
-    let decodedToken: TokenPayload
-
-    // 1. Giải mã JWT (Kiểm tra chữ ký và Hạn sử dụng (exp))
+    // Chỉ kiểm tra JWT format và signature, không kiểm tra DB
     try {
-      decodedToken = await verifyToken({
+      await verifyToken({
         token: token,
-        secretKey: process.env.JWT_SECRET_FORGOT_PASSWORD_TOKEN as string
+        secretKey: envConfig.secrets.jwt.forgotPassword
       })
     } catch (error: any) {
-      // 'verifyToken' sẽ ném HttpError(MESSAGES.TOKEN_EXPIRED) nếu hết hạn
       ctx.addIssue({
         code: 'custom',
         message: error.message || MESSAGES.UNAUTHORIZED,
         path: ['forgot_password_token']
       })
-      return // Dừng
-    }
-
-    // 2. [THAY ĐỔI] Tìm user (Dùng Prisma và UUID)
-    const user = await prisma.users.findUnique({
-      where: { id: decodedToken.user_id } // Không cần new ObjectId()
-    })
-
-    if (!user) {
-      ctx.addIssue({
-        code: 'custom',
-        message: MESSAGES.USER_NOT_FOUND,
-        path: ['forgot_password_token']
-      })
-      return // Dừng
-    }
-
-    // 3. [LOGIC MỚI] Tìm token hash trong CSDL
-    // (Thay thế cho: value !== user.forgot_password_token)
-
-    // Tìm tất cả token 'reset_password' còn hạn của user
-    const userTokens = await prisma.user_tokens.findMany({
-      where: {
-        user_id: decodedToken.user_id,
-        type: 'reset_password',
-        expires_at: { gt: new Date() } // Kiểm tra hạn sử dụng trong CSDL
-      }
-    })
-
-    if (userTokens.length === 0) {
-      ctx.addIssue({
-        code: 'custom',
-        message: MESSAGES.INVALID_FORGOT_PASSWORD_TOKEN, // Token không tồn tại hoặc hết hạn
-        path: ['forgot_password_token']
-      })
       return
     }
-
-    // 4. [LOGIC MỚI] So sánh hash
-    let isMatch = false
-    for (const record of userTokens) {
-      if (await compareHash(token, record.token_hash)) {
-        isMatch = true
-        break
-      }
-    }
-
-    if (!isMatch) {
-      ctx.addIssue({
-        code: 'custom',
-        message: MESSAGES.INVALID_FORGOT_PASSWORD_TOKEN, // Token không khớp
-        path: ['forgot_password_token']
-      })
-      return
-    }
-
-    // 5. Gắn decoded token vào request (Giữ nguyên)
-    ;(ctx as any).decoded_forgot_password_token = decodedToken
   })
 
 // Middleware để validate dữ liệu bằng Zod

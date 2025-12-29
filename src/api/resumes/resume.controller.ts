@@ -3,6 +3,7 @@ import { ResumeService } from './resume.service'
 import { TokenPayload } from '@/types/token-payload.type'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { HttpError } from '@/shared/common/http-error'
+import { envConfig } from '@/config/getEnvConfig'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -215,7 +216,7 @@ export class ResumeController {
     const { template, format, html, viewportWidth } = req.body
 
     // dev-only: persist incoming HTML to tmp for debugging if present
-    if (html && process.env.NODE_ENV !== 'production') {
+    if (html && envConfig.app.nodeEnv !== 'production') {
       try {
         const outDir = path.join(os.tmpdir(), 'job-portal-debug')
         if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true })

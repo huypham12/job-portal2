@@ -1,6 +1,7 @@
 import { ErrorRequestHandler } from 'express'
 import { HttpError } from '../shared/common/http-error'
 import { ErrorResponseDto } from '../shared/common/error-response.dto'
+import { envConfig } from '../config/getEnvConfig'
 
 // trình xử lý lỗi chung, mọi error sẽ đều được next tới đây
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
@@ -9,7 +10,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const errors = err instanceof HttpError ? err.errors || {} : {}
 
   // Dev-only: log validation / error details to console for easier debugging
-  if (process.env.NODE_ENV !== 'production') {
+  if (envConfig.app.nodeEnv !== 'production') {
     try {
       console.error('[error-handler] ', { path: req.originalUrl, status, message, errors })
     } catch (e) {

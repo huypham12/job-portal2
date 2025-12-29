@@ -6,24 +6,6 @@ npm install
 
 npm run build
 
-# Khởi động PostgreSQL và Elasticsearch
-
-docker-compose up postgres elasticsearch -d
-
-# Chờ services ready (khoảng 30-60 giây)
-
-docker-compose logs -f postgres elasticsearch
-
-# Check PostgreSQL
-
-docker-compose exec postgres pg_isready -U postgres
-
-# Check Elasticsearch
-
-curl http://localhost:9200
-
-# Expected: {"name":"xxx","cluster_name":"docker-cluster","cluster_uuid":"xxx","version":{"number":"8.15.2"...}}
-
 # Generate Prisma client
 
 npx prisma generate

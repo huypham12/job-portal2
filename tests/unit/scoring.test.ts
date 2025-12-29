@@ -10,7 +10,8 @@ export function testScoringComponents() {
     experienceYears: 4,
     expectedExperience: 3,
     postedAtMs: Date.now() - 1000 * 60 * 60 * 24 * 10, // 10 days ago
-    lastActiveAtMs: Date.now() - 1000 * 60 * 60 * 24 * 5 // 5 days ago
+    profileUpdatedAtMs: Date.now() - 1000 * 60 * 60 * 24 * 5, // 5 days ago
+    isLookingForJob: true
   })
 
   // Basic assertions about ranges and expected properties
@@ -20,9 +21,12 @@ export function testScoringComponents() {
   assert.ok(components.experience >= 0 && components.experience <= 1)
   assert.ok(components.recency >= 0 && components.recency <= 1)
   assert.ok(components.activity >= 0 && components.activity <= 1)
+  assert.ok(components.availability >= 0 && components.availability <= 1)
 
   // Weighted aggregation example
-  const raw = components.text * 0.35 + components.skills * 0.3 + components.location * 0.15
+  const raw = components.text * 0.35 + components.skills * 0.25 + components.location * 0.15 +
+              components.experience * 0.1 + components.recency * 0.05 +
+              components.activity * 0.05 + components.availability * 0.04
   const percent = normalizeScore(raw)
   assert.ok(Number.isInteger(percent))
   assert.ok(percent >= 0 && percent <= 100)

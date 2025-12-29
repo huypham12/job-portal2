@@ -235,6 +235,7 @@ const filterJobsQuery = z.object({
   search: z.string().trim().optional(),
   skill_names: z.string().trim().optional(), // Comma-separated or space-separated skill names
   location_name: z.string().trim().optional(), // Location name to search in locations table
+  tags: z.string().trim().optional(), // Comma-separated tags
 
   // Filters
   company_id: z.string().uuid().optional(),
@@ -259,8 +260,18 @@ const filterJobsQuery = z.object({
     .transform((str) => new Date(str))
     .optional(),
 
+  // Work arrangements filters
+  is_remote: z.coerce.boolean().optional(), // Remote work allowed
+  flexible_hours: z.coerce.boolean().optional(), // Flexible working hours
+  remote_percentage_min: z.coerce.number().int().min(0).max(100).optional(), // Minimum remote percentage
+
+  // Job categories and benefits filters
+  job_category: z.string().trim().optional(), // Job category
+  job_category_type: z.enum(['industry', 'technical', 'work_type']).optional(), // Category type
+  benefits_type: z.string().trim().optional(), // Benefits type (comma-separated)
+
   // Sorting
-  sort_by: z.enum(['posted_at', 'title', 'salary_min', 'expires_at']).default('posted_at'),
+  sort_by: z.enum(['posted_at', 'title', 'salary_min', 'expires_at', 'relevance']).default('posted_at'),
   sort_order: z.enum(['asc', 'desc']).default('desc')
 })
 

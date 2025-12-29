@@ -2,12 +2,13 @@ import { PrismaClient, user_role, job_type } from '@prisma/client'
 import * as fs from 'fs'
 import * as path from 'path'
 import { generateHash } from '../../src/shared/utils/crypto'
+import { envConfig } from '../../src/config/getEnvConfig'
 // import { elasticsearchSyncService } from '../../../src/shared/services/elasticsearch-sync.service'
 
 const prisma = new PrismaClient()
 
 // Check if Elasticsearch is available and enabled
-const isElasticsearchEnabled = process.env.DISABLE_ELASTICSEARCH !== 'true'
+const isElasticsearchEnabled = !envConfig.elasticsearch.disableElasticsearch
 let isElasticsearchAvailable = false
 
 // Interface definitions for JSON data
@@ -84,7 +85,7 @@ export async function seedCandidates() {
   // Check Elasticsearch availability
   if (isElasticsearchEnabled) {
     try {
-      // @ts-ignore - Optional elasticsearch dependency
+      // @ts-expect-error - Optional elasticsearch dependency
       const { elasticsearchService }: any = await import('../../../src/config/elasticsearch.service')
       isElasticsearchAvailable = await elasticsearchService.checkConnection()
       if (isElasticsearchAvailable) {
@@ -186,53 +187,59 @@ export async function seedCandidates() {
     console.log('✅ Cleared existing candidate data')
 
     // Limit to 1000 candidates as requested (or override with env var for testing)
-    const candidatesToSeed = profilesData.slice(
-      0,
-      process.env.CANDIDATE_SEED_LIMIT ? parseInt(process.env.CANDIDATE_SEED_LIMIT) : 1000
-    )
+    const candidatesToSeed = profilesData.slice(0, envConfig.seeding.candidateLimit)
 
     // Hash the common password
     const hashedPassword = await generateHash('P@ssw0rd123')
     console.log('🔐 Password hashed for all candidates')
 
-    // Get all locations for mapping
-    const locations = await prisma.locations.findMany({
+    // Get available district locations from database (same as companies)
+    console.log('📍 Fetching available district locations from database...')
+    const allDistricts = await prisma.locations.findMany({
+      where: { type: 'district' },
       select: {
         id: true,
         name: true,
-        type: true,
         parent: {
           select: {
             id: true,
             name: true
           }
         }
-      }
+      },
+      orderBy: { name: 'asc' }
     })
 
-    // Create location mapping function - prefer districts over provinces for more specific locations
-    const findLocationId = (locationText: string): string | null => {
-      if (!locationText) return null
+    if (allDistricts.length === 0) {
+      throw new Error('No district locations found. Please run locations seeding first.')
+    }
 
-      // First try to find districts (more specific)
-      const districtMatch = locations.find(
-        (loc) =>
-          loc.type === 'district' &&
-          (loc.name.toLowerCase().includes(locationText.toLowerCase()) ||
-            locationText.toLowerCase().includes(loc.name.toLowerCase()))
-      )
+    // Major cities in Vietnam where most job seekers are located
+    const majorCityKeywords = ['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ', 'Biên Hòa', 'Đồng Nai']
 
-      if (districtMatch) return districtMatch.id
+    // Separate districts by major cities vs others
+    const majorCityDistricts = allDistricts.filter((district) =>
+      majorCityKeywords.some((keyword) => district.parent?.name.includes(keyword))
+    )
+    const otherDistricts = allDistricts.filter(
+      (district) => !majorCityKeywords.some((keyword) => district.parent?.name.includes(keyword))
+    )
 
-      // Then try provinces
-      const provinceMatch = locations.find(
-        (loc) =>
-          loc.type === 'province' &&
-          (loc.name.toLowerCase().includes(locationText.toLowerCase()) ||
-            locationText.toLowerCase().includes(loc.name.toLowerCase()))
-      )
+    console.log(`📍 Found ${allDistricts.length} total districts`)
+    console.log(`🏙️  ${majorCityDistricts.length} districts in major cities (80% weight)`)
+    console.log(`🌄 ${otherDistricts.length} districts in other areas (20% weight)`)
+    console.log(`ℹ️  Candidate locations will be weighted toward major cities for realistic distribution`)
 
-      return provinceMatch?.id || null
+    // Helper function to get a weighted random district (80% major cities, 20% others)
+    const getWeightedRandomDistrict = () => {
+      const useMajorCity = Math.random() < 0.8 // 80% chance
+      const sourceArray =
+        useMajorCity && majorCityDistricts.length > 0
+          ? majorCityDistricts
+          : otherDistricts.length > 0
+            ? otherDistricts
+            : allDistricts
+      return sourceArray[Math.floor(Math.random() * sourceArray.length)]
     }
 
     // Get all skills from database (not from JSON, as some might have failed seeding)
@@ -249,6 +256,19 @@ export async function seedCandidates() {
     dbSkills.forEach((skill) => {
       skillNameToId.set(skill.name.toLowerCase(), skill.id)
     })
+
+    // Shuffle all data arrays and track used indices to prevent duplicates across candidates
+    console.log('🎲 Shuffling data for diverse distribution...')
+    const shuffledExperiences = [...experiencesData].sort(() => Math.random() - 0.5)
+    const shuffledEducations = [...educationsData].sort(() => Math.random() - 0.5)
+    const shuffledCertifications = [...certificationsData].sort(() => Math.random() - 0.5)
+    const shuffledAwards = [...awardsData].sort(() => Math.random() - 0.5)
+
+    // Track used indices to ensure no duplicate assignments across all candidates
+    const usedExperienceIndices = new Set<number>()
+    const usedEducationIndices = new Set<number>()
+    const usedCertificationIndices = new Set<number>()
+    const usedAwardIndices = new Set<number>()
 
     console.log('🎯 Starting candidate creation...')
 
@@ -278,8 +298,11 @@ export async function seedCandidates() {
             }
           })
 
-          // 2. Find location ID
-          const locationId = findLocationId(profileData.location_text)
+          // 2. Randomly assign a district location from database (weighted toward major cities)
+          const randomDistrict = getWeightedRandomDistrict()
+          const locationText = randomDistrict.parent?.name
+            ? `${randomDistrict.name}, ${randomDistrict.parent.name}`
+            : randomDistrict.name
 
           // 3. Create profile
           const profile = await prisma.profiles.create({
@@ -290,8 +313,8 @@ export async function seedCandidates() {
               gender: profileData.gender || null,
               date_of_birth: profileData.date_of_birth ? new Date(profileData.date_of_birth) : null,
               phone_number: profileData.phone_number || null,
-              location_text: profileData.location_text,
-              location_id: locationId,
+              location_text: locationText,
+              location_id: randomDistrict.id,
               bio: profileData.bio,
               desired_currency: profileData.desired_currency,
               desired_job_title: profileData.desired_job_title,
@@ -307,15 +330,19 @@ export async function seedCandidates() {
             }
           })
 
-          // 4. Create experiences for this profile (distribute experiences across candidates)
-          // Use modulo to cycle through all experiences multiple times if needed
-          const experiencesPerCandidate = Math.max(1, Math.floor(experiencesData.length / 10)) // Ensure at least 1 experience per candidate
-          const startExpIndex = ((candidateNumber - 1) * experiencesPerCandidate) % experiencesData.length
+          // 4. Create experiences for this profile (random diverse selection, no duplicates)
+          const experiencesPerCandidate = Math.floor(Math.random() * 3) + 2 // 2-4 experiences per candidate
           const candidateExperiences: ExperienceData[] = []
 
-          for (let i = 0; i < experiencesPerCandidate; i++) {
-            const expIndex = (startExpIndex + i) % experiencesData.length
-            candidateExperiences.push(experiencesData[expIndex])
+          // Random selection ensuring no duplicates across all candidates
+          let attempts = 0
+          while (candidateExperiences.length < experiencesPerCandidate && attempts < shuffledExperiences.length * 2) {
+            const randomIndex = Math.floor(Math.random() * shuffledExperiences.length)
+            if (!usedExperienceIndices.has(randomIndex)) {
+              usedExperienceIndices.add(randomIndex)
+              candidateExperiences.push(shuffledExperiences[randomIndex])
+            }
+            attempts++
           }
 
           if (candidateExperiences.length > 0) {
@@ -332,14 +359,19 @@ export async function seedCandidates() {
             })
           }
 
-          // 5. Create educations for this profile (distribute educations across candidates)
-          const educationsPerCandidate = 1
-          const startEduIndex = ((candidateNumber - 1) * educationsPerCandidate) % educationsData.length
+          // 5. Create educations for this profile (random diverse selection, no duplicates)
+          const educationsPerCandidate = Math.floor(Math.random() * 2) + 1 // 1-2 educations per candidate
           const candidateEducations: EducationData[] = []
 
-          for (let i = 0; i < educationsPerCandidate; i++) {
-            const eduIndex = (startEduIndex + i) % educationsData.length
-            candidateEducations.push(educationsData[eduIndex])
+          // Random selection ensuring no duplicates across all candidates
+          let eduAttempts = 0
+          while (candidateEducations.length < educationsPerCandidate && eduAttempts < shuffledEducations.length * 2) {
+            const randomIndex = Math.floor(Math.random() * shuffledEducations.length)
+            if (!usedEducationIndices.has(randomIndex)) {
+              usedEducationIndices.add(randomIndex)
+              candidateEducations.push(shuffledEducations[randomIndex])
+            }
+            eduAttempts++
           }
 
           if (candidateEducations.length > 0) {
@@ -355,14 +387,19 @@ export async function seedCandidates() {
             })
           }
 
-          // 6. Create certifications for this profile (distribute certifications across candidates)
-          const certsPerCandidate = Math.max(1, Math.floor(certificationsData.length / 20)) // Ensure at least 1 certification per candidate
-          const startCertIndex = ((candidateNumber - 1) * certsPerCandidate) % certificationsData.length
+          // 6. Create certifications for this profile (random diverse selection, no duplicates)
+          const certsPerCandidate = Math.floor(Math.random() * 3) + 1 // 1-3 certifications per candidate
           const candidateCerts: CertificationData[] = []
 
-          for (let i = 0; i < certsPerCandidate; i++) {
-            const certIndex = (startCertIndex + i) % certificationsData.length
-            candidateCerts.push(certificationsData[certIndex])
+          // Random selection ensuring no duplicates across all candidates
+          let certAttempts = 0
+          while (candidateCerts.length < certsPerCandidate && certAttempts < shuffledCertifications.length * 2) {
+            const randomIndex = Math.floor(Math.random() * shuffledCertifications.length)
+            if (!usedCertificationIndices.has(randomIndex)) {
+              usedCertificationIndices.add(randomIndex)
+              candidateCerts.push(shuffledCertifications[randomIndex])
+            }
+            certAttempts++
           }
 
           if (candidateCerts.length > 0) {
@@ -382,14 +419,23 @@ export async function seedCandidates() {
             })
           }
 
-          // 7. Create awards for this profile (distribute awards across candidates)
-          const awardsPerCandidate = Math.max(1, Math.floor(awardsData.length / 30)) // Ensure at least 1 award per candidate
-          const startAwardIndex = ((candidateNumber - 1) * awardsPerCandidate) % awardsData.length
+          // 7. Create awards for this profile (random diverse selection, not everyone has awards, no duplicates)
+          const hasAwards = Math.random() < 0.6 // 60% candidates have awards
           const candidateAwards: AwardData[] = []
 
-          for (let i = 0; i < awardsPerCandidate; i++) {
-            const awardIndex = (startAwardIndex + i) % awardsData.length
-            candidateAwards.push(awardsData[awardIndex])
+          if (hasAwards && shuffledAwards.length > 0) {
+            const awardsPerCandidate = Math.floor(Math.random() * 2) + 1 // 1-2 awards
+
+            // Random selection ensuring no duplicates across all candidates
+            let awardAttempts = 0
+            while (candidateAwards.length < awardsPerCandidate && awardAttempts < shuffledAwards.length * 2) {
+              const randomIndex = Math.floor(Math.random() * shuffledAwards.length)
+              if (!usedAwardIndices.has(randomIndex)) {
+                usedAwardIndices.add(randomIndex)
+                candidateAwards.push(shuffledAwards[randomIndex])
+              }
+              awardAttempts++
+            }
           }
 
           if (candidateAwards.length > 0) {
@@ -427,7 +473,7 @@ export async function seedCandidates() {
           // 9. Sync to Elasticsearch (only if available)
           if (isElasticsearchAvailable) {
             try {
-              // @ts-ignore - Optional elasticsearch dependency
+              // @ts-expect-error - Optional elasticsearch dependency
               const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
               const esDoc = {
                 id: profile.id,

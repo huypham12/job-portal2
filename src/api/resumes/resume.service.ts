@@ -2,6 +2,7 @@ import { prisma } from '@/config/database.service'
 import { S3Service } from '@/api/uploads/services/s3.service'
 import { HttpError } from '@/shared/common/http-error'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
+import { envConfig } from '@/config/getEnvConfig'
 import puppeteer from 'puppeteer'
 import * as pdfParse from 'pdf-parse'
 import { v4 as uuidv4 } from 'uuid'
@@ -1360,7 +1361,9 @@ export class ResumeService {
         (content.projects && content.projects.length > 0)
           ? `
         <div class="section">
-          ${content.technologies && content.technologies.length > 0 ? `
+          ${
+            content.technologies && content.technologies.length > 0
+              ? `
             <h2 class="section-title">
               <i class="fas fa-tools"></i>
               Công nghệ nổi bật
@@ -1368,30 +1371,43 @@ export class ResumeService {
             <div style="display:flex;flex-wrap:wrap;gap:8px;">
               ${content.technologies.map((t: any) => `<div style="padding:6px 10px;border-radius:8px;background:#f1f5f9;color:#0f172a;font-weight:500;font-size:13px">${t}</div>`).join('')}
             </div>
-          ` : ''}
-          ${content.highlights && content.highlights.length > 0 ? `
+          `
+              : ''
+          }
+          ${
+            content.highlights && content.highlights.length > 0
+              ? `
             <h2 class="section-title" style="margin-top:18px;">
               <i class="fas fa-star"></i>
               Điểm nổi bật
             </h2>
-            ${content.highlights.map((h: any) => `
+            ${content.highlights
+              .map(
+                (h: any) => `
               <div class="template-card" style="margin-bottom:10px;">
                 <div class="template-card-title">${h.title || h}</div>
                 ${h.description ? `<div class="template-card-subtitle">${h.description}</div>` : ''}
               </div>
-            `).join('')}
-          ` : ''}
-          ${content.projects && content.projects.length > 0 ? `
+            `
+              )
+              .join('')}
+          `
+              : ''
+          }
+          ${
+            content.projects && content.projects.length > 0
+              ? `
             <h2 class="section-title" style="margin-top:18px;">
               <i class="fas fa-project-diagram"></i>
               Dự án
             </h2>
-            ${content.projects.map((proj: any) => {
-              const links = Array.isArray(proj.links) ? proj.links : []
-              const linksHtml = links.length
-                ? `<div style="margin-top:8px;">${links.map((l: any) => `<div><a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label || l.url}</a></div>`).join('')}</div>`
-                : ''
-              return `
+            ${content.projects
+              .map((proj: any) => {
+                const links = Array.isArray(proj.links) ? proj.links : []
+                const linksHtml = links.length
+                  ? `<div style="margin-top:8px;">${links.map((l: any) => `<div><a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label || l.url}</a></div>`).join('')}</div>`
+                  : ''
+                return `
               <div class="template-card" style="margin-bottom:12px;">
                 <div class="template-card-title">${proj.title || proj.name || 'Project'}</div>
                 ${proj.role ? `<div class="template-card-subtitle">${proj.role}</div>` : ''}
@@ -1399,9 +1415,14 @@ export class ResumeService {
                 ${linksHtml}
               </div>
             `
-            }).join('')}
-          ` : ''}
-          ${content.links && content.links.length > 0 ? `
+              })
+              .join('')}
+          `
+              : ''
+          }
+          ${
+            content.links && content.links.length > 0
+              ? `
             <h2 class="section-title" style="margin-top:18px;">
               <i class="fas fa-link"></i>
               Liên kết
@@ -1409,7 +1430,9 @@ export class ResumeService {
             <div>
               ${content.links.map((ln: any) => `<div style="margin-bottom:8px;"><strong style="margin-right:8px">${ln.label ? `${ln.label}:` : ''}</strong><a href="${ln.url}" target="_blank" rel="noopener noreferrer">${ln.url}</a></div>`).join('')}
             </div>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
       `
           : ''
@@ -1443,7 +1466,11 @@ export class ResumeService {
    * Generate PDF và upload lên S3, lưu vào resume.file_url
    * @returns file_url của PDF đã upload
    */
-  private async generateAndSaveResumePdf(resume: any, profile: any, template: string = 'professional'): Promise<string> {
+  private async generateAndSaveResumePdf(
+    resume: any,
+    profile: any,
+    template: string = 'professional'
+  ): Promise<string> {
     // Generate HTML từ template
     const html = this.generateResumeHtml(resume, profile, template)
 
@@ -1570,7 +1597,7 @@ export class ResumeService {
       if (isFullDocument) {
         try {
           if (!/\<base\s+/i.test(processedHtml)) {
-            const baseTag = `<base href="${process.env.PUBLIC_ORIGIN || 'http://localhost:3000'}">`
+            const baseTag = `<base href="${envConfig.app.publicOrigin}">`
             processedHtml = processedHtml.replace(/<head([^>]*)>/i, `<head$1>\n  ${baseTag}`)
           }
         } catch (e) {
@@ -1585,8 +1612,8 @@ export class ResumeService {
           // Remove style="..." attributes from <link ...> tags
           processedHtml = processedHtml.replace(/<link\b([^>]*)\sstyle=(["'])(.*?)\2([^>]*)>/gi, '<link$1$4>')
           // If no <base> tag, insert one pointing to server origin to help resolve relative URLs
-          if (!/\<base\s+/i.test(processedHtml)) {
-            const baseTag = `<base href="${process.env.PUBLIC_ORIGIN || 'http://localhost:3000'}">`
+          if (!/<base\s+/i.test(processedHtml)) {
+            const baseTag = `<base href="${envConfig.app.publicOrigin}">`
             processedHtml = processedHtml.replace(/<head([^>]*)>/i, `<head$1>\n  ${baseTag}`)
           }
         } catch (e) {
@@ -1689,7 +1716,7 @@ export class ResumeService {
       if (!fetchFn) {
         try {
           // dynamic import node-fetch
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
           fetchFn = require('node-fetch')
         } catch (e) {
           // can't fetch, return original html
@@ -1737,7 +1764,10 @@ export class ResumeService {
           }
 
           // Now replace the original <link ...> tag with <style>inlinedCss</style>
-          const linkTagRegex = new RegExp(`<link\\b[^>]*href=(["'])${href.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\1[^>]*>`, 'gi')
+          const linkTagRegex = new RegExp(
+            `<link\\b[^>]*href=(["'])${href.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\1[^>]*>`,
+            'gi'
+          )
           result = result.replace(linkTagRegex, `<style>${inlinedCss}</style>`)
           processedHrefs[href] = href
         } catch (e) {

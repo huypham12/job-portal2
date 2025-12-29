@@ -26,7 +26,7 @@ export const matchingService = {
     const timerDone = metrics.startTimer('matching.candidates.duration')
 
     // Fetch job payload from ES (lightweight)
-    const jobPayload = await elasticsearchService.getById({ index: 'jobs', id: jobId })
+    const jobPayload = await elasticsearchService.getById({ index: elasticsearchService.getIndexName('jobs'), id: jobId })
     if (!jobPayload) {
       timerDone()
       return { jobId, total: 0, candidates: [] }
@@ -37,7 +37,7 @@ export const matchingService = {
     // Build advanced ES query for profiles matching với business-aware scoring
     const profileQuery = buildProfileMatchingQuery(jobPayload, filters)
     const esResp = await elasticsearchService.search({
-      index: 'profiles',
+      index: elasticsearchService.getIndexName('profiles'),
       query: profileQuery,
       from: 0,
       size: topN,
@@ -74,7 +74,20 @@ export const matchingService = {
         experienceYears: src.years_of_experience ?? 0,
         expectedExperience: (jobPayload as any).experience_level ?? 0,
         postedAtMs: (jobPayload as any).posted_at ? new Date((jobPayload as any).posted_at).getTime() : undefined,
-        lastActiveAtMs: src.last_active_at ? new Date(src.last_active_at).getTime() : undefined,
+        profileUpdatedAtMs: src.updated_at ? new Date(src.updated_at).getTime() : undefined,
+        isLookingForJob: src.is_looking_for_job ?? true,
+        // Work arrangement matching
+        candidateRemotePreference: (src as any).location_text?.toLowerCase().includes('remote') || (src as any).prefers_remote,
+        jobRemoteAllowed: (jobPayload as any).is_remote_allowed,
+        jobRemotePercentage: (jobPayload as any).remote_percentage ?? 0,
+        candidateFlexiblePreference: (src as any).prefers_flexible_hours,
+        jobFlexibleHours: (jobPayload as any).flexible_hours,
+        // Benefits matching
+        candidateDesiredBenefits: (src as any).desired_benefits ?? [],
+        jobBenefits: (jobPayload as any).job_benefits?.map((b: any) => b.benefit_type) ?? [],
+        // Category matching
+        candidatePreferredCategories: (src as any).preferred_categories ?? [],
+        jobCategories: (jobPayload as any).job_categories?.map((c: any) => c.categories?.name) ?? []
       })
 
       const weightedRaw =
@@ -84,13 +97,26 @@ export const matchingService = {
         components.experience * DEFAULT_SCORE_WEIGHTS.experience +
         components.recency * DEFAULT_SCORE_WEIGHTS.recency +
         components.activity * DEFAULT_SCORE_WEIGHTS.activity +
-        components.availability * DEFAULT_SCORE_WEIGHTS.availability
+        components.availability * DEFAULT_SCORE_WEIGHTS.availability +
+        components.work_arrangement * DEFAULT_SCORE_WEIGHTS.work_arrangement +
+        components.benefits * DEFAULT_SCORE_WEIGHTS.benefits +
+        components.category * DEFAULT_SCORE_WEIGHTS.category
 
       const score_percent = normalizeScore(weightedRaw)
       const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
 
+      // Chuẩn hoá ID trả ra cho phía API:
+      // - es_id: _id trong ES
+      // - profile_id: id DB của profile (ưu tiên _source.profile_id, fallback _source.id nếu trước đây lưu thẳng profile id)
+      // - user_id: id user để dùng khi cần map sang bảng users
+      const profileId = (src as any).profile_id ?? (src as any).id ?? null
+      const userId = (src as any).user_id ?? null
+
       return {
-        id: h.id,
+        id: profileId ?? h.id,
+        es_id: h.id,
+        profile_id: profileId,
+        user_id: userId,
         score_percent,
         explanation,
         _source: src
@@ -124,7 +150,7 @@ export const matchingService = {
 
     const timerDone = metrics.startTimer('matching.jobs.duration')
 
-    const profilePayload = await elasticsearchService.getById({ index: 'profiles', id: profileId })
+    const profilePayload = await elasticsearchService.getById({ index: elasticsearchService.getIndexName('profiles'), id: profileId })
     if (!profilePayload) {
       timerDone()
       return { profileId, total: 0, jobs: [] }
@@ -135,7 +161,7 @@ export const matchingService = {
     // Build advanced ES query for job-profile matching với business-aware scoring
     const jobQuery = buildJobMatchingQuery(profilePayload, filters)
     const esResp = await elasticsearchService.searchJobs({
-      index: 'jobs',
+      index: elasticsearchService.getIndexName('jobs'),
       query: jobQuery,
       from: 0,
       size: topN,
@@ -181,9 +207,22 @@ export const matchingService = {
         experienceYears: (profilePayload as any).years_of_experience ?? 0,
         expectedExperience: src.experience_level ?? 0,
         postedAtMs: src.posted_at ? new Date(src.posted_at).getTime() : undefined,
-        lastActiveAtMs: (profilePayload as any).last_active_at
-          ? new Date((profilePayload as any).last_active_at).getTime()
-          : undefined
+        profileUpdatedAtMs: (profilePayload as any).updated_at
+          ? new Date((profilePayload as any).updated_at).getTime()
+          : undefined,
+        isLookingForJob: (profilePayload as any).is_looking_for_job ?? true,
+        // Work arrangement matching
+        candidateRemotePreference: (profilePayload as any).location_text?.toLowerCase().includes('remote') || (profilePayload as any).prefers_remote,
+        jobRemoteAllowed: src.is_remote_allowed,
+        jobRemotePercentage: src.remote_percentage ?? 0,
+        candidateFlexiblePreference: (profilePayload as any).prefers_flexible_hours,
+        jobFlexibleHours: src.flexible_hours,
+        // Benefits matching
+        candidateDesiredBenefits: (profilePayload as any).desired_benefits ?? [],
+        jobBenefits: src.job_benefits?.map((b: any) => b.benefit_type) ?? [],
+        // Category matching
+        candidatePreferredCategories: (profilePayload as any).preferred_categories ?? [],
+        jobCategories: src.job_categories?.map((c: any) => c.categories?.name) ?? []
       })
 
       const weightedRaw =
@@ -193,7 +232,10 @@ export const matchingService = {
         components.experience * DEFAULT_SCORE_WEIGHTS.experience +
         components.recency * DEFAULT_SCORE_WEIGHTS.recency +
         components.activity * DEFAULT_SCORE_WEIGHTS.activity +
-        components.availability * DEFAULT_SCORE_WEIGHTS.availability
+        components.availability * DEFAULT_SCORE_WEIGHTS.availability +
+        components.work_arrangement * DEFAULT_SCORE_WEIGHTS.work_arrangement +
+        components.benefits * DEFAULT_SCORE_WEIGHTS.benefits +
+        components.category * DEFAULT_SCORE_WEIGHTS.category
 
       const score_percent = normalizeScore(weightedRaw)
       const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
@@ -228,13 +270,23 @@ function buildJobMatchingQuery(profilePayload: any, filters?: Record<string, any
   const should: any[] = []
   const filter: any[] = []
 
-  // Text-based matching on job requirements and title
+  // Enhanced text-based matching using comprehensive job fields
   if (profilePayload.headline || profilePayload.desired_job_title) {
     const queryText = profilePayload.headline || profilePayload.desired_job_title
     must.push({
       multi_match: {
         query: queryText,
-        fields: ['title^3', 'description^2', 'job_requirements_title', 'company_name'],
+        fields: [
+          'title^4', // Highest priority for job title
+          'description^2.5', // High priority for job description
+          'company_name^2', // Company name
+          'job_requirements_title^1.5', // Job requirements
+          'job_benefits_type^1.2', // Benefits offered
+          'job_category^1', // Job categories
+          'location_name^1', // Location name
+          'location_combined^0.8', // Combined location
+          'tags^0.8' // Job tags
+        ],
         fuzziness: 'AUTO',
         operator: 'and'
       }
@@ -278,27 +330,94 @@ function buildJobMatchingQuery(profilePayload: any, filters?: Record<string, any
     })
   }
 
-  // Location matching
+  // Enhanced location matching with hierarchy
   if (profilePayload.location_id) {
     should.push({
       term: {
         location_id: {
           value: profilePayload.location_id,
-          boost: 1.4
+          boost: 1.5 // Exact location match gets highest boost
         }
       }
     })
   }
 
-  // Remote work opportunity
-  if (profilePayload.location_text?.toLowerCase().includes('remote')) {
-    should.push({
+  // Location hierarchy matching for broader matches
+  if ((profilePayload as any).location_province || (profilePayload as any).location_district) {
+    const locationShould = []
+
+    if ((profilePayload as any).location_province) {
+      locationShould.push({
+        match: {
+          location_province: {
+            query: (profilePayload as any).location_province,
+            boost: 1.2
+          }
+        }
+      })
+    }
+
+    if ((profilePayload as any).location_district) {
+      locationShould.push({
+        match: {
+          location_district: {
+            query: (profilePayload as any).location_district,
+            boost: 1.3
+          }
+        }
+      })
+    }
+
+    if (locationShould.length > 0) {
+      should.push({
+        bool: {
+          should: locationShould,
+          minimum_should_match: 0
+        }
+      })
+    }
+  }
+
+  // Enhanced work arrangement matching
+  const workArrangementShould = []
+
+  // Remote work preference
+  if (profilePayload.location_text?.toLowerCase().includes('remote') || (profilePayload as any).prefers_remote) {
+    workArrangementShould.push({
       bool: {
         should: [
-          { term: { is_remote_allowed: true } },
-          { range: { remote_percentage: { gte: 50 } } }
-        ],
-        boost: 1.2
+          { term: { is_remote_allowed: { value: true, boost: 1.5 } } },
+          { range: { remote_percentage: { gte: 80, boost: 1.3 } } }, // High remote preference
+          { range: { remote_percentage: { gte: 50, boost: 1.1 } } }  // Medium remote preference
+        ]
+      }
+    })
+  }
+
+  // Flexible hours preference
+  if ((profilePayload as any).prefers_flexible_hours) {
+    workArrangementShould.push({
+      term: { flexible_hours: { value: true, boost: 1.4 } }
+    })
+  }
+
+  // General work-life balance boost for good arrangements
+  workArrangementShould.push({
+    bool: {
+      should: [
+        { term: { is_remote_allowed: true } },
+        { term: { flexible_hours: true } },
+        { range: { remote_percentage: { gte: 20 } } }
+      ],
+      boost: 1.1
+    }
+  })
+
+  if (workArrangementShould.length > 0) {
+    should.push({
+      bool: {
+        should: workArrangementShould,
+        minimum_should_match: 0
       }
     })
   }
@@ -338,6 +457,26 @@ function buildJobMatchingQuery(profilePayload: any, filters?: Record<string, any
     }
   })
 
+  // Benefits matching - boost jobs with desired benefits
+  if ((profilePayload as any).desired_benefits && Array.isArray((profilePayload as any).desired_benefits)) {
+    should.push({
+      terms: {
+        'job_benefits_type': (profilePayload as any).desired_benefits,
+        boost: 1.3
+      }
+    })
+  }
+
+  // Category matching - boost jobs in preferred categories
+  if ((profilePayload as any).preferred_categories && Array.isArray((profilePayload as any).preferred_categories)) {
+    should.push({
+      terms: {
+        'job_category': (profilePayload as any).preferred_categories,
+        boost: 1.2
+      }
+    })
+  }
+
   // Only include active jobs
   filter.push({ term: { status: 'active' } })
 
@@ -351,15 +490,26 @@ function buildJobMatchingQuery(profilePayload: any, filters?: Record<string, any
     }
   })
 
-  // Apply additional filters
+  // Apply enhanced additional filters
   if (filters) {
     if (filters.location_id) filter.push({ term: { location_id: filters.location_id } })
     if (filters.job_type) filter.push({ term: { job_type: filters.job_type } })
     if (filters.min_salary !== undefined) filter.push({ range: { salary_min: { gte: filters.min_salary } } })
     if (filters.max_salary !== undefined) filter.push({ range: { salary_max: { lte: filters.max_salary } } })
     if (filters.company_id) filter.push({ term: { company_id: filters.company_id } })
+
+    // Work arrangement filters
     if (filters.is_remote !== undefined) filter.push({ term: { is_remote_allowed: filters.is_remote } })
     if (filters.flexible_hours !== undefined) filter.push({ term: { flexible_hours: filters.flexible_hours } })
+    if (filters.remote_percentage_min !== undefined) filter.push({ range: { remote_percentage: { gte: filters.remote_percentage_min } } })
+
+    // Category and benefits filters
+    if (filters.job_category) filter.push({ term: { job_category: filters.job_category } })
+    if (filters.job_category_type) filter.push({ term: { job_category_type: filters.job_category_type } })
+    if (filters.benefits_type) filter.push({ terms: { job_benefits_type: filters.benefits_type.split(',').map((b: string) => b.trim()) } })
+
+    // Tags filter
+    if (filters.tags) filter.push({ terms: { tags: filters.tags.split(',').map((t: string) => t.trim()) } })
   }
 
   return {
@@ -380,12 +530,20 @@ function buildProfileMatchingQuery(jobPayload: any, filters?: Record<string, any
   const should: any[] = []
   const filter: any[] = []
 
-  // Text-based matching on headline and skills
+  // Enhanced text-based matching using comprehensive profile fields
   if (jobPayload.title) {
     must.push({
       multi_match: {
         query: jobPayload.title,
-        fields: ['headline^3', 'full_name^1', 'bio', 'desired_job_title^2'],
+        fields: [
+          'headline^3', // Highest priority for profile headline
+          'desired_job_title^2', // Job title preferences
+          'full_name^1.5', // Name matching
+          'bio^1', // Bio/description
+          'skills_flat^1', // Skills
+          'education_degree^0.8', // Education background
+          'current_employment^0.8' // Employment status
+        ],
         fuzziness: 'AUTO',
         operator: 'and'
       }
@@ -447,6 +605,26 @@ function buildProfileMatchingQuery(jobPayload: any, filters?: Record<string, any
           value: 'remote',
           boost: 1.1
         }
+      }
+    })
+  }
+
+  // Benefits alignment - boost profiles that want job's benefits
+  if (jobPayload.job_benefits && Array.isArray(jobPayload.job_benefits)) {
+    should.push({
+      terms: {
+        'desired_benefits': jobPayload.job_benefits.map((b: any) => b.benefit_type),
+        boost: 1.2
+      }
+    })
+  }
+
+  // Category alignment - boost profiles interested in job's categories
+  if (jobPayload.job_categories && Array.isArray(jobPayload.job_categories)) {
+    should.push({
+      terms: {
+        'preferred_categories': jobPayload.job_categories.map((c: any) => c.categories?.name),
+        boost: 1.1
       }
     })
   }
