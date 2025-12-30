@@ -15,6 +15,29 @@ import { QueryContext, ESQuery, JobDocument } from './search.types'
 import { buildJobSearchFunctionScore, BOOSTS } from './scoring/score.templates'
 
 /**
+ * Get sort configuration based on sort option
+ */
+function getSortConfig(sort?: string): any[] {
+  switch (sort) {
+    case 'newest':
+      return [{ posted_at: 'desc' }]
+    case 'oldest':
+      return [{ posted_at: 'asc' }]
+    case 'salary_high':
+      return [{ salary_max: 'desc' }]
+    case 'salary_low':
+      return [{ salary_min: 'asc' }]
+    case 'experience_high':
+      return [{ experience_level: 'desc' }]
+    case 'experience_low':
+      return [{ experience_level: 'asc' }]
+    case 'relevance':
+    default:
+      return [{ _score: 'desc' }, { posted_at: 'desc' }]
+  }
+}
+
+/**
  * Build canonical Elasticsearch query for job search
  * Implements conservative boosting: skills > location > experience > freshness
  */
@@ -71,7 +94,11 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
         type: 'best_fields',
         operator,
         minimum_should_match: minShouldMatch,
-        fuzziness: 0 // Disable fuzziness for Vietnamese
+        // Keep exact matching for Vietnamese (analyzer handles normalization),
+        // but allow fuzzy matching for non-Vietnamese queries so users get
+        // tolerant / typo-friendly results in Latin queries.
+        fuzziness: hasVietnameseChars ? 0 : 'AUTO',
+        prefix_length: hasVietnameseChars ? 0 : 1
       }
     })
   }
@@ -108,10 +135,30 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     filterClauses.push({ term: { experience_level: filters.experience_level } })
   }
 
-  // Skills filter (if specified in filters)
+  // Skills filter (if specified in filters) - improved with nested matching
   if (filters?.skill_names && filters.skill_names.length > 0) {
     filterClauses.push({
-      terms: { skills: filters.skill_names }
+      bool: {
+        should: [
+          // Exact match trên skills array (keyword)
+          { terms: { skills: filters.skill_names } },
+          // Nested match cho structured skills
+          {
+            nested: {
+              path: 'skills',
+              query: {
+                bool: {
+                  must: [
+                    { terms: { 'skills.name': filters.skill_names } },
+                    { range: { 'skills.proficiency': { gte: 3 } } }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        minimum_should_match: 1
+      }
     })
   }
 
@@ -140,13 +187,22 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
   }
 
   // Benefits filter
-  if (filters?.benefits_type) {
-    const benefitTypes = Array.isArray(filters.benefits_type)
-      ? filters.benefits_type
-      : filters.benefits_type.split(',').map((b: string) => b.trim())
+  if (filters?.benefits_type && filters.benefits_type.length > 0) {
     filterClauses.push({
-      terms: { job_benefits_type: benefitTypes }
+      terms: { job_benefits_type: filters.benefits_type }
     })
+  }
+
+  // Job categories filter
+  if (filters?.job_category && filters.job_category.length > 0) {
+    filterClauses.push({
+      terms: { job_category: filters.job_category }
+    })
+  }
+
+  // Flexible hours filter
+  if (filters?.flexible_hours !== undefined) {
+    filterClauses.push({ term: { flexible_hours: filters.flexible_hours } })
   }
 
   // Tags filter
@@ -242,7 +298,7 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     query: queryBody,
     from: pagination ? (pagination.page - 1) * pagination.size : 0,
     size: pagination?.size || 20,
-    sort: [{ _score: 'desc' }, { posted_at: 'desc' }], // Score first, then recency
+    sort: getSortConfig(filters?.sort), // Dynamic sort based on filter
     _source: true, // Include all fields
   }
 

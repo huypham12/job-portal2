@@ -11,7 +11,6 @@ import {
   createJobValidator,
   updateJobValidator,
   updateJobStatusValidator,
-  publishJobValidator,
   bulkJobActionsValidator,
   bulkExtendExpiryValidator,
   filterJobsValidator,
@@ -323,18 +322,6 @@ router.patch(
   jobController.updateJobStatus
 )
 
-/**
- * PATCH /api/jobs/:id/publish
- * Publish a draft job (change status to approved)
- */
-router.patch(
-  '/:id/publish',
-  authenticateAccessToken,
-  recruiter,
-  checkResourceOwnership('job'),
-  publishJobValidator,
-  jobController.publishJob
-)
 
 /**
  * POST /api/jobs/bulk-actions

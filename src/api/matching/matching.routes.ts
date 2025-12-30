@@ -2,23 +2,26 @@ import { Router } from 'express'
 import { matchCandidatesController, matchJobsController } from './matching.controller'
 import { authenticateAccessToken, verifiedUserValidator } from '../../middleware/verify.middleware'
 import { checkResourceOwnership } from '../../middleware/resource-ownership.middleware'
+import { apiRateLimit } from '../../middleware/rate-limit.middleware'
 
 const router = Router()
 
-// POST /api/matching/job/:jobId/candidates
+// GET /api/matching/job/:jobId/candidates
 // Chỉ Recruiter sở hữu job mới có thể xem candidates phù hợp
-router.post(
+router.get(
   '/job/:jobId/candidates',
+  apiRateLimit,
   authenticateAccessToken,
   verifiedUserValidator,
   checkResourceOwnership('job'),
   matchCandidatesController
 )
 
-// POST /api/matching/profile/:profileId/jobs
+// GET /api/matching/profile/:profileId/jobs
 // Chỉ Candidate sở hữu profile mới có thể xem jobs phù hợp
-router.post(
+router.get(
   '/profile/:profileId/jobs',
+  apiRateLimit,
   authenticateAccessToken,
   verifiedUserValidator,
   checkResourceOwnership('profile'),

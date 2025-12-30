@@ -7,7 +7,6 @@ import {
   CreateJobDTO,
   UpdateJobDTO,
   UpdateJobStatusDTO,
-  PublishJobDTO,
   BulkJobActionsDTO,
   BulkExtendExpiryDTO,
   SuggestedCandidatesDTO,
@@ -165,22 +164,6 @@ export class JobController {
     }
   }
 
-  /**
-   * PATCH /api/jobs/:id/publish
-   * Publish a draft job (change status to approved)
-   */
-  publishJob = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.validated!.params
-
-      // Job ownership is verified by middleware
-      const result = await this.jobService.publishJob(id)
-
-      res.status(HTTP_STATUS.OK).json(result)
-    } catch (error) {
-      next(error)
-    }
-  }
 
   /**
    * POST /api/jobs/bulk-actions

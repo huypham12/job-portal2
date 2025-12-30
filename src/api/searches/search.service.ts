@@ -24,7 +24,7 @@ function shouldUseNewSearchBuilder(userId?: string): boolean {
 
   // Use user ID for consistent rollout (same user always gets same experience)
   const hash = userId ? simpleHash(userId) : Math.random() * 100
-  return (hash % 100) < percentage
+  return hash % 100 < percentage
 }
 
 /**
@@ -34,7 +34,7 @@ function simpleHash(str: string): number {
   let hash = 0
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i)
-    hash = ((hash << 5) - hash) + char
+    hash = (hash << 5) - hash + char
     hash = hash & hash // Convert to 32-bit integer
   }
   return Math.abs(hash)
@@ -49,7 +49,7 @@ export const searchService = {
       userSkills?: string[]
       userDesiredSalaryMin?: number
       userDesiredSalaryMax?: number
-      recruiterId?: string  // Optional for tenant isolation (only for authenticated recruiters)
+      recruiterId?: string // Optional for tenant isolation (only for authenticated recruiters)
     }
   ): Promise<JobSearchResponseDto> {
     const {
@@ -58,6 +58,13 @@ export const searchService = {
       jobType,
       experienceLevel,
       skills,
+      salaryMin,
+      salaryMax,
+      jobCategories,
+      jobBenefits,
+      remotePercentageMin,
+      flexibleHours,
+      sort,
       page = 1,
       size = 20,
       highlight,
@@ -68,7 +75,7 @@ export const searchService = {
       userSkills,
       userDesiredSalaryMin,
       userDesiredSalaryMax,
-      recruiterId  // Optional: only present for authenticated recruiters
+      recruiterId // Optional: only present for authenticated recruiters
     } = dto
 
     // Check if new search builder should be used (use default hash for anonymous users)
@@ -88,11 +95,22 @@ export const searchService = {
       userPrefersRemote,
       userDesiredSalaryMin,
       userDesiredSalaryMax,
+      userRemotePercentageMin: remotePercentageMin,
+      userPrefersFlexibleHours: flexibleHours,
+      userPreferredCategories: jobCategories,
+      userDesiredBenefits: jobBenefits,
       filters: {
         location_name: location,
         job_type: jobType,
         experience_level: experienceLevel,
         skill_names: skills,
+        salary_min: salaryMin,
+        salary_max: salaryMax,
+        job_category: jobCategories,
+        benefits_type: jobBenefits,
+        remote_percentage_min: remotePercentageMin,
+        flexible_hours: flexibleHours,
+        sort: sort,
         recruiter_id: recruiterId // Optional: only filter by tenant if recruiterId provided
       },
       pagination: { page, size },
@@ -117,11 +135,7 @@ export const searchService = {
       const esQuery = buildJobSearchQuery(queryContext)
 
       // Use standardized search entrypoint
-      const esResp = await elasticsearchService.searchWithTemplate(
-        'jobs',
-        esQuery,
-        queryContext.options
-      )
+      const esResp = await elasticsearchService.searchWithTemplate('jobs', esQuery, queryContext.options)
 
       timerDone()
       metrics.increment('search.jobs.request')
@@ -134,7 +148,6 @@ export const searchService = {
       }
 
       return await this.formatJobSearchResponse(esResp, highlight)
-
     } catch (esError) {
       console.warn('ES search failed, falling back to DB search', esError)
       metrics.increment('search.jobs.es_fallback')
@@ -151,9 +164,7 @@ export const searchService = {
    */
   async formatJobSearchResponse(esResp: any, highlight?: boolean): Promise<JobSearchResponseDto> {
     // Optional enrichment: fetch companies for hits that need extra info
-    const companyIds = Array.from(new Set(
-      esResp.hits.map((h: any) => (h._source as any)?.company_id).filter(Boolean)
-    ))
+    const companyIds = Array.from(new Set(esResp.hits.map((h: any) => (h._source as any)?.company_id).filter(Boolean)))
 
     let companyMap: Record<string, unknown> = {}
     if (companyIds.length) {
@@ -269,7 +280,6 @@ export const searchService = {
           score: s.score
         }))
       }
-
     } catch (error) {
       console.warn('ES suggest failed:', error)
       timerDone()
@@ -285,7 +295,7 @@ export const searchService = {
     q?: string
     page?: number
     size?: number
-    recruiterId?: string  // Optional for public search, mandatory for tenant isolation
+    recruiterId?: string // Optional for public search, mandatory for tenant isolation
   }): Promise<{ total: number; hits: any[]; took_ms: number }> {
     const { q, page = 1, size = 20, recruiterId } = dto
     const from = (page - 1) * size
@@ -345,7 +355,9 @@ export const searchService = {
 
     // CRITICAL: Enforce dual ownership - exactly one context required
     if ((!recruiterId && !candidateId) || (recruiterId && candidateId)) {
-      throw new Error('Either recruiterId OR candidateId must be provided for application search (not both, not neither)')
+      throw new Error(
+        'Either recruiterId OR candidateId must be provided for application search (not both, not neither)'
+      )
     }
 
     const must: any[] = []
@@ -708,7 +720,20 @@ export const searchService = {
    * Fallback search implementation using database when ES is unavailable
    */
   async searchJobsFromDB(dto: JobSearchRequestDto): Promise<{ took: number; total: number; hits: any[] }> {
-    const { q, location, jobType, experienceLevel, skills, page = 1, size = 20 } = dto
+    const {
+      q,
+      location,
+      jobType,
+      experienceLevel,
+      skills,
+      salaryMin,
+      salaryMax,
+      jobCategories,
+      jobBenefits,
+      sort,
+      page = 1,
+      size = 20
+    } = dto
     const from = (page - 1) * size
 
     try {
@@ -741,6 +766,26 @@ export const searchService = {
         params.push(skills)
       }
 
+      if (salaryMin !== undefined) {
+        whereClause += ` AND (j.salary_range->>'max')::int >= $${params.length + 1}`
+        params.push(salaryMin)
+      }
+
+      if (salaryMax !== undefined) {
+        whereClause += ` AND (j.salary_range->>'min')::int <= $${params.length + 1}`
+        params.push(salaryMax)
+      }
+
+      if (jobCategories && Array.isArray(jobCategories) && jobCategories.length > 0) {
+        whereClause += ` AND EXISTS (SELECT 1 FROM job_categories jc WHERE jc.job_id = j.id AND jc.category_id IN (SELECT id FROM categories WHERE name = ANY($${params.length + 1})))`
+        params.push(jobCategories)
+      }
+
+      if (jobBenefits && Array.isArray(jobBenefits) && jobBenefits.length > 0) {
+        whereClause += ` AND EXISTS (SELECT 1 FROM job_benefits jb WHERE jb.job_id = j.id AND jb.benefit_type = ANY($${params.length + 1}))`
+        params.push(jobBenefits)
+      }
+
       // Execute database query
       const query = `
         SELECT
@@ -758,16 +803,26 @@ export const searchService = {
         FROM jobs j
         LEFT JOIN companies c ON j.company_id = c.id
         ${whereClause}
-        ORDER BY j.posted_at DESC
+        ORDER BY
+          CASE
+            WHEN $${params.length + 1} = 'newest' THEN j.posted_at
+            WHEN $${params.length + 1} = 'oldest' THEN j.posted_at
+            WHEN $${params.length + 1} = 'salary_high' THEN (j.salary_range->>'max')::int
+            WHEN $${params.length + 1} = 'salary_low' THEN (j.salary_range->>'min')::int
+            WHEN $${params.length + 1} = 'experience_high' THEN j.experience_level
+            WHEN $${params.length + 1} = 'experience_low' THEN j.experience_level
+            ELSE j.posted_at
+          END
+          ${sort === 'oldest' || sort === 'salary_low' || sort === 'experience_low' ? 'ASC' : 'DESC'}
         LIMIT $${params.length + 1} OFFSET $${params.length + 2}
       `
-      params.push(size, from)
+      params.push(sort || 'relevance', size, from)
 
       const jobs = await prisma.$queryRaw(Prisma.sql`${query}`, ...params)
 
       // Count total for pagination
-      const countQuery = `SELECT COUNT(*) as total FROM jobs j LEFT JOIN companies c ON j.company_id = c.id ${whereClause}`
-      const countResult = (await prisma.$queryRaw(Prisma.sql`${countQuery}`, ...params.slice(0, -2))) as any[]
+      const countQuery = `SELECT COUNT(*) as total FROM jobs j LEFT JOIN companies c ON j.company_id = c.id ${whereClause.replace(/ORDER BY[\s\S]*$/, '')}`
+      const countResult = (await prisma.$queryRaw(Prisma.sql`${countQuery}`, ...params.slice(0, -3))) as any[]
 
       return {
         took: 0, // DB query time not measured
@@ -801,7 +856,7 @@ export const searchService = {
       userSkills?: string[]
       userDesiredSalaryMin?: number
       userDesiredSalaryMax?: number
-      recruiterId?: string  // Optional for tenant isolation
+      recruiterId?: string // Optional for tenant isolation
     }
   ): Promise<JobSearchResponseDto> {
     const {
@@ -810,6 +865,13 @@ export const searchService = {
       jobType,
       experienceLevel,
       skills,
+      salaryMin,
+      salaryMax,
+      jobCategories,
+      jobBenefits,
+      remotePercentageMin,
+      flexibleHours,
+      sort,
       page = 1,
       size = 20,
       highlight,
@@ -866,15 +928,62 @@ export const searchService = {
     if (typeof experienceLevel === 'number') filter.push({ term: { experience_level: experienceLevel } })
     if (skills && Array.isArray(skills) && skills.length) filter.push({ terms: { skills } })
 
+    // Salary range filters
+    if (salaryMin !== undefined || salaryMax !== undefined) {
+      const salaryConditions = []
+      if (salaryMin !== undefined) {
+        salaryConditions.push({
+          range: { salary_min: { gte: salaryMin * 0.8 } } // Accept 80% of desired minimum
+        })
+      }
+      if (salaryMax !== undefined) {
+        salaryConditions.push({
+          range: { salary_max: { lte: salaryMax * 1.2 } } // Accept up to 120% of desired maximum
+        })
+      }
+      if (salaryConditions.length > 0) {
+        filter.push({
+          bool: {
+            should: salaryConditions,
+            minimum_should_match: Math.min(1, salaryConditions.length)
+          }
+        })
+      }
+    }
+
+    // Job categories filter
+    if (jobCategories && Array.isArray(jobCategories) && jobCategories.length > 0) {
+      filter.push({ terms: { job_category: jobCategories } })
+    }
+
+    // Job benefits filter
+    if (jobBenefits && Array.isArray(jobBenefits) && jobBenefits.length > 0) {
+      filter.push({ terms: { job_benefits_type: jobBenefits } })
+    }
+
+    // Remote percentage filter
+    if (remotePercentageMin !== undefined) {
+      filter.push({
+        range: { remote_percentage: { gte: remotePercentageMin } }
+      })
+    }
+
+    // Flexible hours filter
+    if (flexibleHours !== undefined) {
+      filter.push({ term: { flexible_hours: flexibleHours } })
+    }
+
     const esQuery = { bool: { must, filter } }
-    const cacheKey = `search:jobs:legacy:${JSON.stringify(esQuery)}:from:${from}:size:${size}:recruiterId:${recruiterId || 'public'}:userCtx:${JSON.stringify({
-      userExperienceLevel,
-      userLocationId,
-      userPrefersRemote,
-      userSkills: userSkills?.slice(0, 5),
-      userDesiredSalaryMin,
-      userDesiredSalaryMax
-    })}`
+    const cacheKey = `search:jobs:legacy:${JSON.stringify(esQuery)}:from:${from}:size:${size}:sort:${sort}:recruiterId:${recruiterId || 'public'}:userCtx:${JSON.stringify(
+      {
+        userExperienceLevel,
+        userLocationId,
+        userPrefersRemote,
+        userSkills: userSkills?.slice(0, 5),
+        userDesiredSalaryMin,
+        userDesiredSalaryMax
+      }
+    )}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
       metrics.increment('search.jobs.legacy.cache_hit')
@@ -891,6 +1000,22 @@ export const searchService = {
         query: esQuery,
         from,
         size,
+        sort:
+          sort === 'relevance'
+            ? [{ _score: 'desc' }, { posted_at: 'desc' }]
+            : sort === 'newest'
+              ? [{ posted_at: 'desc' }]
+              : sort === 'oldest'
+                ? [{ posted_at: 'asc' }]
+                : sort === 'salary_high'
+                  ? [{ salary_max: 'desc' }]
+                  : sort === 'salary_low'
+                    ? [{ salary_min: 'asc' }]
+                    : sort === 'experience_high'
+                      ? [{ experience_level: 'desc' }]
+                      : sort === 'experience_low'
+                        ? [{ experience_level: 'asc' }]
+                        : [{ _score: 'desc' }, { posted_at: 'desc' }],
         // Enhanced user context for personalized scoring
         userExperienceLevel,
         userLocationId,

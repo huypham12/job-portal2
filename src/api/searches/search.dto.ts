@@ -28,6 +28,73 @@ export const JobSearchRequestSchema = z.object({
     .refine((arr) => !arr || arr.length > 0, {
       message: 'Skills array must not be empty when provided'
     }),
+  // Salary range filters
+  salaryMin: z
+    .union([z.number().int().min(0), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0) {
+          throw new Error('salaryMin must be a non-negative integer')
+        }
+        return parsed
+      }
+      return val
+    }),
+  salaryMax: z
+    .union([z.number().int().min(0), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0) {
+          throw new Error('salaryMax must be a non-negative integer')
+        }
+        return parsed
+      }
+      return val
+    }),
+  // Job categories and benefits
+  jobCategories: z
+    .array(z.string().trim().min(1))
+    .optional()
+    .refine((arr) => !arr || arr.length > 0, {
+      message: 'Job categories array must not be empty when provided'
+    }),
+  jobBenefits: z
+    .array(z.string().trim().min(1))
+    .optional()
+    .refine((arr) => !arr || arr.length > 0, {
+      message: 'Job benefits array must not be empty when provided'
+    }),
+  // Work arrangement filters
+  remotePercentageMin: z
+    .union([z.number().int().min(0).max(100), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0 || parsed > 100) {
+          throw new Error('remotePercentageMin must be an integer between 0 and 100')
+        }
+        return parsed
+      }
+      return val
+    }),
+  flexibleHours: z
+    .union([z.boolean(), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        if (val === 'true') return true
+        if (val === 'false') return false
+        throw new Error('flexibleHours must be "true" or "false"')
+      }
+      return val
+    }),
+  // Sort options
+  sort: z.enum(['relevance', 'newest', 'oldest', 'salary_high', 'salary_low', 'experience_high', 'experience_low']).default('relevance'),
   page: z
     .union([z.number().int().min(1), z.string()])
     .default(1)

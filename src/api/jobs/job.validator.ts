@@ -194,14 +194,11 @@ const updateJobStatusBody = z
   })
   .strict()
 
-// ==================== PUBLISH JOB SCHEMA ====================
-// Publish job from draft to approved (no body required)
-const publishJobBody = z.object({}).strict()
 
 // ==================== BULK JOB ACTIONS SCHEMA ====================
 const bulkJobActionsBody = z
   .object({
-    action: z.enum(['close', 'delete', 'publish']),
+    action: z.enum(['close', 'delete']),
     job_ids: z.array(z.string().uuid()).min(1, 'At least one job ID is required').max(50, 'Maximum 50 jobs per request')
   })
   .strict()
@@ -296,7 +293,6 @@ const jobIdParams = z.object({
 export type CreateJobDTO = z.infer<typeof createJobBody>
 export type UpdateJobDTO = z.infer<typeof updateJobBody>
 export type UpdateJobStatusDTO = z.infer<typeof updateJobStatusBody>
-export type PublishJobDTO = z.infer<typeof publishJobBody>
 export type BulkJobActionsDTO = z.infer<typeof bulkJobActionsBody>
 export type BulkExtendExpiryDTO = z.infer<typeof bulkExtendExpiryBody>
 export type SuggestedCandidatesDTO = z.infer<typeof suggestedCandidatesQuery>
@@ -308,7 +304,6 @@ export type JobIdParams = z.infer<typeof jobIdParams>
 export const createJobValidator = zodValidate({ body: createJobBody })
 export const updateJobValidator = zodValidate({ body: updateJobBody, params: jobIdParams })
 export const updateJobStatusValidator = zodValidate({ body: updateJobStatusBody, params: jobIdParams })
-export const publishJobValidator = zodValidate({ body: publishJobBody, params: jobIdParams })
 export const bulkJobActionsValidator = zodValidate({ body: bulkJobActionsBody })
 export const bulkExtendExpiryValidator = zodValidate({ body: bulkExtendExpiryBody })
 export const suggestedCandidatesValidator = zodValidate({ query: suggestedCandidatesQuery, params: jobIdParams })

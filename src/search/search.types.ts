@@ -39,12 +39,13 @@ export type QueryContext = {
     is_remote?: boolean
     flexible_hours?: boolean
     remote_percentage_min?: number
-    job_category?: string
+    job_category?: string[]
     job_category_type?: string
-    benefits_type?: string
+    benefits_type?: string[]
     tags?: string[]
     skill_names?: string[]
     location_name?: string
+    sort?: 'relevance' | 'newest' | 'oldest' | 'salary_high' | 'salary_low' | 'experience_high' | 'experience_low'
     recruiter_id?: string // Optional tenant isolation filter
   }
 

@@ -472,42 +472,12 @@ export class JobService {
   /**
    * Publish a draft job (change status from draft to approved)
    */
-  async publishJob(jobId: string) {
-    // REMOVED: Ownership check - handled by middleware
-    const job = await this.getJobById(jobId)
-
-    // Only draft jobs can be published
-    if (job.status !== job_status.draft) {
-      throw new HttpError('Only draft jobs can be published', HTTP_STATUS.BAD_REQUEST)
-    }
-
-    // Update status to approved
-    await prisma.jobs.update({
-      where: { id: jobId },
-      data: { status: job_status.approved }
-    })
-
-    // Get updated job for sync
-    const updatedJob = await this.getJobById(jobId)
-
-    // Sync to Elasticsearch immediately
-    try {
-      const esDocument = jobToESDoc(updatedJob)
-      await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
-      console.log(`✅ Job ${jobId} synced to Elasticsearch after publish`)
-    } catch (error) {
-      console.error(`❌ Failed to sync job ${jobId} to Elasticsearch after publish:`, error)
-      // Don't fail publish due to sync error
-    }
-
-    return { message: 'Job published successfully' }
-  }
 
   /**
    * Bulk job actions (close, delete, publish)
    * Note: Company ownership is verified by middleware, jobs ownership verified individually
    */
-  async bulkJobActions(companyId: string, action: 'close' | 'delete' | 'publish', jobIds: string[]) {
+  async bulkJobActions(companyId: string, action: 'close' | 'delete', jobIds: string[]) {
     // Get all jobs that belong to this company (ownership already verified by middleware)
     const jobs = await prisma.jobs.findMany({
       where: {
@@ -533,17 +503,6 @@ export class JobService {
       )
     }
 
-    // Validate action-specific constraints
-    if (action === 'publish') {
-      const nonDraftJobs = jobs.filter((job) => job.status !== job_status.draft)
-      if (nonDraftJobs.length > 0) {
-        throw new HttpError(
-          `Only draft jobs can be published. Non-draft jobs: ${nonDraftJobs.map((j) => j.title).join(', ')}`,
-          HTTP_STATUS.BAD_REQUEST
-        )
-      }
-    }
-
     // Perform bulk action
     const updateData: any = {}
     let actionMessage = ''
@@ -556,10 +515,6 @@ export class JobService {
       case 'delete':
         updateData.deleted = true
         actionMessage = 'deleted'
-        break
-      case 'publish':
-        updateData.status = job_status.approved
-        actionMessage = 'published'
         break
     }
 
@@ -796,7 +751,9 @@ export class JobService {
           type: 'best_fields',
           operator: operator,
           minimum_should_match: minShouldMatch,
-          fuzziness: 0 // Disable fuzziness for Vietnamese
+          // Preserve exact matching for Vietnamese, enable fuzzy for Latin queries
+          fuzziness: hasVietnameseChars ? 0 : 'AUTO',
+          prefix_length: hasVietnameseChars ? 0 : 1
         }
       })
     }

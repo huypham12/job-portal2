@@ -33,7 +33,14 @@ import {
 import { authenticateAccessToken } from '../../middleware/verify.middleware'
 import { authenticatedUser } from '../../middleware/authorize.middleware'
 import { checkResourceOwnership } from '../../middleware/resource-ownership.middleware'
+import { apiRateLimit, strictRateLimit } from '../../middleware/rate-limit.middleware'
 import { envConfig } from '../../config/getEnvConfig'
+
+// Cache headers middleware for public endpoints
+const cacheHeaders = (maxAge: number) => (req: any, res: any, next: any) => {
+  res.set('Cache-Control', `public, max-age=${maxAge}`)
+  next()
+}
 
 // Import moved controllers from jobs module
 import { jobController } from '../jobs/job.controller'
@@ -124,7 +131,7 @@ router.get('/jobs/featured', jobController.getFeaturedJobs)
  * GET /api/search/jobs/popular
  * Get popular jobs based on view counts (moved from /api/jobs/popular)
  */
-router.get('/jobs/popular', getPopularJobsValidator, PopularJobsController.getPopularJobs)
+router.get('/jobs/popular', cacheHeaders(300), getPopularJobsValidator, PopularJobsController.getPopularJobs)
 
 /**
  * GET /api/search/jobs/trending
@@ -197,9 +204,9 @@ router.get(
 
 // ==================== EXISTING SEARCH ROUTES ====================
 
-router.get('/jobs', searchJobsValidator, searchJobsController)
-router.get('/suggestions', suggestionsValidator, suggestionsController)
-router.post('/events', eventsController)
+router.get('/jobs', apiRateLimit, searchJobsValidator, searchJobsController)
+router.get('/suggestions', strictRateLimit, suggestionsValidator, suggestionsController)
+router.post('/events', apiRateLimit, eventsController)
 
 // Recent searches routes - require authentication
 router.get(
@@ -217,12 +224,12 @@ router.delete(
   RecentSearchesController.deleteRecentSearch
 )
 router.delete('/recent', authenticateAccessToken, authenticatedUser, RecentSearchesController.clearRecentSearches)
-router.get('/popular-queries', getPopularQueriesValidator, RecentSearchesController.getPopularQueries)
+router.get('/popular-queries', cacheHeaders(300), apiRateLimit, getPopularQueriesValidator, RecentSearchesController.getPopularQueries)
 
 // Company search routes
-router.get('/companies', searchCompaniesValidator, searchCompaniesController)
-router.get('/companies/suggestions', companiesSuggestionsValidator, companiesSuggestionsController)
-router.get('/companies/popular', getPopularCompaniesValidator, getPopularCompaniesController)
+router.get('/companies', apiRateLimit, searchCompaniesValidator, searchCompaniesController)
+router.get('/companies/suggestions', strictRateLimit, companiesSuggestionsValidator, companiesSuggestionsController)
+router.get('/companies/popular', cacheHeaders(600), apiRateLimit, getPopularCompaniesValidator, getPopularCompaniesController)
 
 // ==================== RECOMMENDATIONS ROUTES (MOVED) ====================
 
@@ -232,6 +239,7 @@ router.get('/companies/popular', getPopularCompaniesValidator, getPopularCompani
  */
 router.get(
   '/recommendations/for-candidate',
+  apiRateLimit,
   rolloutMetricsMiddleware('recommendations_candidate'),
   authenticateAccessToken,
   getCandidateRecommendationsValidator,
@@ -244,6 +252,7 @@ router.get(
  */
 router.get(
   '/recommendations/for-recruiter',
+  apiRateLimit,
   rolloutMetricsMiddleware('recommendations_recruiter'),
   authenticateAccessToken,
   checkResourceOwnership('company'),
