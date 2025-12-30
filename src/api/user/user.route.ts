@@ -5,6 +5,7 @@ import { wrapController } from '@/shared/utils/wrap-controller'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { accessTokenValidator } from '../auth/auth.validator'
 import { candidate, recruiter } from '@/middleware/authorize.middleware'
+import { ElasticsearchSyncMiddleware } from '@/middleware/elasticsearch-sync.middleware'
 import {
   createProfileValidator,
   updateProfileValidator,
@@ -37,6 +38,9 @@ import {
 const userRouter = Router()
 const userService = new UserService()
 const userController = new UserController(userService)
+
+// Elasticsearch sync middleware - phải đặt trước các middleware khác
+userRouter.use(ElasticsearchSyncMiddleware.getMiddleware())
 
 // Middleware chung cho tất cả routes - chỉ candidate được truy cập
 const candidateAuth = [accessTokenValidator, authenticateAccessToken, candidate]

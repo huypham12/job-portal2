@@ -73,9 +73,9 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
 
     // Conservative field boosts - skills get priority over titles
     const searchFields = [
-      `title^${BOOSTS.title}`,           // Reduced from 4.0 to 2.0
-      `description^${BOOSTS.description}`, // Reduced from 2.5 to 1.5
-      `skills^${BOOSTS.skillsExact}`,    // NEW: Skills get highest boost (3.0)
+      `title^${BOOSTS.title}`,
+      `description^${BOOSTS.description}`,
+      `skills^${BOOSTS.skillsExact}`,
       `job_category^${BOOSTS.categoryMatch}`,
       `company_name^${BOOSTS.company_name}`,
       `location_name^${BOOSTS.location_name}`,
@@ -271,14 +271,14 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
 
   queryBody.bool = {
     must: mustClauses.length > 0 ? mustClauses : undefined,
-    filter: filterClauses.length > 0 ? filterClauses : undefined,
+    filter: filterClauses.length > 0 ? filterClauses : undefined
   }
 
   // Add function_score for personalization if we have user context
   const hasUserContext = userSkills || userLocationId || userExperienceLevel ||
-                        userPrefersRemote || userPrefersFlexibleHours ||
-                        userDesiredSalaryMin || userDesiredSalaryMax ||
-                        userDesiredBenefits || userPreferredCategories
+    userPrefersRemote || userPrefersFlexibleHours ||
+    userDesiredSalaryMin || userDesiredSalaryMax ||
+    userDesiredBenefits || userPreferredCategories
 
   if (hasUserContext) {
     const functionScore = buildJobSearchFunctionScore(context)
@@ -299,7 +299,7 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     from: pagination ? (pagination.page - 1) * pagination.size : 0,
     size: pagination?.size || 20,
     sort: getSortConfig(filters?.sort), // Dynamic sort based on filter
-    _source: true, // Include all fields
+    _source: true // Include all fields
   }
 
   // Add debugging options

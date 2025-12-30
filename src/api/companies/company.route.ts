@@ -4,6 +4,7 @@ import { wrapController } from '@/shared/utils/wrap-controller'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { recruiter } from '@/middleware/authorize.middleware'
 import { validateDto } from '@/middleware/validateDto.middleware'
+import { ElasticsearchSyncMiddleware } from '@/middleware/elasticsearch-sync.middleware'
 import {
   createCompanyValidator,
   getCompanyParamsValidator,
@@ -16,6 +17,9 @@ import {
 import { companyController } from './company.controller' // Giả định controller được import
 
 export const companyRouter = Router()
+
+// Elasticsearch sync middleware - phải đặt trước các middleware khác
+companyRouter.use(ElasticsearchSyncMiddleware.getMiddleware())
 
 /**
  * @route POST /api/companies

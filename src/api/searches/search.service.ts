@@ -42,7 +42,9 @@ function simpleHash(str: string): number {
 
 export const searchService = {
   async searchJobs(
-    dto: JobSearchRequestDto & {
+    dto: Omit<JobSearchRequestDto, 'location'> & {
+      location?: string
+      locationId?: string
       userExperienceLevel?: number
       userLocationId?: string
       userPrefersRemote?: boolean
@@ -918,8 +920,10 @@ export const searchService = {
     }
 
     // Handle location filtering with province/district hierarchy
-    if (location) {
-      const locationIds = await searchRepo.getLocationIdsForFilter(location)
+    // Prefer locationId (UUID) over location (name) for precision
+    const locationFilterValue = (dto as any).locationId || location
+    if (locationFilterValue) {
+      const locationIds = await searchRepo.getLocationIdsForFilter(locationFilterValue)
       if (locationIds.length > 0) {
         filter.push({ terms: { location_id: locationIds } })
       }

@@ -34,9 +34,21 @@ export const getFailedSummarySchema = {
   query: z.object({}).optional()
 }
 
+// Validate consistency - no params needed
+export const validateConsistencySchema = {
+  query: z.object({}).optional()
+}
+
+// Fix consistency - no params needed
+export const fixConsistencySchema = {
+  body: z.object({}).optional()
+}
+
 // Export types
 export type GetSyncStatusInput = z.infer<typeof getSyncStatusSchema.query>
 export type RetryFailedSyncsInput = z.infer<typeof retryFailedSyncsSchema.body>
 export type RetrySpecificEntityInput = z.infer<typeof retrySpecificEntitySchema.params>
 export type CleanupOldRecordsInput = z.infer<typeof cleanupOldRecordsSchema.body>
 export type GetFailedSummaryInput = z.infer<typeof getFailedSummarySchema.query>
+export type ValidateConsistencyInput = z.infer<typeof validateConsistencySchema.query>
+export type FixConsistencyInput = z.infer<typeof fixConsistencySchema.body>

@@ -6,7 +6,9 @@ import {
   retryFailedSyncsSchema,
   retrySpecificEntitySchema,
   cleanupOldRecordsSchema,
-  getFailedSummarySchema
+  getFailedSummarySchema,
+  validateConsistencySchema,
+  fixConsistencySchema
 } from './sync.validator'
 
 const router = Router()
@@ -50,5 +52,19 @@ router.post('/cleanup', validateDto(cleanupOldRecordsSchema), syncController.cle
  * @access Admin only
  */
 router.get('/failed-summary', validateDto(getFailedSummarySchema), syncController.getFailedSummary.bind(syncController))
+
+/**
+ * @route GET /api/sync/consistency
+ * @desc Validate data consistency between DB and ES
+ * @access Admin only
+ */
+router.get('/consistency', validateDto(validateConsistencySchema), syncController.validateConsistency.bind(syncController))
+
+/**
+ * @route POST /api/sync/fix-consistency
+ * @desc Auto-fix consistency issues
+ * @access Admin only
+ */
+router.post('/fix-consistency', validateDto(fixConsistencySchema), syncController.fixConsistency.bind(syncController))
 
 export default router

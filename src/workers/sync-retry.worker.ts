@@ -123,13 +123,35 @@ export class SyncRetryWorker {
 
       console.log(`🔄 Processing ${failedSyncs.length} failed syncs...`)
 
+      let successCount = 0
+      let errorCount = 0
+
       for (const sync of failedSyncs) {
         try {
+          // Validate entity type
+          const validTypes = ['job', 'profile', 'company', 'application']
+          if (!validTypes.includes(sync.entity_type)) {
+            console.warn(`⚠️ Invalid entity type: ${sync.entity_type}, skipping`)
+            errorCount++
+            continue
+          }
+
           // Re-fetch current data
           const document = await this.getEntityData(sync.entity_type, sync.entity_id)
 
           if (!document) {
-            console.warn(`Entity ${sync.entity_type}:${sync.entity_id} not found, skipping`)
+            console.warn(`Entity ${sync.entity_type}:${sync.entity_id} not found, marking as deleted`)
+            // Mark as success since entity no longer exists
+            await prisma.sync_status.update({
+              where: {
+                entity_type_entity_id: {
+                  entity_type: sync.entity_type,
+                  entity_id: sync.entity_id
+                }
+              },
+              data: { sync_status: 'success' }
+            })
+            successCount++
             continue
           }
 
@@ -143,12 +165,19 @@ export class SyncRetryWorker {
 
           if (success) {
             console.log(`✅ Re-synced ${sync.entity_type}:${sync.entity_id}`)
+            successCount++
+          } else {
+            console.warn(`❌ Re-sync failed for ${sync.entity_type}:${sync.entity_id}`)
+            errorCount++
           }
 
         } catch (error) {
           console.error(`❌ Background retry failed for ${sync.entity_type}:${sync.entity_id}:`, error)
+          errorCount++
         }
       }
+
+      console.log(`🔄 Retry batch completed: ${successCount} success, ${errorCount} failed`)
 
     } catch (error) {
       console.error('Sync retry worker error:', error)

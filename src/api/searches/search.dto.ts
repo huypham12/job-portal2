@@ -8,6 +8,7 @@ const jobTypeEnum = z.nativeEnum(job_type)
 export const JobSearchRequestSchema = z.object({
   q: z.string().optional(),
   location: z.string().trim().min(1).optional(),
+  locationId: z.string().uuid().optional(),
   jobType: jobTypeEnum.optional(),
   experienceLevel: z
     .union([z.number().int().min(0).max(50), z.string()])
@@ -23,8 +24,22 @@ export const JobSearchRequestSchema = z.object({
       return val
     }),
   skills: z
-    .array(z.string().trim().min(1))
+    .union([
+      z.array(z.string().trim().min(1)),
+      z.string()
+    ])
     .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        // Handle comma-separated string
+        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        if (parsed.length === 0) {
+          throw new Error('Skills array must not be empty when provided')
+        }
+        return parsed
+      }
+      return val
+    })
     .refine((arr) => !arr || arr.length > 0, {
       message: 'Skills array must not be empty when provided'
     }),
@@ -57,14 +72,42 @@ export const JobSearchRequestSchema = z.object({
     }),
   // Job categories and benefits
   jobCategories: z
-    .array(z.string().trim().min(1))
+    .union([
+      z.array(z.string().trim().min(1)),
+      z.string()
+    ])
     .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        // Handle comma-separated string
+        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        if (parsed.length === 0) {
+          throw new Error('Job categories array must not be empty when provided')
+        }
+        return parsed
+      }
+      return val
+    })
     .refine((arr) => !arr || arr.length > 0, {
       message: 'Job categories array must not be empty when provided'
     }),
   jobBenefits: z
-    .array(z.string().trim().min(1))
+    .union([
+      z.array(z.string().trim().min(1)),
+      z.string()
+    ])
     .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        // Handle comma-separated string
+        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        if (parsed.length === 0) {
+          throw new Error('Job benefits array must not be empty when provided')
+        }
+        return parsed
+      }
+      return val
+    })
     .refine((arr) => !arr || arr.length > 0, {
       message: 'Job benefits array must not be empty when provided'
     }),
@@ -83,14 +126,16 @@ export const JobSearchRequestSchema = z.object({
       return val
     }),
   flexibleHours: z
-    .union([z.boolean(), z.string()])
+    .union([z.boolean(), z.string(), z.number()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        if (val === 'true') return true
-        if (val === 'false') return false
-        throw new Error('flexibleHours must be "true" or "false"')
+        const v = val.trim().toLowerCase()
+        if (v === 'true' || v === '1') return true
+        if (v === 'false' || v === '0') return false
+        throw new Error('flexibleHours must be boolean-like ("true"/"false" or "1"/"0")')
       }
+      if (typeof val === 'number') return val === 1
       return val
     }),
   // Sort options
@@ -122,16 +167,141 @@ export const JobSearchRequestSchema = z.object({
       return val
     }),
   highlight: z
-    .union([z.boolean(), z.string()])
+    .union([z.boolean(), z.string(), z.number()])
     .default(false)
     .transform((val) => {
       if (typeof val === 'string') {
-        if (val === 'true') return true
-        if (val === 'false') return false
-        throw new Error('highlight must be "true" or "false"')
+        const v = val.trim().toLowerCase()
+        if (v === 'true' || v === '1') return true
+        if (v === 'false' || v === '0') return false
+        throw new Error('highlight must be boolean-like ("true"/"false" or "1"/"0")')
+      }
+      if (typeof val === 'number') return val === 1
+      return val
+    }),
+  // User context fields for personalized search (used by search.service.ts)
+  userExperienceLevel: z
+    .union([z.number().int().min(0).max(50), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0 || parsed > 50) {
+          throw new Error('userExperienceLevel must be an integer between 0 and 50')
+        }
+        return parsed
       }
       return val
-    })
+    }),
+  userLocationId: z.string().uuid().optional(),
+  userPrefersRemote: z
+    .union([z.boolean(), z.string(), z.number()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const v = val.trim().toLowerCase()
+        if (v === 'true' || v === '1') return true
+        if (v === 'false' || v === '0') return false
+        throw new Error('userPrefersRemote must be boolean-like ("true"/"false" or "1"/"0")')
+      }
+      if (typeof val === 'number') return val === 1
+      return val
+    }),
+  userSkills: z
+    .union([
+      z.array(z.string().trim().min(1)),
+      z.string()
+    ])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        // Handle comma-separated string
+        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        return parsed.length > 0 ? parsed : undefined
+      }
+      return val
+    }),
+  userDesiredSalaryMin: z
+    .union([z.number().int().min(0), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0) {
+          throw new Error('userDesiredSalaryMin must be a non-negative integer')
+        }
+        return parsed
+      }
+      return val
+    }),
+  userDesiredSalaryMax: z
+    .union([z.number().int().min(0), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0) {
+          throw new Error('userDesiredSalaryMax must be a non-negative integer')
+        }
+        return parsed
+      }
+      return val
+    }),
+  userPreferredCategories: z
+    .union([
+      z.array(z.string().trim().min(1)),
+      z.string()
+    ])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        // Handle comma-separated string
+        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        return parsed.length > 0 ? parsed : undefined
+      }
+      return val
+    }),
+  userDesiredBenefits: z
+    .union([
+      z.array(z.string().trim().min(1)),
+      z.string()
+    ])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        // Handle comma-separated string
+        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        return parsed.length > 0 ? parsed : undefined
+      }
+      return val
+    }),
+  userRemotePercentageMin: z
+    .union([z.number().int().min(0).max(100), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const parsed = parseInt(val, 10)
+        if (isNaN(parsed) || parsed < 0 || parsed > 100) {
+          throw new Error('userRemotePercentageMin must be an integer between 0 and 100')
+        }
+        return parsed
+      }
+      return val
+    }),
+  userPrefersFlexibleHours: z
+    .union([z.boolean(), z.string(), z.number()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        const v = val.trim().toLowerCase()
+        if (v === 'true' || v === '1') return true
+        if (v === 'false' || v === '0') return false
+        throw new Error('userPrefersFlexibleHours must be boolean-like ("true"/"false" or "1"/"0")')
+      }
+      if (typeof val === 'number') return val === 1
+      return val
+    }),
+  recruiterId: z.string().uuid().optional() // Optional for tenant isolation
 })
 
 export const SuggestionRequestSchema = z.object({
@@ -150,7 +320,24 @@ export const SuggestionRequestSchema = z.object({
       }
       return val
     }),
-  context: z.record(z.string(), z.any()).optional()
+  context: z
+    .union([
+      z.record(z.string(), z.any()),
+      z.string()
+    ])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        try {
+          // Try to parse JSON string
+          return JSON.parse(val)
+        } catch {
+          // If not valid JSON, treat as simple string context
+          return { query: val }
+        }
+      }
+      return val
+    })
 })
 
 export const SuggestionSchema = z.object({

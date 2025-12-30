@@ -1,8 +1,12 @@
 import { Router } from 'express'
 import candidateRouter from './candidate/candidate.route'
 import recruiterRouter from './recruiter/recruiter.route'
+import { ElasticsearchSyncMiddleware } from '@/middleware/elasticsearch-sync.middleware'
 
 const router = Router()
+
+// Elasticsearch sync middleware - áp dụng cho tất cả application routes
+router.use(ElasticsearchSyncMiddleware.getMiddleware())
 
 /**
  * Candidate routes - mounted under `/candidate` to clearly separate

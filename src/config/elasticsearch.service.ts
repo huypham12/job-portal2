@@ -30,10 +30,8 @@ export type Suggestion = { text: string; payload?: unknown; score?: number }
 export type SuggestResponse = { suggestions: Suggestion[] }
 
 /**
- * Thin Elasticsearch client wrapper.
- * Only method signatures are provided here — implementation belongs to infra/bootstrap code.
- *
- * Controllers/services must call these methods; do NOT call ES client directly.
+ * Enhanced Elasticsearch client wrapper for Job Portal
+ * Supports advanced search, matching, and analytics features
  */
 import { Client } from '@elastic/elasticsearch'
 
@@ -94,12 +92,440 @@ export const vietnameseAnalyzers = {
         type: 'custom',
         tokenizer: 'standard',
         filter: ['lowercase', 'asciifolding_filter'] // Minimal filtering for titles
+      },
+      // Autocomplete analyzer for search suggestions
+      autocomplete_analyzer: {
+        type: 'custom',
+        tokenizer: 'edge_ngram_tokenizer',
+        filter: ['lowercase', 'asciifolding_filter']
       }
     },
     normalizer: {
       lc_normalizer: {
         type: 'custom',
         filter: ['lowercase', 'asciifolding_filter']
+      }
+    },
+    tokenizer: {
+      edge_ngram_tokenizer: {
+        type: 'edge_ngram',
+        min_gram: 1,
+        max_gram: 15, // Optimized for job titles
+        token_chars: ['letter', 'digit', 'whitespace']
+      }
+    }
+  }
+}
+
+// Enhanced index mappings với full schema utilization
+export const enhancedMappings = {
+  jobs: {
+    mappings: {
+      properties: {
+        // Core job info
+        id: { type: 'keyword' },
+        job_id: { type: 'keyword' },
+        title: {
+          type: 'text',
+          analyzer: 'vi_title_analyzer',
+          search_analyzer: 'vi_search_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
+            suggest: { type: 'completion' },
+            analyzed: { type: 'text', analyzer: 'vi_analyzer' }
+          }
+        },
+        description: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          search_analyzer: 'vi_search_analyzer'
+        },
+
+        // Company relationship
+        company_id: { type: 'keyword' },
+        company_name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            suggest: { type: 'completion' }
+          }
+        },
+        company_size: { type: 'integer' },
+        company_industry: { type: 'keyword' },
+
+        // Location hierarchy (từ locations table)
+        location_id: { type: 'keyword' },
+        location_name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
+          }
+        },
+        location_province: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+          }
+        },
+        location_district: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+          }
+        },
+        location_combined: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
+          }
+        },
+
+        // Job requirements (từ job_requirements table)
+        job_requirements: {
+          type: 'nested',
+          properties: {
+            requirement_type: { type: 'keyword' },
+            title: { type: 'text', analyzer: 'vi_analyzer' },
+            description: { type: 'text', analyzer: 'vi_analyzer' },
+            is_required: { type: 'boolean' },
+            level: { type: 'keyword' },
+            years_experience: { type: 'integer' }
+          }
+        },
+        experience_level: { type: 'integer' },
+        min_experience_years: { type: 'integer' },
+        max_experience_years: { type: 'integer' },
+
+        // Skills (từ job_skills + skills tables)
+        skills: {
+          type: 'nested',
+          properties: {
+            name: { type: 'keyword' },
+            category: { type: 'keyword' },
+            category_type: { type: 'keyword' },
+            proficiency_required: { type: 'integer' }
+          }
+        },
+        skills_flat: { type: 'keyword' },
+        skills_technical: { type: 'keyword' },
+        skills_soft: { type: 'keyword' },
+
+        // Work arrangements (từ job_work_arrangements table)
+        is_remote_allowed: { type: 'boolean' },
+        remote_percentage: { type: 'integer' },
+        flexible_hours: { type: 'boolean' },
+        travel_requirement: { type: 'keyword' },
+        overtime_expected: { type: 'boolean' },
+        shift_type: { type: 'keyword' },
+
+        // Benefits (từ job_benefits table)
+        job_benefits: {
+          type: 'nested',
+          properties: {
+            benefit_type: { type: 'keyword' },
+            title: { type: 'text', analyzer: 'vi_analyzer' },
+            description: { type: 'text', analyzer: 'vi_analyzer' },
+            value_amount: { type: 'integer' },
+            value_currency: { type: 'keyword' }
+          }
+        },
+        job_benefits_type: { type: 'keyword' },
+
+        // Categories (từ job_categories + categories tables)
+        job_categories: {
+          type: 'nested',
+          properties: {
+            category_id: { type: 'keyword' },
+            name: { type: 'keyword' },
+            type: { type: 'keyword' }
+          }
+        },
+        job_category: { type: 'keyword' },
+        job_category_type: { type: 'keyword' },
+
+        // Salary & job details
+        salary_range: { type: 'text' },
+        salary_min: { type: 'integer' },
+        salary_max: { type: 'integer' },
+        job_type: { type: 'keyword' },
+
+        // Status & dates
+        status: { type: 'keyword' },
+        posted_at: { type: 'date' },
+        expires_at: { type: 'date' },
+        updated_at: { type: 'date' },
+
+        // Recruiter info
+        recruiter_id: { type: 'keyword' },
+        recruiter_role: { type: 'keyword' },
+
+        // Metadata
+        metadata: { type: 'object' },
+        version: { type: 'integer' }
+      }
+    }
+  },
+
+  profiles: {
+    mappings: {
+      properties: {
+        // Core profile info
+        id: { type: 'keyword' },
+        profile_id: { type: 'keyword' },
+        user_id: { type: 'keyword' },
+        user_role: { type: 'keyword' },
+
+        full_name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
+          }
+        },
+        display_name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
+          }
+        },
+        headline: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            suggest: { type: 'completion' },
+            analyzed: { type: 'text', analyzer: 'vi_analyzer' }
+          }
+        },
+        bio: {
+          type: 'text',
+          analyzer: 'vi_analyzer'
+        },
+        desired_job_title: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            suggest: { type: 'completion' }
+          }
+        },
+
+        // Skills (từ profile_skills + skills tables)
+        skills: {
+          type: 'nested',
+          properties: {
+            name: { type: 'keyword' },
+            proficiency: { type: 'integer' },
+            level: { type: 'keyword' },
+            category: { type: 'keyword' },
+            category_type: { type: 'keyword' }
+          }
+        },
+        skills_flat: { type: 'keyword' },
+        skills_technical: { type: 'keyword' },
+        skills_soft: { type: 'keyword' },
+
+        // Experience & Education
+        years_of_experience: { type: 'integer' },
+        current_employment: { type: 'boolean' },
+        is_looking_for_job: { type: 'boolean' },
+
+        experiences: {
+          type: 'nested',
+          properties: {
+            company_name: { type: 'text', analyzer: 'vi_analyzer' },
+            position: { type: 'text', analyzer: 'vi_analyzer' },
+            start_date: { type: 'date' },
+            end_date: { type: 'date' },
+            is_current: { type: 'boolean' },
+            description: { type: 'text', analyzer: 'vi_analyzer' }
+          }
+        },
+        educations: {
+          type: 'nested',
+          properties: {
+            school_name: { type: 'text', analyzer: 'vi_analyzer' },
+            degree: { type: 'keyword' },
+            field_of_study: { type: 'text', analyzer: 'vi_analyzer' },
+            start_date: { type: 'date' },
+            end_date: { type: 'date' }
+          }
+        },
+        certifications: {
+          type: 'nested',
+          properties: {
+            name: { type: 'text', analyzer: 'vi_analyzer' },
+            issuing_org: { type: 'text', analyzer: 'vi_analyzer' },
+            issue_date: { type: 'date' },
+            expiry_date: { type: 'date' }
+          }
+        },
+
+        // Location & Preferences
+        location_id: { type: 'keyword' },
+        location_text: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
+          }
+        },
+        location_province: { type: 'keyword' },
+        location_district: { type: 'keyword' },
+
+        // Preferences
+        desired_salary_min: { type: 'integer' },
+        desired_salary_max: { type: 'integer' },
+        desired_job_type: { type: 'keyword' },
+        desired_benefits: { type: 'keyword' },
+        preferred_categories: { type: 'keyword' },
+        prefers_remote: { type: 'boolean' },
+        prefers_flexible_hours: { type: 'boolean' },
+
+        // Activity tracking
+        last_active_at: { type: 'date' },
+        updated_at: { type: 'date' },
+        created_at: { type: 'date' }
+      }
+    }
+  },
+
+  companies: {
+    mappings: {
+      properties: {
+        id: { type: 'keyword' },
+        company_id: { type: 'keyword' },
+        name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
+            suggest: { type: 'completion' }
+          }
+        },
+        description: { type: 'text', analyzer: 'vi_analyzer' },
+        industry: { type: 'keyword' },
+        size: { type: 'integer' },
+        founded_year: { type: 'integer' },
+        employee_count_min: { type: 'integer' },
+        employee_count_max: { type: 'integer' },
+        headquarters_location: { type: 'text', analyzer: 'vi_analyzer' },
+        company_type: { type: 'keyword' },
+        revenue_range: { type: 'keyword' },
+        culture_description: { type: 'text', analyzer: 'vi_analyzer' },
+        recruiter_id: { type: 'keyword' },
+        is_verified: { type: 'boolean' },
+        status: { type: 'keyword' }
+      }
+    }
+  },
+
+  locations: {
+    mappings: {
+      properties: {
+        id: { type: 'keyword' },
+        name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+          }
+        },
+        parent_id: { type: 'keyword' },
+        type: { type: 'keyword' },
+        latitude: { type: 'float' },
+        longitude: { type: 'float' }
+      }
+    }
+  },
+
+  skills: {
+    mappings: {
+      properties: {
+        id: { type: 'keyword' },
+        name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
+            suggest: { type: 'completion' }
+          }
+        },
+        category_id: { type: 'keyword' },
+        category_name: { type: 'keyword' },
+        category_type: { type: 'keyword' }
+      }
+    }
+  },
+
+  applications: {
+    mappings: {
+      properties: {
+        id: { type: 'keyword' },
+        application_id: { type: 'keyword' },
+        job_id: { type: 'keyword' },
+        profile_id: { type: 'keyword' },
+        user_id: { type: 'keyword' },
+        recruiter_id: { type: 'keyword' },
+        candidate_id: { type: 'keyword' },
+        status: { type: 'keyword' },
+        applied_at: { type: 'date' },
+        first_viewed_at: { type: 'date' },
+        last_viewed_at: { type: 'date' },
+        view_count: { type: 'integer' },
+        job_title: { type: 'text', analyzer: 'vi_analyzer' },
+        job_company_name: { type: 'text', analyzer: 'vi_analyzer' },
+        job_location: { type: 'text', analyzer: 'vi_analyzer' },
+        job_type: { type: 'keyword' },
+        job_salary_min: { type: 'integer' },
+        job_salary_max: { type: 'integer' },
+        job_experience_level: { type: 'integer' },
+        job_is_remote_allowed: { type: 'boolean' },
+        job_requirements_years_experience: { type: 'integer' },
+        candidate_name: { type: 'text', analyzer: 'vi_analyzer' },
+        candidate_email: { type: 'keyword' },
+        candidate_headline: { type: 'text', analyzer: 'vi_analyzer' },
+        candidate_location: { type: 'text', analyzer: 'vi_analyzer' },
+        candidate_years_experience: { type: 'integer' },
+        candidate_desired_salary_min: { type: 'integer' },
+        candidate_desired_salary_max: { type: 'integer' },
+        candidate_skills: {
+          type: 'nested',
+          properties: {
+            name: { type: 'keyword' },
+            proficiency: { type: 'integer' },
+            category: { type: 'keyword' }
+          }
+        },
+        candidate_skills_flat: { type: 'keyword' },
+        candidate_education: { type: 'keyword' },
+        candidate_current_employment: { type: 'boolean' },
+        current_stage_name: { type: 'keyword' },
+        current_stage_status: { type: 'keyword' },
+        stages_count: { type: 'integer' },
+        completed_stages_count: { type: 'integer' },
+        average_rating: { type: 'float' },
+        has_rating: { type: 'boolean' },
+        days_since_applied: { type: 'integer' },
+        days_since_first_viewed: { type: 'integer' },
+        days_since_last_viewed: { type: 'integer' },
+        total_view_time: { type: 'integer' },
+        has_notes: { type: 'boolean' },
+        is_shortlisted: { type: 'boolean' },
+        is_withdrawn: { type: 'boolean' },
+        last_updated: { type: 'date' }
       }
     }
   }
@@ -617,460 +1043,547 @@ export const elasticsearchService = {
       return false
     }
   },
+  /**
+   * Enhanced job search với location hierarchy và advanced filters
+   */
+  async searchJobsEnhanced(params: {
+    q?: string
+    location?: {
+      provinceId?: string
+      districtId?: string
+      locationName?: string
+    }
+    skills?: string[]
+    jobType?: string[]
+    experienceLevel?: { min?: number, max?: number }
+    salaryRange?: { min?: number, max?: number }
+    workArrangement?: {
+      isRemote?: boolean
+      remotePercentageMin?: number
+      flexibleHours?: boolean
+    }
+    benefits?: string[]
+    categories?: string[]
+    companySize?: { min?: number, max?: number }
+    postedWithinDays?: number
+    sort?: string
+    page?: number
+    size?: number
+  }) {
+    const {
+      q, location, skills, jobType, experienceLevel, salaryRange,
+      workArrangement, benefits, categories, companySize,
+      postedWithinDays, sort, page = 1, size = 20
+    } = params
+
+    const mustClauses = []
+    const filterClauses = []
+    const shouldClauses = []
+
+    // Full-text search với Vietnamese analyzer
+    if (q?.trim()) {
+      mustClauses.push({
+        multi_match: {
+          query: q.trim(),
+          fields: [
+            'title^3', 'title.analyzed^2',
+            'description^1.5', 'company_name^1',
+            'skills_flat^2', 'job_requirements_title^1',
+            'location_combined^1'
+          ],
+          type: 'best_fields',
+          operator: 'or',
+          minimum_should_match: '30%',
+          fuzziness: 'AUTO',
+          prefix_length: 1
+        }
+      })
+    }
+
+    // Location hierarchy filtering
+    if (location) {
+      const locationFilters = []
+
+      if (location.provinceId) {
+        locationFilters.push({
+          term: { location_province: location.provinceId }
+        })
+      }
+
+      if (location.districtId) {
+        locationFilters.push({
+          term: { location_district: location.districtId }
+        })
+      }
+
+      if (location.locationName) {
+        locationFilters.push({
+          multi_match: {
+            query: location.locationName,
+            fields: ['location_name', 'location_province', 'location_district'],
+            fuzziness: 'AUTO'
+          }
+        })
+      }
+
+      if (locationFilters.length > 0) {
+        filterClauses.push({
+          bool: { should: locationFilters, minimum_should_match: 1 }
+        })
+      }
+    }
+
+    // Skills filtering với proficiency
+    if (skills?.length) {
+      filterClauses.push({
+        nested: {
+          path: 'skills',
+          query: {
+            bool: {
+              must: [
+                { terms: { 'skills.name': skills } },
+                { range: { 'skills.proficiency_required': { gte: 2 } } }
+              ]
+            }
+          }
+        }
+      })
+    }
+
+    // Job type filtering
+    if (jobType?.length) {
+      filterClauses.push({ terms: { job_type: jobType } })
+    }
+
+    // Experience level filtering
+    if (experienceLevel) {
+      const expFilters = []
+      if (experienceLevel.min !== undefined) {
+        expFilters.push({ range: { experience_level: { gte: experienceLevel.min } } })
+      }
+      if (experienceLevel.max !== undefined) {
+        expFilters.push({ range: { experience_level: { lte: experienceLevel.max } } })
+      }
+      if (expFilters.length > 0) {
+        filterClauses.push({ bool: { must: expFilters } })
+      }
+    }
+
+    // Salary range filtering
+    if (salaryRange) {
+      const salaryFilters = []
+      if (salaryRange.min !== undefined) {
+        salaryFilters.push({ range: { salary_min: { gte: salaryRange.min } } })
+      }
+      if (salaryRange.max !== undefined) {
+        salaryFilters.push({ range: { salary_max: { lte: salaryRange.max } } })
+      }
+      if (salaryFilters.length > 0) {
+        filterClauses.push({
+          bool: { should: salaryFilters, minimum_should_match: 1 }
+        })
+      }
+    }
+
+    // Work arrangement filtering
+    if (workArrangement) {
+      if (workArrangement.isRemote !== undefined) {
+        filterClauses.push({ term: { is_remote_allowed: workArrangement.isRemote } })
+      }
+      if (workArrangement.remotePercentageMin !== undefined) {
+        filterClauses.push({
+          range: { remote_percentage: { gte: workArrangement.remotePercentageMin } }
+        })
+      }
+      if (workArrangement.flexibleHours !== undefined) {
+        filterClauses.push({ term: { flexible_hours: workArrangement.flexibleHours } })
+      }
+    }
+
+    // Benefits filtering
+    if (benefits?.length) {
+      filterClauses.push({ terms: { job_benefits_type: benefits } })
+    }
+
+    // Categories filtering
+    if (categories?.length) {
+      filterClauses.push({ terms: { job_category: categories } })
+    }
+
+    // Company size filtering
+    if (companySize) {
+      const sizeFilters = []
+      if (companySize.min !== undefined) {
+        sizeFilters.push({ range: { company_size: { gte: companySize.min } } })
+      }
+      if (companySize.max !== undefined) {
+        sizeFilters.push({ range: { company_size: { lte: companySize.max } } })
+      }
+      if (sizeFilters.length > 0) {
+        filterClauses.push({ bool: { must: sizeFilters } })
+      }
+    }
+
+    // Posted within days
+    if (postedWithinDays) {
+      filterClauses.push({
+        range: {
+          posted_at: { gte: `now-${postedWithinDays}d/d` }
+        }
+      })
+    }
+
+    // Active jobs only
+    filterClauses.push({ term: { status: 'approved' } })
+    filterClauses.push({ range: { expires_at: { gt: 'now' } } })
+
+    // Build final query
+    const queryBody = {
+      bool: {
+        must: mustClauses,
+        filter: filterClauses,
+        should: shouldClauses,
+        minimum_should_match: 0
+      }
+    }
+
+    // Add sorting
+    let sortConfig = []
+    switch (sort) {
+      case 'newest':
+        sortConfig = [{ posted_at: 'desc' }]
+        break
+      case 'salary_high':
+        sortConfig = [{ salary_max: 'desc' }]
+        break
+      case 'salary_low':
+        sortConfig = [{ salary_min: 'asc' }]
+        break
+      case 'experience_high':
+        sortConfig = [{ experience_level: 'desc' }]
+        break
+      case 'company_size':
+        sortConfig = [{ company_size: 'desc' }]
+        break
+      case 'relevance':
+      default:
+        sortConfig = [{ _score: 'desc' }, { posted_at: 'desc' }]
+    }
+
+    const response = await this.search({
+      index: this.getIndexName('jobs'),
+      query: queryBody,
+      from: (page - 1) * size,
+      size,
+      sort: sortConfig
+    })
+
+    return this.normalizeSearchResponse(response)
+  },
+
+  /**
+   * Enhanced candidate-job matching với job requirements extraction
+   */
+  async matchCandidatesForJobEnhanced(jobId: string, size = 50) {
+    // First, get job details with all requirements
+    const job = await this.getById({
+      index: this.getIndexName('jobs'),
+      id: jobId
+    })
+
+    if (!job) return { candidates: [] }
+
+    const mustClauses = []
+    const shouldClauses = []
+
+    // Required skills matching với proficiency
+    if (job.skills?.length > 0) {
+      mustClauses.push({
+        nested: {
+          path: 'skills',
+          query: {
+            bool: {
+              must: job.skills.map((skill: any) => ({
+                bool: {
+                  should: [
+                    { term: { 'skills.name': skill.name } },
+                    {
+                      fuzzy: {
+                        'skills.name': {
+                          value: skill.name,
+                          fuzziness: 'AUTO'
+                        }
+                      }
+                    }
+                  ],
+                  minimum_should_match: 1
+                }
+              }))
+            }
+          }
+        }
+      })
+
+      // Boost candidates with high proficiency in required skills
+      shouldClauses.push({
+        nested: {
+          path: 'skills',
+          query: {
+            bool: {
+              must: job.skills.map((skill: any) => ({
+                bool: {
+                  must: [
+                    { term: { 'skills.name': skill.name } },
+                    { range: { 'skills.proficiency': { gte: skill.proficiency_required || 3 } } }
+                  ]
+                }
+              }))
+            }
+          }
+        }
+      })
+    }
+
+    // Experience requirements
+    if (job.experience_level || job.min_experience_years) {
+      const minYears = job.min_experience_years || (job.experience_level * 1.5)
+      mustClauses.push({
+        range: { years_of_experience: { gte: minYears } }
+      })
+
+      // Boost candidates with exact experience match
+      shouldClauses.push({
+        range: {
+          years_of_experience: {
+            gte: minYears,
+            lte: minYears + 2 // Within 2 years of requirement
+          }
+        }
+      })
+    }
+
+    // Location matching
+    if (job.location_id) {
+      shouldClauses.push({
+        term: { location_id: job.location_id }
+      })
+
+      // Also match province/district level
+      if (job.location_province) {
+        shouldClauses.push({
+          term: { location_province: job.location_province }
+        })
+      }
+    }
+
+    // Work arrangement preferences
+    if (job.is_remote_allowed) {
+      shouldClauses.push({
+        bool: {
+          should: [
+            { term: { prefers_remote: true } },
+            {
+              match: {
+                location_text: {
+                  query: 'remote',
+                  boost: 0.5
+                }
+              }
+            }
+          ]
+        }
+      })
+    }
+
+    if (job.flexible_hours) {
+      shouldClauses.push({
+        term: { prefers_flexible_hours: true }
+      })
+    }
+
+    // Benefits alignment
+    if (job.job_benefits_type?.length > 0) {
+      shouldClauses.push({
+        terms: { desired_benefits: job.job_benefits_type }
+      })
+    }
+
+    // Categories alignment
+    if (job.job_category?.length > 0) {
+      shouldClauses.push({
+        terms: { preferred_categories: job.job_category }
+      })
+    }
+
+    // Salary expectations (overlap logic)
+    if (job.salary_min || job.salary_max) {
+      const salaryConditions = []
+      if (job.salary_min) {
+        salaryConditions.push({
+          range: { desired_salary_min: { lte: job.salary_min * 1.2 } }
+        })
+      }
+      if (job.salary_max) {
+        salaryConditions.push({
+          range: { desired_salary_max: { gte: job.salary_max * 0.8 } }
+        })
+      }
+      if (salaryConditions.length > 0) {
+        shouldClauses.push({
+          bool: {
+            should: salaryConditions,
+            minimum_should_match: 1
+          }
+        })
+      }
+    }
+
+    // Only active candidates
+    mustClauses.push({ term: { is_looking_for_job: true } })
+
+    // Boost recently active profiles
+    shouldClauses.push({
+      range: { last_active_at: { gte: 'now-30d' } }
+    })
+
+    const queryBody = {
+      bool: {
+        must: mustClauses,
+        should: shouldClauses,
+        minimum_should_match: 0
+      }
+    }
+
+    const response = await this.search({
+      index: this.getIndexName('profiles'),
+      query: queryBody,
+      from: 0,
+      size,
+      sort: [{ _score: 'desc' }]
+    })
+
+    return this.normalizeSearchResponse(response)
+  },
+
+  /**
+   * Location hierarchy search for UI autocomplete
+   */
+  async searchLocations(query: string, type?: 'province' | 'district', parentId?: string) {
+    const mustClauses = []
+
+    if (query) {
+      mustClauses.push({
+        multi_match: {
+          query,
+          fields: ['name', 'name.autocomplete'],
+          fuzziness: 'AUTO'
+        }
+      })
+    }
+
+    if (type) {
+      mustClauses.push({ term: { type } })
+    }
+
+    if (parentId) {
+      mustClauses.push({ term: { parent_id: parentId } })
+    }
+
+    const response = await this.search({
+      index: this.getIndexName('locations'),
+      query: {
+        bool: { must: mustClauses }
+      },
+      size: 20
+    })
+
+    return this.normalizeSearchResponse(response)
+  },
+
+  /**
+   * Skills autocomplete với categories
+   */
+  async searchSkills(query: string, category?: string) {
+    const mustClauses = []
+
+    if (query) {
+      mustClauses.push({
+        multi_match: {
+          query,
+          fields: ['name', 'name.autocomplete'],
+          type: 'bool_prefix'
+        }
+      })
+    }
+
+    if (category) {
+      mustClauses.push({
+        term: { category_id: category }
+      })
+    }
+
+    const response = await this.search({
+      index: this.getIndexName('skills'),
+      query: {
+        bool: { must: mustClauses }
+      },
+      size: 10
+    })
+
+    return this.normalizeSearchResponse(response)
+  },
+
   async initializeIndices(): Promise<void> {
     const client = getClient()
-    // Define basic mappings per SEARCH_MATCHING_PLAN.md
-    const jobsIndex = this.getIndexName('jobs')
-    const companiesIndex = this.getIndexName('companies')
-    const profilesIndex = this.getIndexName('profiles')
-    const applicationsIndex = this.getIndexName('applications')
-    const searchEventsIndex = this.getIndexName('search_events')
 
-    // Jobs mapping - Optimized for job portal search
-    const jobsMapping = {
-      mappings: {
-        properties: {
-          id: { type: 'keyword' },
-          job_id: { type: 'keyword' },
-          title: {
-            type: 'text',
-            analyzer: 'vi_title_analyzer', // Use specialized analyzer for titles
-            search_analyzer: 'vi_search_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-              autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
-              suggest: { type: 'completion' },
-              raw: { type: 'keyword' },
-              // Enhanced title search with main analyzer
-              analyzed: { type: 'text', analyzer: 'vi_analyzer' }
-            }
-          },
-          description: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            search_analyzer: 'vi_search_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
-            }
-          },
-          skills: {
-            type: 'keyword'
-          },
-          tags: { type: 'keyword' },
-          company_id: { type: 'keyword' },
-          company_name: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-              suggest: { type: 'completion' }
-            }
-          },
-          company_size: { type: 'integer' }, // For company reputation boost
-          // Ownership information for security verification
-          recruiter_id: { type: 'keyword' },
-          recruiter_role: { type: 'keyword' },
-          location_id: { type: 'keyword' },
-          location_name: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
-            }
-          },
-          // Location fields for hierarchical search (province + district)
-          location_province: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-              autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
-            }
-          },
-          location_district: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-              autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
-            }
-          },
-          // Combined field for flexible search
-          location_combined: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
-            }
-          },
-          salary_range: { type: 'text' },
-          salary_min: { type: 'integer' },
-          salary_max: { type: 'integer' },
-          job_type: { type: 'keyword' },
-          experience_level: { type: 'integer' },
-          // Job requirements - Critical for matching
-          job_requirements_title: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          job_requirements_years_experience: { type: 'integer' },
-          job_requirements_is_required: { type: 'boolean' },
-          // Work arrangements - Critical for work-life balance matching
-          is_remote_allowed: { type: 'boolean' },
-          flexible_hours: { type: 'boolean' },
-          remote_percentage: { type: 'integer' },
-          travel_requirement: { type: 'keyword' },
-          // Job categories for better filtering
-          job_category: { type: 'keyword' },
-          job_category_type: { type: 'keyword' }, // industry, technical, work_type
-          // Job benefits for enhanced matching
-          job_benefits_type: { type: 'keyword' },
-          job_benefits_value_amount: { type: 'integer' },
-          status: { type: 'keyword' },
-          posted_at: { type: 'date' },
-          expires_at: { type: 'date' },
-          metadata: { type: 'object' }
-        }
-      },
-      settings: {
-        ...vietnameseAnalyzers,
-        analysis: {
-          ...vietnameseAnalyzers.analysis,
-          analyzer: {
-            ...vietnameseAnalyzers.analysis.analyzer,
-            autocomplete_analyzer: {
-              type: 'custom',
-              tokenizer: 'edge_ngram_tokenizer',
-              filter: ['lowercase', 'asciifolding_filter']
-            }
-          },
-          tokenizer: {
-            edge_ngram_tokenizer: {
-              type: 'edge_ngram',
-              min_gram: 1,
-              max_gram: 15, // Optimized for job titles
-              token_chars: ['letter', 'digit', 'whitespace']
+    // Enhanced index creation với enriched mappings
+    const indices = [
+      { name: 'jobs', mapping: enhancedMappings.jobs },
+      { name: 'profiles', mapping: enhancedMappings.profiles },
+      { name: 'companies', mapping: enhancedMappings.companies },
+      { name: 'locations', mapping: enhancedMappings.locations },
+      { name: 'skills', mapping: enhancedMappings.skills },
+      { name: 'applications', mapping: enhancedMappings.applications }
+    ]
+
+    for (const { name, mapping } of indices) {
+      const indexName = this.getIndexName(name)
+
+      try {
+        const exists = await client.indices.exists({ index: indexName })
+
+        if (!exists) {
+          // Add settings to mapping
+          const fullMapping = {
+            ...mapping,
+            settings: {
+              ...vietnameseAnalyzers,
+              analysis: {
+                ...vietnameseAnalyzers.analysis,
+                analyzer: {
+                  ...vietnameseAnalyzers.analysis.analyzer,
+                  autocomplete_analyzer: {
+                    type: 'custom',
+                    tokenizer: 'edge_ngram_tokenizer',
+                    filter: ['lowercase', 'asciifolding_filter']
+                  }
+                },
+                tokenizer: vietnameseAnalyzers.analysis.tokenizer
+              }
             }
           }
+
+          await client.indices.create({
+            index: indexName,
+            body: fullMapping
+          })
+          console.log(`✅ Created index: ${indexName}`)
+        } else {
+          console.log(`ℹ️ Index ${indexName} already exists`)
         }
+      } catch (error) {
+        console.error(`❌ Failed to create index ${indexName}:`, error)
       }
     }
-
-    // Profiles mapping - Optimized for candidate search and matching
-    const profilesMapping = {
-      mappings: {
-        properties: {
-          id: { type: 'keyword' },
-          profile_id: { type: 'keyword' },
-          user_id: { type: 'keyword' },
-          user_role: { type: 'keyword' }, // Ownership context
-          full_name: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
-            }
-          },
-          display_name: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
-            }
-          },
-          headline: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-              suggest: { type: 'completion' }
-            }
-          },
-          bio: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          desired_job_title: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-              suggest: { type: 'completion' }
-            }
-          },
-          desired_salary_min: { type: 'integer' },
-          desired_salary_max: { type: 'integer' },
-          years_of_experience: { type: 'integer' },
-          skills: {
-            type: 'nested', // Use nested for structured skill data
-            properties: {
-              name: { type: 'keyword' },
-              proficiency: {
-                type: 'integer'
-              },
-              level: { type: 'keyword' },
-              category: { type: 'keyword' }, // Skills taxonomy
-              category_type: { type: 'keyword' } // industry, technical, etc.
-            }
-          },
-          skills_flat: {
-            type: 'keyword'
-          },
-          location_id: { type: 'keyword' },
-          location_text: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
-            }
-          },
-          // Education and experience data
-          education_degree: { type: 'keyword' },
-          education_field_of_study: { type: 'text', analyzer: 'vi_analyzer' },
-          certifications_skills_acquired: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          current_employment: { type: 'boolean' }, // Is currently employed
-          is_looking_for_job: { type: 'boolean' },
-          last_active_at: { type: 'date' },
-          resume_url: { type: 'keyword' },
-          avatar_url: { type: 'keyword' }
-        }
-      },
-      settings: {
-        ...vietnameseAnalyzers,
-        analysis: {
-          ...vietnameseAnalyzers.analysis,
-          analyzer: {
-            ...vietnameseAnalyzers.analysis.analyzer,
-            autocomplete_analyzer: {
-              type: 'custom',
-              tokenizer: 'edge_ngram_tokenizer',
-              filter: ['lowercase', 'asciifolding_filter']
-            }
-          },
-          tokenizer: {
-            edge_ngram_tokenizer: {
-              type: 'edge_ngram',
-              min_gram: 1,
-              max_gram: 15, // Optimized for profile headlines
-              token_chars: ['letter', 'digit', 'whitespace']
-            }
-          }
-        }
-      }
-    }
-
-    // Companies mapping - Optimized for company search and filtering
-    const companiesMapping = {
-      mappings: {
-        properties: {
-          id: { type: 'keyword' },
-          company_id: { type: 'keyword' },
-          name: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-              autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
-              suggest: { type: 'completion' }
-            }
-          },
-          description: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          recruiter_id: { type: 'keyword' },
-          recruiter_role: { type: 'keyword' }, // Ownership information
-          logo_url: { type: 'keyword' },
-          size: { type: 'integer' },
-          // Contact info - not indexed for search privacy
-          industry: { type: 'keyword' },
-          founded_year: { type: 'integer' },
-          employee_count_min: { type: 'integer' },
-          employee_count_max: { type: 'integer' },
-          website_url: { type: 'keyword' },
-          headquarters_location: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          company_type: { type: 'keyword' },
-          revenue_range: { type: 'keyword' },
-          culture_description: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          }
-        }
-      },
-      settings: {
-        ...vietnameseAnalyzers,
-        analysis: {
-          ...vietnameseAnalyzers.analysis,
-          analyzer: {
-            ...vietnameseAnalyzers.analysis.analyzer,
-            autocomplete_analyzer: {
-              type: 'custom',
-              tokenizer: 'standard',
-              filter: ['lowercase', 'asciifolding_filter']
-            }
-          }
-        }
-      }
-    }
-
-    // Search Events mapping - Optimized for analytics and user behavior tracking
-    const searchEventsMapping = {
-      mappings: {
-        properties: {
-          id: { type: 'keyword' },
-          user_id: { type: 'keyword' },
-          event_type: { type: 'keyword' },
-          job_id: { type: 'keyword' },
-          profile_id: { type: 'keyword' },
-          query: {
-            type: 'text',
-            analyzer: 'vi_analyzer',
-            fields: {
-              keyword: { type: 'keyword', normalizer: 'lc_normalizer' } // For exact matching in aggregations
-            }
-          },
-          position: { type: 'integer' },
-          filters: { type: 'object' },
-          result_count: { type: 'integer' },
-          timestamp_ms: { type: 'date' },
-          created_at: { type: 'date' },
-          session_id: { type: 'keyword' },
-          user_agent: { type: 'text' },
-          ip_address: { type: 'ip' },
-          // Performance metrics
-          search_duration_ms: { type: 'integer' },
-          es_took_ms: { type: 'integer' },
-          // Business context
-          user_location: { type: 'keyword' },
-          user_experience_level: { type: 'integer' },
-          user_job_type_preference: { type: 'keyword' }
-        }
-      },
-      settings: {
-        ...vietnameseAnalyzers,
-        analysis: {
-          ...vietnameseAnalyzers.analysis,
-          analyzer: {
-            ...vietnameseAnalyzers.analysis.analyzer,
-            autocomplete_analyzer: {
-              type: 'custom',
-              tokenizer: 'standard',
-              filter: ['lowercase', 'asciifolding_filter']
-            }
-          }
-        }
-      }
-    }
-
-    // Applications mapping - Optimized for recruitment analytics and tracking
-    const applicationsMapping = {
-      mappings: {
-        properties: {
-          id: { type: 'keyword' },
-          application_id: { type: 'keyword' },
-          job_id: { type: 'keyword' },
-          profile_id: { type: 'keyword' },
-          user_id: { type: 'keyword' },
-          status: { type: 'keyword' },
-          applied_at: { type: 'date' },
-          first_viewed_at: { type: 'date' },
-          last_viewed_at: { type: 'date' },
-          view_count: { type: 'integer' },
-          // Candidate info - for analytics and filtering
-          candidate_name: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          candidate_email: { type: 'keyword' },
-          candidate_headline: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          candidate_location: { type: 'text', analyzer: 'vi_analyzer' },
-          candidate_years_experience: { type: 'integer' },
-          candidate_desired_salary_min: { type: 'integer' },
-          candidate_desired_salary_max: { type: 'integer' },
-          candidate_skills: {
-            type: 'nested',
-            properties: {
-              name: { type: 'keyword' },
-              proficiency: { type: 'integer' },
-              category: { type: 'keyword' }
-            }
-          },
-          candidate_skills_flat: {
-            type: 'keyword'
-          },
-          candidate_education: { type: 'keyword' },
-          candidate_current_employment: { type: 'boolean' },
-          // Job info with requirements matching
-          job_title: {
-            type: 'text',
-            analyzer: 'vi_analyzer'
-          },
-          job_company_name: { type: 'text', analyzer: 'vi_analyzer' },
-          job_location: { type: 'text', analyzer: 'vi_analyzer' },
-          job_type: { type: 'keyword' },
-          job_salary_min: { type: 'integer' },
-          job_salary_max: { type: 'integer' },
-          job_experience_level: { type: 'integer' },
-          job_is_remote_allowed: { type: 'boolean' },
-          job_requirements_years_experience: { type: 'integer' },
-          // Application stages - detailed pipeline data
-          current_stage_name: { type: 'keyword' },
-          current_stage_status: { type: 'keyword' },
-          stages_count: { type: 'integer' },
-          completed_stages_count: { type: 'integer' },
-          average_rating: { type: 'float' },
-          has_rating: { type: 'boolean' },
-          // Timeline analytics
-          days_since_applied: { type: 'integer' },
-          days_since_first_viewed: { type: 'integer' },
-          days_since_last_viewed: { type: 'integer' },
-          total_view_time: { type: 'integer' }, // in seconds
-          // Metadata and flags
-          has_notes: { type: 'boolean' },
-          is_shortlisted: { type: 'boolean' },
-          is_withdrawn: { type: 'boolean' },
-          last_updated: { type: 'date' }
-        }
-      },
-      settings: {
-        ...vietnameseAnalyzers,
-        analysis: {
-          ...vietnameseAnalyzers.analysis,
-          analyzer: {
-            ...vietnameseAnalyzers.analysis.analyzer,
-            autocomplete_analyzer: {
-              type: 'custom',
-              tokenizer: 'standard',
-              filter: ['lowercase', 'asciifolding_filter']
-            }
-          }
-        }
-      }
-    }
-
-    // Create or update indices
-    const createIfNotExists = async (indexName: string, body: any) => {
-      const exists = await client.indices.exists({ index: indexName })
-      if (!exists) {
-        await client.indices.create({ index: indexName, body })
-      } else {
-        // Optionally update mapping - skip for now to avoid breaking changes
-      }
-    }
-
-    await createIfNotExists(jobsIndex, jobsMapping)
-    await createIfNotExists(companiesIndex, companiesMapping)
-    await createIfNotExists(profilesIndex, profilesMapping)
-    await createIfNotExists(applicationsIndex, applicationsMapping)
-    await createIfNotExists(searchEventsIndex, searchEventsMapping)
   }
 }

@@ -199,4 +199,76 @@ export class SyncController {
       throw new HttpError('Failed to get failed summary', HTTP_STATUS.INTERNAL_SERVER_ERROR)
     }
   }
+
+  /**
+   * GET /api/sync/consistency - Validate data consistency between DB and ES
+   */
+  async validateConsistency(req: Request, res: Response) {
+    try {
+      const consistency = await elasticsearchSyncService.validateSyncConsistency()
+
+      res.json({
+        success: true,
+        data: {
+          is_consistent: consistency.isConsistent,
+          mismatches: consistency.mismatches,
+          sample_mismatches: consistency.sampleMismatches,
+          total_mismatches: consistency.mismatches.length
+        }
+      })
+    } catch (error) {
+      console.error('Failed to validate consistency:', error)
+      throw new HttpError('Failed to validate consistency', HTTP_STATUS.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  /**
+   * POST /api/sync/fix-consistency - Auto-fix consistency issues
+   */
+  async fixConsistency(req: Request, res: Response) {
+    try {
+      const consistency = await elasticsearchSyncService.validateSyncConsistency()
+
+      if (consistency.isConsistent) {
+        return res.json({
+          success: true,
+          message: 'Data is already consistent',
+          data: { fixed: 0 }
+        })
+      }
+
+      let fixed = 0
+
+      // Fix missing entities in ES
+      for (const sample of consistency.sampleMismatches) {
+        for (const missingId of sample.missingInES) {
+          try {
+            const document = await SyncRetryWorker.getEntityData(sample.type, missingId)
+            if (document) {
+              const success = await elasticsearchSyncService.syncToElasticsearchWithRetry(
+                sample.type + 's',
+                missingId,
+                document
+              )
+              if (success) fixed++
+            }
+          } catch (error) {
+            console.error(`Failed to fix ${sample.type}:${missingId}:`, error)
+          }
+        }
+      }
+
+      res.json({
+        success: true,
+        data: {
+          mismatches_found: consistency.mismatches.length,
+          attempts_fixed: fixed,
+          remaining_mismatches: consistency.mismatches.length - fixed
+        }
+      })
+    } catch (error) {
+      console.error('Failed to fix consistency:', error)
+      throw new HttpError('Failed to fix consistency', HTTP_STATUS.INTERNAL_SERVER_ERROR)
+    }
+  }
 }

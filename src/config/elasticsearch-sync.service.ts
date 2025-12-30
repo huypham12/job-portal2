@@ -170,7 +170,8 @@ export class ElasticsearchSyncService {
         include: {
           companies: {
             include: {
-              users: true // Include recruiter user info for ownership
+              users: true, // Include recruiter user info for ownership
+              company_details: true // Include company details for enhanced mapping
             }
           },
           locations: {
@@ -179,7 +180,11 @@ export class ElasticsearchSyncService {
             }
           },
           job_skills: {
-            include: { skills: true }
+            include: {
+              skills: {
+                include: { category: true } // Include skill categories for enhanced mapping
+              }
+            }
           },
           job_requirements: true,
           job_categories: {
@@ -271,11 +276,20 @@ export class ElasticsearchSyncService {
         include: {
           users: true, // Include user info for role
           skills: {
-            include: { skills: { include: { category: true } } }
+            include: {
+              skills: {
+                include: { category: true } // Include skill categories for enhanced mapping
+              }
+            }
           },
           educations: true,
           experiences: true,
-          certifications: true
+          certifications: true,
+          locations: {
+            include: {
+              parent: true // Include parent province for location hierarchy
+            }
+          }
         }
       })
 
@@ -639,6 +653,117 @@ export class ElasticsearchSyncService {
         lastSyncAt: null,
         errors: 1
       }
+    }
+  }
+
+  /**
+   * Validate data consistency between database and Elasticsearch
+   */
+  async validateSyncConsistency(): Promise<{
+    isConsistent: boolean
+    mismatches: Array<{
+      type: string
+      databaseCount: number
+      esCount: number
+      difference: number
+    }>
+    sampleMismatches: Array<{
+      type: string
+      missingInES: string[]
+      extraInES: string[]
+    }>
+  }> {
+    try {
+      const stats = await this.getSyncStats()
+
+      const mismatches = []
+      const sampleMismatches = []
+
+      // Check counts
+      const types = ['jobs', 'companies', 'profiles', 'applications']
+      for (const type of types) {
+        const dbCount = stats.database[type as keyof typeof stats.database] as number
+        const esCount = stats.elasticsearch[type as keyof typeof stats.elasticsearch] as number
+        const difference = Math.abs(dbCount - esCount)
+
+        if (difference > 0) {
+          mismatches.push({
+            type,
+            databaseCount: dbCount,
+            esCount,
+            difference
+          })
+
+          // Get sample mismatches (up to 5 IDs)
+          try {
+            const dbIds = await this.getSampleIdsFromDB(type, 5)
+            const esIds = await this.getSampleIdsFromES(type, 5)
+
+            const missingInES = dbIds.filter(id => !esIds.includes(id))
+            const extraInES = esIds.filter(id => !dbIds.includes(id))
+
+            if (missingInES.length > 0 || extraInES.length > 0) {
+              sampleMismatches.push({
+                type,
+                missingInES,
+                extraInES
+              })
+            }
+          } catch (error) {
+            console.warn(`Could not get sample IDs for ${type}:`, error)
+          }
+        }
+      }
+
+      return {
+        isConsistent: mismatches.length === 0,
+        mismatches,
+        sampleMismatches
+      }
+    } catch (error) {
+      console.error('Failed to validate sync consistency:', error)
+      return {
+        isConsistent: false,
+        mismatches: [],
+        sampleMismatches: []
+      }
+    }
+  }
+
+  private async getSampleIdsFromDB(type: string, limit: number): Promise<string[]> {
+    let model: any
+    switch (type) {
+      case 'jobs': model = prisma.jobs; break
+      case 'companies': model = prisma.companies; break
+      case 'profiles': model = prisma.profiles; break
+      case 'applications': model = prisma.applications; break
+      default: return []
+    }
+
+    const records = await model.findMany({
+      select: { id: true },
+      take: limit,
+      orderBy: { updated_at: 'desc' }
+    })
+
+    return records.map(r => r.id)
+  }
+
+  private async getSampleIdsFromES(type: string, limit: number): Promise<string[]> {
+    try {
+      const client = elasticsearchService.getClient()
+      const response = await client.search({
+        index: elasticsearchService.getIndexName(type),
+        body: {
+          size: limit,
+          sort: [{ updated_at: 'desc' }],
+          _source: ['id']
+        }
+      })
+
+      return response.hits.hits.map((hit: any) => hit._source.id)
+    } catch {
+      return []
     }
   }
 

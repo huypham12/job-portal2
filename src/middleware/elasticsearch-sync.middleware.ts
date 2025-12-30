@@ -60,10 +60,15 @@ export class ElasticsearchSyncMiddleware {
           if (syncData) {
             // Extract user ID from JWT token
             const userId = req.decoded_authorization?.user_id
+
+            // Log sync operation for monitoring
+            console.log(`🔄 Auto-sync triggered: ${syncData.action} ${syncData.type} ${syncData.id || 'bulk'}`)
+
             await ElasticsearchSyncMiddleware.performSync(syncData, userId)
           }
         } catch (error) {
           console.error('🔄 Elasticsearch sync error:', error)
+          // Don't throw - we don't want to break the API response
         }
       })
 
@@ -219,28 +224,42 @@ export class ElasticsearchSyncMiddleware {
    */
   private static async performSync(syncData: SyncableData, userId?: string): Promise<void> {
     try {
+      // Validate sync data
+      if (!syncData.type || !syncData.action) {
+        console.warn('⚠️ Invalid sync data - missing type or action')
+        return
+      }
+
       switch (syncData.action) {
         case 'create':
         case 'update': {
-          if (syncData.id) {
-            let success = false
-            switch (syncData.type) {
-              case 'job':
-                success = await elasticsearchSyncService.syncJobById(syncData.id, userId || null, 'upsert')
-                break
-              case 'company':
-                success = await elasticsearchSyncService.syncCompanyById(syncData.id, userId || null, 'upsert')
-                break
-              case 'profile':
-                success = await elasticsearchSyncService.syncProfileById(syncData.id, userId || null, 'upsert')
-                break
-              case 'application':
-                success = await elasticsearchSyncService.syncApplicationById(syncData.id, userId || null, 'upsert')
-                break
-            }
-            if (success) {
-              console.log(`✅ Synced ${syncData.action} for ${syncData.type}:${syncData.id}`)
-            }
+          if (!syncData.id) {
+            console.warn(`⚠️ ${syncData.action} action missing ID for ${syncData.type}`)
+            return
+          }
+
+          let success = false
+          switch (syncData.type) {
+            case 'job':
+              success = await elasticsearchSyncService.syncJobById(syncData.id, userId || null, 'upsert')
+              break
+            case 'company':
+              success = await elasticsearchSyncService.syncCompanyById(syncData.id, userId || null, 'upsert')
+              break
+            case 'profile':
+              success = await elasticsearchSyncService.syncProfileById(syncData.id, userId || null, 'upsert')
+              break
+            case 'application':
+              success = await elasticsearchSyncService.syncApplicationById(syncData.id, userId || null, 'upsert')
+              break
+            default:
+              console.warn(`⚠️ Unknown sync type: ${syncData.type}`)
+              return
+          }
+          if (success) {
+            console.log(`✅ Synced ${syncData.action} for ${syncData.type}:${syncData.id}`)
+          } else {
+            console.warn(`❌ Failed to sync ${syncData.action} for ${syncData.type}:${syncData.id}`)
           }
           break
         }
