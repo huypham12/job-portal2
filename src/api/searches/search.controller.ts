@@ -11,9 +11,7 @@ export async function searchJobsController(req: Request, res: Response) {
 
   // Extract recruiterId from authenticated user if they are a recruiter
   // This enables tenant isolation for authenticated recruiters while allowing public search for candidates
-  const recruiterId = req.decoded_authorization?.role === 'recruiter'
-    ? req.decoded_authorization.user_id
-    : undefined
+  const recruiterId = req.decoded_authorization?.role === 'recruiter' ? req.decoded_authorization.user_id : undefined
 
   const result = await searchService.searchJobs({
     ...query,

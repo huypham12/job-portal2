@@ -58,8 +58,8 @@ export class ElasticsearchSyncMiddleware {
 
           const syncData = await ElasticsearchSyncMiddleware.extractSyncData(req, data)
           if (syncData) {
-            // Extract user ID from request context
-            const userId = req.user?.id || req.user?.userId
+            // Extract user ID from JWT token
+            const userId = req.decoded_authorization?.user_id
             await ElasticsearchSyncMiddleware.performSync(syncData, userId)
           }
         } catch (error) {

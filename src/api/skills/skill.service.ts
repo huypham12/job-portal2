@@ -16,7 +16,7 @@ export class SkillService {
    * - Pagination
    */
   async searchSkills(params: SearchSkillsParams) {
-    const { search, category, limit, offset } = params
+    const { search, category, limit = 50, offset = 0 } = params
 
     // Build WHERE clause
     const where: any = {}
@@ -29,7 +29,22 @@ export class SkillService {
     }
 
     if (category) {
-      where.category = category
+      // category may be a category id (UUID) or a category slug/name.
+      // Schema: skills has `category_id` relation to categories.
+      const uuidV4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      if (uuidV4Regex.test(category)) {
+        // filter by foreign key category_id
+        where.category_id = category
+      } else {
+        // filter by related category slug or name
+        where.category = {
+          // try slug first, fallback to name using OR
+          OR: [
+            { slug: category },
+            { name: category }
+          ]
+        }
+      }
     }
 
     // Execute query with pagination

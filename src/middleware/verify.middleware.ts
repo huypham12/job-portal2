@@ -200,6 +200,8 @@ export const authenticateRefreshToken = async (req: Request, res: Response, next
   }
 }
 
+// DEPRECATED: Sử dụng authorize() middleware thay thế
+// verifiedUserValidator đã được tích hợp vào authorize middleware
 export const verifiedUserValidator = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.decoded_authorization as TokenPayload

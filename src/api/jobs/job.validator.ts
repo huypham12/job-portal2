@@ -49,8 +49,9 @@ const jobStatusEnum = z.nativeEnum(job_status)
 // ==================== SALARY RANGE SCHEMA ====================
 const salaryRangeSchema = z
   .object({
-    min: z.number().int().min(0, 'Minimum salary must be >= 0'),
-    max: z.number().int().min(0, 'Maximum salary must be >= 0'),
+    // Accept numeric strings by coercing to number
+    min: z.coerce.number().int().min(0, 'Minimum salary must be >= 0'),
+    max: z.coerce.number().int().min(0, 'Maximum salary must be >= 0'),
     currency: z.string().default('VND')
   })
   .refine((data) => data.max >= data.min, {
@@ -66,7 +67,8 @@ const createJobBody = z
     location_id: z.string().uuid('Invalid location ID').optional().nullable(),
     salary_range: salaryRangeSchema.optional(),
     job_type: jobTypeEnum,
-    experience_level: z.number().int().min(0).max(30).optional().nullable(),
+    // Coerce numeric strings to numbers for robustness
+    experience_level: z.coerce.number().int().min(0).max(30).optional().nullable(),
     expires_at: z
       .string()
       .datetime()
@@ -88,7 +90,7 @@ const createJobBody = z
           description: z.string().optional(),
           is_required: z.boolean().default(true),
           level: z.string().max(50).optional(),
-          years_experience: z.number().int().min(0).optional()
+          years_experience: z.coerce.number().int().min(0).optional()
         })
       )
       .optional(),
@@ -100,7 +102,8 @@ const createJobBody = z
           benefit_type: z.string().max(50),
           title: z.string().max(255),
           description: z.string().optional(),
-          value_amount: z.number().optional(),
+          // Accept numeric strings and coerce
+          value_amount: z.coerce.number().optional(),
           value_currency: z.string().max(10).default('VND')
         })
       )
@@ -116,7 +119,7 @@ const createJobBody = z
     work_arrangements: z
       .object({
         is_remote_allowed: z.boolean().default(false),
-        remote_percentage: z.number().int().min(0).max(100).default(0),
+        remote_percentage: z.coerce.number().int().min(0).max(100).default(0),
         flexible_hours: z.boolean().default(false),
         travel_requirement: z.string().max(50).optional(),
         overtime_expected: z.boolean().default(false),
@@ -134,7 +137,7 @@ const updateJobBody = z
     location_id: z.string().uuid().optional().nullable(),
     salary_range: salaryRangeSchema.optional(),
     job_type: jobTypeEnum.optional(),
-    experience_level: z.number().int().min(0).max(30).optional().nullable(),
+    experience_level: z.coerce.number().int().min(0).max(30).optional().nullable(),
     expires_at: z
       .string()
       .datetime()
@@ -153,7 +156,7 @@ const updateJobBody = z
           description: z.string().optional(),
           is_required: z.boolean().default(true),
           level: z.string().max(50).optional(),
-          years_experience: z.number().int().min(0).optional()
+          years_experience: z.coerce.number().int().min(0).optional()
         })
       )
       .optional(),
@@ -163,7 +166,7 @@ const updateJobBody = z
           benefit_type: z.string().max(50),
           title: z.string().max(255),
           description: z.string().optional(),
-          value_amount: z.number().optional(),
+          value_amount: z.coerce.number().optional(),
           value_currency: z.string().max(10).default('VND')
         })
       )
@@ -173,7 +176,7 @@ const updateJobBody = z
     work_arrangements: z
       .object({
         is_remote_allowed: z.boolean().optional(),
-        remote_percentage: z.number().int().min(0).max(100).optional(),
+        remote_percentage: z.coerce.number().int().min(0).max(100).optional(),
         flexible_hours: z.boolean().optional(),
         travel_requirement: z.string().max(50).optional(),
         overtime_expected: z.boolean().optional(),

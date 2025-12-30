@@ -14,13 +14,32 @@ export const checkResourceOwnership = (
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id, role } = req.decoded_authorization as TokenPayload
-      const paramId = req.params.id || req.params.userId || req.params.jobId || req.params.profileId
+      const userRole = role as string
+      const paramId =
+        req.params.applicationId || req.params.id || req.params.userId || req.params.jobId || req.params.profileId
       const resourceId = paramId ?? (resourceType === 'user' ? user_id : undefined)
       if (!resourceId) {
         return next(new HttpError('Missing resource ID in URL parameters', HTTP_STATUS.BAD_REQUEST))
       }
 
-      if (role === UserRole.Admin) {
+      // Initial debug log to help trace ownership checks
+      console.log('checkResourceOwnership:start', {
+        resourceType,
+        resourceId,
+        userId: user_id,
+        userRole,
+        params: req.params,
+        path: req.path,
+        method: req.method
+      })
+
+      // Admin bypass all ownership checks
+      if (userRole === 'admin') {
+        console.log('checkResourceOwnership:admin_bypass', {
+          resourceType,
+          resourceId,
+          userId: user_id
+        })
         return next()
       }
 
@@ -29,7 +48,10 @@ export const checkResourceOwnership = (
       try {
         const cachedResult = await redisService.get(cacheKey)
         if (cachedResult === 'true') {
+          console.log('checkResourceOwnership:cache_hit', { cacheKey, resourceType, resourceId, userId: user_id })
           return next() // Ownership verified from cache
+        } else {
+          console.log('checkResourceOwnership:cache_miss', { cacheKey, resourceType, resourceId, userId: user_id })
         }
       } catch (error) {
         // Continue with DB check if cache fails
@@ -40,7 +62,7 @@ export const checkResourceOwnership = (
       switch (resourceType) {
         case 'user': {
           // User chỉ có thể truy cập thông tin của chính họ
-          if (user_id !== resourceId) {
+          if (userRole !== 'admin' && user_id !== resourceId) {
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
           break
@@ -48,13 +70,15 @@ export const checkResourceOwnership = (
 
         case 'profile': {
           // Kiểm tra profile thuộc về user hiện tại
-          const profile = await prisma.profiles.findUnique({
-            where: { id: resourceId },
-            select: { user_id: true }
-          })
+          if (userRole !== 'admin') {
+            const profile = await prisma.profiles.findUnique({
+              where: { id: resourceId },
+              select: { user_id: true }
+            })
 
-          if (!profile || profile.user_id !== user_id) {
-            return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
+            if (!profile || profile.user_id !== user_id) {
+              return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
+            }
           }
           break
         }
@@ -76,10 +100,11 @@ export const checkResourceOwnership = (
         }
 
         case 'application': {
-          // Dual ownership: Candidate owns via profile, Recruiter owns via job company
+          // Dual ownership: Candidate owns via profile, Recruiter owns via job company, Admin owns all
           const application = await prisma.applications.findUnique({
             where: { id: resourceId },
             select: {
+              id: true,
               profile_id: true,
               job_id: true,
               profiles: {
@@ -87,8 +112,15 @@ export const checkResourceOwnership = (
               },
               jobs: {
                 select: {
+                  id: true,
+                  title: true,
+                  company_id: true,
                   companies: {
-                    select: { recruiter_id: true }
+                    select: {
+                      id: true,
+                      name: true,
+                      recruiter_id: true
+                    }
                   }
                 }
               }
@@ -99,40 +131,95 @@ export const checkResourceOwnership = (
             return next(new HttpError('Application not found', HTTP_STATUS.NOT_FOUND))
           }
 
-          // Check dual ownership - chỉ Candidate và Recruiter mới có quyền truy cập application
+          // Validate application relationships
+          if (!application.job_id) {
+            return next(new HttpError('Application is not associated with any job', HTTP_STATUS.BAD_REQUEST))
+          }
+
+          if (!application.jobs) {
+            console.error('Application references non-existent job:', {
+              applicationId: resourceId,
+              jobId: application.job_id
+            })
+            return next(new HttpError('Application is associated with an invalid job', HTTP_STATUS.INTERNAL_SERVER_ERROR))
+          }
+
+          if (!application.jobs.companies) {
+            console.error('Job references non-existent company:', {
+              applicationId: resourceId,
+              jobId: application.jobs.id,
+              companyId: application.jobs.company_id
+            })
+            return next(new HttpError('Job is associated with an invalid company', HTTP_STATUS.INTERNAL_SERVER_ERROR))
+          }
+
+          if (!application.jobs.companies.recruiter_id) {
+            console.error('Company has no assigned recruiter:', {
+              applicationId: resourceId,
+              jobId: application.jobs.id,
+              companyId: application.jobs.companies.id
+            })
+            return next(new HttpError('Company has no assigned recruiter', HTTP_STATUS.INTERNAL_SERVER_ERROR))
+          }
+
+          // Check ownership based on role
           let hasAccess = false
 
-          if (role === UserRole.Candidate) {
+          if (userRole === 'candidate') {
             // Candidate owns application via their profile
             hasAccess = application.profiles?.user_id === user_id
-          } else if (role === UserRole.Recruiter) {
+          } else if (userRole === 'recruiter') {
             // Recruiter owns application via job's company
-            hasAccess = application.jobs?.companies?.recruiter_id === user_id
-          } else {
-            // Admin và các role khác không có quyền truy cập application
-            hasAccess = false
+            hasAccess = application.jobs.companies.recruiter_id === user_id
+          } else if (userRole === 'admin') {
+            // Admin can access all applications
+            hasAccess = true
           }
 
           if (!hasAccess) {
+            console.log('Application access denied:', {
+              applicationId: resourceId,
+              userId: user_id,
+              role,
+              jobTitle: application.jobs.title,
+              companyName: application.jobs.companies.name,
+              companyRecruiterId: application.jobs.companies.recruiter_id
+            })
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
+
+          console.log('Application ownership verified:', {
+            applicationId: resourceId,
+            jobTitle: application.jobs.title,
+            companyName: application.jobs.companies.name,
+            userRole: role
+          })
           break
         }
 
         case 'job': {
-          // Chỉ recruiter owner của company mới có thể sửa/xóa job
-          console.log(role)
-          if (role !== UserRole.Recruiter) {
+          // Only recruiter owner of company can modify/delete job, Admin can access all
+          if (userRole !== 'recruiter' && userRole !== 'admin') {
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
+          }
+
+          // Admin can access all jobs, skip ownership check
+          if (userRole === 'admin') {
+            break
           }
 
           const job = await prisma.jobs.findUnique({
             where: { id: resourceId },
             select: {
               id: true,
+              title: true,
               company_id: true,
               companies: {
-                select: { id: true, recruiter_id: true }
+                select: {
+                  id: true,
+                  name: true,
+                  recruiter_id: true
+                }
               }
             }
           })
@@ -141,7 +228,7 @@ export const checkResourceOwnership = (
             return next(new HttpError('Job not found', HTTP_STATUS.NOT_FOUND))
           }
 
-          // Kiểm tra job có company không
+          // Validate job relationships
           if (!job.company_id) {
             return next(new HttpError('Job is not associated with any company', HTTP_STATUS.BAD_REQUEST))
           }
@@ -157,48 +244,94 @@ export const checkResourceOwnership = (
           if (!job.companies.recruiter_id) {
             console.error('Company has no assigned recruiter:', {
               jobId: resourceId,
-              companyId: job.company_id
+              companyId: job.company_id,
+              companyName: job.companies.name
             })
             return next(new HttpError('Company has no assigned recruiter', HTTP_STATUS.INTERNAL_SERVER_ERROR))
           }
 
           if (job.companies.recruiter_id !== user_id) {
-            console.log('hi', job.companies.recruiter_id)
-            console.log('hello', user_id)
+            console.log('Job access denied:', {
+              jobId: resourceId,
+              jobTitle: job.title,
+              companyName: job.companies.name,
+              companyRecruiterId: job.companies.recruiter_id,
+              userId: user_id
+            })
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
+
+          console.log('Job ownership verified:', {
+            jobId: resourceId,
+            jobTitle: job.title,
+            companyName: job.companies.name
+          })
           break
         }
 
         case 'company': {
-          // Chỉ recruiter owner của company mới có thể sửa company
-          if (role !== UserRole.Recruiter) {
+          // Only recruiter owner of company can modify company, Admin can access all
+          if (userRole !== 'recruiter' && userRole !== 'admin') {
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
+          }
+
+          // Admin can access all companies, skip ownership check
+          if (userRole === 'admin') {
+            break
           }
 
           const company = await prisma.companies.findUnique({
             where: { id: resourceId },
-            select: { recruiter_id: true }
+            select: {
+              id: true,
+              name: true,
+              recruiter_id: true
+            }
           })
 
-          if (!company || company.recruiter_id !== user_id) {
+          if (!company) {
+            return next(new HttpError('Company not found', HTTP_STATUS.NOT_FOUND))
+          }
+
+          if (!company.recruiter_id) {
+            console.error('Company has no assigned recruiter:', {
+              companyId: resourceId,
+              companyName: company.name
+            })
+            return next(new HttpError('Company has no assigned recruiter', HTTP_STATUS.INTERNAL_SERVER_ERROR))
+          }
+
+          if (company.recruiter_id !== user_id) {
+            console.log('Company access denied:', {
+              companyId: resourceId,
+              companyName: company.name,
+              companyRecruiterId: company.recruiter_id,
+              userId: user_id
+            })
             return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
           }
+
+          console.log('Company ownership verified:', {
+            companyId: resourceId,
+            companyName: company.name
+          })
           break
         }
 
         case 'saved_job': {
           // User chỉ có thể truy cập saved jobs của profile của họ
-          const savedJob = await prisma.saved_jobs.findUnique({
-            where: { id: resourceId },
-            select: {
-              profile_id: true,
-              profiles: { select: { user_id: true } }
-            }
-          })
+          if (userRole !== 'admin') {
+            const savedJob = await prisma.saved_jobs.findUnique({
+              where: { id: resourceId },
+              select: {
+                profile_id: true,
+                profiles: { select: { user_id: true } }
+              }
+            })
 
-          if (!savedJob || savedJob.profiles.user_id !== user_id) {
-            return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
+            if (!savedJob || savedJob.profiles.user_id !== user_id) {
+              return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
+            }
           }
           break
         }
@@ -234,11 +367,11 @@ export const checkCompanySubscriptionOwnership = async (req: Request, res: Respo
       return next(new HttpError('Missing subscription ID in URL parameters', HTTP_STATUS.BAD_REQUEST))
     }
 
-    if (role === UserRole.Admin) {
+    if (role === 'admin') {
       return next()
     }
 
-    if (role !== UserRole.Recruiter) {
+    if (role !== 'recruiter') {
       return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
     }
 
@@ -278,10 +411,11 @@ export const checkPaymentOwnership = async (req: Request, res: Response, next: N
       return next(new HttpError('Missing payment ID in URL parameters', HTTP_STATUS.BAD_REQUEST))
     }
 
-    if (role === UserRole.Admin) {
+    if (role === 'admin') {
       return next()
     }
 
+    // Note: This function references a payments table that doesn't exist in current schema
     const payment = await prisma.payments.findUnique({
       where: { id: paymentId },
       select: {

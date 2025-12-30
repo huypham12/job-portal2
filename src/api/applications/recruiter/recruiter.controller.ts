@@ -71,9 +71,9 @@ export class RecruiterApplicationController {
   getApplicationTimeline = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { applicationId } = req.params
 
-      const timeline = await this.recruiterService.getApplicationTimeline(user_id, id)
+      const timeline = await this.recruiterService.getApplicationTimeline(user_id, applicationId)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -91,13 +91,70 @@ export class RecruiterApplicationController {
   getApplicationCV = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { applicationId } = req.params
 
-      const cv = await this.recruiterService.getApplicationCV(user_id, id)
+      const cv = await this.recruiterService.getApplicationCV(user_id, applicationId)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
         data: cv
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * GET /api/applications/:id
+   * Get full application details (Recruiter)
+   */
+  getApplicationById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId } = req.params
+
+      const result = await this.recruiterService.getApplicationCV(user_id, applicationId)
+
+      // Normalize to a shape similar to candidate-facing detail to keep frontend compatibility
+      const responsePayload = {
+        id: result.application.id,
+        applied_at: result.application.applied_at,
+        status: result.application.status,
+        metadata: { notes: result.application.notes || [] },
+        jobs: {
+          title: result.application.job_title,
+          companies: { name: result.application.company_name }
+        },
+        profiles: {
+          id: result.candidate.profile_id,
+          user_id: result.candidate.user_id,
+          full_name: result.candidate.full_name,
+          display_name: result.candidate.display_name,
+          avatar_url: result.candidate.avatar_url,
+          headline: result.candidate.headline,
+          years_of_experience: result.candidate.years_of_experience,
+          location_text: result.candidate.location_text,
+          linkedin_url: result.candidate.social_links?.linkedin_url,
+          github_url: result.candidate.social_links?.github_url,
+          personal_website: result.candidate.social_links?.personal_website,
+          users: { email: result.candidate.email },
+          experiences: result.candidate.experiences || [],
+          educations: result.candidate.educations || [],
+          skills: (result.candidate.skills || []).map((s: any) => ({
+            skills: { id: s.id, name: s.name, category: s.category },
+            proficiency: s.proficiency,
+            level: s.level
+          })),
+          certifications: result.candidate.certifications || [],
+          awards: result.candidate.awards || []
+        },
+        resumes: result.resume || [],
+        application_documents: result.documents || []
+      }
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: responsePayload
       })
     } catch (error) {
       next(error)
@@ -111,10 +168,10 @@ export class RecruiterApplicationController {
   updateApplicationStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { applicationId } = req.params
       const data = req.body as UpdateStatusDTO['body']
 
-      const result = await this.recruiterService.updateApplicationStatus(user_id, id, data)
+      const result = await this.recruiterService.updateApplicationStatus(user_id, applicationId, data)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -133,10 +190,10 @@ export class RecruiterApplicationController {
   updateApplicationStage = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { applicationId } = req.params
       const data = req.body as UpdateStageDTO['body']
 
-      const result = await this.recruiterService.updateApplicationStage(user_id, id, data)
+      const result = await this.recruiterService.updateApplicationStage(user_id, applicationId, data)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -155,10 +212,10 @@ export class RecruiterApplicationController {
   createApplicationStage = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { applicationId } = req.params
       const data = req.body as CreateStageDTO['body']
 
-      const result = await this.recruiterService.createApplicationStage(user_id, id, data)
+      const result = await this.recruiterService.createApplicationStage(user_id, applicationId, data)
 
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
@@ -177,10 +234,10 @@ export class RecruiterApplicationController {
   addApplicationNotes = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { applicationId } = req.params
       const data = req.body as AddNotesDTO['body']
 
-      const result = await this.recruiterService.addApplicationNotes(user_id, id, data)
+      const result = await this.recruiterService.addApplicationNotes(user_id, applicationId, data)
 
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
@@ -199,10 +256,10 @@ export class RecruiterApplicationController {
   contactCandidate = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { applicationId } = req.params
       const data = req.body as ContactCandidateDTO['body']
 
-      const result = await this.recruiterService.contactCandidate(user_id, id, data)
+      const result = await this.recruiterService.contactCandidate(user_id, applicationId, data)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,

@@ -19,15 +19,16 @@ import {
   authenticateRefreshToken,
   verifiedUserValidator
 } from '@/middleware/verify.middleware'
+import { authRateLimit } from '@/middleware/rate-limit.middleware'
 
 const authRouter = Router()
 const emailService = new EmailService()
 const authService = new AuthService(emailService)
 const authController = new AuthController(authService, emailService)
 
-authRouter.post('/register', registerValidator, wrapController(authController.register))
+authRouter.post('/register', authRateLimit, registerValidator, wrapController(authController.register))
 
-authRouter.post('/login', loginValidator, wrapController(authController.login))
+authRouter.post('/login', authRateLimit, loginValidator, wrapController(authController.login))
 
 authRouter.post(
   '/logout',
@@ -54,10 +55,11 @@ authRouter.post(
   wrapController(authController.verifyEmail)
 )
 
-authRouter.post('/forgot-password', wrapController(authController.forgotPassword))
+authRouter.post('/forgot-password', authRateLimit, wrapController(authController.forgotPassword))
 // khi người dùng click vào link, link đó là của frontend, sau đó frontend sẽ gọi đến api này để xác thực token (truyền token trong body)
 authRouter.post(
   '/verify-forgot-password',
+  authRateLimit,
   authenticateForgotPasswordToken,
   wrapController(authController.verifyForgotPasswordToken)
 )

@@ -262,14 +262,7 @@ router.get(
  * POST /api/jobs
  * Create a new job posting
  */
-router.post(
-  '/',
-  authenticateAccessToken,
-  recruiter,
-  checkResourceOwnership('company'),
-  createJobValidator,
-  jobController.createJob
-)
+router.post('/', authenticateAccessToken, recruiter, createJobValidator, jobController.createJob)
 
 /**
  * GET /api/jobs/my-jobs

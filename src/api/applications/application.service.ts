@@ -13,8 +13,20 @@ export class ApplicationService {
   /**
    * Create a new job application
    */
-  async createApplication(profileId: string, data: CreateApplicationDTO) {
+  async createApplication(userId: string, data: CreateApplicationDTO) {
     const { job_id, resume_id, metadata } = data
+
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true, full_name: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
 
     // Check if job exists and is active
     const job = await prisma.jobs.findUnique({
@@ -66,15 +78,7 @@ export class ApplicationService {
       if (resume.source_type === 'created' && !resume.file_url) {
         try {
           const resumeService = new ResumeService()
-          // Lấy user_id từ profile để generate PDF
-          const profile = await prisma.profiles.findUnique({
-            where: { id: profileId },
-            select: { user_id: true }
-          })
-
-          if (profile) {
-            await resumeService.ensureResumePdfForApplication(profile.user_id, resume_id)
-          }
+          await resumeService.ensureResumePdfForApplication(userId, resume_id)
         } catch (error) {
           // Log error nhưng không block application creation
           // PDF sẽ được generate khi recruiter xem hoặc user download
@@ -82,14 +86,6 @@ export class ApplicationService {
         }
       }
     }
-
-    // Get profile info for notification
-    const profile = await prisma.profiles.findUnique({
-      where: { id: profileId },
-      select: {
-        full_name: true
-      }
-    })
 
     // Create application
     const application = await prisma.applications.create({
@@ -129,7 +125,7 @@ export class ApplicationService {
     })
 
     // Send notification to recruiter
-    if (job.companies?.recruiter_id && profile?.full_name) {
+    if (job.companies?.recruiter_id && profile.full_name) {
       try {
         await NotificationHelper.notifyApplicationReceived({
           recruiterId: job.companies.recruiter_id,
@@ -194,9 +190,20 @@ export class ApplicationService {
   /**
    * Get list of applications for current user with pagination and filters
    */
-  async getApplications(profileId: string, filters: GetApplicationsDTO) {
+  async getApplications(userId: string, filters: GetApplicationsDTO) {
     const { page = 1, limit = 20, status, sort_by = 'applied_at', order = 'desc' } = filters
 
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
     const skip = (page - 1) * limit
 
     // Build where clause
@@ -268,7 +275,19 @@ export class ApplicationService {
   /**
    * Get application by ID with full details
    */
-  async getApplicationById(profileId: string, applicationId: string) {
+  async getApplicationById(userId: string, applicationId: string) {
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
+
     const application = await prisma.applications.findFirst({
       where: {
         id: applicationId,
@@ -355,7 +374,19 @@ export class ApplicationService {
   /**
    * Get application stages history
    */
-  async getApplicationStages(profileId: string, applicationId: string) {
+  async getApplicationStages(userId: string, applicationId: string) {
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
+
     // Verify application belongs to user
     const application = await prisma.applications.findFirst({
       where: {
@@ -404,7 +435,19 @@ export class ApplicationService {
   /**
    * Submit candidate feedback for interview stage
    */
-  async submitStageFeedback(profileId: string, applicationId: string, stageId: string, feedback: string) {
+  async submitStageFeedback(userId: string, applicationId: string, stageId: string, feedback: string) {
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
+
     // Verify application belongs to user
     const application = await prisma.applications.findFirst({
       where: {
@@ -444,7 +487,19 @@ export class ApplicationService {
   /**
    * Get application documents
    */
-  async getApplicationDocuments(profileId: string, applicationId: string) {
+  async getApplicationDocuments(userId: string, applicationId: string) {
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
+
     // Verify application belongs to user
     const application = await prisma.applications.findFirst({
       where: {
@@ -484,11 +539,23 @@ export class ApplicationService {
    * Upload additional document for application
    */
   async uploadApplicationDocument(
-    profileId: string,
+    userId: string,
     applicationId: string,
     documentType: string,
     file: Express.Multer.File
   ) {
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
+
     // Verify application belongs to user
     const application = await prisma.applications.findFirst({
       where: {
@@ -534,7 +601,19 @@ export class ApplicationService {
   /**
    * Withdraw application
    */
-  async withdrawApplication(profileId: string, applicationId: string) {
+  async withdrawApplication(userId: string, applicationId: string) {
+    // Get profile for the user
+    const profile = await prisma.profiles.findUnique({
+      where: { user_id: userId },
+      select: { id: true, full_name: true }
+    })
+
+    if (!profile) {
+      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const profileId = profile.id
+
     // Verify application belongs to user
     const application = await prisma.applications.findFirst({
       where: {

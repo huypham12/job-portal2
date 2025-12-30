@@ -12,6 +12,7 @@ import {
   resumeRouter,
   jobRouter,
   skillRouter,
+  categoryRouter,
   savedJobRouter,
   applicationRouter,
   connectionInterestRouter,
@@ -146,6 +147,7 @@ const main = async () => {
     app.use('/api/uploads', uploadRouter)
     app.use('/api/resumes', resumeRouter)
     app.use('/api/skills', skillRouter)
+    app.use('/api/categories', categoryRouter)
     app.use('/api/saved-jobs', savedJobRouter)
     app.use('/api/applications', applicationRouter)
     app.use('/api/connection-interests', connectionInterestRouter)

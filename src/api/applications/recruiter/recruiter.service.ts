@@ -456,6 +456,16 @@ export class RecruiterApplicationService {
         applied_at: true,
         status: true,
         metadata: true,
+        jobs: {
+          select: {
+            title: true,
+            companies: {
+              select: {
+                name: true
+              }
+            }
+          }
+        },
         profiles: {
           select: {
             id: true,
@@ -611,7 +621,9 @@ export class RecruiterApplicationService {
         id: application!.id,
         applied_at: application!.applied_at,
         status: application!.status,
-        notes: (application!.metadata as any)?.notes || []
+        notes: (application!.metadata as any)?.notes || [],
+        job_title: application!.jobs?.title || null,
+        company_name: application!.jobs?.companies?.name || null
       },
       candidate,
       resume: application!.resumes,

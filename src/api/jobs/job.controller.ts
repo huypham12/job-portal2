@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import { JobService } from './job.service'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
+import { HttpError } from '@/shared/common/http-error'
+import { MESSAGES } from '@/shared/constants/messages'
 import {
   CreateJobDTO,
   UpdateJobDTO,
@@ -30,9 +32,32 @@ export class JobController {
    */
   createJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const userId = req.decoded_authorization!.user_id
+      const role = req.decoded_authorization!.role
       const data: CreateJobDTO = req.validated!.body
 
-      // Company ownership is verified by middleware, so we can use data.company_id directly
+      // Verify company ownership for job creation
+      // Admin bypass ownership check
+      if (role !== 'admin') {
+        const company = await prisma.companies.findUnique({
+          where: { id: data.company_id },
+          select: {
+            id: true,
+            name: true,
+            recruiter_id: true,
+            is_verified: true
+          }
+        })
+
+        if (!company) {
+          throw new HttpError('Company not found', HTTP_STATUS.NOT_FOUND)
+        }
+
+        if (company.recruiter_id !== userId) {
+          throw new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN)
+        }
+      }
+
       const job = await this.jobService.createJob(data.company_id, data)
 
       res.status(HTTP_STATUS.CREATED).json({

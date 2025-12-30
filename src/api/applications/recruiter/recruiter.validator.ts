@@ -163,7 +163,7 @@ export type JobIdParamDTO = z.infer<(typeof JobIdParamSchema)['params']>
  * Validator for updating application status
  */
 const UpdateStatusParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
 })
 
 const UpdateStatusBodySchema = z.object({
@@ -185,7 +185,7 @@ export type UpdateStatusDTO = {
  * Validator for updating application stage
  */
 const UpdateStageParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
 })
 
 const UpdateStageBodySchema = z.object({
@@ -236,7 +236,7 @@ export type UpdateStageDTO = {
  * Validator for creating new stage
  */
 const CreateStageParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
 })
 
 const CreateStageBodySchema = z.object({
@@ -303,7 +303,7 @@ export type CreateStageDTO = {
  * Validator for adding notes
  */
 const AddNotesParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
 })
 
 const AddNotesBodySchema = z.object({
@@ -324,7 +324,7 @@ export type AddNotesDTO = {
  * Validator for contacting candidate
  */
 const ContactCandidateParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
 })
 
 const ContactCandidateBodySchema = z.object({
@@ -376,7 +376,7 @@ export type BulkUpdateDTO = z.infer<typeof BulkUpdateBodySchema>
  */
 export const ApplicationIdParamSchema = {
   params: z.object({
-    id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+    applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
   })
 }
 
@@ -459,7 +459,7 @@ export type GetShortlistedDTO = z.infer<typeof GetShortlistedQuerySchema>
  */
 export const GetApplicationTimelineSchema = {
   params: z.object({
-    id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+    applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
   })
 }
 

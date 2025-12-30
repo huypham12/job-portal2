@@ -59,7 +59,7 @@ export type GetApplicationsDTO = z.infer<typeof GetApplicationsQuerySchema>
  * Validator for UUID params (used for getting application by ID, stages, documents, etc.)
  */
 const UUIDParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
 })
 
 export const UUIDParamSchema = {
@@ -72,7 +72,7 @@ export type UUIDParamDTO = z.infer<typeof UUIDParamsSchema>
  * Validator for uploading application document
  */
 const UploadDocumentParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' })
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' })
 })
 
 const UploadDocumentBodySchema = z.object({
@@ -96,7 +96,7 @@ export type UploadDocumentDTO = {
  * Validator for submitting candidate feedback for interview stage
  */
 const StageFeedbackParamsSchema = z.object({
-  id: z.string().uuid({ message: 'Application ID must be a valid UUID' }),
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' }),
   stageId: z.string().uuid({ message: 'Stage ID must be a valid UUID' })
 })
 

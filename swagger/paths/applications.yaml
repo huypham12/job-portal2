@@ -1,7 +1,7 @@
 # ============================================
 # APPLICATION ENDPOINTS (Candidate)
 # ============================================
-/applications:
+/applications/candidate:
   post:
     tags: [applications]
     summary: Create application (Candidate)
@@ -44,7 +44,7 @@
       '200': { description: OK }
       '401': { description: Unauthorized }
 
-/applications/{id}:
+/applications/candidate/{id}:
   get:
     tags: [applications]
     summary: Get application by id
@@ -71,7 +71,7 @@
       '200': { description: Withdrawn }
       '401': { description: Unauthorized }
 
-/applications/{id}/stages:
+/applications/candidate/{id}/stages:
   get:
     tags: [applications]
     summary: Get application stages
@@ -85,7 +85,7 @@
       '200': { description: OK }
       '401': { description: Unauthorized }
 
-/applications/{id}/documents:
+/applications/candidate/{id}/documents:
   get:
     tags: [applications]
     summary: Get application documents
@@ -125,10 +125,42 @@
       '400': { description: Validation error }
       '401': { description: Unauthorized }
 
+/applications/candidate/{id}/stages/{stageId}/feedback:
+  patch:
+    tags: [applications]
+    summary: Submit candidate feedback for interview stage
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+        description: Application ID
+      - in: path
+        name: stageId
+        required: true
+        schema: { type: string, format: uuid }
+        description: Stage ID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [candidate_feedback]
+            properties:
+              candidate_feedback:
+                type: string
+                description: Candidate feedback for the interview stage
+    responses:
+      '200': { description: Feedback submitted }
+      '400': { description: Validation error }
+      '401': { description: Unauthorized }
+
 # ============================================
 # APPLICATION ENDPOINTS (Recruiter)
 # ============================================
-/applications/job/{jobId}:
+/applications/recruiter/job/{jobId}:
   get:
     tags: [applications]
     summary: List applications for a job (Recruiter)
@@ -169,7 +201,7 @@
 # ============================================
 # RECRUITER EXTRA FEATURES (shortlist, compare, shortlist list)
 # ============================================
-/applications/shortlist:
+/applications/recruiter/shortlist:
   post:
     tags: [applications]
     summary: Add or remove candidate from shortlist
@@ -197,7 +229,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/shortlisted:
+/applications/recruiter/shortlisted:
   get:
     tags: [applications]
     summary: Get shortlisted candidates
@@ -215,7 +247,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/compare:
+/applications/recruiter/compare:
   post:
     tags: [applications]
     summary: Compare multiple candidates side-by-side
@@ -241,7 +273,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/:id/timeline:
+/applications/recruiter/:id/timeline:
   # Note: certain routers expose /applications/:id/timeline under recruiter routes.
   # Keep this here for completeness (alias of recruiter timeline endpoint).
   get:
@@ -258,7 +290,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/job/{jobId}/stats:
+/applications/recruiter/job/{jobId}/stats:
   get:
     tags: [applications]
     summary: Get job application stats (Recruiter)
@@ -273,7 +305,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/bulk-update:
+/applications/recruiter/bulk-update:
   post:
     tags: [applications]
     summary: Bulk update applications (Recruiter)
@@ -289,7 +321,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/{id}/cv:
+/applications/recruiter/{id}/cv:
   get:
     tags: [applications]
     summary: View application CV (Recruiter)
@@ -304,7 +336,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/{id}/status:
+/applications/recruiter/{id}/status:
   patch:
     tags: [applications]
     summary: Update application status (Recruiter)
@@ -325,7 +357,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/{id}/stage:
+/applications/recruiter/{id}/stage:
   patch:
     tags: [applications]
     summary: Update application stage (Recruiter)
@@ -365,7 +397,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/{id}/notes:
+/applications/recruiter/{id}/notes:
   post:
     tags: [applications]
     summary: Add application note (Recruiter)
@@ -386,7 +418,7 @@
       '401': { description: Unauthorized }
       '403': { description: Forbidden }
 
-/applications/{id}/contact:
+/applications/recruiter/{id}/contact:
   post:
     tags: [applications]
     summary: Contact candidate (Recruiter)

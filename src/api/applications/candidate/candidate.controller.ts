@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { ApplicationService } from './application.service'
+import { ApplicationService } from '../application.service'
 import { HTTP_STATUS } from '@/shared/constants/httpStatus'
-import { CreateApplicationDTO, GetApplicationsDTO } from './application.validator'
+import { CreateApplicationDTO, GetApplicationsDTO } from '../application.validator'
 import { TokenPayload } from '@/types/token-payload.type'
 
-export class ApplicationController {
+export class CandidateApplicationController {
   private applicationService: ApplicationService
 
   constructor() {
@@ -17,10 +17,10 @@ export class ApplicationController {
    */
   createApplication = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
+      const { user_id } = req.decoded_authorization as TokenPayload
       const data = req.body as CreateApplicationDTO
 
-      const application = await this.applicationService.createApplication(profile_id, data)
+      const application = await this.applicationService.createApplication(user_id, data)
 
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
@@ -38,10 +38,10 @@ export class ApplicationController {
    */
   getApplications = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
+      const { user_id } = req.decoded_authorization as TokenPayload
       const filters = req.validated?.query as GetApplicationsDTO
 
-      const result = await this.applicationService.getApplications(profile_id, filters)
+      const result = await this.applicationService.getApplications(user_id, filters)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -58,10 +58,9 @@ export class ApplicationController {
    */
   getApplicationById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
-
-      const application = await this.applicationService.getApplicationById(profile_id, id)
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId } = req.params
+      const application = await this.applicationService.getApplicationById(user_id, applicationId)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -78,10 +77,10 @@ export class ApplicationController {
    */
   getApplicationStages = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId } = req.params
 
-      const stages = await this.applicationService.getApplicationStages(profile_id, id)
+      const stages = await this.applicationService.getApplicationStages(user_id, applicationId)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -98,10 +97,10 @@ export class ApplicationController {
    */
   getApplicationDocuments = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId } = req.params
 
-      const documents = await this.applicationService.getApplicationDocuments(profile_id, id)
+      const documents = await this.applicationService.getApplicationDocuments(user_id, applicationId)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -118,8 +117,8 @@ export class ApplicationController {
    */
   uploadDocument = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId } = req.params
       const { document_type } = req.body
       const file = req.file
 
@@ -133,7 +132,12 @@ export class ApplicationController {
         })
       }
 
-      const document = await this.applicationService.uploadApplicationDocument(profile_id, id, document_type, file)
+      const document = await this.applicationService.uploadApplicationDocument(
+        user_id,
+        applicationId,
+        document_type,
+        file
+      )
 
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
@@ -151,10 +155,10 @@ export class ApplicationController {
    */
   withdrawApplication = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
-      const { id } = req.params
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId } = req.params
 
-      const application = await this.applicationService.withdrawApplication(profile_id, id)
+      const application = await this.applicationService.withdrawApplication(user_id, applicationId)
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -172,11 +176,15 @@ export class ApplicationController {
    */
   submitStageFeedback = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { profile_id } = req.decoded_authorization as TokenPayload
-      const { id, stageId } = req.params
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId, stageId } = req.params
       const { candidate_feedback } = req.body
-
-      const stage = await this.applicationService.submitStageFeedback(profile_id, id, stageId, candidate_feedback)
+      const stage = await this.applicationService.submitStageFeedback(
+        user_id,
+        applicationId,
+        stageId,
+        candidate_feedback
+      )
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
