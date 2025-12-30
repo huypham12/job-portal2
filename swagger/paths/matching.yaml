@@ -2,25 +2,103 @@
 # MATCHING ENDPOINTS
 # ============================================
 /matching/job/{jobId}/candidates:
-  post:
+  get:
     tags: [matching]
-    summary: Match candidates for a job
+    summary: Get candidates automatically matched to a job based on job requirements
+    description: Returns candidates that best match the job posting requirements using intelligent matching algorithms. No manual filters needed - matching is based on job content analysis.
     parameters:
       - in: path
         name: jobId
         required: true
         schema: { type: string, format: uuid }
+        description: Job ID to find matching candidates for
+      - in: query
+        name: size
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+        description: Maximum number of candidates to return
     responses:
-      '200': { description: OK }
+      '200':
+        description: Successfully returned matched candidates
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jobId:
+                  type: string
+                  description: The job ID that was matched
+                total:
+                  type: integer
+                  description: Total number of matched candidates
+                candidates:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Candidate profile ID
+                      score_percent:
+                        type: number
+                        description: Match score as percentage (0-100)
+                      explanation:
+                        type: object
+                        description: Detailed breakdown of why this candidate matches
+                      _source:
+                        type: object
+                        description: Full candidate profile data
 
 /matching/profile/{profileId}/jobs:
-  post:
+  get:
     tags: [matching]
-    summary: Match jobs for a candidate profile
+    summary: Get jobs automatically matched to a candidate profile
+    description: Returns jobs that best match the candidate's profile and preferences using intelligent matching algorithms.
     parameters:
       - in: path
         name: profileId
         required: true
         schema: { type: string, format: uuid }
+        description: Candidate profile ID to find matching jobs for
+      - in: query
+        name: size
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+        description: Maximum number of jobs to return
     responses:
-      '200': { description: OK }
+      '200':
+        description: Successfully returned matched jobs
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profileId:
+                  type: string
+                  description: The profile ID that was matched
+                total:
+                  type: integer
+                  description: Total number of matched jobs
+                jobs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Job ID
+                      score_percent:
+                        type: number
+                        description: Match score as percentage (0-100)
+                      explanation:
+                        type: object
+                        description: Detailed breakdown of why this job matches
+                      _source:
+                        type: object
+                        description: Full job data

@@ -1076,9 +1076,9 @@ export const elasticsearchService = {
       postedWithinDays, sort, page = 1, size = 20
     } = params
 
-    const mustClauses = []
-    const filterClauses = []
-    const shouldClauses = []
+    const mustClauses: any[] = []
+    const filterClauses: any[] = []
+    const shouldClauses: any[] = []
 
     // Full-text search với Vietnamese analyzer
     if (q?.trim()) {
@@ -1285,11 +1285,35 @@ export const elasticsearchService = {
    * Enhanced candidate-job matching với job requirements extraction
    */
   async matchCandidatesForJobEnhanced(jobId: string, size = 50) {
-    // First, get job details with all requirements
-    const job = await this.getById({
+    // First, get job details with all requirements.
+    // Note: documents may be indexed with a prefixed id (`job_<id>`). Try direct id first,
+    // then fall back to searching for `job_id` field to be robust across index formats.
+    let job = await this.getById({
       index: this.getIndexName('jobs'),
       id: jobId
     })
+
+    if (!job) {
+      // Fallback: search by job_id field
+      try {
+        const fallbackResp = await this.search({
+          index: this.getIndexName('jobs'),
+          query: {
+            bool: {
+              must: [{ term: { job_id: jobId } }]
+            }
+          },
+          size: 1
+        })
+        const hit = (fallbackResp.hits && fallbackResp.hits[0]) || null
+        if (hit) {
+          job = hit._source
+          console.log(`🔁 [ES] Fallback found job doc for jobId=${jobId} via job_id field`)
+        }
+      } catch (e) {
+        console.warn(`🔁 [ES] Fallback search for job_id ${jobId} failed:`, e)
+      }
+    }
 
     if (!job) return { candidates: [] }
 
@@ -1462,7 +1486,80 @@ export const elasticsearchService = {
       sort: [{ _score: 'desc' }]
     })
 
-    return this.normalizeSearchResponse(response)
+    const normalized = this.normalizeSearchResponse(response)
+
+    // If strict query returned no hits, perform a relaxed fallback search to
+    // avoid showing empty results for recruiters. The relaxed query converts
+    // strictly-required skill/experience clauses into SHOULD clauses so we
+    // can surface partially-matching candidates.
+    if (normalized && (normalized.total || 0) === 0) {
+      try {
+        // Build a relaxed version of the query: remove hard must skill/experience
+        // requirements while keeping basic filters like is_looking_for_job.
+        const relaxedMust: any[] = []
+        const relaxedShould: any[] = []
+
+        // Keep the 'is_looking_for_job' filter if present
+        // (we ensure only active/available candidates are returned)
+        relaxedMust.push({ term: { is_looking_for_job: true } })
+
+        // Move existing shouldClauses into relaxedShould
+        if (shouldClauses.length > 0) {
+          relaxedShould.push(...shouldClauses)
+        }
+
+        // If job had skills, add a looser multi_match on skills fields
+        if (job.skills?.length > 0) {
+          const skillNames = job.skills.map((s: any) => s.name || s)
+          relaxedShould.push({
+            multi_match: {
+              query: skillNames.join(' '),
+              fields: ['skills.name^2', 'skills_flat^1.5', 'bio', 'headline'],
+              fuzziness: 'AUTO'
+            }
+          })
+        }
+
+        // Loosen experience constraint to a SHOULD clause (prefer candidates
+        // with similar years but don't require it)
+        if (job.experience_level || job.min_experience_years) {
+          const minYears = job.min_experience_years || (job.experience_level * 1.5)
+          relaxedShould.push({
+            range: {
+              years_of_experience: {
+                gte: Math.max(0, minYears - 2),
+                lte: minYears + 3
+              }
+            }
+          })
+        }
+
+        const relaxedQueryBody = {
+          bool: {
+            must: relaxedMust,
+            should: relaxedShould,
+            minimum_should_match: relaxedShould.length > 0 ? 1 : 0
+          }
+        }
+
+        const fallbackResp = await this.search({
+          index: this.getIndexName('profiles'),
+          query: relaxedQueryBody,
+          from: 0,
+          size,
+          sort: [{ _score: 'desc' }]
+        })
+
+        const fallbackNorm = this.normalizeSearchResponse(fallbackResp)
+        console.log(`🔁 [ES] Relaxed candidate matching returned ${fallbackNorm.total} hits for jobId=${jobId}`)
+        return fallbackNorm
+      } catch (e) {
+        console.warn(`🔁 [ES] Relaxed fallback search for job ${jobId} failed:`, e)
+        return normalized
+      }
+    }
+
+    return normalized
   },
 
   /**
@@ -1575,7 +1672,7 @@ export const elasticsearchService = {
 
           await client.indices.create({
             index: indexName,
-            body: fullMapping
+            body: fullMapping as any
           })
           console.log(`✅ Created index: ${indexName}`)
         } else {

@@ -285,7 +285,7 @@ export class ElasticsearchSyncService {
           educations: true,
           experiences: true,
           certifications: true,
-          locations: {
+          location: {
             include: {
               parent: true // Include parent province for location hierarchy
             }
@@ -746,7 +746,7 @@ export class ElasticsearchSyncService {
       orderBy: { updated_at: 'desc' }
     })
 
-    return records.map(r => r.id)
+    return records.map((r: { id: string }) => r.id)
   }
 
   private async getSampleIdsFromES(type: string, limit: number): Promise<string[]> {

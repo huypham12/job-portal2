@@ -458,3 +458,40 @@ export type PopularCompaniesRequestDto = z.infer<typeof PopularCompaniesRequestS
 export type CompanySearchResponseDto = z.infer<typeof CompanySearchResponseSchema>
 export type CompanySuggestionsResponseDto = z.infer<typeof CompanySuggestionsResponseSchema>
 export type PopularCompaniesResponseDto = z.infer<typeof PopularCompaniesResponseSchema>
+
+// Location Search DTOs
+export const LocationSearchRequestSchema = z.object({
+  q: z.string().min(1, 'Query is required'),
+  type: z.enum(['province', 'district']).optional(),
+  parentId: z.string().uuid().optional(),
+  size: z.number().int().min(1).max(50).default(20)
+})
+
+export const LocationSearchResponseSchema = z.object({
+  total: z.number().int(),
+  took_ms: z.number().int(),
+  hits: z.array(z.any())
+})
+
+// Skills Search DTOs
+export const SkillsSearchRequestSchema = z.object({
+  q: z.string().min(1, 'Query is required'),
+  category: z.string().optional(),
+  size: z.number().int().min(1).max(50).default(20)
+})
+
+export const SkillsSearchResponseSchema = z.object({
+  total: z.number().int(),
+  took_ms: z.number().int(),
+  hits: z.array(z.any())
+})
+
+// Validators
+export const searchLocationsValidator = zodValidate({ query: LocationSearchRequestSchema })
+export const searchSkillsValidator = zodValidate({ query: SkillsSearchRequestSchema })
+
+// Export types
+export type LocationSearchRequestDto = z.infer<typeof LocationSearchRequestSchema>
+export type LocationSearchResponseDto = z.infer<typeof LocationSearchResponseSchema>
+export type SkillsSearchRequestDto = z.infer<typeof SkillsSearchRequestSchema>
+export type SkillsSearchResponseDto = z.infer<typeof SkillsSearchResponseSchema>

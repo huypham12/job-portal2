@@ -78,8 +78,10 @@ const main = async () => {
       'http://localhost:3000',
       'http://localhost:5173',
       'http://localhost:5174',
+      'http://localhost:5175',
       'http://127.0.0.1:5173',
       'http://127.0.0.1:5174',
+      'http://127.0.0.1:5175',
       ...(envConfig.cors.origin || [])
     ].filter(Boolean)
 
@@ -170,6 +172,7 @@ const main = async () => {
 
     // Rollout monitoring endpoint
     app.get('/api/rollout/status', (req: Request, res: Response) => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { RolloutMonitor } = require('./shared/utils/rollout-monitoring.util')
       res.status(200).json({
         timestamp: new Date().toISOString(),
@@ -197,8 +200,8 @@ const main = async () => {
     // // await elasticsearchService.initializeIndices()
     // console.log('Elasticsearch initialized successfully')
 
-    // Create HTTP server
-    const server = createServer(app)
+    // Create HTTP server and assign to outer `server` variable so graceful shutdown works
+    server = createServer(app)
 
     // Initialize Socket.IO
     socketService.initialize(server)

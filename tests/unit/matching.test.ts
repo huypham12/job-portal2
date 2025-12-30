@@ -8,6 +8,7 @@ export async function testMatchingService() {
   const origGetById = elasticsearchService.getById
   const origSearch = elasticsearchService.search
   const origSearchJobs = elasticsearchService.searchJobs
+  const origMatchCandidatesForJobEnhanced = (elasticsearchService as any).matchCandidatesForJobEnhanced
 
   try {
     // Mock getById for job lookup
@@ -66,6 +67,35 @@ export async function testMatchingService() {
       return { hits: [] }
     }
 
+    // Mock matchCandidatesForJobEnhanced for job-candidate matching
+    ;(elasticsearchService as any).matchCandidatesForJobEnhanced = async () => {
+      return {
+        hits: [
+          {
+            id: 'p1',
+            _score: 5.0,
+            _source: {
+              skills: ['nodejs'],
+              years_of_experience: 4,
+              location_id: 'hanoi',
+              last_active_at: new Date().toISOString()
+            }
+          },
+          {
+            id: 'p2',
+            _score: 2.0,
+            _source: {
+              skills: ['python'],
+              years_of_experience: 2,
+              location_id: 'hanoi',
+              last_active_at: new Date().toISOString()
+            }
+          }
+        ],
+        total: 2
+      }
+    }
+
     // Mock searchJobs for profile-job matching
     ;(elasticsearchService as any).searchJobs = async () => {
       return {
@@ -89,22 +119,25 @@ export async function testMatchingService() {
       }
     }
 
-    const candResp = await matchingService.matchCandidatesForJob('job-1', 10, {})
+    const candResp = await matchingService.matchCandidatesForJob('job-1', 10)
     assert.ok(candResp && Array.isArray((candResp as any).candidates))
     assert.ok((candResp as any).candidates.length > 0)
     for (const c of (candResp as any).candidates) {
       assert.ok(typeof c.score_percent === 'number')
-      assert.ok(Number.isInteger(c.score_percent))
+      assert.ok(c.score_percent >= 0 && c.score_percent <= 100) // Allow decimal values
       assert.ok(c.explanation && typeof c.explanation === 'object')
+      assert.ok('overall_score' in c.explanation) // Should have basic explanation
     }
 
-    const jobResp = await matchingService.matchJobsForProfile('profile-1', 10, {})
+    const jobResp = await matchingService.matchJobsForProfile('profile-1', 10)
     assert.ok(jobResp && Array.isArray((jobResp as any).jobs))
     assert.ok((jobResp as any).jobs.length > 0)
     for (const j of (jobResp as any).jobs) {
       assert.ok(typeof j.score_percent === 'number')
-      assert.ok(Number.isInteger(j.score_percent))
+      assert.ok(j.score_percent >= 0 && j.score_percent <= 100) // Allow decimal values, clamped to 0-100
       assert.ok(j.explanation && typeof j.explanation === 'object')
+      // Should have detailed explanation with multiple factors
+      assert.ok(Object.keys(j.explanation).length > 1)
     }
 
     console.log('testMatchingService passed')
@@ -113,5 +146,6 @@ export async function testMatchingService() {
     ;(elasticsearchService as any).getById = origGetById
     ;(elasticsearchService as any).search = origSearch
     ;(elasticsearchService as any).searchJobs = origSearchJobs
+    ;(elasticsearchService as any).matchCandidatesForJobEnhanced = origMatchCandidatesForJobEnhanced
   }
 }

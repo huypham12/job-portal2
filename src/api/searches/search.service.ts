@@ -133,11 +133,45 @@ export const searchService = {
     const timerDone = metrics.startTimer('search.jobs.duration')
 
     try {
-      // Use new standardized query builder
-      const esQuery = buildJobSearchQuery(queryContext)
+      // Use enhanced search with business-aware scoring
+      const pagination = queryContext.pagination || { page: 1, size: 20 }
+      const sortOption = queryContext.filters?.sort
 
-      // Use standardized search entrypoint
-      const esResp = await elasticsearchService.searchWithTemplate('jobs', esQuery, queryContext.options)
+      const sortConfig =
+        sortOption === 'relevance'
+          ? [{ _score: 'desc' }, { posted_at: 'desc' }]
+          : sortOption === 'newest'
+            ? [{ posted_at: 'desc' }]
+            : sortOption === 'oldest'
+              ? [{ posted_at: 'asc' }]
+              : sortOption === 'salary_high'
+                ? [{ salary_max: 'desc' }]
+                : sortOption === 'salary_low'
+                  ? [{ salary_min: 'asc' }]
+                  : sortOption === 'experience_high'
+                    ? [{ experience_level: 'desc' }]
+                    : sortOption === 'experience_low'
+                      ? [{ experience_level: 'asc' }]
+                      : [{ _score: 'desc' }, { posted_at: 'desc' }]
+
+      const esResp = await elasticsearchService.searchJobs({
+        index: 'jobs',
+        query: queryContext.q || '',
+        from: (pagination.page - 1) * pagination.size,
+        size: pagination.size,
+        sort: sortConfig,
+        userExperienceLevel: queryContext.userExperienceLevel,
+        userLocationId: queryContext.userLocationId,
+        prioritizeFreshJobs: queryContext.options?.prioritizeFreshJobs,
+        userPrefersRemote: queryContext.userPrefersRemote,
+        userPrefersFlexibleHours: queryContext.userPrefersFlexibleHours,
+        userSkills: queryContext.userSkills,
+        userDesiredSalaryMin: queryContext.userDesiredSalaryMin,
+        userDesiredSalaryMax: queryContext.userDesiredSalaryMax,
+        userDesiredBenefits: queryContext.userDesiredBenefits,
+        userPreferredCategories: queryContext.userPreferredCategories,
+        userRemotePercentageMin: queryContext.userRemotePercentageMin
+      })
 
       timerDone()
       metrics.increment('search.jobs.request')
@@ -703,6 +737,20 @@ export const searchService = {
       console.error('ES health check failed', e)
       return false
     }
+  },
+
+  /**
+   * Location autocomplete for search UI
+   */
+  async searchLocations(query: string, type?: 'province' | 'district', parentId?: string) {
+    return await elasticsearchService.searchLocations(query, type, parentId)
+  },
+
+  /**
+   * Skills autocomplete for search UI
+   */
+  async searchSkills(query: string, category?: string) {
+    return await elasticsearchService.searchSkills(query, category)
   },
 
   /**

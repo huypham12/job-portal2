@@ -15,9 +15,10 @@ import { QueryContext } from '../../search/search.types'
 
 export const matchingService = {
   /**
-   * Return candidates for a job with score_percent and explanation.
+   * Return candidates for a job with enhanced scoring and explanation
+   * Automatic matching based on job requirements - no manual filters needed
    */
-  async matchCandidatesForJob(jobId: string, size = 50, filters?: Record<string, any>) {
+  async matchCandidatesForJob(jobId: string, size = 50) {
     const cacheKey = `matching:candidates:job:${jobId}:size:${size}`
     const cacheHit = await redisService.get(cacheKey)
     if (cacheHit) {
@@ -27,143 +28,73 @@ export const matchingService = {
 
     const timerDone = metrics.startTimer('matching.candidates.duration')
 
-    // Fetch job payload from ES (lightweight)
-    const jobPayload = await elasticsearchService.getById({ index: elasticsearchService.getIndexName('jobs'), id: jobId })
-    if (!jobPayload) {
-      timerDone()
-      return { jobId, total: 0, candidates: [] }
-    }
+    try {
+      // Sử dụng phương thức enhanced từ ES service - automatic matching from job content only
+      const result = await elasticsearchService.matchCandidatesForJobEnhanced(jobId, size)
 
-    const topN = Math.min(size * 2, 100) // Get at most 2x requested size, max 100
+      // elasticsearchService.normalizeSearchResponse returns { took, total, hits }
+      // where hits = [{ id, _source, _score }, ...]. Normalize to the expected
+      // matching response shape used by frontend.
+      const hits = Array.isArray((result as any).hits) ? (result as any).hits : []
 
-    // Build advanced ES query for profiles matching với business-aware scoring
-    const profileQuery = buildProfileMatchingQuery(jobPayload, filters)
-    const esResp = await elasticsearchService.search({
-      index: elasticsearchService.getIndexName('profiles'),
-      query: profileQuery,
-      from: 0,
-      size: topN,
-      sort: [{ _score: 'desc' }] // Sort by relevance first
-    })
+      // Min-max normalization for consistent scoring across results
+      const rawScores = hits.map((h: any) => (typeof h._score === 'number' ? h._score : 0))
+      const minScore = rawScores.length ? Math.min(...rawScores) : 0
+      const maxScore = rawScores.length ? Math.max(...rawScores) : minScore
 
-    const hits = esResp.hits
-    timerDone()
-    metrics.increment('matching.candidates.request')
+      const candidates = hits.map((h: any) => {
+        const scoreRaw = typeof h._score === 'number' ? h._score : 0
 
-    // Compute min/max of ES raw scores for min-max normalization
-    const rawScores = hits.map((h: any) => (typeof h._score === 'number' ? h._score : 0))
-    const minScore = rawScores.length ? Math.min(...rawScores) : 0
-    const maxScore = rawScores.length ? Math.max(...rawScores) : minScore
+        // Normalize score to 0-100 range
+        let score_percent = 0
+        if (maxScore === minScore) {
+          score_percent = scoreRaw > 0 ? 100 : 0
+        } else {
+          score_percent = Math.max(0, Math.min(100, Math.round((scoreRaw - minScore) / (maxScore - minScore) * 100)))
+        }
 
-    const results = hits.map((h: any) => {
-      const src = h._source || {}
-      const rawText = typeof h._score === 'number' ? h._score : 0
-      let textScoreNorm = 0
-      if (maxScore === minScore) {
-        textScoreNorm = rawText > 0 ? 1 : 0
-      } else {
-        textScoreNorm = Math.max(0, Math.min(1, (rawText - minScore) / (maxScore - minScore)))
-      }
-
-      const components = computeScoreComponents({
-        textScore: textScoreNorm,
-        requiredSkills: (jobPayload as any).skills ?? [],
-        candidateSkills: src.skills ?? [],
-        locationMatch:
-          (jobPayload as any).location_id && src.location_id && (jobPayload as any).location_id === src.location_id
-            ? 1
-            : 0,
-        experienceYears: src.years_of_experience ?? 0,
-        expectedExperience: (jobPayload as any).experience_level ?? 0,
-        postedAtMs: (jobPayload as any).posted_at ? new Date((jobPayload as any).posted_at).getTime() : undefined,
-        profileUpdatedAtMs: src.updated_at ? new Date(src.updated_at).getTime() : undefined,
-        isLookingForJob: src.is_looking_for_job ?? true,
-        // Work arrangement matching
-        candidateRemotePreference: (src as any).location_text?.toLowerCase().includes('remote') || (src as any).prefers_remote,
-        jobRemoteAllowed: (jobPayload as any).is_remote_allowed,
-        jobRemotePercentage: (jobPayload as any).remote_percentage ?? 0,
-        candidateFlexiblePreference: (src as any).prefers_flexible_hours,
-        jobFlexibleHours: (jobPayload as any).flexible_hours,
-        // Benefits matching
-        candidateDesiredBenefits: (src as any).desired_benefits ?? [],
-        jobBenefits: (jobPayload as any).job_benefits?.map((b: any) => b.benefit_type) ?? [],
-        // Category matching
-        candidatePreferredCategories: (src as any).preferred_categories ?? [],
-        jobCategories: (jobPayload as any).job_categories?.map((c: any) => c.categories?.name) ?? []
+        return {
+          id: h.id,
+          score_percent,
+          _score: h._score,
+          _source: h._source,
+          explanation: {
+            // For candidates, we provide basic score info since detailed matching
+            // logic is based on job requirements and candidate profiles
+            text_match: scoreRaw > 0 ? Math.max(0, Math.min(100, Math.round(scoreRaw * 100))) : 0,
+            overall_score: score_percent
+          }
+        }
       })
 
-      const weightedRaw =
-        components.text * DEFAULT_SCORE_WEIGHTS.text +
-        components.skills * DEFAULT_SCORE_WEIGHTS.skills +
-        components.location * DEFAULT_SCORE_WEIGHTS.location +
-        components.experience * DEFAULT_SCORE_WEIGHTS.experience +
-        components.recency * DEFAULT_SCORE_WEIGHTS.recency +
-        components.activity * DEFAULT_SCORE_WEIGHTS.activity +
-        components.availability * DEFAULT_SCORE_WEIGHTS.availability +
-        components.work_arrangement * DEFAULT_SCORE_WEIGHTS.work_arrangement +
-        components.benefits * DEFAULT_SCORE_WEIGHTS.benefits +
-        components.category * DEFAULT_SCORE_WEIGHTS.category
-
-      const score_percent = normalizeScore(weightedRaw)
-      const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
-
-      // Chuẩn hoá ID trả ra cho phía API:
-      // - es_id: _id trong ES
-      // - profile_id: id DB của profile (ưu tiên _source.profile_id, fallback _source.id nếu trước đây lưu thẳng profile id)
-      // - user_id: id user để dùng khi cần map sang bảng users
-      const profileId = (src as any).profile_id ?? (src as any).id ?? null
-      const userId = (src as any).user_id ?? null
-
-      // Only include essential fields from _source to reduce response size
-      const essentialSource = {
-        id: src.id,
-        profile_id: src.profile_id,
-        user_id: src.user_id,
-        full_name: src.full_name,
-        headline: src.headline,
-        bio: src.bio,
-        skills: src.skills,
-        skills_flat: src.skills_flat,
-        years_of_experience: src.years_of_experience,
-        location_text: src.location_text,
-        location_id: src.location_id,
-        is_looking_for_job: src.is_looking_for_job,
-        updated_at: src.updated_at,
-        prefers_remote: src.prefers_remote,
-        prefers_flexible_hours: src.prefers_flexible_hours,
-        desired_salary_min: src.desired_salary_min,
-        desired_salary_max: src.desired_salary_max
+      const filteredResult = {
+        jobId,
+        total: typeof (result as any).total === 'number' ? (result as any).total : candidates.length,
+        candidates: candidates.slice(0, size)
       }
 
-      return {
-        id: profileId ?? h.id,
-        es_id: h.id,
-        profile_id: profileId,
-        user_id: userId,
-        score_percent,
-        explanation,
-        _source: essentialSource
+      timerDone()
+      metrics.increment('matching.candidates.request')
+
+      // Cache results for 30 minutes
+      try {
+        await redisService.set(cacheKey, JSON.stringify(filteredResult), 30 * 60)
+      } catch (e) {
+        // Non-fatal
       }
-    })
 
-    // Return top `size` sorted by score_percent desc
-    const sorted = results.sort((a, b) => b.score_percent - a.score_percent).slice(0, size)
-    const result = { jobId, total: results.length, candidates: sorted }
-
-    // Cache results for 30 minutes
-    try {
-      await redisService.set(cacheKey, JSON.stringify(result), 30 * 60)
-    } catch (e) {
-      // Non-fatal
+      return filteredResult
+    } catch (error) {
+      timerDone()
+      console.error(`Enhanced candidate matching failed for job ${jobId}:`, error)
+      throw error
     }
-
-    return result
   },
 
   /**
-   * Return jobs for a profile with score_percent and explanation.
+   * Return jobs for a profile with enhanced scoring and explanation
    */
-  async matchJobsForProfile(profileId: string, size = 50, filters?: Record<string, any>) {
+  async matchJobsForProfile(profileId: string, size = 50) {
     const cacheKey = `matching:jobs:profile:${profileId}:size:${size}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
@@ -173,152 +104,145 @@ export const matchingService = {
 
     const timerDone = metrics.startTimer('matching.jobs.duration')
 
-    const profilePayload = await elasticsearchService.getById({ index: elasticsearchService.getIndexName('profiles'), id: profileId })
-    if (!profilePayload) {
-      timerDone()
-      return { profileId, total: 0, jobs: [] }
-    }
+    try {
+      // Fetch profile payload
+      const profilePayload = await elasticsearchService.getById({ index: elasticsearchService.getIndexName('profiles'), id: profileId })
 
-    const topN = Math.min(size * 2, 100) // Get at most 2x requested size, max 100
-
-    // Build QueryContext from profile payload
-    const queryContext: QueryContext = {
-      // Use profile headline as search query
-      q: (profilePayload as any).headline || (profilePayload as any).desired_job_title,
-
-      // User preferences from profile
-      userSkills: (profilePayload as any).skills_flat || (profilePayload as any).skills?.map((s: any) => s.name),
-      userLocationId: (profilePayload as any).location_id,
-      userExperienceLevel: (profilePayload as any).years_of_experience ?
-        Math.floor((profilePayload as any).years_of_experience / 2) : undefined,
-      userPrefersRemote: (profilePayload as any).location_text?.toLowerCase().includes('remote') ||
-                         (profilePayload as any).prefers_remote,
-      userPrefersFlexibleHours: (profilePayload as any).prefers_flexible_hours,
-      userDesiredSalaryMin: (profilePayload as any).desired_salary_min,
-      userDesiredSalaryMax: (profilePayload as any).desired_salary_max,
-      userDesiredBenefits: (profilePayload as any).desired_benefits,
-      userPreferredCategories: (profilePayload as any).preferred_categories,
-      userRemotePercentageMin: (profilePayload as any).prefers_remote ? 50 : undefined,
-
-      // Additional filters from method params
-      filters: filters,
-
-      // Pagination for top-N
-      pagination: { page: 1, size: topN },
-
-      // Always prioritize fresh jobs for candidates
-      options: { prioritizeFreshJobs: true }
-    }
-
-    // Use standardized query builder
-    const esQuery = buildJobSearchQuery(queryContext)
-    const esResp = await elasticsearchService.searchWithTemplate('jobs', esQuery)
-
-    const hits = esResp.hits
-    timerDone()
-    metrics.increment('matching.jobs.request')
-
-    const rawScores = hits.map((h: any) => (typeof h._score === 'number' ? h._score : 0))
-    const minScore = rawScores.length ? Math.min(...rawScores) : 0
-    const maxScore = rawScores.length ? Math.max(...rawScores) : minScore
-
-    const results = hits.map((h: any) => {
-      const src = h._source || {}
-      const rawText = typeof h._score === 'number' ? h._score : 0
-      let textScoreNorm = 0
-      if (maxScore === minScore) {
-        textScoreNorm = rawText > 0 ? 1 : 0
-      } else {
-        textScoreNorm = Math.max(0, Math.min(1, (rawText - minScore) / (maxScore - minScore)))
+      if (!profilePayload) {
+        timerDone()
+        return { profileId, total: 0, jobs: [] }
       }
 
-      const components = computeScoreComponents({
-        textScore: textScoreNorm,
-        requiredSkills: src.skills ?? [],
-        candidateSkills: (profilePayload as any).skills ?? [],
-        locationMatch:
-          src.location_id &&
-          (profilePayload as any).location_id &&
-          src.location_id === (profilePayload as any).location_id
-            ? 1
-            : 0,
-        experienceYears: (profilePayload as any).years_of_experience ?? 0,
-        expectedExperience: src.experience_level ?? 0,
-        postedAtMs: src.posted_at ? new Date(src.posted_at).getTime() : undefined,
-        profileUpdatedAtMs: (profilePayload as any).updated_at
-          ? new Date((profilePayload as any).updated_at).getTime()
-          : undefined,
-        isLookingForJob: (profilePayload as any).is_looking_for_job ?? true,
-        // Work arrangement matching
-        candidateRemotePreference: (profilePayload as any).location_text?.toLowerCase().includes('remote') || (profilePayload as any).prefers_remote,
-        jobRemoteAllowed: src.is_remote_allowed,
-        jobRemotePercentage: src.remote_percentage ?? 0,
-        candidateFlexiblePreference: (profilePayload as any).prefers_flexible_hours,
-        jobFlexibleHours: src.flexible_hours,
-        // Benefits matching
-        candidateDesiredBenefits: (profilePayload as any).desired_benefits ?? [],
-        jobBenefits: src.job_benefits?.map((b: any) => b.benefit_type) ?? [],
-        // Category matching
-        candidatePreferredCategories: (profilePayload as any).preferred_categories ?? [],
-        jobCategories: src.job_categories?.map((c: any) => c.categories?.name) ?? []
+      // Build QueryContext từ profile data
+      const queryContext: QueryContext = {
+        q: (profilePayload as any).headline || (profilePayload as any).desired_job_title,
+        userSkills: (profilePayload as any).skills_flat || (profilePayload as any).skills?.map((s: any) => s.name),
+        userLocationId: (profilePayload as any).location_id,
+        userExperienceLevel: (profilePayload as any).years_of_experience ?
+          Math.floor((profilePayload as any).years_of_experience / 2) : undefined,
+        userPrefersRemote: (profilePayload as any).location_text?.toLowerCase().includes('remote') ||
+                           (profilePayload as any).prefers_remote,
+        userPrefersFlexibleHours: (profilePayload as any).prefers_flexible_hours,
+        userDesiredSalaryMin: (profilePayload as any).desired_salary_min,
+        userDesiredSalaryMax: (profilePayload as any).desired_salary_max,
+        userDesiredBenefits: (profilePayload as any).desired_benefits,
+        userPreferredCategories: (profilePayload as any).preferred_categories,
+        userRemotePercentageMin: (profilePayload as any).prefers_remote ? 50 : undefined,
+        pagination: { page: 1, size: Math.min(size * 2, 100) },
+        options: { prioritizeFreshJobs: true }
+      }
+
+      // Sử dụng searchJobs với business-aware scoring
+      const esQuery = buildJobSearchQuery(queryContext)
+      const esResp = await elasticsearchService.searchWithTemplate('jobs', esQuery)
+
+      const hits = esResp.hits
+
+      // Min-max normalization cho scoring
+      const rawScores = hits.map((h: any) => (typeof h._score === 'number' ? h._score : 0))
+      const minScore = rawScores.length ? Math.min(...rawScores) : 0
+      const maxScore = rawScores.length ? Math.max(...rawScores) : minScore
+
+      const results = hits.map((h: any) => {
+        const src = h._source || {}
+        const rawText = typeof h._score === 'number' ? h._score : 0
+        let textScoreNorm = 0
+        if (maxScore === minScore) {
+          textScoreNorm = rawText > 0 ? 1 : 0
+        } else {
+          textScoreNorm = Math.max(0, Math.min(1, (rawText - minScore) / (maxScore - minScore)))
+        }
+
+        // Tính toán các components scoring
+        const components = computeScoreComponents({
+          textScore: textScoreNorm,
+          requiredSkills: src.skills ?? [],
+          candidateSkills: (profilePayload as any).skills ?? [],
+          locationMatch: src.location_id && (profilePayload as any).location_id &&
+                        src.location_id === (profilePayload as any).location_id ? 1 : 0,
+          experienceYears: (profilePayload as any).years_of_experience ?? 0,
+          expectedExperience: src.experience_level ?? 0,
+          postedAtMs: src.posted_at ? new Date(src.posted_at).getTime() : undefined,
+          profileUpdatedAtMs: (profilePayload as any).updated_at ?
+                             new Date((profilePayload as any).updated_at).getTime() : undefined,
+          isLookingForJob: (profilePayload as any).is_looking_for_job ?? true,
+          // Work arrangement matching
+          candidateRemotePreference: (profilePayload as any).location_text?.toLowerCase().includes('remote') ||
+                                   (profilePayload as any).prefers_remote,
+          jobRemoteAllowed: src.is_remote_allowed,
+          jobRemotePercentage: src.remote_percentage ?? 0,
+          candidateFlexiblePreference: (profilePayload as any).prefers_flexible_hours,
+          jobFlexibleHours: src.flexible_hours,
+          // Benefits matching
+          candidateDesiredBenefits: (profilePayload as any).desired_benefits ?? [],
+          jobBenefits: src.job_benefits?.map((b: any) => b.benefit_type) ?? [],
+          // Category matching
+          candidatePreferredCategories: (profilePayload as any).preferred_categories ?? [],
+          jobCategories: src.job_categories?.map((c: any) => c.categories?.name) ?? []
+        })
+
+        const weightedRaw = components.text * DEFAULT_SCORE_WEIGHTS.text +
+                           components.skills * DEFAULT_SCORE_WEIGHTS.skills +
+                           components.location * DEFAULT_SCORE_WEIGHTS.location +
+                           components.experience * DEFAULT_SCORE_WEIGHTS.experience +
+                           components.recency * DEFAULT_SCORE_WEIGHTS.recency +
+                           components.activity * DEFAULT_SCORE_WEIGHTS.activity +
+                           components.availability * DEFAULT_SCORE_WEIGHTS.availability +
+                           components.work_arrangement * DEFAULT_SCORE_WEIGHTS.work_arrangement +
+                           components.benefits * DEFAULT_SCORE_WEIGHTS.benefits +
+                           components.category * DEFAULT_SCORE_WEIGHTS.category
+
+        // Ensure score_percent is within 0-100 range
+        const score_percent = Math.max(0, Math.min(100, normalizeScore(weightedRaw)))
+        const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
+
+        // Only include essential fields from _source to reduce response size
+        const essentialSource = {
+          id: src.id,
+          title: src.title,
+          description: src.description,
+          company_name: src.company_name,
+          location_name: src.location_name,
+          location_id: src.location_id,
+          salary_min: src.salary_min,
+          salary_max: src.salary_max,
+          job_type: src.job_type,
+          is_remote_allowed: src.is_remote_allowed,
+          remote_percentage: src.remote_percentage,
+          flexible_hours: src.flexible_hours,
+          skills: src.skills,
+          experience_level: src.experience_level,
+          posted_at: src.posted_at,
+          status: src.status,
+          job_categories: src.job_categories,
+          job_benefits: src.job_benefits
+        }
+
+        return {
+          id: h.id,
+          score_percent,
+          explanation,
+          _source: essentialSource
+        }
       })
 
-      const weightedRaw =
-        components.text * DEFAULT_SCORE_WEIGHTS.text +
-        components.skills * DEFAULT_SCORE_WEIGHTS.skills +
-        components.location * DEFAULT_SCORE_WEIGHTS.location +
-        components.experience * DEFAULT_SCORE_WEIGHTS.experience +
-        components.recency * DEFAULT_SCORE_WEIGHTS.recency +
-        components.activity * DEFAULT_SCORE_WEIGHTS.activity +
-        components.availability * DEFAULT_SCORE_WEIGHTS.availability +
-        components.work_arrangement * DEFAULT_SCORE_WEIGHTS.work_arrangement +
-        components.benefits * DEFAULT_SCORE_WEIGHTS.benefits +
-        components.category * DEFAULT_SCORE_WEIGHTS.category
+      const sorted = results.sort((a, b) => b.score_percent - a.score_percent).slice(0, size)
+      const result = { profileId, total: results.length, jobs: sorted }
 
-      const score_percent = normalizeScore(weightedRaw)
-      const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
-
-      // Only include essential fields from _source to reduce response size
-      const essentialSource = {
-        id: src.id,
-        title: src.title,
-        description: src.description,
-        company_name: src.company_name,
-        location_name: src.location_name,
-        location_id: src.location_id,
-        salary_min: src.salary_min,
-        salary_max: src.salary_max,
-        job_type: src.job_type,
-        is_remote_allowed: src.is_remote_allowed,
-        remote_percentage: src.remote_percentage,
-        flexible_hours: src.flexible_hours,
-        skills: src.skills,
-        experience_level: src.experience_level,
-        posted_at: src.posted_at,
-        status: src.status,
-        job_categories: src.job_categories,
-        job_benefits: src.job_benefits
+      // Cache results for 30 minutes
+      try {
+        await redisService.set(cacheKey, JSON.stringify(result), 30 * 60)
+      } catch (e) {
+        // Non-fatal
       }
 
-      return {
-        id: h.id,
-        score_percent,
-        explanation,
-        _source: essentialSource
-      }
-    })
-
-    const sorted = results.sort((a, b) => b.score_percent - a.score_percent).slice(0, size)
-    const result = { profileId, total: results.length, jobs: sorted }
-
-    // Cache results for 30 minutes
-    try {
-      await redisService.set(cacheKey, JSON.stringify(result), 30 * 60)
-    } catch (e) {
-      // Non-fatal
+      timerDone()
+      return result
+    } catch (error) {
+      timerDone()
+      console.error(`Enhanced job matching failed for profile ${profileId}:`, error)
+      throw error
     }
-
-    return result
   }
 }
 

@@ -285,8 +285,14 @@ const myJobsQuery = z.object({
 })
 
 // ==================== PARAMS SCHEMAS ====================
+// Accept either raw UUID or ES-prefixed id "job_<uuid>".
 const jobIdParams = z.object({
-  id: z.string().uuid('Invalid job ID')
+  id: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      return val.startsWith('job_') ? val.substring(4) : val
+    }
+    return val
+  }, z.string().uuid('Invalid job ID'))
 })
 
 // ==================== TYPE EXPORTS ====================
