@@ -215,6 +215,17 @@ export class ResumeController {
     const { id } = req.params
     const { template, format, html, viewportWidth } = req.body
 
+    // Log export parameters for debugging
+    console.log('📤 Export CV request:', {
+      resumeId: id,
+      userId: user_id,
+      template,
+      format,
+      hasHtml: !!html,
+      htmlLength: html?.length || 0,
+      viewportWidth
+    })
+
     // dev-only: persist incoming HTML to tmp for debugging if present
     if (html && envConfig.app.nodeEnv !== 'production') {
       try {

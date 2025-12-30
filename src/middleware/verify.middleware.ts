@@ -162,22 +162,36 @@ export const authenticateRefreshToken = async (req: Request, res: Response, next
       secretKey: envConfig.secrets.jwt.refresh
     })) as TokenPayload
 
-    // 2. Hash token và query trực tiếp bằng token_hash (vì token_hash là unique)
-    const tokenHash = await generateHash(refresh_token)
-
-    const userToken = await prisma.refresh_tokens.findFirst({
+    // 2. Vì token_hash được lưu bằng hash non-deterministic (bcrypt),
+    //    ta không thể tái tạo cùng một hash để query trực tiếp.
+    //    Thay vào đó lấy tất cả refresh tokens còn hạn của user và sử dụng compareHash
+    //    để kiểm tra token thô có khớp với bất kỳ hash nào trong DB.
+    const userTokens = await prisma.refresh_tokens.findMany({
       where: {
         user_id: decodedToken.user_id,
-        token_hash: tokenHash,
-        expires_at: { gt: new Date() } // Chỉ lấy token còn hạn
-      }
+        expires_at: { gt: new Date() } // Chỉ lấy token chưa hết hạn
+      },
+      select: { id: true, token_hash: true }
     })
 
-    if (!userToken) {
+    if (!userTokens || userTokens.length === 0) {
       return next(new HttpError(MESSAGES.REFRESH_TOKEN_INVALID_OR_REVOKED, HTTP_STATUS.UNAUTHORIZED))
     }
 
-    // 3. Gắn token vào request
+    // Compare against stored hashes
+    let matched = false
+    for (const rec of userTokens) {
+      if (await compareHash(refresh_token, rec.token_hash)) {
+        matched = true
+        break
+      }
+    }
+
+    if (!matched) {
+      return next(new HttpError(MESSAGES.REFRESH_TOKEN_INVALID_OR_REVOKED, HTTP_STATUS.UNAUTHORIZED))
+    }
+
+    // 3. Gắn token đã decode vào request để controller tiếp tục xử lý
     req.decoded_refresh_token = decodedToken
     next()
   } catch (error) {

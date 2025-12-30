@@ -598,11 +598,10 @@ function buildProfileMatchingQuery(jobPayload: any, filters?: Record<string, any
         fields: [
           'headline^3', // Highest priority for profile headline
           'desired_job_title^2', // Job title preferences
-          'full_name^1.5', // Name matching
+        'full_name^1.5', // Name matching
           'bio^1', // Bio/description
           'skills_flat^1', // Skills
-          'education_degree^0.8', // Education background
-          'current_employment^0.8' // Employment status
+          'education_degree^0.8' // Education background
         ],
         fuzziness: 'AUTO',
         operator: 'and'
@@ -687,6 +686,16 @@ function buildProfileMatchingQuery(jobPayload: any, filters?: Record<string, any
         boost: 1.1
       }
     })
+  }
+ 
+  // Final combined boolean query for profile -> job matching
+  return {
+    bool: {
+      must,
+      should,
+      filter,
+      minimum_should_match: should.length > 0 ? 0 : undefined
+    }
   }
 }
 

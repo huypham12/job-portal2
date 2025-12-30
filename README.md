@@ -36,7 +36,7 @@ npm run es:init
 
 # Sync tất cả data từ database
 
-npm run es:sync
+npm run dev:es:sync
 
 # Check health
 

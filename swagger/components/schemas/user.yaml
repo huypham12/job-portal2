@@ -31,6 +31,11 @@ components:
             avatar: 'https://example.com/avatar.jpg'
             bio: 'Software developer'
           description: Additional metadata as JSON object
+        is_looking_for_job:
+          type: boolean
+          nullable: true
+          example: true
+          description: Candidate availability flag (actively looking)
 
     # ============================================
     # User Response Schemas
@@ -126,6 +131,11 @@ components:
               type: string
               format: uuid
               nullable: true
+            is_looking_for_job:
+              type: boolean
+              nullable: true
+              example: true
+              description: Candidate availability flag (actively looking)
             metadata:
               type: object
               additionalProperties: true

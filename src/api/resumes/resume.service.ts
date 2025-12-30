@@ -730,14 +730,41 @@ export class ResumeService {
       throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
     }
 
-    // Prefer HTML provided by frontend (ensures preview fidelity); otherwise generate from template
+    // If frontend provided an HTML snapshot (preview), prefer using it verbatim so PDF matches preview.
+    // Otherwise generate HTML from server template.
     const frontendProvided = dto.html && typeof dto.html === 'string' && dto.html.trim().length > 0
     let html: string
+    try {
+      console.log('[ExportDebug] incoming:', {
+        templateParam: dto.template,
+        frontendHtmlProvided: !!dto.html,
+        frontendProvided
+      })
+    } catch (e) {
+      // ignore logging errors
+    }
     if (frontendProvided) {
-      // Use frontend HTML verbatim (do not sanitize or inline fonts) except ensure a base href exists
       html = dto.html as string
     } else {
       html = this.generateResumeHtml(resume, profile, dto.template || 'modern')
+    }
+    try {
+      console.log('[ExportDebug] final decision:', {
+        templateToUse: dto.template || 'generated',
+        finalHtmlLength: typeof html === 'string' ? html.length : null,
+        frontendProvidedUsed: frontendProvided
+      })
+    } catch (e) {
+      // ignore
+    }
+    try {
+      console.log('[ExportDebug] final decision:', {
+        templateToUse: dto.template || 'generated',
+        finalHtmlLength: typeof html === 'string' ? html.length : null,
+        frontendProvidedUsed: frontendProvided
+      })
+    } catch (e) {
+      // ignore
     }
 
     if (dto.format === 'html') {
@@ -1594,39 +1621,33 @@ export class ResumeService {
       let processedHtml = html
       const isFullDocument = /<\s*html|<!doctype/i.test(String(processedHtml))
 
-      if (isFullDocument) {
-        try {
-          if (!/\<base\s+/i.test(processedHtml)) {
-            const baseTag = `<base href="${envConfig.app.publicOrigin}">`
-            processedHtml = processedHtml.replace(/<head([^>]*)>/i, `<head$1>\n  ${baseTag}`)
-          }
-        } catch (e) {
-          // ignore
+      // Sanitize incoming HTML and ensure base href so relative URLs resolve.
+      try {
+        // Remove style="..." attributes from <style ...> tags
+        processedHtml = processedHtml.replace(/<style\b([^>]*)\sstyle=(["'])(.*?)\2([^>]*)>/gi, '<style$1$4>')
+        // Remove style="..." attributes from <link ...> tags
+        processedHtml = processedHtml.replace(/<link\b([^>]*)\sstyle=(["'])(.*?)\2([^>]*)>/gi, '<link$1$4>')
+        // If no <base> tag, insert one pointing to server origin to help resolve relative URLs
+        if (!/<base\s+/i.test(processedHtml)) {
+          const baseTag = `<base href="${envConfig.app.publicOrigin}">`
+          processedHtml = processedHtml.replace(/<head([^>]*)>/i, `<head$1>\n  ${baseTag}`)
         }
-      } else {
-        // Sanitize incoming HTML: remove accidental inline computed-style attributes on <style> and <link> tags
-        // (frontend may have copied computed styles onto these tags which interferes with rendering)
-        try {
-          // Remove style="..." attributes from <style ...> tags
-          processedHtml = processedHtml.replace(/<style\b([^>]*)\sstyle=(["'])(.*?)\2([^>]*)>/gi, '<style$1$4>')
-          // Remove style="..." attributes from <link ...> tags
-          processedHtml = processedHtml.replace(/<link\b([^>]*)\sstyle=(["'])(.*?)\2([^>]*)>/gi, '<link$1$4>')
-          // If no <base> tag, insert one pointing to server origin to help resolve relative URLs
-          if (!/<base\s+/i.test(processedHtml)) {
-            const baseTag = `<base href="${envConfig.app.publicOrigin}">`
-            processedHtml = processedHtml.replace(/<head([^>]*)>/i, `<head$1>\n  ${baseTag}`)
-          }
-        } catch (e) {
-          // ignore sanitization errors and proceed with original HTML
-        }
+      } catch (e) {
+        // ignore sanitization errors and proceed with original HTML
+      }
 
-        // Try to inline Google Fonts CSS + font binaries to avoid network/font-loading issues in Puppeteer
-        try {
-          processedHtml = await this.inlineGoogleFonts(processedHtml)
-        } catch (e) {
-          // If inlining fails, continue with original processedHtml
-          console.warn('Google Fonts inlining failed:', (e as any)?.message || e)
-        }
+      // Try to inline Google Fonts CSS + font binaries to avoid network/font-loading issues in Puppeteer
+      try {
+        processedHtml = await this.inlineGoogleFonts(processedHtml)
+      } catch (e) {
+        console.warn('Google Fonts inlining failed:', (e as any)?.message || e)
+      }
+
+      // Try to inline other external stylesheets (font-awesome, cdn css, etc.)
+      try {
+        processedHtml = await this.inlineExternalStylesheets(processedHtml)
+      } catch (e) {
+        console.warn('External CSS inlining failed:', (e as any)?.message || e)
       }
 
       // Ensure @page size exists so Puppeteer respects CSS page size
@@ -1642,7 +1663,8 @@ export class ResumeService {
       } catch (e) {
         // ignore if not supported
       }
-      await page.setContent(processedHtml, { waitUntil: 'networkidle0' })
+      // Use DOMContentLoaded to avoid waiting for external network requests (we inline most CSS/fonts)
+      await page.setContent(processedHtml, { waitUntil: 'domcontentloaded' })
 
       // Wait for all fonts to load
       await page.evaluateHandle('document.fonts.ready')
@@ -1772,6 +1794,61 @@ export class ResumeService {
           processedHrefs[href] = href
         } catch (e) {
           // ignore per-href errors
+        }
+      }
+
+      return result
+    } catch (e) {
+      return html
+    }
+  }
+
+  /**
+   * Inline external stylesheet links into HTML to avoid Puppeteer network issues.
+   * Fetches hrefs from <link rel="stylesheet" href="..."> and replaces with <style>content</style>.
+   */
+  private async inlineExternalStylesheets(html: string): Promise<string> {
+    try {
+      const linkRegex = /<link\b[^>]*rel=(["']?)stylesheet\1[^>]*href=(["'])(https?:\/\/[^"']+|\/[^"']+)\2[^>]*>/gi
+      let m
+      let result = html
+
+      // Determine fetch function
+      let fetchFn: any = (globalThis as any).fetch
+      if (!fetchFn) {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+          fetchFn = require('node-fetch')
+        } catch (e) {
+          // can't fetch, return original html
+          return html
+        }
+      }
+
+      const processedHrefs: Record<string, boolean> = {}
+
+      while ((m = linkRegex.exec(html)) !== null) {
+        const href = (m as any)[3] // The URL is in the third capture group
+        if (!href || processedHrefs[href]) continue
+
+        try {
+          // Resolve relative URLs against publicOrigin
+          const resolvedUrl = href.startsWith('/') ? `${envConfig.app.publicOrigin.replace(/\/$/, '')}${href}` : href
+          const res = await fetchFn(resolvedUrl)
+          if (!res.ok) {
+            processedHrefs[href] = true
+            continue
+          }
+          const cssText = await res.text()
+
+          // Replace the specific <link ... href="..."> occurrence with a <style> block
+          const escapedHref = href.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+          const linkTagRegex = new RegExp(`<link\\\\b[^>]*href=([\"'])${escapedHref}\\\\1[^>]*>`, 'gi')
+          result = result.replace(linkTagRegex, `<style>${cssText}</style>`)
+          processedHrefs[href] = true
+        } catch (e) {
+          processedHrefs[href] = true
+          // Continue processing other links
         }
       }
 

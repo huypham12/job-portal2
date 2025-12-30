@@ -39,7 +39,7 @@ export class ApplicationController {
   getApplications = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { profile_id } = req.decoded_authorization as TokenPayload
-      const filters = req.query as unknown as GetApplicationsDTO
+      const filters = req.validated?.query as GetApplicationsDTO
 
       const result = await this.applicationService.getApplications(profile_id, filters)
 

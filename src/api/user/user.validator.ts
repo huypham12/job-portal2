@@ -109,6 +109,8 @@ const updateProfileBody = z
     desired_salary_min: z.number().int().min(0).optional(),
     desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
+  // Availability flag: whether candidate is actively looking for job
+  is_looking_for_job: z.boolean().optional()
   })
   .strict()
   .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
@@ -142,6 +144,8 @@ const createProfileBody = z
     desired_salary_min: z.number().int().min(0).optional(),
     desired_currency: z.string().max(10).optional(),
     desired_job_type: z.array(jobTypeEnum).optional(),
+  // Availability flag on create as well
+  is_looking_for_job: z.boolean().optional()
   })
   .strict()
 

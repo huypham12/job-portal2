@@ -106,6 +106,8 @@ export class UserController {
 
     // body đã được validate/transform bởi Zod middleware
     const payload = req.validated!.body as UpdateProfileDto
+    // Log payload for debugging location persistence issues
+    console.log('🔧 updateProfile called:', { userId, payload })
 
     const profile = await this.userService.updateProfileForUser(userId, payload)
     res.json({

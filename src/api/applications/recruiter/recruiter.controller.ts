@@ -30,8 +30,8 @@ export class RecruiterApplicationController {
   getApplicationsByJob = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const params = req.params as GetApplicationsByJobDTO['params']
-      const filters = req.query as unknown as GetApplicationsByJobDTO['query']
+      const params = req.validated?.params as GetApplicationsByJobDTO['params']
+      const filters = req.validated?.query as GetApplicationsByJobDTO['query']
 
       const result = await this.recruiterService.getApplicationsByJob(user_id, params, filters)
 
@@ -263,7 +263,7 @@ export class RecruiterApplicationController {
   getShortlistedCandidates = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user_id } = req.decoded_authorization as TokenPayload
-      const filters = req.query as unknown as GetShortlistedDTO
+      const filters = req.validated?.query as GetShortlistedDTO
 
       const result = await this.recruiterService.getShortlistedCandidates(user_id, filters)
 
