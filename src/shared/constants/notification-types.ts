@@ -28,8 +28,7 @@ export enum NotificationType {
   SAVED_JOB_EXPIRING = 'saved_job_expiring',
   JOB_APPROVED = 'job_approved',
 
-  // Jobs
-  JOB_RECOMMENDATION = 'job_recommendation',
+  // Job Alerts
   POPULAR_JOB_ALERT = 'popular_job_alert',
   LOCATION_JOB_ALERT = 'location_job_alert',
   SEARCH_BASED_ALERT = 'search_based_alert',
@@ -85,9 +84,6 @@ export const NotificationTemplates: Record<NotificationType, (data: any) => stri
   [NotificationType.SAVED_JOB_EXPIRING]: (data) => `Công việc đã lưu "${data.job_title}" sắp hết hạn nộp đơn`,
 
   [NotificationType.JOB_APPROVED]: (data) => `Tin tuyển dụng "${data.job_title}" đã được duyệt và đăng tải`,
-
-  [NotificationType.JOB_RECOMMENDATION]: (data) =>
-    `Có một công việc phù hợp với bạn: ${data.job_title} tại ${data.company_name}`,
 
   [NotificationType.POPULAR_JOB_ALERT]: (data) =>
     `Công việc hot: ${data.job_title} đã được ${data.view_count} người xem trong tuần qua`,

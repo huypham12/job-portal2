@@ -45,10 +45,44 @@ export const vietnameseAnalyzers = {
       vi_stop: {
         type: 'stop',
         stopwords: [
-          'của', 'và', 'là', 'có', 'được', 'trong', 'người', 'đã', 'từ', 'với',
-          'cho', 'như', 'này', 'đó', 'theo', 'về', 'ở', 'vào', 'sẽ', 'để',
-          'ra', 'đi', 'đến', 'tại', 'nhưng', 'vẫn', 'cũng', 'bị', 'một', 'hai',
-          'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'
+          'của',
+          'và',
+          'là',
+          'có',
+          'được',
+          'trong',
+          'người',
+          'đã',
+          'từ',
+          'với',
+          'cho',
+          'như',
+          'này',
+          'đó',
+          'theo',
+          'về',
+          'ở',
+          'vào',
+          'sẽ',
+          'để',
+          'ra',
+          'đi',
+          'đến',
+          'tại',
+          'nhưng',
+          'vẫn',
+          'cũng',
+          'bị',
+          'một',
+          'hai',
+          'ba',
+          'bốn',
+          'năm',
+          'sáu',
+          'bảy',
+          'tám',
+          'chín',
+          'mười'
         ]
       },
       // Improved stemmer for Vietnamese
@@ -1077,8 +1111,8 @@ export const elasticsearchService = {
     }
     skills?: string[]
     jobType?: string[]
-    experienceLevel?: { min?: number, max?: number }
-    salaryRange?: { min?: number, max?: number }
+    experienceLevel?: { min?: number; max?: number }
+    salaryRange?: { min?: number; max?: number }
     workArrangement?: {
       isRemote?: boolean
       remotePercentageMin?: number
@@ -1086,16 +1120,27 @@ export const elasticsearchService = {
     }
     benefits?: string[]
     categories?: string[]
-    companySize?: { min?: number, max?: number }
+    companySize?: { min?: number; max?: number }
     postedWithinDays?: number
     sort?: string
     page?: number
     size?: number
   }) {
     const {
-      q, location, skills, jobType, experienceLevel, salaryRange,
-      workArrangement, benefits, categories, companySize,
-      postedWithinDays, sort, page = 1, size = 20
+      q,
+      location,
+      skills,
+      jobType,
+      experienceLevel,
+      salaryRange,
+      workArrangement,
+      benefits,
+      categories,
+      companySize,
+      postedWithinDays,
+      sort,
+      page = 1,
+      size = 20
     } = params
 
     const mustClauses: any[] = []
@@ -1108,9 +1153,12 @@ export const elasticsearchService = {
         multi_match: {
           query: q.trim(),
           fields: [
-            'title^3', 'title.analyzed^2',
-            'description^1.5', 'company_name^1',
-            'skills_flat^2', 'job_requirements_title^1',
+            'title^3',
+            'title.analyzed^2',
+            'description^1.5',
+            'company_name^1',
+            'skills_flat^2',
+            'job_requirements_title^1',
             'location_combined^1'
           ],
           type: 'best_fields',
@@ -1162,10 +1210,7 @@ export const elasticsearchService = {
           path: 'skills',
           query: {
             bool: {
-              must: [
-                { terms: { 'skills.name': skills } },
-                { range: { 'skills.proficiency_required': { gte: 2 } } }
-              ]
+              must: [{ terms: { 'skills.name': skills } }, { range: { 'skills.proficiency_required': { gte: 2 } } }]
             }
           }
         }
@@ -1392,7 +1437,7 @@ export const elasticsearchService = {
 
     // Experience requirements
     if (job.experience_level || job.min_experience_years) {
-      const minYears = job.min_experience_years || (job.experience_level * 1.5)
+      const minYears = job.min_experience_years || job.experience_level * 1.5
       mustClauses.push({
         range: { years_of_experience: { gte: minYears } }
       })
@@ -1545,7 +1590,7 @@ export const elasticsearchService = {
         // Loosen experience constraint to a SHOULD clause (prefer candidates
         // with similar years but don't require it)
         if (job.experience_level || job.min_experience_years) {
-          const minYears = job.min_experience_years || (job.experience_level * 1.5)
+          const minYears = job.min_experience_years || job.experience_level * 1.5
           relaxedShould.push({
             range: {
               years_of_experience: {

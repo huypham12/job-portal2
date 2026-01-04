@@ -2,8 +2,8 @@ import { Router } from 'express'
 import { notificationController } from './notifications.controller'
 import { EnhancedNotificationsController } from './enhanced-notifications.controller'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
+import { recruiter, adminOnly } from '@/middleware/authorize.middleware'
 import {
-  sendJobRecommendationsValidator,
   sendPopularJobAlertsValidator,
   sendLocationBasedAlertsValidator,
   sendSearchBasedAlertsValidator
@@ -51,21 +51,12 @@ router.delete('/:id', notificationController.deleteNotification.bind(notificatio
 // ==================== ENHANCED NOTIFICATIONS ====================
 
 /**
- * POST /api/notifications/send-job-recommendations
- * Send personalized job recommendations
- */
-router.post(
-  '/send-job-recommendations',
-  sendJobRecommendationsValidator,
-  EnhancedNotificationsController.sendJobRecommendations
-)
-
-/**
  * POST /api/notifications/send-popular-job-alerts
  * Send alerts about trending/popular jobs
  */
 router.post(
   '/send-popular-job-alerts',
+  adminOnly,
   sendPopularJobAlertsValidator,
   EnhancedNotificationsController.sendPopularJobAlerts
 )
@@ -76,6 +67,7 @@ router.post(
  */
 router.post(
   '/send-location-based-alerts',
+  recruiter,
   sendLocationBasedAlertsValidator,
   EnhancedNotificationsController.sendLocationBasedAlerts
 )
@@ -86,6 +78,7 @@ router.post(
  */
 router.post(
   '/send-search-based-alerts',
+  recruiter,
   sendSearchBasedAlertsValidator,
   EnhancedNotificationsController.sendSearchBasedAlerts
 )
@@ -94,6 +87,6 @@ router.post(
  * GET /api/notifications/enhanced-stats
  * Get statistics about enhanced notifications
  */
-router.get('/enhanced-stats', EnhancedNotificationsController.getEnhancedStats)
+router.get('/enhanced-stats', adminOnly, EnhancedNotificationsController.getEnhancedStats)
 
 export default router

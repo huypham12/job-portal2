@@ -305,24 +305,6 @@ export class NotificationHelper {
     await socketService.sendNotification(data.candidateId, NotificationType.SAVED_JOB_EXPIRING, content)
   }
 
-  /**
-   * Send job recommendation notification
-   */
-  static async notifyJobRecommendation(data: { userId: string; jobId: string; jobTitle: string; companyName: string }) {
-    const content = NotificationTemplates[NotificationType.JOB_RECOMMENDATION](data)
-
-    await socketService.sendNotification(data.userId, NotificationType.JOB_RECOMMENDATION, content, {
-      title: `Công việc phù hợp: ${data.jobTitle}`,
-      action_url: `/jobs/${data.jobId}`,
-      action_text: 'Xem chi tiết',
-      metadata: {
-        job_id: data.jobId,
-        job_title: data.jobTitle,
-        company_name: data.companyName
-      },
-      category: 'recommendation'
-    })
-  }
 
   /**
    * Send popular job alert

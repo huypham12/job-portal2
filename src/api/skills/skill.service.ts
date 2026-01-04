@@ -90,6 +90,26 @@ export class SkillService {
   }
 
   /**
+   * Get skills by category ID
+   * Used for dropdown options when selecting skills within a category
+   */
+  async getSkillsByCategory(categoryId: string) {
+    return await prisma.skills.findMany({
+      where: {
+        category_id: categoryId
+      },
+      select: {
+        id: true,
+        name: true,
+        category: true
+      },
+      orderBy: {
+        name: 'asc'
+      }
+    })
+  }
+
+  /**
    * Get skill by ID
    * Used for validation when creating profile_skills or job_skills
    */

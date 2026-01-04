@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { matchCandidatesController, matchJobsController } from './matching.controller'
+import { matchCandidatesController } from './matching.controller'
 import { authenticateAccessToken, verifiedUserValidator } from '../../middleware/verify.middleware'
 import { checkResourceOwnership } from '../../middleware/resource-ownership.middleware'
 import { apiRateLimit } from '../../middleware/rate-limit.middleware'
@@ -17,15 +17,5 @@ router.get(
   matchCandidatesController
 )
 
-// GET /api/matching/profile/:profileId/jobs
-// Chỉ Candidate sở hữu profile mới có thể xem jobs phù hợp
-router.get(
-  '/profile/:profileId/jobs',
-  apiRateLimit,
-  authenticateAccessToken,
-  verifiedUserValidator,
-  checkResourceOwnership('profile'),
-  matchJobsController
-)
 
 export default router

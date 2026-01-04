@@ -3,7 +3,7 @@ import { zodValidate } from './validate-request'
 
 /**
  * Validators for enhanced features: recent searches, recently viewed jobs,
- * popular jobs, job recommendations, and enhanced notifications
+ * popular jobs, and enhanced notifications
  */
 
 // ==================== RECENT SEARCHES VALIDATORS ====================
@@ -99,40 +99,7 @@ const getPopularJobsByLocationQuery = z.object({
 
 export const getPopularJobsByLocationValidator = zodValidate({ query: getPopularJobsByLocationQuery })
 
-// ==================== JOB RECOMMENDATIONS VALIDATORS ====================
-
-const getJobRecommendationsQuery = z.object({
-  limit: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(20).default(10)),
-  type: z.enum(['viewed', 'searched', 'mixed']).default('mixed')
-})
-
-export const getJobRecommendationsValidator = zodValidate({ query: getJobRecommendationsQuery })
-
-const getForYouRecommendationsQuery = z.object({
-  limit: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(10).default(5))
-})
-
-export const getForYouRecommendationsValidator = zodValidate({ query: getForYouRecommendationsQuery })
-
 // ==================== ENHANCED NOTIFICATIONS VALIDATORS ====================
-
-const sendJobRecommendationsBody = z.object({
-  limit: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(10).default(3))
-})
-
-export const sendJobRecommendationsValidator = zodValidate({ body: sendJobRecommendationsBody })
 
 const sendPopularJobAlertsBody = z.object({
   threshold: z.preprocess((val) => {

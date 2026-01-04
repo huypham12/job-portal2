@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import { SyncController } from './sync.controller'
 import { validateDto } from '../../middleware/validateDto.middleware'
+import { authenticateAccessToken, verifiedUserValidator } from '../../middleware/verify.middleware'
+import { adminOnly } from '../../middleware/authorize.middleware'
 import {
   getSyncStatusSchema,
   retryFailedSyncsSchema,
@@ -13,6 +15,9 @@ import {
 
 const router = Router()
 const syncController = new SyncController()
+
+// All routes require strict admin-only access
+router.use(authenticateAccessToken, verifiedUserValidator, adminOnly)
 
 /**
  * @route GET /api/sync/status

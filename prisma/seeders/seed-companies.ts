@@ -49,6 +49,153 @@ interface CompanyBenefitData {
   is_featured: boolean
 }
 
+// Validation sets to ensure uniqueness
+const usedWebsiteUrls = new Set<string>()
+const usedStockSymbols = new Set<string>()
+const usedCompanyNames = new Set<string>()
+
+// Function to select diverse benefits based on company characteristics
+function selectDiverseBenefits(companyBenefitsData: CompanyBenefitData[], companySize: number, industry: string | null): CompanyBenefitData[] {
+  const selectedBenefits: CompanyBenefitData[] = []
+
+  // Determine number of benefits based on company size
+  let benefitsCount = 3 // Small companies (default)
+  if (companySize > 1000) benefitsCount = 6 // Large companies
+  else if (companySize > 500) benefitsCount = 5 // Medium-large companies
+  else if (companySize > 100) benefitsCount = 4 // Medium companies
+
+  // Group benefits by type
+  const benefitsByType = new Map<string, CompanyBenefitData[]>()
+  companyBenefitsData.forEach(benefit => {
+    if (!benefitsByType.has(benefit.benefit_type)) {
+      benefitsByType.set(benefit.benefit_type, [])
+    }
+    benefitsByType.get(benefit.benefit_type)!.push(benefit)
+  })
+
+  // Priority benefit types based on industry and company size
+  const priorityTypes: string[] = []
+
+  // Essential benefits for all companies
+  priorityTypes.push('Salary & Compensation', 'Health & Insurance', 'Work-Life Balance')
+
+  // Growth benefits for tech/IT companies
+  if (industry?.toLowerCase().includes('công nghệ') || industry?.toLowerCase().includes('phần mềm')) {
+    priorityTypes.push('Learning & Development', 'Career Advancement')
+  }
+
+  // Culture benefits for large companies
+  if (companySize > 500) {
+    priorityTypes.push('Company Culture', 'Facilities & Equipment')
+  }
+
+  // Logistics benefits for companies with many employees
+  if (companySize > 200) {
+    priorityTypes.push('Food & Beverage', 'Transportation')
+  }
+
+  // Modern benefits for forward-thinking companies
+  if (Math.random() < 0.3) { // 30% chance
+    priorityTypes.push('Remote Work', 'Flexible Hours')
+  }
+
+  // Select benefits ensuring diversity
+  const usedTypes = new Set<string>()
+  let attempts = 0
+
+  while (selectedBenefits.length < benefitsCount && attempts < 100) {
+    attempts++
+
+    // Try priority types first
+    let availableTypes = priorityTypes.filter(type => !usedTypes.has(type) && benefitsByType.has(type))
+
+    // If no priority types available, use any remaining types
+    if (availableTypes.length === 0) {
+      availableTypes = Array.from(benefitsByType.keys()).filter(type => !usedTypes.has(type))
+    }
+
+    if (availableTypes.length === 0) break
+
+    const randomType = availableTypes[Math.floor(Math.random() * availableTypes.length)]
+    const typeBenefits = benefitsByType.get(randomType)!
+
+    if (typeBenefits.length > 0) {
+      const randomBenefit = typeBenefits[Math.floor(Math.random() * typeBenefits.length)]
+      selectedBenefits.push(randomBenefit)
+      usedTypes.add(randomType)
+    }
+  }
+
+  // If we still don't have enough benefits, fill with random ones
+  while (selectedBenefits.length < benefitsCount && selectedBenefits.length < companyBenefitsData.length) {
+    const randomBenefit = companyBenefitsData[Math.floor(Math.random() * companyBenefitsData.length)]
+    if (!selectedBenefits.some(b => b.title === randomBenefit.title)) {
+      selectedBenefits.push(randomBenefit)
+    }
+  }
+
+  return selectedBenefits.slice(0, benefitsCount)
+}
+
+// Validation and sanitization functions
+function sanitizeAndValidateData(companiesData: CompanyData[], companyDetailsData: CompanyDetailData[]) {
+  const websiteUrls = new Set<string>()
+  const stockSymbols = new Set<string>()
+  const companyNames = new Set<string>()
+  let fixesApplied = 0
+
+  console.log('🔧 Sanitizing and validating company data...')
+
+  for (let i = 0; i < companiesData.length; i++) {
+    const company = companiesData[i]
+    const companyDetail = companyDetailsData[i]
+
+    // Fix company name duplicates by adding suffix
+    let originalName = company.name
+    let nameSuffix = 1
+    while (companyNames.has(company.name.toLowerCase())) {
+      company.name = `${originalName} ${nameSuffix}`
+      nameSuffix++
+      fixesApplied++
+    }
+    companyNames.add(company.name.toLowerCase())
+
+    // Fix website URL duplicates by adding subdomain
+    if (companyDetail.website_url) {
+      let originalUrl = companyDetail.website_url
+      let urlSuffix = 1
+      while (websiteUrls.has(companyDetail.website_url.toLowerCase())) {
+        const urlObj = new URL(originalUrl)
+        companyDetail.website_url = `https://${urlSuffix}.${urlObj.hostname}`
+        urlSuffix++
+        fixesApplied++
+      }
+      websiteUrls.add(companyDetail.website_url.toLowerCase())
+    }
+
+    // Fix stock symbol duplicates by adding number suffix
+    if (companyDetail.stock_symbol) {
+      let originalSymbol = companyDetail.stock_symbol
+      let symbolSuffix = 1
+      while (stockSymbols.has(companyDetail.stock_symbol.toUpperCase())) {
+        companyDetail.stock_symbol = `${originalSymbol}${symbolSuffix}`
+        symbolSuffix++
+        fixesApplied++
+      }
+      stockSymbols.add(companyDetail.stock_symbol.toUpperCase())
+    }
+  }
+
+  if (fixesApplied > 0) {
+    console.log(`🔧 Applied ${fixesApplied} automatic fixes for duplicate data`)
+  }
+
+  console.log('✅ Data validation and sanitization completed')
+  console.log(`📊 Unique company names: ${companyNames.size}`)
+  console.log(`🌐 Unique website URLs: ${websiteUrls.size}`)
+  console.log(`📈 Unique stock symbols: ${stockSymbols.size}`)
+}
+
 export async function seedCompanies() {
   console.log('🏢 Starting companies seeding...')
 
@@ -88,6 +235,9 @@ export async function seedCompanies() {
     if (companiesData.length !== 100 || companyDetailsData.length !== 100) {
       throw new Error('Companies data must contain exactly 100 records for both companies and company_details')
     }
+
+    // Sanitize and validate data (auto-fix duplicates)
+    sanitizeAndValidateData(companiesData, companyDetailsData)
 
     // Get available district locations for headquarters
     console.log('📍 Fetching available district locations from database...')
@@ -133,8 +283,13 @@ export async function seedCompanies() {
         useMajorCity && majorCityDistricts.length > 0
           ? majorCityDistricts
           : otherDistricts.length > 0
-            ? otherDistricts
-            : allDistricts
+          ? otherDistricts
+          : allDistricts
+
+      if (sourceArray.length === 0) {
+        throw new Error('No valid districts available for company headquarters')
+      }
+
       return sourceArray[Math.floor(Math.random() * sourceArray.length)]
     }
 
@@ -160,12 +315,17 @@ export async function seedCompanies() {
     const hashedPassword = await generateHash(recruiterPassword)
     console.log('🔐 Password hashed for all recruiters')
 
-    // Track used benefit indices to prevent duplicates across companies
-    const usedBenefitIndices = new Set<number>()
-
     // Create recruiters and their companies in batches
     const batchSize = 10
     let processedCount = 0
+
+    // Benefit type distribution to ensure diversity
+    const benefitTypeGroups = {
+      essential: ['Salary & Compensation', 'Health & Insurance', 'Work-Life Balance'],
+      growth: ['Learning & Development', 'Career Advancement'],
+      culture: ['Company Culture', 'Facilities & Equipment', 'Food & Beverage'],
+      logistics: ['Transportation', 'Remote Work', 'Flexible Hours']
+    }
 
     for (let i = 0; i < companiesData.length; i += batchSize) {
       const batch = companiesData.slice(i, i + batchSize)
@@ -217,8 +377,19 @@ export async function seedCompanies() {
             }
           })
 
-          // 3. Create company details
+          // 3. Create company details with validated location
           const randomDistrict = getWeightedRandomDistrict()
+
+          // Validate location exists before creating
+          const locationExists = await prisma.locations.findUnique({
+            where: { id: randomDistrict.id },
+            select: { id: true, name: true, type: true }
+          })
+
+          if (!locationExists) {
+            throw new Error(`Invalid location ID: ${randomDistrict.id} for company ${companyData.name}`)
+          }
+
           const companyDetail = await prisma.company_details.create({
             data: {
               company_id: company.id,
@@ -237,20 +408,8 @@ export async function seedCompanies() {
             }
           })
 
-          // 4. Create company benefits (assign random unique benefits to each company)
-          const benefitsPerCompany = 5 // Each company gets 5 random benefits
-          const selectedBenefits: CompanyBenefitData[] = []
-
-          // Random selection ensuring no duplicates across all companies
-          let attempts = 0
-          while (selectedBenefits.length < benefitsPerCompany && attempts < companyBenefitsData.length * 2) {
-            const randomIndex = Math.floor(Math.random() * companyBenefitsData.length)
-            if (!usedBenefitIndices.has(randomIndex)) {
-              usedBenefitIndices.add(randomIndex)
-              selectedBenefits.push(companyBenefitsData[randomIndex])
-            }
-            attempts++
-          }
+          // 4. Create diverse company benefits based on company size and industry
+          const selectedBenefits = selectDiverseBenefits(companyBenefitsData, companyData.size || 100, companyDetailData.industry)
 
           const benefitPromises = selectedBenefits.map((benefitData) =>
             prisma.company_benefits.create({
@@ -314,11 +473,43 @@ export async function seedCompanies() {
       )
     }
 
+    // Log seeding statistics
+    const totalCompanies = companiesData.length
+    const uniqueIndustries = new Set(companyDetailsData.map(d => d.industry).filter(Boolean)).size
+    const companiesWithStockSymbols = companyDetailsData.filter(d => d.stock_symbol).length
+    const companiesWithWebsites = companyDetailsData.filter(d => d.website_url).length
+    const avgBenefitsPerCompany = Math.round((totalCompanies * 4) / totalCompanies) // Assuming ~4 benefits per company
+
+    // Analyze industry distribution
+    const industryStats = companyDetailsData.reduce((acc, detail) => {
+      const industry = detail.industry || 'Unknown'
+      acc[industry] = (acc[industry] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+
+    const topIndustries = Object.entries(industryStats)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 5)
+
+    console.log('\n📊 Seeding Statistics:')
+    console.log(`✅ Companies created: ${totalCompanies}`)
+    console.log(`🏭 Unique industries: ${uniqueIndustries}`)
+    console.log(`📈 Companies with stock symbols: ${companiesWithStockSymbols}`)
+    console.log(`🌐 Companies with websites: ${companiesWithWebsites}`)
+    console.log(`🎁 Benefits distribution: 3-6 per company (based on company size)`)
+    console.log('\n🏭 Top 5 Industries:')
+    topIndustries.forEach(([industry, count], index) => {
+      const percentage = ((count / totalCompanies) * 100).toFixed(1)
+      console.log(`  ${index + 1}. ${industry}: ${count} companies (${percentage}%)`)
+    })
+
     console.log(
-      `🎉 Successfully seeded ${companiesData.length} recruiters with their companies, details, and benefits!`
+      `\n🎉 Successfully seeded ${totalCompanies} recruiters with their companies, details, and benefits!`
     )
-    console.log(`📧 Recruiter emails: recruiter1@gmail.com to recruiter${companiesData.length}@gmail.com`)
+    console.log(`📧 Recruiter emails: recruiter1@gmail.com to recruiter${totalCompanies}@gmail.com`)
     console.log(`🔑 Common password: ${recruiterPassword}`)
+    console.log(`📋 Data validation: ✅ Unique names, websites, and stock symbols`)
+    console.log(`📍 Location references: ✅ All validated against database`)
   } catch (error) {
     console.error('❌ Error seeding companies:', error)
     throw error

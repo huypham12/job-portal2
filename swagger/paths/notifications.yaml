@@ -56,15 +56,6 @@
       '200': { description: OK }
       '401': { description: Unauthorized }
 
-/notifications/send-job-recommendations:
-  post:
-    tags: [notifications]
-    summary: Send personalized job recommendations
-    security: [{ bearerAuth: [] }]
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-
 /notifications/send-popular-job-alerts:
   post:
     tags: [notifications]

@@ -54,26 +54,26 @@ router.get(
  * POST /api/applications/shortlist
  * Add or remove candidate from shortlist
  */
-router.post('/shortlist', validateDto(ShortlistCandidateSchema), recruiterController.shortlistCandidate)
+router.post('/shortlist', checkResourceOwnership('job'), validateDto(ShortlistCandidateSchema), recruiterController.shortlistCandidate)
 
 /**
  * GET /api/applications/shortlisted
  * Get shortlisted candidates
  */
-router.get('/shortlisted', validateDto(GetShortlistedSchema), recruiterController.getShortlistedCandidates)
+router.get('/shortlisted', checkResourceOwnership('job'), validateDto(GetShortlistedSchema), recruiterController.getShortlistedCandidates)
 
 /**
  * POST /api/applications/compare
  * Compare multiple candidates side-by-side
  */
-router.post('/compare', validateDto(CompareCandidatesSchema), recruiterController.compareCandidates)
+router.post('/compare', checkResourceOwnership('job'), validateDto(CompareCandidatesSchema), recruiterController.compareCandidates)
 
 /**
  * POST /api/applications/bulk-update
  * Bulk update multiple applications
  * Note: This must come before /:id routes to avoid conflict
  */
-router.post('/bulk-update', validateDto(BulkUpdateSchema), recruiterController.bulkUpdateApplications)
+router.post('/bulk-update', checkResourceOwnership('company'), validateDto(BulkUpdateSchema), recruiterController.bulkUpdateApplications)
 
 /**
  * GET /api/applications/:id/timeline

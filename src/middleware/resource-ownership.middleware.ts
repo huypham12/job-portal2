@@ -9,7 +9,7 @@ import { redisService } from '@/config/redis.service'
 
 // Middleware kiểm tra user chỉ có thể truy cập data của chính họ
 export const checkResourceOwnership = (
-  resourceType: 'user' | 'profile' | 'resume' | 'application' | 'job' | 'company' | 'saved_job'
+  resourceType: 'user' | 'profile' | 'resume' | 'application' | 'job' | 'company' | 'saved_job' | 'connection_interest'
 ) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -141,7 +141,9 @@ export const checkResourceOwnership = (
               applicationId: resourceId,
               jobId: application.job_id
             })
-            return next(new HttpError('Application is associated with an invalid job', HTTP_STATUS.INTERNAL_SERVER_ERROR))
+            return next(
+              new HttpError('Application is associated with an invalid job', HTTP_STATUS.INTERNAL_SERVER_ERROR)
+            )
           }
 
           if (!application.jobs.companies) {
@@ -330,6 +332,33 @@ export const checkResourceOwnership = (
             })
 
             if (!savedJob || savedJob.profiles.user_id !== user_id) {
+              return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
+            }
+          }
+          break
+        }
+
+        case 'connection_interest': {
+          // User can access connection interests where they are the candidate or recruiter
+          if (userRole !== 'admin') {
+            const connectionInterest = await prisma.connection_interests.findUnique({
+              where: { id: resourceId },
+              select: {
+                candidate_id: true,
+                recruiter_id: true,
+                candidate: { select: { user_id: true } }
+              }
+            })
+
+            if (!connectionInterest) {
+              return next(new HttpError('Connection interest not found', HTTP_STATUS.NOT_FOUND))
+            }
+
+            // Check if user is the candidate (via profile) or the recruiter
+            const isCandidate = connectionInterest.candidate.user_id === user_id
+            const isRecruiter = connectionInterest.recruiter_id === user_id
+
+            if (!isCandidate && !isRecruiter) {
               return next(new HttpError(MESSAGES.INSUFFICIENT_PERMISSIONS, HTTP_STATUS.FORBIDDEN))
             }
           }

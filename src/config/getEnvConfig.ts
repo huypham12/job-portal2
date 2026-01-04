@@ -110,7 +110,6 @@ interface EnvConfig {
   rollout: {
     searchJobsPercentage: number
     searchPopularPercentage: number
-    recommendationsPercentage: number
     matchingPercentage: number
     newSearchBuilderPercentage: number
     maxErrorRate: number
@@ -262,7 +261,6 @@ export const envConfig: EnvConfig = {
   rollout: {
     searchJobsPercentage: parseInt(getEnvVar('SEARCH_JOBS_ROLLOUT_PERCENTAGE', false, '0')),
     searchPopularPercentage: parseInt(getEnvVar('SEARCH_POPULAR_ROLLOUT_PERCENTAGE', false, '0')),
-    recommendationsPercentage: parseInt(getEnvVar('RECOMMENDATIONS_ROLLOUT_PERCENTAGE', false, '0')),
     matchingPercentage: parseInt(getEnvVar('MATCHING_ROLLOUT_PERCENTAGE', false, '0')),
     newSearchBuilderPercentage: parseInt(getEnvVar('NEW_SEARCH_BUILDER_ROLLOUT_PERCENTAGE', false, '0')),
     maxErrorRate: parseFloat(getEnvVar('MAX_ERROR_RATE', false, '0.05'))

@@ -81,6 +81,7 @@ interface SkillData {
 
 export async function seedCandidates() {
   console.log('👥 Starting candidates seeding...')
+  console.log('📋 Features: Dynamic skill assignment, unique emails, validated data, diverse profiles')
 
   // Check Elasticsearch availability
   if (isElasticsearchEnabled) {
@@ -100,8 +101,6 @@ export async function seedCandidates() {
   } else {
     console.log('ℹ️  Elasticsearch sync disabled via DISABLE_ELASTICSEARCH=true')
   }
-
-  const prisma = new PrismaClient()
 
   try {
     // Load all JSON data
@@ -242,6 +241,104 @@ export async function seedCandidates() {
       return sourceArray[Math.floor(Math.random() * sourceArray.length)]
     }
 
+    // Helper function to validate and filter job types
+    const validateJobTypes = (jobTypes: string[]): job_type[] => {
+      const validJobTypes: job_type[] = ['full_time', 'part_time', 'contract']
+      return (jobTypes || []).filter((type) => validJobTypes.includes(type as job_type)) as job_type[]
+    }
+
+    // Helper function to safely parse date string
+    const parseDate = (dateString: string | null | undefined): Date | null => {
+      if (!dateString) return null
+      const date = new Date(dateString)
+      return isNaN(date.getTime()) ? null : date
+    }
+
+    // Helper function to validate currency code
+    const validateCurrency = (currency: string | null | undefined): string | null => {
+      if (!currency) return null
+      // Allow common currency codes (2-3 letters)
+      const currencyRegex = /^[A-Z]{2,3}$/
+      return currencyRegex.test(currency.toUpperCase()) ? currency.toUpperCase() : 'VND'
+    }
+
+    // Helper function to validate and sanitize URL
+    const validateUrl = (url: string | null | undefined): string | null => {
+      if (!url) return null
+      try {
+        const urlObj = new URL(url)
+        return urlObj.href.length <= 255 ? urlObj.href : null
+      } catch {
+        return null
+      }
+    }
+
+    // Helper function to validate salary
+    const validateSalary = (salary: number | null | undefined): number | null => {
+      if (salary === null || salary === undefined) return null
+      // Ensure salary is positive and reasonable (max 1 billion VND)
+      const validSalary = Math.max(0, Math.min(1000000000, Math.floor(salary)))
+      return validSalary > 0 ? validSalary : null
+    }
+
+    // Helper function to validate phone number
+    const validatePhoneNumber = (phone: string | null | undefined): string | null => {
+      if (!phone) return null
+      // Remove all non-digit characters and validate length
+      const cleanPhone = phone.replace(/\D/g, '')
+      return cleanPhone.length >= 8 && cleanPhone.length <= 15 ? cleanPhone : null
+    }
+
+    // Helper function to validate gender
+    const validateGender = (gender: string | null | undefined): string | null => {
+      if (!gender) return null
+      const validGenders = ['Nam', 'Nữ', 'Male', 'Female', 'Other']
+      const normalizedGender = gender.trim()
+      return validGenders.includes(normalizedGender) ? normalizedGender : null
+    }
+
+    // Helper function to validate skill proficiency
+    const validateProficiency = (proficiency: number | undefined): number => {
+      // Ensure proficiency is between 1-100
+      return Math.max(1, Math.min(100, Math.floor(proficiency || Math.floor(Math.random() * 100) + 1)))
+    }
+
+    // Helper function to validate skill level
+    const validateSkillLevel = (level: string | undefined): string => {
+      const validLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert']
+      if (level && validLevels.includes(level)) {
+        return level
+      }
+      // Random level if invalid or missing
+      return validLevels[Math.floor(Math.random() * validLevels.length)]
+    }
+
+    // Helper function to find location in database by text (case-insensitive)
+    const findLocationByText = (locationText: string) => {
+      // Try exact match first
+      let location = allDistricts.find(
+        (district) =>
+          district.name.toLowerCase() === locationText.toLowerCase() ||
+          (district.parent && district.parent.name.toLowerCase() === locationText.toLowerCase())
+      )
+
+      // If no exact match, try partial match
+      if (!location) {
+        location = allDistricts.find(
+          (district) =>
+            district.name.toLowerCase().includes(locationText.toLowerCase()) ||
+            (district.parent && district.parent.name.toLowerCase().includes(locationText.toLowerCase()))
+        )
+      }
+
+      // If still no match, use random district
+      if (!location) {
+        location = getWeightedRandomDistrict()
+      }
+
+      return location
+    }
+
     // Get all skills from database (not from JSON, as some might have failed seeding)
     const dbSkills = await prisma.skills.findMany({
       select: {
@@ -256,6 +353,93 @@ export async function seedCandidates() {
     dbSkills.forEach((skill) => {
       skillNameToId.set(skill.name.toLowerCase(), skill.id)
     })
+
+    // Get skills grouped by category type for dynamic skill assignment
+    const skillsByCategoryType = await prisma.skills.findMany({
+      include: {
+        category: {
+          select: {
+            type: true
+          }
+        }
+      }
+    })
+
+    // Group skills by category type
+    const skillsGroupedByType: Record<string, Array<{ id: string; name: string }>> = {
+      technical: [],
+      industry: []
+    }
+
+    skillsByCategoryType.forEach((skill) => {
+      const type = skill.category.type
+      if (skillsGroupedByType[type]) {
+        skillsGroupedByType[type].push({ id: skill.id, name: skill.name })
+      }
+    })
+
+    console.log(
+      `📚 Skills by category: Technical: ${skillsGroupedByType.technical.length}, Industry: ${skillsGroupedByType.industry.length}`
+    )
+
+    // Job category mapping based on job title keywords
+    const jobCategoryMapping: Record<string, { primary: string[]; secondary: string[] }> = {
+      developer: { primary: ['technical'], secondary: ['technical'] },
+      engineer: { primary: ['technical'], secondary: ['technical'] },
+      designer: { primary: ['technical'], secondary: ['technical'] },
+      analyst: { primary: ['technical'], secondary: ['industry'] },
+      scientist: { primary: ['technical'], secondary: ['technical'] },
+      manager: { primary: ['industry'], secondary: ['technical'] },
+      specialist: { primary: ['technical'], secondary: ['industry'] },
+      writer: { primary: ['industry'], secondary: ['technical'] },
+      accountant: { primary: ['industry'], secondary: ['technical'] },
+      sales: { primary: ['industry'], secondary: ['technical'] },
+      marketing: { primary: ['industry'], secondary: ['technical'] },
+      legal: { primary: ['industry'], secondary: ['technical'] },
+      qa: { primary: ['technical'], secondary: ['technical'] },
+      testing: { primary: ['technical'], secondary: ['technical'] }
+    }
+
+    // Helper function to get relevant skills for a job title based on dynamic categories
+    const getRelevantSkillsForJobTitle = (jobTitle: string): Array<{ id: string; name: string }> => {
+      const normalizedTitle = jobTitle.toLowerCase()
+
+      // Determine job category based on keywords
+      let jobCategory = 'other'
+      for (const [keyword, categories] of Object.entries(jobCategoryMapping)) {
+        if (normalizedTitle.includes(keyword)) {
+          jobCategory = keyword
+          break
+        }
+      }
+
+      const categoryConfig = jobCategoryMapping[jobCategory] || { primary: ['technical'], secondary: ['industry'] }
+
+      // Get skills from primary category first
+      let relevantSkills: Array<{ id: string; name: string }> = []
+      const primarySkills = skillsGroupedByType[categoryConfig.primary[0]] || []
+      relevantSkills = [...primarySkills]
+
+      // Add some skills from secondary category
+      const secondarySkills = skillsGroupedByType[categoryConfig.secondary[0]] || []
+      const additionalSkills = secondarySkills
+        .filter((skill) => !relevantSkills.some((rs) => rs.id === skill.id))
+        .slice(0, Math.floor(relevantSkills.length * 0.3)) // Add 30% from secondary
+
+      relevantSkills = [...relevantSkills, ...additionalSkills]
+
+      // If no relevant skills found, provide fallback from database
+      if (relevantSkills.length === 0) {
+        const fallbackSkills = [
+          ...skillsGroupedByType.technical.slice(0, 2),
+          ...skillsGroupedByType.industry.slice(0, 2)
+        ].filter((skill) => skill !== undefined)
+        relevantSkills = fallbackSkills
+      }
+
+      // Shuffle and limit to reasonable number
+      return relevantSkills.sort(() => Math.random() - 0.5).slice(0, Math.min(relevantSkills.length, 8))
+    }
 
     // Shuffle all data arrays and track used indices to prevent duplicates across candidates
     console.log('🎲 Shuffling data for diverse distribution...')
@@ -285,7 +469,9 @@ export async function seedCandidates() {
 
       const batchPromises = batch.map(async (profileData, indexInBatch) => {
         const candidateNumber = i + indexInBatch + 1
-        const email = `candidate${candidateNumber}@gmail.com`
+        // Generate unique email with timestamp to prevent duplicates across multiple runs
+        const timestamp = Date.now()
+        const email = `candidate${candidateNumber}_${timestamp}@gmail.com`
 
         try {
           // 1. Create user account
@@ -298,40 +484,62 @@ export async function seedCandidates() {
             }
           })
 
-          // 2. Randomly assign a district location from database (weighted toward major cities)
-          const randomDistrict = getWeightedRandomDistrict()
-          const locationText = randomDistrict.parent?.name
-            ? `${randomDistrict.name}, ${randomDistrict.parent.name}`
-            : randomDistrict.name
+          // 2. Use location from JSON data, find matching location in database
+          const locationText = profileData.location_text || 'Hà Nội'
+          const matchedLocation = findLocationByText(locationText)
 
-          // 3. Create profile
+          // Validate location exists
+          if (!matchedLocation) {
+            throw new Error(
+              `No valid location found for candidate ${candidateNumber} with location text: ${locationText}`
+            )
+          }
+
+          // 3. Create profile with validated data
+          const validatedProfileData = {
+            user_id: user.id,
+            full_name: profileData.full_name || `Candidate ${candidateNumber}`,
+            display_name: profileData.display_name || profileData.full_name || `Candidate ${candidateNumber}`,
+            gender: validateGender(profileData.gender),
+            date_of_birth: parseDate(profileData.date_of_birth),
+            phone_number: validatePhoneNumber(profileData.phone_number),
+            location_text: locationText,
+            location_id: matchedLocation.id,
+            bio:
+              profileData.bio ||
+              `Experienced professional with ${profileData.years_of_experience || 0} years of experience.`,
+            desired_currency: validateCurrency(profileData.desired_currency),
+            desired_job_title: profileData.desired_job_title || 'Software Developer',
+            desired_job_type: validateJobTypes(profileData.desired_job_type),
+            desired_salary_min: validateSalary(profileData.desired_salary_min),
+            github_url: validateUrl(profileData.github_url),
+            headline: profileData.headline || `Looking for ${profileData.desired_job_title || 'new opportunities'}`,
+            is_looking_for_job: profileData.is_looking_for_job !== false, // Default to true
+            is_public: profileData.is_public !== false, // Default to true
+            linkedin_url: validateUrl(profileData.linkedin_url),
+            personal_website: validateUrl(profileData.personal_website),
+            years_of_experience: Math.max(0, Math.min(50, profileData.years_of_experience || 0))
+          }
+
           const profile = await prisma.profiles.create({
-            data: {
-              user_id: user.id,
-              full_name: profileData.full_name,
-              display_name: profileData.display_name,
-              gender: profileData.gender || null,
-              date_of_birth: profileData.date_of_birth ? new Date(profileData.date_of_birth) : null,
-              phone_number: profileData.phone_number || null,
-              location_text: locationText,
-              location_id: randomDistrict.id,
-              bio: profileData.bio,
-              desired_currency: profileData.desired_currency,
-              desired_job_title: profileData.desired_job_title,
-              desired_job_type: profileData.desired_job_type as job_type[],
-              desired_salary_min: profileData.desired_salary_min,
-              github_url: profileData.github_url,
-              headline: profileData.headline,
-              is_looking_for_job: profileData.is_looking_for_job,
-              is_public: profileData.is_public,
-              linkedin_url: profileData.linkedin_url,
-              personal_website: profileData.personal_website,
-              years_of_experience: profileData.years_of_experience
-            }
+            data: validatedProfileData
           })
 
-          // 4. Create experiences for this profile (random diverse selection, no duplicates)
-          const experiencesPerCandidate = Math.floor(Math.random() * 3) + 2 // 2-4 experiences per candidate
+          // 4. Create experiences for this profile (based on years of experience, no duplicates)
+          const yearsExp = profileData.years_of_experience || 0
+          let experiencesPerCandidate = 0
+
+          if (yearsExp === 0) {
+            experiencesPerCandidate = 0
+          } else if (yearsExp <= 2) {
+            experiencesPerCandidate = 1
+          } else if (yearsExp <= 5) {
+            experiencesPerCandidate = 2
+          } else if (yearsExp <= 10) {
+            experiencesPerCandidate = Math.random() < 0.7 ? 2 : 3 // 70% chance for 2, 30% for 3
+          } else {
+            experiencesPerCandidate = Math.floor(Math.random() * 2) + 3 // 3-4 experiences for very experienced candidates
+          }
           const candidateExperiences: ExperienceData[] = []
 
           // Random selection ensuring no duplicates across all candidates
@@ -359,8 +567,20 @@ export async function seedCandidates() {
             })
           }
 
-          // 5. Create educations for this profile (random diverse selection, no duplicates)
-          const educationsPerCandidate = Math.floor(Math.random() * 2) + 1 // 1-2 educations per candidate
+          // 5. Create educations for this profile (based on age, no duplicates)
+          const birthDate = profileData.date_of_birth ? new Date(profileData.date_of_birth) : null
+          const currentYear = new Date().getFullYear()
+          const age = birthDate ? currentYear - birthDate.getFullYear() : 25 // Default to 25 if no birth date
+
+          let educationsPerCandidate = 1 // Default 1 education
+
+          if (age < 22) {
+            educationsPerCandidate = 1 // Young, possibly still studying
+          } else if (age <= 25) {
+            educationsPerCandidate = Math.random() < 0.6 ? 1 : 2 // 60% chance for 1, 40% for 2 (graduated, maybe pursuing higher education)
+          } else {
+            educationsPerCandidate = 1 // Older, likely completed education
+          }
           const candidateEducations: EducationData[] = []
 
           // Random selection ensuring no duplicates across all candidates
@@ -453,18 +673,30 @@ export async function seedCandidates() {
             })
           }
 
-          // 8. Create skills for this profile (randomly assign some skills to each candidate)
-          const skillsPerCandidate = Math.floor(Math.random() * 8) + 3 // 3-10 skills per candidate
-          const shuffledSkills = [...dbSkills].sort(() => Math.random() - 0.5)
-          const candidateSkills = shuffledSkills.slice(0, skillsPerCandidate)
+          // 8. Create skills for this profile (assign relevant skills based on job title)
+          const relevantSkills = getRelevantSkillsForJobTitle(profileData.desired_job_title)
+
+          // Ensure we have enough skills (3-7 skills total)
+          const skillsNeeded = Math.min(Math.floor(Math.random() * 5) + 3, dbSkills.length)
+          let candidateSkills = [...relevantSkills]
+
+          // Fill remaining slots with random skills not already assigned
+          if (candidateSkills.length < skillsNeeded) {
+            const remainingSkills = dbSkills
+              .filter((skill) => !candidateSkills.some((assigned) => assigned.id === skill.id))
+              .sort(() => Math.random() - 0.5)
+
+            const additionalSkills = remainingSkills.slice(0, skillsNeeded - candidateSkills.length)
+            candidateSkills = [...candidateSkills, ...additionalSkills]
+          }
 
           if (candidateSkills.length > 0) {
             await prisma.profile_skills.createMany({
               data: candidateSkills.map((skill) => ({
                 profile_id: profile.id,
                 skill_id: skill.id,
-                proficiency: Math.floor(Math.random() * 100) + 1,
-                level: ['Beginner', 'Intermediate', 'Advanced', 'Expert'][Math.floor(Math.random() * 4)]
+                proficiency: validateProficiency(undefined), // Random valid proficiency
+                level: validateSkillLevel(undefined) // Random valid level
               })),
               skipDuplicates: true
             })
@@ -486,7 +718,7 @@ export async function seedCandidates() {
                 desired_salary_min: profile.desired_salary_min,
                 desired_salary_max: profile.desired_salary_min, // Use min as max if no max field
                 years_of_experience: profile.years_of_experience || 0,
-                skills: candidateSkills.map((skill) => skill.name), // Use the skills we just assigned
+                skills: candidateSkills.map((skill) => skill.name), // Use the relevant skills we just assigned
                 location_id: profile.location_id,
                 location_text: profile.location_text || '',
                 is_looking_for_job: profile.is_looking_for_job || false,
@@ -500,7 +732,11 @@ export async function seedCandidates() {
 
           return { user, profile, candidateNumber }
         } catch (error) {
-          console.error(`❌ Error creating candidate ${candidateNumber}:`, error)
+          console.error(`❌ Error creating candidate ${candidateNumber} (${profileData.full_name}):`, error)
+          // Log additional context for debugging
+          console.error(`   Email: ${email}`)
+          console.error(`   Job Title: ${profileData.desired_job_title}`)
+          console.error(`   Location Text: ${profileData.location_text || 'Hà Nội'}`)
           throw error
         }
       })
@@ -513,6 +749,22 @@ export async function seedCandidates() {
       )
     }
 
+    // Final validation
+    const totalProfiles = await prisma.profiles.count({
+      where: {
+        users: {
+          role: user_role.candidate
+        }
+      }
+    })
+
+    const totalUsers = await prisma.users.count({
+      where: {
+        role: user_role.candidate
+      }
+    })
+
+    console.log(`✅ Validation: ${totalUsers} users, ${totalProfiles} profiles created`)
     console.log(`🎉 Successfully seeded ${candidatesToSeed.length} candidates with all related data!`)
   } catch (error) {
     console.error('❌ Error seeding candidates:', error)

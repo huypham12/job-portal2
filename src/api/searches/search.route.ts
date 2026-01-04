@@ -13,8 +13,6 @@ import {
   getPopularJobsValidator,
   getTrendingJobsValidator,
   getPopularJobsByLocationValidator,
-  getJobRecommendationsValidator,
-  getForYouRecommendationsValidator,
   getRecentSearchesValidator,
   deleteRecentSearchValidator,
   getPopularQueriesValidator
@@ -28,7 +26,6 @@ import {
 } from './search.dto'
 import { authenticateAccessToken } from '../../middleware/verify.middleware'
 import { authenticatedUser } from '../../middleware/authorize.middleware'
-import { checkResourceOwnership } from '../../middleware/resource-ownership.middleware'
 import { apiRateLimit, strictRateLimit } from '../../middleware/rate-limit.middleware'
 import { envConfig } from '../../config/getEnvConfig'
 
@@ -38,14 +35,12 @@ const cacheHeaders = (maxAge: number) => (req: any, res: any, next: any) => {
   next()
 }
 
-// Import moved controllers from jobs module
-import { jobController } from '../jobs/job.controller'
+// Controllers for enhanced search features
 import { PopularJobsController } from './popular-jobs.controller'
-import { JobRecommendationsController } from './job-recommendations.controller'
 import { RecentlyViewedController } from './recently-viewed.controller'
+import { jobController } from '../jobs/job.controller'
 
-
-// Import moved validators
+// Validators from jobs module
 import { filterJobsValidator } from '../jobs/job.validator'
 
 // Import moved utilities from recommendations module
@@ -85,28 +80,36 @@ function simpleHash(str: string): number {
 }
 
 /**
- * Search routes:
- * Public routes:
- *  - GET  /api/search/jobs (search jobs - public)
- *  - GET  /api/search/suggestions (search suggestions - public)
- *  - POST /api/events (log search events - public)
- *  - GET  /api/search/popular-queries (popular queries - public)
- *  - GET  /api/search/companies (search companies - public)
- *  - GET  /api/search/companies/suggestions (company suggestions - public)
- *  - GET  /api/search/companies/popular (popular companies - public)
+ * Search routes - Centralized search functionality
+ *
+ * Public routes (no auth required):
+ *  - GET  /api/search/jobs (enhanced job search with ES)
+ *  - GET  /api/search/suggestions (autocomplete suggestions)
+ *  - POST /api/search/events (log search events)
+ *  - GET  /api/search/popular-queries (trending queries)
+ *  - GET  /api/search/companies (company search)
+ *  - GET  /api/search/companies/suggestions (company autocomplete)
+ *  - GET  /api/search/companies/popular (popular companies)
  *
  * Authenticated routes (require login):
- *  - GET  /api/search/recent (get recent searches)
- *  - DELETE /api/search/recent/:id (delete specific recent search)
+ *  - GET  /api/search/recent (recent searches history)
+ *  - DELETE /api/search/recent/:id (delete recent search)
  *  - DELETE /api/search/recent (clear all recent searches)
- *  - GET  /api/search/recommendations/for-candidate (job recommendations for candidates)
- *  - GET  /api/search/recommendations/for-recruiter (candidate recommendations for recruiters)
  *
- * Controller functions handle validation and responses.
+ * Job discovery routes (moved from jobs module):
+ *  - GET  /api/search/jobs/list (basic job listing)
+ *  - GET  /api/search/jobs/featured (featured jobs)
+ *  - GET  /api/search/jobs/popular (popular jobs by views)
+ *  - GET  /api/search/jobs/trending (trending jobs)
+ *  - GET  /api/search/jobs/popular-by-location (popular by location)
+ *  - GET  /api/search/jobs/latest (latest jobs)
+ *  - GET  /api/search/jobs/recently-viewed (user's viewed jobs)
+ *  - DELETE /api/search/jobs/recently-viewed (clear viewed history)
+ *  - GET  /api/search/jobs/recently-viewed/stats (viewing stats)
  */
 
-// ==================== MOVED FROM JOB MODULE ====================
-// These endpoints were moved from job.route.ts to centralize all search functionality
+// ==================== JOB DISCOVERY ROUTES ====================
+// Moved from jobs module for centralized search functionality
 
 /**
  * GET /api/search/jobs/list
@@ -148,11 +151,12 @@ router.get(
  */
 router.get('/jobs/latest', jobController.getLatestJobs)
 
-// ==================== AUTHENTICATED JOB ROUTES (MOVED) ====================
+// ==================== USER-SPECIFIC JOB ROUTES ====================
+// User behavior and personalization features
 
 /**
  * GET /api/search/jobs/recently-viewed
- * Get jobs recently viewed by authenticated user (moved from /api/jobs/recently-viewed)
+ * Get jobs recently viewed by authenticated user
  */
 router.get(
   '/jobs/recently-viewed',
@@ -163,45 +167,27 @@ router.get(
 
 /**
  * DELETE /api/search/jobs/recently-viewed
- * Clear recently viewed jobs history (moved from /api/jobs/recently-viewed)
+ * Clear recently viewed jobs history
  */
 router.delete('/jobs/recently-viewed', authenticateAccessToken, RecentlyViewedController.clearRecentlyViewed)
 
 /**
  * GET /api/search/jobs/recently-viewed/stats
- * Get viewing statistics for user (moved from /api/jobs/recently-viewed/stats)
+ * Get viewing statistics for user
  */
 router.get('/jobs/recently-viewed/stats', authenticateAccessToken, RecentlyViewedController.getViewingStats)
 
-/**
- * GET /api/search/jobs/recommendations
- * Get personalized job recommendations (moved from /api/jobs/recommendations)
- */
-router.get(
-  '/jobs/recommendations',
-  authenticateAccessToken,
-  getJobRecommendationsValidator,
-  JobRecommendationsController.getRecommendations
-)
 
-/**
- * GET /api/search/jobs/recommendations/for-you
- * Get "For You" personalized recommendations (moved from /api/jobs/recommendations/for-you)
- */
-router.get(
-  '/jobs/recommendations/for-you',
-  authenticateAccessToken,
-  getForYouRecommendationsValidator,
-  JobRecommendationsController.getForYouRecommendations
-)
-
-// ==================== EXISTING SEARCH ROUTES ====================
+// ==================== CORE SEARCH ROUTES ====================
+// Main search functionality with Elasticsearch
 
 router.get('/jobs', apiRateLimit, searchJobsValidator, searchJobsController)
 router.get('/suggestions', strictRateLimit, suggestionsValidator, suggestionsController)
 router.post('/events', apiRateLimit, eventsController)
 
-// Recent searches routes - require authentication
+// ==================== USER SEARCH HISTORY ====================
+// Recent searches and popular queries
+
 router.get(
   '/recent',
   authenticateAccessToken,
@@ -219,12 +205,12 @@ router.delete(
 router.delete('/recent', authenticateAccessToken, authenticatedUser, RecentSearchesController.clearRecentSearches)
 router.get('/popular-queries', cacheHeaders(300), apiRateLimit, getPopularQueriesValidator, RecentSearchesController.getPopularQueries)
 
-// Company search routes
+// ==================== COMPANY SEARCH ROUTES ====================
+// Company discovery and search
+
 router.get('/companies', apiRateLimit, searchCompaniesValidator, searchCompaniesController)
 router.get('/companies/suggestions', strictRateLimit, companiesSuggestionsValidator, companiesSuggestionsController)
 router.get('/companies/popular', cacheHeaders(600), apiRateLimit, getPopularCompaniesValidator, getPopularCompaniesController)
-
-// ==================== RECOMMENDATIONS ROUTES (MOVED) ====================
 
 
 export default router

@@ -5,121 +5,9 @@ import { NotificationHelper } from '../../shared/helpers/notification.helper'
 
 /**
  * Enhanced Notifications Controller
- * Handles advanced notification features like job recommendations and alerts
+ * Handles advanced notification features like job alerts and location-based notifications
  */
 export class EnhancedNotificationsController {
-  /**
-   * POST /api/notifications/send-job-recommendations
-   * Send personalized job recommendations to user
-   */
-  static async sendJobRecommendations(req: Request, res: Response) {
-    try {
-      const userId = req.decoded_authorization?.user_id
-      const limit = parseInt(req.body.limit) || 3
-
-      if (!userId) {
-        return ApiResponse.unauthorized(res, 'Authentication required')
-      }
-
-      // Get profile ID from user ID
-      const user = await prisma.users.findUnique({
-        where: { id: userId },
-        select: { profiles: { select: { id: true } } }
-      })
-      const profileId = user?.profiles?.id
-
-      if (!profileId) {
-        return ApiResponse.notFound(res, 'User profile not found')
-      }
-
-      // Get user's recent behavior
-      const [recentViews, recentSearches] = await Promise.all([
-        prisma.job_views.findMany({
-          where: { profile_id: profileId },
-          orderBy: { viewed_at: 'desc' },
-          take: 5,
-          include: {
-            jobs: {
-              include: {
-                companies: true,
-                job_skills: {
-                  include: { skills: true }
-                }
-              }
-            }
-          }
-        }),
-        prisma.search_history.findMany({
-          where: { profile_id: profileId },
-          orderBy: { searched_at: 'desc' },
-          take: 3
-        })
-      ])
-
-      // Find recommended jobs based on behavior
-      let recommendedJobs: any[] = []
-
-      if (recentViews.length > 0) {
-        // Get similar jobs based on viewed jobs
-        const viewedSkills = recentViews
-          .flatMap((v) => v.jobs.job_skills?.map((js: any) => js.skill_id) || [])
-          .filter(Boolean)
-
-        const similarJobs = await prisma.jobs.findMany({
-          where: {
-            status: 'approved',
-            expires_at: { gt: new Date() },
-            job_skills: {
-              some: {
-                skill_id: { in: viewedSkills }
-              }
-            },
-            // Not recently viewed
-            job_views: {
-              none: {
-                profile_id: profileId,
-                viewed_at: {
-                  gt: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24h
-                }
-              }
-            }
-          },
-          include: {
-            companies: { select: { id: true, name: true } }
-          },
-          take: limit,
-          orderBy: { posted_at: 'desc' }
-        })
-
-        recommendedJobs = similarJobs
-      }
-
-      // Send notifications for each recommended job
-      const notificationsSent = []
-      for (const job of recommendedJobs.slice(0, limit)) {
-        await NotificationHelper.notifyJobRecommendation({
-          userId,
-          jobId: job.id,
-          jobTitle: job.title,
-          companyName: job.companies.name
-        })
-        notificationsSent.push({
-          jobId: job.id,
-          jobTitle: job.title,
-          companyName: job.companies.name
-        })
-      }
-
-      return ApiResponse.success(res, {
-        message: 'Job recommendations sent successfully',
-        notificationsSent,
-        totalSent: notificationsSent.length
-      })
-    } catch (error) {
-      console.error('Error sending job recommendations:', error)
-      return ApiResponse.error(res, 'Failed to send job recommendations')
-    }
-  }
 
   /**
    * POST /api/notifications/send-popular-job-alerts
@@ -384,7 +272,7 @@ export class EnhancedNotificationsController {
           where: {
             user_id: userId,
             type: {
-              in: ['job_recommendation', 'popular_job_alert', 'location_job_alert', 'search_based_alert']
+              in: ['popular_job_alert', 'location_job_alert', 'search_based_alert']
             }
           }
         }),
@@ -393,7 +281,7 @@ export class EnhancedNotificationsController {
           where: {
             user_id: userId,
             type: {
-              in: ['job_recommendation', 'popular_job_alert', 'location_job_alert', 'search_based_alert']
+              in: ['popular_job_alert', 'location_job_alert', 'search_based_alert']
             }
           },
           _count: true
@@ -402,7 +290,7 @@ export class EnhancedNotificationsController {
           where: {
             user_id: userId,
             type: {
-              in: ['job_recommendation', 'popular_job_alert', 'location_job_alert', 'search_based_alert']
+              in: ['popular_job_alert', 'location_job_alert', 'search_based_alert']
             }
           },
           orderBy: { sent_at: 'desc' },

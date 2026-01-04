@@ -18,6 +18,7 @@ import {
   handleMulterError
 } from './middleware/upload.middleware'
 import { candidate, recruiter } from '@/middleware/authorize.middleware'
+import { checkResourceOwnership } from '@/middleware/resource-ownership.middleware'
 
 const uploadRouter = Router()
 
@@ -53,6 +54,7 @@ uploadRouter.post(
   '/company-logo/:companyId',
   ...authMiddleware,
   recruiter,
+  checkResourceOwnership('company'),
   uploadImage.single('file'),
   handleMulterError,
   uploadCompanyLogoValidator,
@@ -68,6 +70,7 @@ uploadRouter.post(
   '/resume/:profileId',
   ...authMiddleware,
   candidate,
+  checkResourceOwnership('profile'),
   uploadDocument.single('file'),
   handleMulterError,
   uploadResumeValidator,
@@ -83,6 +86,7 @@ uploadRouter.post(
   '/application-document/:applicationId',
   ...authMiddleware,
   candidate,
+  checkResourceOwnership('application'),
   multerUploadApplicationDocument.single('file'),
   handleMulterError,
   uploadApplicationDocumentValidator,

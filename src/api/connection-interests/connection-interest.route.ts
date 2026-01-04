@@ -4,6 +4,7 @@ import { CreateInterestSchema, GetInterestsSchema, InterestIdSchema } from './co
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { authorize, recruiter, candidate } from '@/middleware/authorize.middleware'
 import { validateDto } from '@/middleware/validateDto.middleware'
+import { checkResourceOwnership } from '@/middleware/resource-ownership.middleware'
 import { UserRole } from '@/shared/constants/enums/user.enum'
 
 const router = Router()
@@ -27,7 +28,13 @@ router.get(
  * Create a new connection interest
  * Accessible by: Recruiter only
  */
-router.post('/', recruiter, validateDto(CreateInterestSchema), ConnectionInterestController.createConnectionInterest)
+router.post(
+  '/',
+  recruiter,
+  checkResourceOwnership('connection_interest'),
+  validateDto(CreateInterestSchema),
+  ConnectionInterestController.createConnectionInterest
+)
 
 /**
  * GET /api/connection-interests
@@ -49,6 +56,7 @@ router.get(
 router.get(
   '/:id',
   authorize([UserRole.Candidate, UserRole.Recruiter]),
+  checkResourceOwnership('connection_interest'),
   validateDto(InterestIdSchema),
   ConnectionInterestController.getConnectionInterestById
 )
@@ -58,6 +66,12 @@ router.get(
  * Delete connection interest
  * Accessible by: Recruiter only
  */
-router.delete('/:id', recruiter, validateDto(InterestIdSchema), ConnectionInterestController.deleteConnectionInterest)
+router.delete(
+  '/:id',
+  recruiter,
+  checkResourceOwnership('connection_interest'),
+  validateDto(InterestIdSchema),
+  ConnectionInterestController.deleteConnectionInterest
+)
 
 export default router

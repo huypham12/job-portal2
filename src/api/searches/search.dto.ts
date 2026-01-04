@@ -26,26 +26,23 @@ export const JobSearchRequestSchema = z.object({
       return val
     }),
   skills: z
-    .union([
-      z.array(z.string().trim().min(1)),
-      z.string()
-    ])
+    .union([z.array(z.string().trim().min(1)), z.string()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
         const trimmed = val.trim()
         if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
         if (parsed.length === 0) {
           throw new Error('Skills array must not be empty when provided')
         }
         return parsed
       }
       return val
-    })
-    .refine((arr) => !arr || arr.length > 0, {
-      message: 'Skills array must not be empty when provided'
     }),
   // Salary range filters
   salaryMin: z
@@ -80,48 +77,42 @@ export const JobSearchRequestSchema = z.object({
     }),
   // Job categories and benefits
   jobCategories: z
-    .union([
-      z.array(z.string().trim().min(1)),
-      z.string()
-    ])
+    .union([z.array(z.string().trim().min(1)), z.string()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
         const trimmed = val.trim()
         if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
         if (parsed.length === 0) {
           throw new Error('Job categories array must not be empty when provided')
         }
         return parsed
       }
       return val
-    })
-    .refine((arr) => !arr || arr.length > 0, {
-      message: 'Job categories array must not be empty when provided'
     }),
   jobBenefits: z
-    .union([
-      z.array(z.string().trim().min(1)),
-      z.string()
-    ])
+    .union([z.array(z.string().trim().min(1)), z.string()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
         const trimmed = val.trim()
         if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
         if (parsed.length === 0) {
           throw new Error('Job benefits array must not be empty when provided')
         }
         return parsed
       }
       return val
-    })
-    .refine((arr) => !arr || arr.length > 0, {
-      message: 'Job benefits array must not be empty when provided'
     }),
   // Work arrangement filters
   remotePercentageMin: z
@@ -155,7 +146,9 @@ export const JobSearchRequestSchema = z.object({
       return val
     }),
   // Sort options
-  sort: z.enum(['relevance', 'newest', 'oldest', 'salary_high', 'salary_low', 'experience_high', 'experience_low']).default('relevance'),
+  sort: z
+    .enum(['relevance', 'newest', 'oldest', 'salary_high', 'salary_low', 'experience_high', 'experience_low'])
+    .default('relevance'),
   page: z
     .union([z.number().int().min(1), z.string()])
     .default(1)
@@ -228,17 +221,17 @@ export const JobSearchRequestSchema = z.object({
       return val
     }),
   userSkills: z
-    .union([
-      z.array(z.string().trim().min(1)),
-      z.string()
-    ])
+    .union([z.array(z.string().trim().min(1)), z.string()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
         const trimmed = val.trim()
         if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
         return parsed.length > 0 ? parsed : undefined
       }
       return val
@@ -274,33 +267,33 @@ export const JobSearchRequestSchema = z.object({
       return val
     }),
   userPreferredCategories: z
-    .union([
-      z.array(z.string().trim().min(1)),
-      z.string()
-    ])
+    .union([z.array(z.string().trim().min(1)), z.string()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
         const trimmed = val.trim()
         if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
         return parsed.length > 0 ? parsed : undefined
       }
       return val
     }),
   userDesiredBenefits: z
-    .union([
-      z.array(z.string().trim().min(1)),
-      z.string()
-    ])
+    .union([z.array(z.string().trim().min(1)), z.string()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
         const trimmed = val.trim()
         if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
         return parsed.length > 0 ? parsed : undefined
       }
       return val
@@ -310,7 +303,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0 || parsed > 100) {
           throw new Error('userRemotePercentageMin must be an integer between 0 and 100')
         }
@@ -323,7 +318,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const v = val.trim().toLowerCase()
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const v = trimmed.toLowerCase()
         if (v === 'true' || v === '1') return true
         if (v === 'false' || v === '0') return false
         throw new Error('userPrefersFlexibleHours must be boolean-like ("true"/"false" or "1"/"0")')
@@ -351,19 +348,20 @@ export const SuggestionRequestSchema = z.object({
       return val
     }),
   context: z
-    .union([
-      z.record(z.string(), z.any()),
-      z.string()
-    ])
+    .union([z.record(z.string(), z.any()), z.string()])
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') {
+          return undefined
+        }
         try {
           // Try to parse JSON string
-          return JSON.parse(val)
+          return JSON.parse(trimmed)
         } catch {
           // If not valid JSON, treat as simple string context
-          return { query: val }
+          return { query: trimmed }
         }
       }
       return val
@@ -463,11 +461,13 @@ export const CompanySearchResponseSchema = z.object({
 })
 
 export const CompanySuggestionsResponseSchema = z.object({
-  suggestions: z.array(z.object({
-    text: z.string(),
-    payload: z.any().optional(),
-    score: z.number().optional()
-  }))
+  suggestions: z.array(
+    z.object({
+      text: z.string(),
+      payload: z.any().optional(),
+      score: z.number().optional()
+    })
+  )
 })
 
 export const PopularCompaniesResponseSchema = z.object({

@@ -11,17 +11,18 @@ export type ScoreComponents = {
   category: number // Category/industry alignment
 }
 
+// Optimized weights for candidate-job matching (recruiters finding candidates)
 export const DEFAULT_SCORE_WEIGHTS = {
-  text: 0.25, // Reduced to make room for new components
-  skills: 0.25, // Reduced to make room for new components
-  location: 0.12,
-  experience: 0.08,
-  recency: 0.06,
-  activity: 0.04,
-  availability: 0.02,
-  work_arrangement: 0.08, // New: Work arrangement preferences
-  benefits: 0.06, // New: Benefits alignment
-  category: 0.04 // New: Category/industry alignment
+  text: 0.15, // Reduced - text matching less critical for candidate-job fit
+  skills: 0.35, // Increased - most important factor for job fit
+  location: 0.15, // Increased - commuting logistics matter
+  experience: 0.12, // Increased - experience compatibility crucial
+  recency: 0.03, // Reduced - job age not relevant for candidate matching
+  activity: 0.08, // Increased - recently active profiles preferred
+  availability: 0.05, // Increased - must be looking for jobs
+  work_arrangement: 0.05, // Reduced - still important but not top priority
+  benefits: 0.02, // Reduced - nice to have but not critical
+  category: 0.00 // Removed - industry alignment less important than skills/experience
 }
 
 /**
@@ -40,14 +41,17 @@ function gaussian(x: number, mean: number, sigma: number): number {
  * Compute raw score components from input data.
  * This function should be deterministic and testable.
  *
- * Pseudocode / intended behavior:
- *  - text: normalized relevance from ES (map ES score -> 0..1)
+ * Scoring logic:
+ *  - text: logistic normalization of ES relevance score (0..1)
  *  - skills: overlap ratio between required and candidate skills (0..1)
- *  - location: exact/distance match (0..1)
- *  - experience: gaussian or piecewise mapping of years difference (0..1)
- *  - recency: decay function based on posted_at (0..1)
- *  - activity: recency of profile updates (within 30 days -> 1)
- *  - availability: boost for candidates actively looking for jobs (1 or 0)
+ *  - location: hierarchical scoring (exact=1.0, province=0.7, different=0.3)
+ *  - experience: gaussian mapping around target experience years (0..1)
+ *  - recency: gaussian decay based on job posting age (newer = higher)
+ *  - activity: gaussian decay based on profile update recency (recent = higher)
+ *  - availability: binary boost for actively job-seeking candidates (1 or 0)
+ *  - work_arrangement: rewards jobs with good arrangements + preference bonus
+ *  - benefits: fuzzy overlap between desired and offered benefits
+ *  - category: fuzzy alignment between preferred and job categories
  *
  * NOTE: Do not perform ES calls here. Accept normalized inputs if possible.
  */
@@ -98,7 +102,7 @@ export function computeScoreComponents(input: {
     jobCategories = []
   } = input
 
-  // === SKILLS: simple overlap ratio required vs candidate (0..1) ===
+  // === SKILLS: improved overlap ratio with exact matching (0..1) ===
   // Validate and normalize skills arrays (from joined tables, may contain null/undefined/empty)
   const validRequiredSkills = Array.isArray(requiredSkills)
     ? requiredSkills.filter((s): s is string => typeof s === 'string' && s.trim().length > 0)
@@ -107,27 +111,50 @@ export function computeScoreComponents(input: {
     ? candidateSkills.filter((s): s is string => typeof s === 'string' && s.trim().length > 0)
     : []
 
-  const requiredCount = Math.max(1, validRequiredSkills.length)
-  const intersectionCount = validRequiredSkills.filter((s) =>
-    validCandidateSkills.some((cs) => cs.toLowerCase() === s.toLowerCase())
-  ).length
-  const skills = intersectionCount / requiredCount
+  let skills = 0
+  if (validRequiredSkills.length === 0) {
+    // If no skills required, give moderate score based on candidate skills
+    skills = validCandidateSkills.length > 0 ? 0.5 : 0.3
+  } else {
+    // Count exact matches (case-insensitive)
+    const intersectionCount = validRequiredSkills.filter((required) =>
+      validCandidateSkills.some((candidate) =>
+        candidate.toLowerCase() === required.toLowerCase()
+      )
+    ).length
 
-  // === EXPERIENCE: gaussian around target years ===
+    // Calculate overlap ratio - candidate must have at least 50% of required skills
+    skills = Math.min(1.0, (intersectionCount / validRequiredSkills.length) * 2)
+  }
+
+  // === EXPERIENCE: strict compatibility check for candidate-job matching ===
   // expectedExperience comes from jobs.experience_level (level scale, e.g., 1-5)
-  // We map it to a "target years" and give highest score around that, decreasing if
-  // candidate is significantly under/over qualified.
+  // For matching, we need stricter compatibility than for general search
   const experienceYearsSafe = Number.isFinite(experienceYears) ? Math.max(0, experienceYears) : 0
-  const targetYears =
-    expectedExperience && expectedExperience > 0
-      ? Math.max(0.5, expectedExperience * 2) // e.g. level 2 -> ~4 years
-      : experienceYearsSafe // if no level set, don't penalize by default
 
-  // sigma controls how quickly we penalize being far from target.
-  // Rough intuition: within ±sigma from target ~ still high score.
-  const sigmaYears = Math.max(1, targetYears * 0.7)
-  const experience =
-    targetYears > 0 ? gaussian(experienceYearsSafe, targetYears, sigmaYears) : 1
+  let experience = 0
+  if (expectedExperience && expectedExperience > 0) {
+    // Map experience level to years: level 1 = 0-2 years, level 2 = 2-4 years, etc.
+    const minYearsForLevel = (expectedExperience - 1) * 2
+    const maxYearsForLevel = expectedExperience * 2
+
+    if (experienceYearsSafe >= minYearsForLevel && experienceYearsSafe <= maxYearsForLevel + 2) {
+      // Perfect match: within level range
+      experience = 1.0
+    } else if (experienceYearsSafe >= minYearsForLevel - 1 && experienceYearsSafe <= maxYearsForLevel + 3) {
+      // Good match: slightly outside range
+      experience = 0.7
+    } else if (experienceYearsSafe < minYearsForLevel) {
+      // Under-qualified: penalize more
+      experience = Math.max(0.1, experienceYearsSafe / minYearsForLevel * 0.5)
+    } else {
+      // Over-qualified: still acceptable but lower score
+      experience = Math.max(0.3, 1.0 - ((experienceYearsSafe - maxYearsForLevel) / maxYearsForLevel))
+    }
+  } else {
+    // No experience requirement specified
+    experience = experienceYearsSafe > 0 ? 0.8 : 0.5
+  }
 
   // === RECENCY: gaussian decay based on job age in days ===
   // Newer jobs get higher scores; older jobs decay gradually rather than hard cut.
@@ -148,33 +175,45 @@ export function computeScoreComponents(input: {
     activity = gaussian(updateDays, 0, sigmaActivity)
   }
 
-  // === TEXT: caller is responsible for mapping ES _score -> 0..1 using min-max or heuristic ===
-  // We just clamp defensively.
-  const text = Math.max(0, Math.min(1, textScore))
+  // === TEXT: normalize ES _score using logistic function for better distribution ===
+  // ES scores can be very high, logistic function provides better 0-1 mapping
+  // Higher scores get closer to 1, lower scores decay to 0
+  const text = textScore > 0 ? 1 / (1 + Math.exp(-textScore * 0.1)) : 0
 
-  // === LOCATION: already computed upstream (0..1). Clamp defensively. ===
-  const location = Math.max(0, Math.min(1, locationMatch))
+  // === LOCATION: hierarchical scoring based on match level ===
+  // 1.0 = exact location match (same province/city + district)
+  // 0.7 = same province, different district
+  // 0.3 = different province but same region/country
+  // 0.0 = no location match
+  // If no location preference, give moderate score for candidates with any location
+  const location = locationMatch > 0 ? Math.max(0.1, Math.min(1, locationMatch)) : 0.5
 
   // === AVAILABILITY: boost for actively looking candidates (binary) ===
   const availability = isLookingForJob ? 1 : 0
 
-  // === WORK ARRANGEMENT: compatibility between candidate preferences and job offerings ===
-  let work_arrangement = 0
-  const remoteCompatibility = candidateRemotePreference === jobRemoteAllowed
-  const flexibleCompatibility = candidateFlexiblePreference === jobFlexibleHours
-  const remotePercentageScore = jobRemotePercentage / 100 // Normalize 0-100 to 0-1
+  // === WORK ARRANGEMENT: strict preference alignment for candidate-job matching ===
+  // Only boost when both candidate and job have compatible preferences
+  let work_arrangement = 0.0
 
-  // Weight remote preference higher than flexible hours
-  if (candidateRemotePreference) {
-    work_arrangement = (remoteCompatibility ? 0.7 : 0) + (remotePercentageScore * 0.3)
-  } else if (candidateFlexiblePreference) {
-    work_arrangement = flexibleCompatibility ? 0.8 : 0.2 // Some base score even if not preferred
-  } else {
-    // Candidate doesn't have strong preferences - give moderate score for good arrangements
-    work_arrangement = (jobRemoteAllowed || jobFlexibleHours) ? 0.6 : 0.3
+  // Remote work compatibility
+  if (candidateRemotePreference && (jobRemoteAllowed || jobRemotePercentage > 50)) {
+    work_arrangement += 0.6 // Strong boost for remote alignment
+  } else if (!candidateRemotePreference && !jobRemoteAllowed && jobRemotePercentage < 20) {
+    work_arrangement += 0.4 // Moderate boost for office alignment
+  } else if (!candidateRemotePreference && (jobRemoteAllowed || jobRemotePercentage > 50)) {
+    work_arrangement += 0.1 // Small boost - candidate accepts some remote
   }
 
-  // === BENEFITS: overlap between desired and offered benefits ===
+  // Flexible hours compatibility
+  if (candidateFlexiblePreference && jobFlexibleHours) {
+    work_arrangement += 0.4 // Strong boost for flexible alignment
+  } else if (!candidateFlexiblePreference && !jobFlexibleHours) {
+    work_arrangement += 0.2 // Moderate boost for standard hours alignment
+  }
+
+  work_arrangement = Math.min(1.0, work_arrangement)
+
+  // === BENEFITS: simple overlap check (simplified for performance) ===
   const validDesiredBenefits = Array.isArray(candidateDesiredBenefits)
     ? candidateDesiredBenefits.filter((b): b is string => typeof b === 'string' && b.trim().length > 0)
     : []
@@ -182,27 +221,21 @@ export function computeScoreComponents(input: {
     ? jobBenefits.filter((b): b is string => typeof b === 'string' && b.trim().length > 0)
     : []
 
-  const benefitsCount = Math.max(1, validDesiredBenefits.length)
-  const benefitsIntersection = validDesiredBenefits.filter((benefit) =>
-    validJobBenefits.some((jb) => jb.toLowerCase().includes(benefit.toLowerCase()) ||
-                                   benefit.toLowerCase().includes(jb.toLowerCase()))
-  ).length
-  const benefits = benefitsIntersection / benefitsCount
+  let benefits = 0
+  if (validDesiredBenefits.length > 0 && validJobBenefits.length > 0) {
+    // Simple exact match count
+    const matchCount = validDesiredBenefits.filter(desired =>
+      validJobBenefits.some(job => job.toLowerCase() === desired.toLowerCase())
+    ).length
+    benefits = matchCount > 0 ? Math.min(1.0, matchCount / validDesiredBenefits.length) : 0
+  } else {
+    // No preferences or no benefits offered
+    benefits = 0.0
+  }
 
-  // === CATEGORY: alignment between preferred and job categories ===
-  const validPreferredCategories = Array.isArray(candidatePreferredCategories)
-    ? candidatePreferredCategories.filter((c): c is string => typeof c === 'string' && c.trim().length > 0)
-    : []
-  const validJobCategories = Array.isArray(jobCategories)
-    ? jobCategories.filter((c): c is string => typeof c === 'string' && c.trim().length > 0)
-    : []
-
-  const categoryCount = Math.max(1, validPreferredCategories.length)
-  const categoryIntersection = validPreferredCategories.filter((category) =>
-    validJobCategories.some((jc) => jc.toLowerCase().includes(category.toLowerCase()) ||
-                                     category.toLowerCase().includes(jc.toLowerCase()))
-  ).length
-  const category = categoryIntersection / categoryCount
+  // === CATEGORY: removed for matching (weight = 0) ===
+  // Category alignment not prioritized in candidate-job matching
+  const category = 0.0
 
   return {
     text,
