@@ -170,23 +170,6 @@ const main = async () => {
       })
     })
 
-    // Rollout monitoring endpoint
-    app.get('/api/rollout/status', (req: Request, res: Response) => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { RolloutMonitor } = require('./shared/utils/rollout-monitoring.util')
-      res.status(200).json({
-        timestamp: new Date().toISOString(),
-        rollout_flags: {
-          search_jobs: envConfig.rollout.searchJobsPercentage,
-          search_popular: envConfig.rollout.searchPopularPercentage,
-          recommendations: envConfig.rollout.recommendationsPercentage,
-          matching: envConfig.rollout.matchingPercentage
-        },
-        metrics: RolloutMonitor.getAllMetrics(),
-        report: RolloutMonitor.generateReport()
-      })
-    })
-
     app.use(errorHandler)
 
     // Chỉ enable Swagger trong development hoặc khi được config

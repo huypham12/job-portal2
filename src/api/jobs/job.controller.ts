@@ -268,14 +268,25 @@ export class JobController {
   getJobPublic = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.validated!.params
+      console.log(`[jobController.getJobPublic] Fetching job id=${id} path=${req.path}`)
 
       const job = await this.jobService.getJobById(id)
+
+      if (!job) {
+        // Defensive: service should throw HttpError, but guard here as well
+        return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'Job not found' })
+      }
 
       res.status(HTTP_STATUS.OK).json({
         message: 'Job retrieved successfully',
         data: job
       })
     } catch (error) {
+      // If it's a known HttpError, return structured response to reduce noise
+      if ((error as any)?.statusCode) {
+        const err = error as any
+        return res.status(err.statusCode).json({ message: err.message, errors: err.errors || {} })
+      }
       next(error)
     }
   }

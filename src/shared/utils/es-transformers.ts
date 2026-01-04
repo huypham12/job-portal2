@@ -10,7 +10,10 @@
 export function jobToESDoc(job: any) {
   // CRITICAL: Validate ownership - reject if missing recruiter ownership
   if (!job.companies?.recruiter_id) {
-    throw new Error(`Job ${job.id} missing recruiter ownership through company - rejecting ES sync`)
+    // Provide clearer log and surface via thrown error to sync pipeline (sync service will record status)
+    const msg = `Job ${job.id} missing recruiter ownership through company - rejecting ES sync`
+    console.warn(`[es-transformer] ${msg} (job may be intentionally unowned; flagged for triage)`)
+    throw new Error(msg)
   }
 
   // Validate required fields

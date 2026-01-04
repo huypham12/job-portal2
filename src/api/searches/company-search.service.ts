@@ -1,6 +1,5 @@
 import { elasticsearchService } from '../../config/elasticsearch.service'
 import { redisService } from '../../config/redis.service'
-import { metrics } from '../../shared/utils/metrics.util'
 import { CompanySearchRequestDto, CompanySearchResponseDto, CompanySuggestionsRequestDto, CompanySuggestionsResponseDto, PopularCompaniesRequestDto, PopularCompaniesResponseDto } from './search.dto'
 
 /**
@@ -18,15 +17,12 @@ export const companySearchService = {
     const cacheKey = `search:companies:${JSON.stringify(dto)}:page:${page}:size:${size}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
-      metrics.increment('search.companies.cache_hit')
       return {
         total: cacheHit.total,
         took_ms: cacheHit.took,
         companies: cacheHit.hits.map((h: any) => h._source)
       }
     }
-
-    const timerDone = metrics.startTimer('search.companies.duration')
 
     // Build ES query
     const must: any[] = []
@@ -78,9 +74,6 @@ export const companySearchService = {
       sort: sortOptions
     })
 
-    timerDone()
-    metrics.increment('search.companies.request')
-
     // Cache results for 15 minutes
     try {
       await redisService.setSearchResponse(cacheKey, esResp, 15 * 60)
@@ -106,11 +99,8 @@ export const companySearchService = {
     const cacheKey = `search:companies:suggest:${q}:${size}:${JSON.stringify(context ?? {})}`
     const cached = await redisService.getSuggestResponse(cacheKey)
     if (cached) {
-      metrics.increment('search.companies.suggest.cache_hit')
       return { suggestions: cached.suggestions }
     }
-
-    const timerDone = metrics.startTimer('search.companies.suggest.duration')
 
     const esResp = await elasticsearchService.suggest({
       index: 'companies',
@@ -118,9 +108,6 @@ export const companySearchService = {
       size,
       context: context as Record<string, unknown> | undefined
     })
-
-    timerDone()
-    metrics.increment('search.companies.suggest.request')
 
     try {
       await redisService.setSuggestResponse(cacheKey, esResp, 20)
@@ -174,15 +161,12 @@ export const companySearchService = {
     const cacheKey = `search:companies:popular:${sort_by}:${industry || 'all'}:${limit}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
-      metrics.increment('search.companies.popular.cache_hit')
       return {
         companies: cacheHit.hits.map((h: any) => h._source),
         sort_by,
         period: 'all_time'
       }
     }
-
-    const timerDone = metrics.startTimer('search.companies.popular.duration')
 
     // Build query based on sort criteria
     let sortOptions: any[] = []
@@ -220,9 +204,6 @@ export const companySearchService = {
       size: limit,
       sort: sortOptions
     })
-
-    timerDone()
-    metrics.increment('search.companies.popular.request')
 
     // Cache for 1 hour
     try {

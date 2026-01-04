@@ -1,7 +1,6 @@
 import { elasticsearchService } from '../../config/elasticsearch.service'
 import { searchService } from '../searches/search.service'
 import { redisService } from '../../config/redis.service'
-import { metrics } from '../../shared/utils/metrics.util'
 import { computeScoreComponents, normalizeScore, DEFAULT_SCORE_WEIGHTS } from '../../shared/utils/scoring.util'
 import { formatBreakdown } from '../../shared/utils/explain.util'
 import { buildJobSearchQuery } from '../../search/jobSearch.builder'
@@ -22,11 +21,8 @@ export const matchingService = {
     const cacheKey = `matching:candidates:job:${jobId}:size:${size}`
     const cacheHit = await redisService.get(cacheKey)
     if (cacheHit) {
-      metrics.increment('matching.candidates.cache_hit')
       return JSON.parse(cacheHit)
     }
-
-    const timerDone = metrics.startTimer('matching.candidates.duration')
 
     try {
       // Sử dụng phương thức enhanced từ ES service - automatic matching from job content only
@@ -73,9 +69,6 @@ export const matchingService = {
         candidates: candidates.slice(0, size)
       }
 
-      timerDone()
-      metrics.increment('matching.candidates.request')
-
       // Cache results for 30 minutes
       try {
         await redisService.set(cacheKey, JSON.stringify(filteredResult), 30 * 60)
@@ -85,7 +78,6 @@ export const matchingService = {
 
       return filteredResult
     } catch (error) {
-      timerDone()
       console.error(`Enhanced candidate matching failed for job ${jobId}:`, error)
       throw error
     }
@@ -98,25 +90,21 @@ export const matchingService = {
     const cacheKey = `matching:jobs:profile:${profileId}:size:${size}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
-      metrics.increment('matching.jobs.cache_hit')
       return cacheHit
     }
-
-    const timerDone = metrics.startTimer('matching.jobs.duration')
 
     try {
       // Fetch profile payload
       const profilePayload = await elasticsearchService.getById({ index: elasticsearchService.getIndexName('profiles'), id: profileId })
 
       if (!profilePayload) {
-        timerDone()
         return { profileId, total: 0, jobs: [] }
       }
 
       // Build QueryContext từ profile data
       const queryContext: QueryContext = {
         q: (profilePayload as any).headline || (profilePayload as any).desired_job_title,
-        userSkills: (profilePayload as any).skills_flat || (profilePayload as any).skills?.map((s: any) => s.name),
+        userSkills: (profilePayload as any).skills_flat || (profilePayload as any).skills?.map((s: any) => typeof s === 'string' ? s : s.name).filter(Boolean),
         userLocationId: (profilePayload as any).location_id,
         userExperienceLevel: (profilePayload as any).years_of_experience ?
           Math.floor((profilePayload as any).years_of_experience / 2) : undefined,
@@ -194,7 +182,17 @@ export const matchingService = {
 
         // Ensure score_percent is within 0-100 range
         const score_percent = Math.max(0, Math.min(100, normalizeScore(weightedRaw)))
-        const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS)
+        const explanation = formatBreakdown(components, DEFAULT_SCORE_WEIGHTS) || {
+          text: 0,
+          skills: 0,
+          location: 0,
+          experience: 0,
+          recency: 0,
+          activity: 0,
+          work_arrangement: 0,
+          benefits: 0,
+          category: 0
+        }
 
         // Only include essential fields from _source to reduce response size
         const essentialSource = {
@@ -236,10 +234,8 @@ export const matchingService = {
         // Non-fatal
       }
 
-      timerDone()
       return result
     } catch (error) {
-      timerDone()
       console.error(`Enhanced job matching failed for profile ${profileId}:`, error)
       throw error
     }

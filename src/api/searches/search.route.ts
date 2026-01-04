@@ -20,10 +20,6 @@ import {
   getPopularQueriesValidator
 } from '../../shared/validators/enhanced-features.validator'
 import {
-  getCandidateRecommendationsValidator,
-  getRecruiterRecommendationsValidator
-} from '../recommendations/recommendations.validator'
-import {
   searchJobsValidator,
   suggestionsValidator,
   searchCompaniesValidator,
@@ -48,14 +44,11 @@ import { PopularJobsController } from './popular-jobs.controller'
 import { JobRecommendationsController } from './job-recommendations.controller'
 import { RecentlyViewedController } from './recently-viewed.controller'
 
-// Import moved controllers from recommendations module
-import { recommendationsController } from '../recommendations/recommendations.controller'
 
 // Import moved validators
 import { filterJobsValidator } from '../jobs/job.validator'
 
 // Import moved utilities from recommendations module
-import { rolloutMetricsMiddleware } from '../../shared/utils/rollout-monitoring.util'
 
 const router = Router()
 
@@ -86,7 +79,7 @@ function simpleHash(str: string): number {
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i)
     hash = (hash << 5) - hash + char
-    hash = hash & hash // Convert to 32-bit integer
+    hash = hash & 0xFFFFFFFF // Convert to 32-bit integer
   }
   return Math.abs(hash)
 }
@@ -233,31 +226,5 @@ router.get('/companies/popular', cacheHeaders(600), apiRateLimit, getPopularComp
 
 // ==================== RECOMMENDATIONS ROUTES (MOVED) ====================
 
-/**
- * GET /api/search/recommendations/for-candidate
- * Get personalized job recommendations for authenticated candidate
- */
-router.get(
-  '/recommendations/for-candidate',
-  apiRateLimit,
-  rolloutMetricsMiddleware('recommendations_candidate'),
-  authenticateAccessToken,
-  getCandidateRecommendationsValidator,
-  recommendationsController.getCandidateRecommendations
-)
-
-/**
- * GET /api/search/recommendations/for-recruiter
- * Get candidate recommendations for recruiter's jobs
- */
-router.get(
-  '/recommendations/for-recruiter',
-  apiRateLimit,
-  rolloutMetricsMiddleware('recommendations_recruiter'),
-  authenticateAccessToken,
-  checkResourceOwnership('company'),
-  getRecruiterRecommendationsValidator,
-  recommendationsController.getRecruiterRecommendations
-)
 
 export default router

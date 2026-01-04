@@ -626,6 +626,28 @@ export const elasticsearchService = {
     if (query && typeof query === 'object' && ('query' in query || 'bool' in query || 'multi_match' in query)) {
       // Use provided query directly if it's already a complete Elasticsearch query
       body.query = query
+    } else if (typeof query === 'string' && query.trim()) {
+      // Convert string query to multi_match across high-priority job fields
+      body.query = {
+        multi_match: {
+          query: query.trim(),
+          fields: [
+            'title^4', // Highest priority - job title
+            'description^2.5', // High priority - job description
+            'company_name^2', // High priority - company name
+            'skills_flat^2', // High priority - skills
+            'job_category^1', // Medium priority - categories
+            'location_name^1', // Medium priority - location
+            'location_combined^0.8', // Lower priority - combined location
+            'job_requirements_title^1.2' // Medium priority - requirements
+          ],
+          type: 'best_fields',
+          operator: 'or',
+          minimum_should_match: '30%',
+          fuzziness: 'AUTO',
+          prefix_length: 1
+        }
+      }
     } else if (query && typeof query === 'object') {
       // Build optimized bool query for job search
       const mustClauses = []

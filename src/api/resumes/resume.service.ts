@@ -1843,7 +1843,7 @@ export class ResumeService {
 
           // Replace the specific <link ... href="..."> occurrence with a <style> block
           const escapedHref = href.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
-          const linkTagRegex = new RegExp(`<link\\\\b[^>]*href=([\"'])${escapedHref}\\\\1[^>]*>`, 'gi')
+          const linkTagRegex = new RegExp(`<link\\b[^>]*href=(["'])${escapedHref}\\1[^>]*>`, 'gi')
           result = result.replace(linkTagRegex, `<style>${cssText}</style>`)
           processedHrefs[href] = true
         } catch (e) {

@@ -15,7 +15,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0 || parsed > 50) {
           throw new Error('experienceLevel must be an integer between 0 and 50')
         }
@@ -31,8 +33,10 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
         if (parsed.length === 0) {
           throw new Error('Skills array must not be empty when provided')
         }
@@ -49,7 +53,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0) {
           throw new Error('salaryMin must be a non-negative integer')
         }
@@ -62,7 +68,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0) {
           throw new Error('salaryMax must be a non-negative integer')
         }
@@ -79,8 +87,10 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
         if (parsed.length === 0) {
           throw new Error('Job categories array must not be empty when provided')
         }
@@ -99,8 +109,10 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
         if (parsed.length === 0) {
           throw new Error('Job benefits array must not be empty when provided')
         }
@@ -117,7 +129,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0 || parsed > 100) {
           throw new Error('remotePercentageMin must be an integer between 0 and 100')
         }
@@ -130,7 +144,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const v = val.trim().toLowerCase()
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const v = trimmed.toLowerCase()
         if (v === 'true' || v === '1') return true
         if (v === 'false' || v === '0') return false
         throw new Error('flexibleHours must be boolean-like ("true"/"false" or "1"/"0")')
@@ -185,7 +201,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0 || parsed > 50) {
           throw new Error('userExperienceLevel must be an integer between 0 and 50')
         }
@@ -199,7 +217,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const v = val.trim().toLowerCase()
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const v = trimmed.toLowerCase()
         if (v === 'true' || v === '1') return true
         if (v === 'false' || v === '0') return false
         throw new Error('userPrefersRemote must be boolean-like ("true"/"false" or "1"/"0")')
@@ -215,8 +235,10 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
         return parsed.length > 0 ? parsed : undefined
       }
       return val
@@ -226,7 +248,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0) {
           throw new Error('userDesiredSalaryMin must be a non-negative integer')
         }
@@ -239,7 +263,9 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
+        const parsed = parseInt(trimmed, 10)
         if (isNaN(parsed) || parsed < 0) {
           throw new Error('userDesiredSalaryMax must be a non-negative integer')
         }
@@ -255,8 +281,10 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
         return parsed.length > 0 ? parsed : undefined
       }
       return val
@@ -269,8 +297,10 @@ export const JobSearchRequestSchema = z.object({
     .optional()
     .transform((val) => {
       if (typeof val === 'string') {
+        const trimmed = val.trim()
+        if (trimmed === '' || trimmed.toLowerCase() === 'null') return undefined
         // Handle comma-separated string
-        const parsed = val.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        const parsed = trimmed.split(',').map(s => s.trim()).filter(s => s.length > 0)
         return parsed.length > 0 ? parsed : undefined
       }
       return val

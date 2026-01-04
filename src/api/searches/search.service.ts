@@ -2,7 +2,6 @@ import { JobSearchRequestDto, JobSearchResponseDto, SuggestionRequestDto, Sugges
 import { elasticsearchService } from '../../config/elasticsearch.service'
 import { searchRepo } from './search.repo'
 import { redisService } from '../../config/redis.service'
-import { metrics } from '../../shared/utils/metrics.util'
 import { prisma } from '../../config/database.service'
 import { Prisma } from '@prisma/client'
 import { buildJobSearchQuery, buildJobSuggestionsQuery } from '../../search/jobSearch.builder'
@@ -126,55 +125,22 @@ export const searchService = {
     const cacheKey = `search:jobs:v2:${JSON.stringify(queryContext)}:recruiterId:${recruiterId || 'public'}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
-      metrics.increment('search.jobs.cache_hit')
       return await this.formatJobSearchResponse(cacheHit, highlight)
     }
 
-    const timerDone = metrics.startTimer('search.jobs.duration')
-
     try {
-      // Use enhanced search with business-aware scoring
-      const pagination = queryContext.pagination || { page: 1, size: 20 }
-      const sortOption = queryContext.filters?.sort
+      // Build complete ES query using the canonical query builder
+      const esQuery = buildJobSearchQuery(queryContext)
 
-      const sortConfig =
-        sortOption === 'relevance'
-          ? [{ _score: 'desc' }, { posted_at: 'desc' }]
-          : sortOption === 'newest'
-            ? [{ posted_at: 'desc' }]
-            : sortOption === 'oldest'
-              ? [{ posted_at: 'asc' }]
-              : sortOption === 'salary_high'
-                ? [{ salary_max: 'desc' }]
-                : sortOption === 'salary_low'
-                  ? [{ salary_min: 'asc' }]
-                  : sortOption === 'experience_high'
-                    ? [{ experience_level: 'desc' }]
-                    : sortOption === 'experience_low'
-                      ? [{ experience_level: 'asc' }]
-                      : [{ _score: 'desc' }, { posted_at: 'desc' }]
-
-      const esResp = await elasticsearchService.searchJobs({
-        index: 'jobs',
-        query: queryContext.q || '',
-        from: (pagination.page - 1) * pagination.size,
-        size: pagination.size,
-        sort: sortConfig,
-        userExperienceLevel: queryContext.userExperienceLevel,
-        userLocationId: queryContext.userLocationId,
-        prioritizeFreshJobs: queryContext.options?.prioritizeFreshJobs,
-        userPrefersRemote: queryContext.userPrefersRemote,
-        userPrefersFlexibleHours: queryContext.userPrefersFlexibleHours,
-        userSkills: queryContext.userSkills,
-        userDesiredSalaryMin: queryContext.userDesiredSalaryMin,
-        userDesiredSalaryMax: queryContext.userDesiredSalaryMax,
-        userDesiredBenefits: queryContext.userDesiredBenefits,
-        userPreferredCategories: queryContext.userPreferredCategories,
-        userRemotePercentageMin: queryContext.userRemotePercentageMin
-      })
-
-      timerDone()
-      metrics.increment('search.jobs.request')
+      // Execute search using the built query
+      const esResp = await elasticsearchService.searchWithTemplate(
+        'jobs',
+        esQuery,
+        {
+          explain: queryContext.options?.explain,
+          profile: queryContext.options?.profile
+        }
+      )
 
       // Cache results for short period
       try {
@@ -186,8 +152,6 @@ export const searchService = {
       return await this.formatJobSearchResponse(esResp, highlight)
     } catch (esError) {
       console.warn('ES search failed, falling back to DB search', esError)
-      metrics.increment('search.jobs.es_fallback')
-      timerDone()
 
       // Fallback to database search
       const esResp = await this.searchJobsFromDB(dto)
@@ -215,17 +179,54 @@ export const searchService = {
       }
     }
 
-    const hits = esResp.hits.map((h: any) => {
-      const src = h._source as any
-      return {
-        id: h.id,
-        title: src?.title,
-        company: companyMap[src?.company_id] ?? { id: src?.company_id, name: src?.company_name },
-        score: h._score ?? undefined,
-        highlight: highlight ? (h as any)._highlight : undefined,
-        _source: src
-      }
-    })
+    // Enrich hits: ensure _source.company_name exists (fallback to DB if necessary)
+    const hits = await Promise.all(
+      (esResp.hits || []).map(async (h: any) => {
+        const src = (h._source as any) || {}
+        const companyId = src?.company_id
+
+        // Primary enrichment from pre-fetched companyMap
+        let company = companyMap[companyId]
+
+        // If still missing, try single-company DB lookup (last-resort)
+        if ((!company || !(company as any)?.name) && companyId) {
+          try {
+            const dbCompany = await searchRepo.getCompanyById(companyId)
+            if (dbCompany) {
+              company = { id: dbCompany.id, name: (dbCompany as any).name, logo_url: (dbCompany as any).logo_url }
+            }
+          } catch (e) {
+            console.warn(`[search] Failed to load company ${companyId} from DB for hit ${h.id}:`, (e as Error)?.message || e)
+          }
+        }
+
+        // If company found via enrichment, propagate into _source for frontend convenience
+        if (company && (company as any).name && !src.company_name) {
+          try {
+            src.company_name = (company as any).name
+          } catch (e) {
+            // ignore
+          }
+        }
+
+        if (!company || !(company as any).name) {
+          // Last-resort placeholder and logging for triage
+          console.warn(
+            `[search] Missing company name for ES hit id=${h.id}, company_id=${companyId}, src.company_name='${src?.company_name ||
+              ''}'`
+          )
+        }
+
+        return {
+          id: h.id,
+          title: src?.title,
+          company: company ?? (src?.company_name ? { id: src?.company_id, name: src.company_name } : { id: src?.company_id, name: 'Chưa có tên công ty' }),
+          score: h._score ?? undefined,
+          highlight: highlight ? (h as any)._highlight : undefined,
+          _source: src
+        }
+      })
+    )
 
     return {
       total: esResp.total,
@@ -266,11 +267,8 @@ export const searchService = {
     const cacheKey = `search:suggest:v2:${index}:${dto.q}:${dto.size}:${JSON.stringify(enhancedContext)}`
     const cached = await redisService.getSuggestResponse(cacheKey)
     if (cached) {
-      metrics.increment('search.suggest.cache_hit')
       return { suggestions: cached.suggestions }
     }
-
-    const timerDone = metrics.startTimer('search.suggest.duration')
 
     try {
       // Try completion suggester first
@@ -299,9 +297,6 @@ export const searchService = {
         }
       }
 
-      timerDone()
-      metrics.increment('search.suggest.request')
-
       // Cache results
       try {
         await redisService.setSuggestResponse(cacheKey, { suggestions }, 20)
@@ -318,7 +313,6 @@ export const searchService = {
       }
     } catch (error) {
       console.warn('ES suggest failed:', error)
-      timerDone()
       // Return empty suggestions on error
       return { suggestions: [] }
     }
@@ -466,19 +460,15 @@ export const searchService = {
     const cacheKey = `search:profiles_for_job:${JSON.stringify(jobPayload)}:topN:${topN}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
-      metrics.increment('search.profiles_for_job.cache_hit')
       return cacheHit.hits
     }
 
-    const timerDone = metrics.startTimer('search.profiles_for_job.duration')
     const esResp = await elasticsearchService.search({
       index: 'profiles',
       query: esQuery,
       from: 0,
       size: topN
     })
-    timerDone()
-    metrics.increment('search.profiles_for_job.request')
     try {
       await redisService.setSearchResponse(cacheKey, esResp, 20)
     } catch (e) {
@@ -516,19 +506,15 @@ export const searchService = {
     const cacheKey = `search:jobs_for_profile:${JSON.stringify(profilePayload)}:topN:${topN}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
-      metrics.increment('search.jobs_for_profile.cache_hit')
       return cacheHit.hits
     }
 
-    const timerDone = metrics.startTimer('search.jobs_for_profile.duration')
     const esResp = await elasticsearchService.search({
       index: 'jobs',
       query: esQuery,
       from: 0,
       size: topN
     })
-    timerDone()
-    metrics.increment('search.jobs_for_profile.request')
     try {
       await redisService.setSearchResponse(cacheKey, esResp, 20)
     } catch (e) {
@@ -978,7 +964,7 @@ export const searchService = {
     }
     if (jobType) filter.push({ term: { job_type: jobType } })
     if (typeof experienceLevel === 'number') filter.push({ term: { experience_level: experienceLevel } })
-    if (skills && Array.isArray(skills) && skills.length) filter.push({ terms: { skills } })
+    if (skills && Array.isArray(skills) && skills.length) filter.push({ terms: { skills_flat: skills } })
 
     // Salary range filters
     if (salaryMin !== undefined || salaryMax !== undefined) {
@@ -1038,11 +1024,8 @@ export const searchService = {
     )}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
-      metrics.increment('search.jobs.legacy.cache_hit')
       return this.formatJobSearchResponse(cacheHit, highlight)
     }
-
-    const timerDone = metrics.startTimer('search.jobs.legacy.duration')
 
     let esResp: any
     try {
@@ -1079,14 +1062,11 @@ export const searchService = {
       })
     } catch (esError) {
       console.warn('ES search failed, falling back to DB search', esError)
-      metrics.increment('search.jobs.legacy.es_fallback')
 
       // Fallback to database search
       esResp = await this.searchJobsFromDB(dto)
     }
 
-    timerDone()
-    metrics.increment('search.jobs.legacy.request')
     // cache results for short period
     try {
       await redisService.setSearchResponse(cacheKey, esResp, 30)
