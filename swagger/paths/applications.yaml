@@ -1,440 +1,1316 @@
 # ============================================
-# APPLICATION ENDPOINTS (Candidate)
+# APPLICATION ENDPOINTS
 # ============================================
+
+# ============================================
+# CANDIDATE ENDPOINTS
+# ============================================
+
 /applications/candidate:
   post:
     tags: [applications]
-    summary: Create application (Candidate)
-    security: [{ bearerAuth: [] }]
+    summary: Create a new job application
+    description: Submit an application for a job posting (candidate only)
+    operationId: createApplication
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateApplicationRequest'
+          example:
+            job_id: '123e4567-e89b-12d3-a456-426614174000'
+            resume_id: '123e4567-e89b-12d3-a456-426614174001'
+            metadata:
+              cover_letter: 'I am very interested in this position...'
     responses:
-      '201': { description: Created }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '201':
+        description: Application created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 201
+              message: 'Application submitted successfully'
+      '400':
+        description: Bad request - Validation error or already applied
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Candidate role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   get:
     tags: [applications]
-    summary: List my applications
-    security: [{ bearerAuth: [] }]
+    summary: Get my applications
+    description: Get paginated list of applications submitted by the authenticated candidate
+    operationId: getMyApplications
+    security:
+      - bearerAuth: []
     parameters:
-      - in: query
-        name: page
-        schema: { type: string, default: '1' }
-        description: 'Page number (will be converted to integer, default: 1)'
-      - in: query
-        name: limit
-        schema: { type: string, default: '20' }
-        description: 'Items per page (will be converted to integer, 1-100, default: 20)'
-      - in: query
-        name: status
-        schema: { $ref: '#/components/schemas/ApplicationStatus' }
-      - in: query
-        name: sort_by
-        schema: { type: string, enum: [applied_at, status], default: applied_at }
-        description: 'Sort field (default: applied_at)'
-      - in: query
-        name: order
-        schema: { type: string, enum: [asc, desc], default: desc }
-        description: 'Sort order (default: desc)'
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: Page number for pagination
+        example: 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of applications per page
+        example: 20
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/ApplicationStatus'
+        description: Filter by application status
+        example: 'pending'
+      - name: sort_by
+        in: query
+        schema:
+          type: string
+          enum: [applied_at, status]
+          default: applied_at
+        description: Sort field
+        example: applied_at
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: desc
+        description: Sort order
+        example: desc
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Applications retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Applications retrieved successfully'
+              data:
+                applications: []
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 0
+                  totalPages: 0
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Candidate role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/candidate/{id}:
+/applications/candidate/{applicationId}:
   get:
     tags: [applications]
-    summary: Get application by id
-    security: [{ bearerAuth: [] }]
+    summary: Get application details
+    description: Get detailed information about a specific application (candidate who owns the application)
+    operationId: getApplicationById
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '404': { description: Not found }
+      '200':
+        description: Application details retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application retrieved successfully'
+              data: {}
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the application owner can access details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   delete:
     tags: [applications]
     summary: Withdraw application
-    security: [{ bearerAuth: [] }]
+    description: Withdraw/cancel a job application (candidate who owns the application)
+    operationId: withdrawApplication
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: Withdrawn }
-      '401': { description: Unauthorized }
+      '200':
+        description: Application withdrawn successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application withdrawn successfully'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the application owner can withdraw
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/candidate/{id}/stages:
+/applications/candidate/{applicationId}/stages:
   get:
     tags: [applications]
-    summary: Get application stages
-    security: [{ bearerAuth: [] }]
+    summary: Get application stages history
+    description: Get the history of application stages (interviews, evaluations, etc.)
+    operationId: getApplicationStages
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Application stages retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application stages retrieved successfully'
+              data:
+                stages: []
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the application owner can access stages
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/candidate/{id}/documents:
+/applications/candidate/{applicationId}/documents:
   get:
     tags: [applications]
     summary: Get application documents
-    security: [{ bearerAuth: [] }]
+    description: Get list of documents uploaded for this application
+    operationId: getApplicationDocuments
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
+      '200':
+        description: Application documents retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application documents retrieved successfully'
+              data:
+                documents: []
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the application owner can access documents
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   post:
     tags: [applications]
     summary: Upload application document
-    security: [{ bearerAuth: [] }]
+    description: Upload additional document for an application (candidate who owns the application)
+    operationId: uploadDocument
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         multipart/form-data:
           schema:
             type: object
+            required:
+              - file
+              - document_type
             properties:
               file:
                 type: string
                 format: binary
+                description: Document file to upload
               document_type:
                 type: string
                 maxLength: 50
+                description: Type of document (e.g., portfolio, certificate)
+                example: 'portfolio'
     responses:
-      '200': { description: Uploaded }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '201':
+        description: Document uploaded successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 201
+              message: 'Document uploaded successfully'
+      '400':
+        description: Bad request - Invalid file or validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the application owner can upload documents
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/candidate/{id}/stages/{stageId}/feedback:
+/applications/candidate/{applicationId}/stages/{stageId}/feedback:
   patch:
     tags: [applications]
-    summary: Submit candidate feedback for interview stage
-    security: [{ bearerAuth: [] }]
+    summary: Submit stage feedback
+    description: Submit candidate feedback for an interview or evaluation stage
+    operationId: submitStageFeedback
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
-        description: Application ID
-      - in: path
-        name: stageId
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
+      - name: stageId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
-        description: Stage ID
+        schema:
+          type: string
+          format: uuid
+        description: Stage ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174001'
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
-            required: [candidate_feedback]
-            properties:
-              candidate_feedback:
-                type: string
-                description: Candidate feedback for the interview stage
+            $ref: '#/components/schemas/SubmitStageFeedbackRequest'
+          example:
+            candidate_feedback: 'The interview went well, I enjoyed discussing the technical challenges...'
     responses:
-      '200': { description: Feedback submitted }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
+      '200':
+        description: Feedback submitted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Feedback submitted successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the application owner can submit feedback
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application or stage not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 # ============================================
-# APPLICATION ENDPOINTS (Recruiter)
+# RECRUITER ENDPOINTS
 # ============================================
+
 /applications/recruiter/job/{jobId}:
   get:
     tags: [applications]
-    summary: List applications for a job (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Get applications for a job
+    description: Get all applications for a specific job posting (recruiter who owns the job)
+    operationId: getApplicationsByJob
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: jobId
+      - name: jobId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
-      - in: query
-        name: page
-        schema: { type: string, default: '1' }
-        description: 'Page number (will be converted to integer, default: 1)'
-      - in: query
-        name: limit
-        schema: { type: string, default: '20' }
-        description: 'Items per page (will be converted to integer, 1-100, default: 20)'
-      - in: query
-        name: status
-        schema: { $ref: '#/components/schemas/ApplicationStatus' }
-      - in: query
-        name: stage
-        schema: { type: string }
-        description: Filter by stage name
-      - in: query
-        name: sort_by
-        schema: { type: string, enum: [applied_at, rating, name], default: applied_at }
-        description: 'Sort field (default: applied_at)'
-      - in: query
-        name: order
-        schema: { type: string, enum: [asc, desc], default: desc }
-        description: 'Sort order (default: desc)'
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: Page number for pagination
+        example: 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of applications per page
+        example: 20
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/ApplicationStatus'
+        description: Filter by application status
+        example: 'pending'
+      - name: stage
+        in: query
+        schema:
+          type: string
+        description: Filter by current stage
+        example: 'initial_screening'
+      - name: skills
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: Filter by required skills (comma-separated)
+        example: ['JavaScript', 'React', 'Node.js']
+      - name: experience_min
+        in: query
+        schema:
+          type: integer
+          minimum: 0
+        description: Minimum years of experience
+        example: 2
+      - name: experience_max
+        in: query
+        schema:
+          type: integer
+          minimum: 0
+        description: Maximum years of experience
+        example: 5
+      - name: location
+        in: query
+        schema:
+          type: string
+        description: Filter by candidate location
+        example: 'Ho Chi Minh City'
+      - name: sort_by
+        in: query
+        schema:
+          type: string
+          enum: [applied_at, rating, name, experience, salary]
+          default: applied_at
+        description: Sort field
+        example: applied_at
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: desc
+        description: Sort order
+        example: desc
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Applications retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Applications retrieved successfully'
+              data:
+                applications: []
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 0
+                  totalPages: 0
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the job owner can access applications
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-# ============================================
-# RECRUITER EXTRA FEATURES (shortlist, compare, shortlist list)
-# ============================================
+/applications/recruiter/job/{jobId}/stats:
+  get:
+    tags: [applications]
+    summary: Get job application statistics
+    description: Get application statistics for a job posting (recruiter who owns the job)
+    operationId: getJobApplicationStats
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: Job statistics retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job statistics retrieved successfully'
+              data:
+                total_applications: 25
+                pending_applications: 10
+                reviewed_applications: 8
+                accepted_applications: 3
+                rejected_applications: 4
+                withdrawn_applications: 0
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the job owner can access statistics
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
 /applications/recruiter/shortlist:
   post:
     tags: [applications]
-    summary: Add or remove candidate from shortlist
-    description: Add or remove a candidate to/from the recruiter's shortlist for later review.
-    security: [{ bearerAuth: [] }]
+    summary: Manage shortlist
+    description: Add or remove a candidate from the recruiter's shortlist
+    operationId: shortlistCandidate
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
-            required: [application_id, action]
-            properties:
-              application_id:
-                type: string
-                format: uuid
-              action:
-                type: string
-                enum: [add, remove]
-              note:
-                type: string
+            $ref: '#/components/schemas/ManageShortlistRequest'
+          example:
+            application_id: '123e4567-e89b-12d3-a456-426614174000'
+            action: 'add'
+            note: 'Strong technical background, good fit for senior role'
     responses:
-      '200': { description: OK }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Shortlist updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Candidate added to shortlist successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /applications/recruiter/shortlisted:
   get:
     tags: [applications]
     summary: Get shortlisted candidates
-    description: Return the list of shortlisted candidates for the authenticated recruiter (supports pagination).
-    security: [{ bearerAuth: [] }]
+    description: Get paginated list of shortlisted candidates for the recruiter
+    operationId: getShortlistedCandidates
+    security:
+      - bearerAuth: []
     parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: Page number for pagination
+        example: 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of candidates per page
+        example: 20
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Shortlisted candidates retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Shortlisted candidates retrieved successfully'
+              data:
+                candidates: []
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 0
+                  totalPages: 0
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /applications/recruiter/compare:
   post:
     tags: [applications]
-    summary: Compare multiple candidates side-by-side
-    description: Provide a comparison view between selected application IDs.
-    security: [{ bearerAuth: [] }]
+    summary: Compare candidates
+    description: Compare multiple candidates side-by-side for evaluation
+    operationId: compareCandidates
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
-            required: [application_ids]
-            properties:
-              application_ids:
-                type: array
-                items:
-                  type: string
-                  format: uuid
-                minItems: 2
+            $ref: '#/components/schemas/CompareCandidatesRequest'
+          example:
+            application_ids:
+              - '123e4567-e89b-12d3-a456-426614174000'
+              - '123e4567-e89b-12d3-a456-426614174001'
+              - '123e4567-e89b-12d3-a456-426614174002'
     responses:
-      '200': { description: Comparison result }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
-
-/applications/recruiter/:id/timeline:
-  # Note: certain routers expose /applications/:id/timeline under recruiter routes.
-  # Keep this here for completeness (alias of recruiter timeline endpoint).
-  get:
-    tags: [applications]
-    summary: Get full application timeline with all stages (Recruiter)
-    security: [{ bearerAuth: [] }]
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema: { type: string, format: uuid }
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
-
-/applications/recruiter/job/{jobId}/stats:
-  get:
-    tags: [applications]
-    summary: Get job application stats (Recruiter)
-    security: [{ bearerAuth: [] }]
-    parameters:
-      - in: path
-        name: jobId
-        required: true
-        schema: { type: string, format: uuid }
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Candidates compared successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Candidates compared successfully'
+              data:
+                comparison: {}
+      '400':
+        description: Bad request - Validation error or too many candidates
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: One or more applications not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /applications/recruiter/bulk-update:
   post:
     tags: [applications]
-    summary: Bulk update applications (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Bulk update applications
+    description: Update multiple applications at once (recruiter who owns the company)
+    operationId: bulkUpdateApplications
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BulkUpdateApplicationsRequest'
+          example:
+            application_ids:
+              - '123e4567-e89b-12d3-a456-426614174000'
+              - '123e4567-e89b-12d3-a456-426614174001'
+            updates:
+              status: 'reviewed'
+              notes: 'Bulk status update for initial screening'
     responses:
-      '200': { description: Updated }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Applications updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Applications updated successfully'
+              data:
+                processed: 2
+                successful: 2
+                failed: 0
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Company ownership required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: One or more applications not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/recruiter/{id}/cv:
+/applications/recruiter/{applicationId}/timeline:
   get:
     tags: [applications]
-    summary: View application CV (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Get application timeline
+    description: Get full application timeline with all stages and activities
+    operationId: getApplicationTimeline
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Application timeline retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application timeline retrieved successfully'
+              data:
+                timeline: []
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can access timeline
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/recruiter/{id}/status:
+/applications/recruiter/{applicationId}/cv:
+  get:
+    tags: [applications]
+    summary: View applicant CV
+    description: View detailed CV/resume of an applicant
+    operationId: getApplicationCV
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: CV retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'CV retrieved successfully'
+              data: {}
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can access CV
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/applications/recruiter/{applicationId}:
+  get:
+    tags: [applications]
+    summary: Get application details
+    description: Get full application details (recruiter view)
+    operationId: getApplicationById
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    responses:
+      '200':
+        description: Application details retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application retrieved successfully'
+              data: {}
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can access application
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/applications/recruiter/{applicationId}/status:
   patch:
     tags: [applications]
-    summary: Update application status (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Update application status
+    description: Update the overall status of an application
+    operationId: updateApplicationStatus
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateApplicationStatusRequest'
+          example:
+            status: 'accepted'
+            notes: 'Candidate selected for the position'
     responses:
-      '200': { description: Updated }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Application status updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application status updated successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can update status
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/recruiter/{id}/stage:
+/applications/recruiter/{applicationId}/stage:
   patch:
     tags: [applications]
-    summary: Update application stage (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Update application stage
+    description: Update an existing application stage (modify details)
+    operationId: updateApplicationStage
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateApplicationStageRequest'
+          example:
+            stage_id: '123e4567-e89b-12d3-a456-426614174001'
+            status: 'completed'
+            notes: 'Interview completed successfully'
     responses:
-      '200': { description: Updated }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Application stage updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Application stage updated successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can update stages
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application or stage not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   post:
     tags: [applications]
-    summary: Create application stage (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Create application stage
+    description: Create a new stage for the application (e.g., schedule interview)
+    operationId: createApplicationStage
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateApplicationStageRequest'
+          example:
+            stage_type: 'interview'
+            title: 'Technical Interview'
+            description: 'Technical assessment and coding challenge'
+            scheduled_at: '2024-01-15T10:00:00Z'
+            location: 'Online via Zoom'
+            interviewer_ids: ['123e4567-e89b-12d3-a456-426614174002']
     responses:
-      '201': { description: Created }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '201':
+        description: Application stage created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 201
+              message: 'Application stage created successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can create stages
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/recruiter/{id}/notes:
+/applications/recruiter/{applicationId}/notes:
   post:
     tags: [applications]
-    summary: Add application note (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Add application notes
+    description: Add internal notes to an application
+    operationId: addApplicationNotes
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/AddApplicationNoteRequest'
+            $ref: '#/components/schemas/AddApplicationNotesRequest'
+          example:
+            notes: 'Candidate has excellent communication skills and relevant experience'
+            note_type: 'evaluation'
+            is_private: true
     responses:
-      '201': { description: Created }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '201':
+        description: Notes added successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 201
+              message: 'Notes added successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can add notes
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/applications/recruiter/{id}/contact:
+/applications/recruiter/{applicationId}/contact:
   post:
     tags: [applications]
-    summary: Contact candidate (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Contact candidate
+    description: Send message or notification to the candidate
+    operationId: contactCandidate
+    security:
+      - bearerAuth: []
     parameters:
-      - in: path
-        name: id
+      - name: applicationId
+        in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Application ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ContactCandidateRequest'
+          example:
+            message: 'Thank you for your application. We would like to schedule an interview.'
+            contact_method: 'email'
+            subject: 'Interview Invitation'
+            priority: 'normal'
     responses:
-      '200': { description: Sent }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Message sent successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Message sent successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only authorized recruiters can contact candidates
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Application not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'

@@ -6,91 +6,180 @@ components:
     ApplicationStatus:
       type: string
       enum: [pending, reviewed, accepted, rejected, withdrawn]
+      description: Status of a job application
 
     CreateApplicationRequest:
       type: object
       required: [job_id]
       properties:
-        job_id: { type: string, format: uuid }
-        resume_id: { type: string, format: uuid }
-        metadata: { type: object, additionalProperties: true }
+        job_id:
+          type: string
+          format: uuid
+          description: ID of the job being applied for
+        resume_id:
+          type: string
+          format: uuid
+          description: ID of the resume to attach (optional)
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional application metadata (e.g., cover letter)
+          example:
+            cover_letter: 'I am excited to apply for this position...'
+
+    SubmitStageFeedbackRequest:
+      type: object
+      required: [candidate_feedback]
+      properties:
+        candidate_feedback:
+          type: string
+          minLength: 1
+          description: Candidate's feedback about the interview/evaluation stage
+
+    ManageShortlistRequest:
+      type: object
+      required: [application_id, action]
+      properties:
+        application_id:
+          type: string
+          format: uuid
+          description: ID of the application to manage
+        action:
+          type: string
+          enum: [add, remove]
+          description: Action to perform on the shortlist
+        note:
+          type: string
+          description: Optional note about why candidate was added/removed
+
+    CompareCandidatesRequest:
+      type: object
+      required: [application_ids]
+      properties:
+        application_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          minItems: 2
+          maxItems: 10
+          description: Array of application IDs to compare (2-10 candidates)
 
     UpdateApplicationStatusRequest:
       type: object
       required: [status]
       properties:
-        status: { type: string, enum: [pending, reviewed, accepted, rejected] }
-        reason: { type: string }
+        status:
+          $ref: '#/components/schemas/ApplicationStatus'
+        notes:
+          type: string
+          description: Optional notes about the status change
 
     UpdateApplicationStageRequest:
       type: object
       required: [stage_id, status]
       properties:
-        stage_id: { type: string, format: uuid }
-        status: { type: string, minLength: 1, maxLength: 50 }
-        feedback: { type: string }
-        rating:
-          oneOf:
-            - type: integer
-              minimum: 1
-              maximum: 5
-            - type: string
-              description: Will be converted to integer (must be between 1 and 5)
-          description: Rating from 1 to 5 (accepts integer or string that will be converted)
-        interviewer_notes: { type: string }
-        completed_at:
+        stage_id:
           type: string
-          description: ISO 8601 datetime format (e.g., '2024-01-01T00:00:00.000Z')
-          example: '2024-01-01T00:00:00.000Z'
+          format: uuid
+          description: ID of the stage to update
+        status:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: New status for the stage
+        notes:
+          type: string
+          description: Optional notes about the stage update
 
     CreateApplicationStageRequest:
       type: object
-      required: [stage_name, stage_order]
+      required: [stage_type, title]
       properties:
-        stage_name: { type: string, minLength: 1, maxLength: 100 }
-        stage_order:
-          oneOf:
-            - type: integer
-              minimum: 1
-            - type: string
-              description: Will be converted to positive integer
-          description: Stage order (accepts integer or string that will be converted to positive integer)
+        stage_type:
+          type: string
+          enum: [application_review, phone_screening, interview, assessment, offer, background_check]
+          description: Type of application stage
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Title of the stage
+        description:
+          type: string
+          description: Description of what happens in this stage
         scheduled_at:
           type: string
-          description: ISO 8601 datetime format (e.g., '2024-01-01T00:00:00.000Z')
-          example: '2024-01-01T00:00:00.000Z'
-        interviewer_notes: { type: string }
+          format: date-time
+          description: When this stage is scheduled
+        location:
+          type: string
+          description: Location or meeting details
+        interviewer_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: IDs of interviewers assigned to this stage
 
-    AddApplicationNoteRequest:
+    AddApplicationNotesRequest:
       type: object
-      required: [note]
+      required: [notes]
       properties:
-        note: { type: string, minLength: 1 }
+        notes:
+          type: string
+          minLength: 1
+          description: Internal notes about the application
+        note_type:
+          type: string
+          enum: [evaluation, feedback, decision, general]
+          default: general
+          description: Type of notes
+        is_private:
+          type: boolean
+          default: true
+          description: Whether notes are private to recruiters only
 
     ContactCandidateRequest:
       type: object
-      required: [subject, message]
+      required: [message]
       properties:
-        subject: { type: string, minLength: 1 }
-        message: { type: string, minLength: 1 }
-        send_email:
-          oneOf:
-            - type: boolean
-            - type: string
-              enum: ['true', 'false', '1', '0', '']
-              description: Will be converted to boolean ('true'/'1' = true, 'false'/'0'/'' = false)
-          default: false
-          description: Whether to send email notification (accepts boolean or string that will be converted)
+        message:
+          type: string
+          minLength: 1
+          description: Message to send to the candidate
+        contact_method:
+          type: string
+          enum: [email, notification, both]
+          default: email
+          description: How to contact the candidate
+        subject:
+          type: string
+          description: Email subject (required if contact_method includes email)
+        priority:
+          type: string
+          enum: [low, normal, high]
+          default: normal
+          description: Message priority
 
     BulkUpdateApplicationsRequest:
       type: object
-      required: [application_ids, action]
+      required: [application_ids, updates]
       properties:
         application_ids:
           type: array
-          items: { type: string, format: uuid }
+          items:
+            type: string
+            format: uuid
           minItems: 1
-        action:
-          type: string
-          enum: [reject, accept, review]
-        reason: { type: string }
+          maxItems: 50
+          description: Array of application IDs to update
+        updates:
+          type: object
+          description: Updates to apply to all selected applications
+          properties:
+            status:
+              $ref: '#/components/schemas/ApplicationStatus'
+            notes:
+              type: string
+              description: Notes to add to each application

@@ -21,7 +21,6 @@
             email: 'john.doe@example.com'
             password: 'P@ssw0rd123'
             confirm_password: 'P@ssw0rd123'
-            date_of_birth: '1990-01-01'
     responses:
       '201':
         description: User registered successfully
@@ -384,6 +383,7 @@
             old_password: 'OldP@ssw0rd123'
             new_password: 'NewP@ssw0rd123'
             confirm_password: 'NewP@ssw0rd123'
+            logout_all_devices: false
     responses:
       '200':
         description: Password changed successfully

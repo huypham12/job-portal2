@@ -1,15 +1,12 @@
 # ============================================
 # COMPANY ENDPOINTS
 # ============================================
+
 /companies:
   post:
-    tags:
-      - companies
-    summary: Create company profile (Recruiter only)
-    description: |-
-      Create a new company profile for the authenticated recruiter.
-      Each recruiter can only create one company profile.
-      Requires recruiter role and authentication.
+    tags: [companies]
+    summary: Create company profile
+    description: Create a new company profile for the authenticated recruiter
     operationId: createCompany
     security:
       - bearerAuth: []
@@ -24,32 +21,28 @@
             description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
             logo_url: 'https://example.com/logo.png'
             size: 100
-            metadata:
-              website: 'https://abc-tech.com'
-              industry: 'Technology'
-              benefits: ['Health insurance', 'Flexible working hours']
+            contact_email: 'contact@abc-tech.com'
+            contact_phone: '+84 28 1234 5678'
+            contact_address: '123 Đường ABC, Quận 1, TP.HCM'
+            linkedin_url: 'https://linkedin.com/company/abc-tech'
+            facebook_url: 'https://facebook.com/abc-tech'
+            twitter_url: 'https://twitter.com/abc_tech'
+            tax_code: '1234567890'
+            business_license: 'GP-123456'
     responses:
       '201':
         description: Company profile created successfully
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCompanyResponse'
+              $ref: '#/components/schemas/SuccessResponse'
             example:
-              message: 'Create company success'
+              statusCode: 201
+              message: 'Company profile created successfully'
               data:
                 id: '123e4567-e89b-12d3-a456-426614174000'
                 name: 'Công ty Cổ phần Công nghệ ABC'
-                description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
                 recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
-                logo_url: 'https://example.com/logo.png'
-                size: 100
-                metadata:
-                  website: 'https://abc-tech.com'
-                  industry: 'Technology'
-                  benefits: ['Health insurance', 'Flexible working hours']
-                created_at: '2024-01-01T00:00:00.000Z'
-                updated_at: '2024-01-01T00:00:00.000Z'
       '400':
         description: Bad request - Validation error
         content:
@@ -63,29 +56,74 @@
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter access required
+        description: Forbidden - Recruiter role required
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '409':
-        description: Conflict - Company already exists for this recruiter
+        description: Conflict - Recruiter already has a company profile
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+
+/companies/{id}:
+  get:
+    tags: [companies]
+    summary: Get company profile by ID
+    description: Get detailed information about a company by its ID (public endpoint)
+    operationId: getCompanyById
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Company ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
+      - name: details
+        in: query
+        schema:
+          type: boolean
+          default: false
+        description: Include detailed company information
+        example: true
+    responses:
+      '200':
+        description: Company profile retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
             example:
-              statusCode: 409
-              message: 'Company already exists'
+              statusCode: 200
+              message: 'Company retrieved successfully'
+              data:
+                id: '123e4567-e89b-12d3-a456-426614174000'
+                name: 'Công ty Cổ phần Công nghệ ABC'
+                description: 'Chuyên cung cấp giải pháp phần mềm...'
+                logo_url: 'https://example.com/logo.png'
+                size: 100
+      '400':
+        description: Bad request - Invalid UUID format
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Company not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /companies/me:
   get:
-    tags:
-      - companies
-    summary: Get my company profile (Recruiter only)
-    description: |-
-      Get the company profile associated with the authenticated recruiter.
-      Requires recruiter role and authentication.
+    tags: [companies]
+    summary: Get my company profile
+    description: Get the company profile owned by the authenticated recruiter
     operationId: getMyCompany
     security:
       - bearerAuth: []
@@ -95,22 +133,13 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetCompanyResponse'
+              $ref: '#/components/schemas/SuccessResponse'
             example:
-              message: 'Get company success'
+              statusCode: 200
+              message: 'Company profile retrieved successfully'
               data:
                 id: '123e4567-e89b-12d3-a456-426614174000'
                 name: 'Công ty Cổ phần Công nghệ ABC'
-                description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
-                recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
-                logo_url: 'https://example.com/logo.png'
-                size: 100
-                metadata:
-                  website: 'https://abc-tech.com'
-                  industry: 'Technology'
-                  benefits: ['Health insurance', 'Flexible working hours']
-                created_at: '2024-01-01T00:00:00.000Z'
-                updated_at: '2024-01-01T00:00:00.000Z'
       '401':
         description: Unauthorized - Invalid or missing access token
         content:
@@ -118,29 +147,21 @@
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter access required
+        description: Forbidden - Recruiter role required
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '404':
-        description: Not found - Company profile not found
+        description: Company profile not found - Recruiter hasn't created one yet
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-            example:
-              statusCode: 404
-              message: 'Company not found'
-
   patch:
-    tags:
-      - companies
-    summary: Update my company profile (Recruiter only)
-    description: |-
-      Update the company profile associated with the authenticated recruiter.
-      At least one field must be provided in the request body.
-      Requires recruiter role and authentication.
+    tags: [companies]
+    summary: Update my company profile
+    description: Update the company profile owned by the authenticated recruiter
     operationId: updateMyCompany
     security:
       - bearerAuth: []
@@ -151,35 +172,22 @@
           schema:
             $ref: '#/components/schemas/UpdateCompanyRequest'
           example:
-            description: 'Mô tả mới cập nhật về công ty'
-            logo_url: 'https://new-logo-url.com/logo.png'
+            name: 'Công ty Cổ phần Công nghệ ABC (Updated)'
+            description: 'Updated company description'
+            logo_url: 'https://example.com/new-logo.png'
             size: 150
-            metadata:
-              website: 'https://abc-tech-updated.com'
-              remote_work: true
     responses:
       '200':
         description: Company profile updated successfully
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateCompanyResponse'
+              $ref: '#/components/schemas/SuccessResponse'
             example:
-              message: 'Update company success'
-              data:
-                id: '123e4567-e89b-12d3-a456-426614174000'
-                name: 'Công ty Cổ phần Công nghệ ABC'
-                description: 'Mô tả mới cập nhật về công ty'
-                recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
-                logo_url: 'https://new-logo-url.com/logo.png'
-                size: 150
-                metadata:
-                  website: 'https://abc-tech-updated.com'
-                  remote_work: true
-                created_at: '2024-01-01T00:00:00.000Z'
-                updated_at: '2024-01-01T12:00:00.000Z'
+              statusCode: 200
+              message: 'Company profile updated successfully'
       '400':
-        description: Bad request - Validation error or empty request body
+        description: Bad request - Validation error
         content:
           application/json:
             schema:
@@ -191,104 +199,63 @@
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter access required
+        description: Forbidden - Recruiter role required or not company owner
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '404':
-        description: Not found - Company profile not found
+        description: Company profile not found
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-
-/companies/{id}:
-  get:
-    tags:
-      - companies
-    summary: Get company profile by ID (Public)
-    description: |-
-      Get detailed information about a company by its ID.
-      This is a public endpoint and does not require authentication.
-    operationId: getCompanyById
-    parameters:
-      - name: id
-        in: path
-        description: Company ID (UUID)
-        required: true
-        schema:
-          type: string
-          format: uuid
-        example: '123e4567-e89b-12d3-a456-426614174000'
-    responses:
-      '200':
-        description: Company profile retrieved successfully
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GetCompanyResponse'
-            example:
-              message: 'Get company success'
-              data:
-                id: '123e4567-e89b-12d3-a456-426614174000'
-                name: 'Công ty Cổ phần Công nghệ ABC'
-                description: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
-                recruiter_id: '123e4567-e89b-12d3-a456-426614174001'
-                logo_url: 'https://example.com/logo.png'
-                size: 100
-                metadata:
-                  website: 'https://abc-tech.com'
-                  industry: 'Technology'
-                  benefits: ['Health insurance', 'Flexible working hours']
-                created_at: '2024-01-01T00:00:00.000Z'
-                updated_at: '2024-01-01T00:00:00.000Z'
-      '400':
-        description: Bad request - Invalid UUID format
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '404':
-        description: Not found - Company not found
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-            example:
-              statusCode: 404
-              message: 'Company not found'
 
 /companies/me/details:
   get:
-    tags:
-      - companies
-    summary: Get my company details (Recruiter only)
+    tags: [companies]
+    summary: Get my company details
+    description: Get detailed information about the recruiter's company
+    operationId: getMyCompanyDetails
     security:
       - bearerAuth: []
     responses:
       '200':
-        description: Company details retrieved
+        description: Company details retrieved successfully
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Company details retrieved successfully'
+              data:
+                industry: 'Technology'
+                founded_year: 2015
+                website_url: 'https://abc-tech.com'
       '401':
-        description: Unauthorized
+        description: Unauthorized - Invalid or missing access token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter only
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Company details not found
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
   post:
-    tags:
-      - companies
-    summary: Create my company details (Recruiter only)
+    tags: [companies]
+    summary: Create company details
+    description: Create detailed information for the recruiter's company
+    operationId: createCompanyDetails
     security:
       - bearerAuth: []
     requestBody:
@@ -296,36 +263,55 @@
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CompanyDetailsRequest'
+            $ref: '#/components/schemas/CreateCompanyDetailsRequest'
+          example:
+            industry: 'Technology'
+            founded_year: 2015
+            employee_count_min: 50
+            employee_count_max: 200
+            website_url: 'https://abc-tech.com'
+            headquarters_location_id: '123e4567-e89b-12d3-a456-426614174002'
+            company_type: 'Corporation'
+            revenue_range: '50M-100M'
     responses:
       '201':
-        description: Details created
+        description: Company details created successfully
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 201
+              message: 'Company details created successfully'
       '400':
-        description: Validation error
+        description: Bad request - Validation error
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized - Invalid or missing access token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter only
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '409':
+        description: Conflict - Company details already exist
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
   patch:
-    tags:
-      - companies
-    summary: Update my company details (Recruiter only)
+    tags: [companies]
+    summary: Update company details
+    description: Update detailed information for the recruiter's company
+    operationId: updateCompanyDetails
     security:
       - bearerAuth: []
     requestBody:
@@ -334,52 +320,160 @@
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateCompanyDetailsRequest'
+          example:
+            industry: 'Information Technology'
+            website_url: 'https://new-abc-tech.com'
+            revenue_range: '100M-500M'
     responses:
       '200':
-        description: Details updated
+        description: Company details updated successfully
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Company details updated successfully'
       '400':
-        description: Validation error
+        description: Bad request - Validation error
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized - Invalid or missing access token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter only
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Company details not found
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
   delete:
-    tags:
-      - companies
-    summary: Delete my company details (Recruiter only)
+    tags: [companies]
+    summary: Delete company details
+    description: Delete detailed information for the recruiter's company
+    operationId: deleteCompanyDetails
     security:
       - bearerAuth: []
     responses:
       '200':
-        description: Details deleted
+        description: Company details deleted successfully
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Company details deleted successfully'
       '401':
-        description: Unauthorized
+        description: Unauthorized - Invalid or missing access token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter only
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Company details not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+/companies/me/benefits:
+  get:
+    tags: [companies]
+    summary: Get my company benefits
+    description: Get list of benefits offered by the recruiter's company
+    operationId: getMyCompanyBenefits
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: Company benefits retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Company benefits retrieved successfully'
+              data:
+                - id: '123e4567-e89b-12d3-a456-426614174003'
+                  benefit_type: 'health'
+                  title: 'Health Insurance'
+                  description: 'Comprehensive health insurance coverage'
+                  value_amount: 5000000
+                  value_currency: 'VND'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+  post:
+    tags: [companies]
+    summary: Add company benefit
+    description: Add a new benefit to the recruiter's company profile
+    operationId: addCompanyBenefit
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCompanyBenefitRequest'
+          example:
+            benefit_type: 'financial'
+            title: 'Performance Bonus'
+            description: 'Year-end performance bonus based on company and individual performance'
+            value_amount: 10000000
+            value_currency: 'VND'
+    responses:
+      '201':
+        description: Company benefit added successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 201
+              message: 'Company benefit added successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
         content:
           application/json:
             schema:
@@ -387,9 +481,10 @@
 
 /companies/me/benefits/{id}:
   patch:
-    tags:
-      - companies
-    summary: Update company benefit (Recruiter only)
+    tags: [companies]
+    summary: Update company benefit
+    description: Update an existing benefit for the recruiter's company
+    operationId: updateCompanyBenefit
     security:
       - bearerAuth: []
     parameters:
@@ -399,65 +494,42 @@
         schema:
           type: string
           format: uuid
+        description: Benefit ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174003'
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateCompanyBenefitRequest'
+          example:
+            title: 'Updated Health Insurance'
+            description: 'Updated description for health insurance'
+            value_amount: 6000000
     responses:
       '200':
-        description: Benefit updated
+        description: Company benefit updated successfully
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Company benefit updated successfully'
       '400':
-        description: Validation error
+        description: Bad request - Validation error
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized - Invalid or missing access token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter only
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-  delete:
-    tags:
-      - companies
-    summary: Delete company benefit (Recruiter only)
-    security:
-      - bearerAuth: []
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '200':
-        description: Benefit deleted
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SuccessResponse'
-      '401':
-        description: Unauthorized
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '403':
-        description: Forbidden - Recruiter only
+        description: Forbidden - Recruiter role required or not benefit owner
         content:
           application/json:
             schema:
@@ -468,66 +540,46 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-
-/companies/me/benefits:
-  get:
-    tags:
-      - companies
-    summary: Get my company benefits (Recruiter only)
+  delete:
+    tags: [companies]
+    summary: Delete company benefit
+    description: Delete a benefit from the recruiter's company profile
+    operationId: deleteCompanyBenefit
     security:
       - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Benefit ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174003'
     responses:
       '200':
-        description: Benefits retrieved
+        description: Company benefit deleted successfully
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Company benefit deleted successfully'
       '401':
-        description: Unauthorized
+        description: Unauthorized - Invalid or missing access token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Forbidden - Recruiter only
+        description: Forbidden - Recruiter role required or not benefit owner
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-  post:
-    tags:
-      - companies
-    summary: Add company benefit (Recruiter only)
-    security:
-      - bearerAuth: []
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CompanyBenefitRequest'
-    responses:
-      '201':
-        description: Benefit added
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SuccessResponse'
-      '400':
-        description: Validation error
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '401':
-        description: Unauthorized
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '403':
-        description: Forbidden - Recruiter only
+      '404':
+        description: Benefit not found
         content:
           application/json:
             schema:

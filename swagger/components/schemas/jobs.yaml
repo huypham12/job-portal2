@@ -66,18 +66,35 @@ components:
         benefits:
           type: array
           items: { $ref: '#/components/schemas/JobBenefit' }
-        skill_ids:
-          type: array
-          items: { type: string, format: uuid }
-        tag_ids:
-          type: array
-          items: { type: string, format: uuid }
-        work_arrangements:
-          $ref: '#/components/schemas/WorkArrangements'
+    skill_ids:
+      type: array
+      items: { type: string, format: uuid }
+    category_ids:
+      type: array
+      items: { type: string, format: uuid }
+    work_arrangements:
+      $ref: '#/components/schemas/WorkArrangements'
 
     UpdateJobRequest:
-      allOf:
-        - $ref: '#/components/schemas/CreateJobRequest'
+      type: object
+      properties:
+        title: { type: string, minLength: 10, maxLength: 255 }
+        description: { type: string, minLength: 50 }
+        location_id: { type: string, format: uuid, nullable: true }
+        salary_range: { $ref: '#/components/schemas/SalaryRange' }
+        job_type: { $ref: '#/components/schemas/JobType' }
+        experience_level: { type: integer, minimum: 0, maximum: 30, nullable: true }
+        expires_at: { type: string, format: date-time }
+        metadata: { type: object, additionalProperties: true }
+        requirements:
+          type: array
+          items: { $ref: '#/components/schemas/JobRequirement' }
+        benefits:
+          type: array
+          items: { $ref: '#/components/schemas/JobBenefit' }
+        skill_ids: { type: array, items: { type: string, format: uuid } }
+        category_ids: { type: array, items: { type: string, format: uuid } }
+        work_arrangements: { $ref: '#/components/schemas/WorkArrangements' }
 
     UpdateJobStatusRequest:
       type: object
@@ -86,17 +103,30 @@ components:
         status:
           type: string
           enum: [approved, closed]
+          description: Job status (approved = open/published, closed = closed)
 
     BulkJobActionsRequest:
       type: object
       required: [action, job_ids]
       properties:
-        action: { type: string, enum: [close, delete, publish] }
-        job_ids: { type: array, items: { type: string, format: uuid } }
+        action:
+          type: string
+          enum: [close, delete]
+          description: Action to perform on the jobs
+        job_ids:
+          type: array
+          items: { type: string, format: uuid }
+          minItems: 1
+          maxItems: 50
+          description: Array of job IDs to perform the action on
 
     BulkExtendExpiryRequest:
       type: object
-      required: [job_ids, new_expiry_date]
+      required: [job_ids, new_expires_at]
       properties:
-        job_ids: { type: array, items: { type: string, format: uuid } }
-        new_expiry_date: { type: string, format: date-time }
+        job_ids:
+          type: array
+          items: { type: string, format: uuid }
+          minItems: 1
+          maxItems: 50
+        new_expires_at: { type: string, format: date-time }

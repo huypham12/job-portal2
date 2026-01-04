@@ -1,358 +1,588 @@
 # ============================================
 # JOB ENDPOINTS
 # ============================================
+
 /jobs:
-  get:
-    tags: [jobs]
-    summary: List jobs (public)
-    parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
-      - in: query
-        name: search
-        schema: { type: string }
-      - in: query
-        name: company_id
-        schema: { type: string, format: uuid }
-      - in: query
-        name: location_id
-        schema: { type: string, format: uuid }
-      - in: query
-        name: job_type
-        schema: { $ref: '#/components/schemas/JobType' }
-      - in: query
-        name: experience_level
-        schema: { type: integer }
-      - in: query
-        name: status
-        schema: { $ref: '#/components/schemas/JobStatus' }
-      - in: query
-        name: salary_min
-        schema: { type: integer }
-      - in: query
-        name: salary_max
-        schema: { type: integer }
-      - in: query
-        name: sort_by
-        schema: { type: string, enum: [posted_at, title, salary_min, expires_at], default: posted_at }
-      - in: query
-        name: sort_order
-        schema: { type: string, enum: [asc, desc], default: desc }
-    responses:
-      '200':
-        {
-          description: Jobs listed,
-          content: { application/json: { schema: { $ref: '#/components/schemas/SuccessResponse' } } }
-        }
   post:
     tags: [jobs]
-    summary: Create job (Recruiter only)
-    security: [{ bearerAuth: [] }]
+    summary: Create a new job posting
+    description: Create a new job posting (requires recruiter authentication)
+    operationId: createJob
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateJobRequest'
+          example:
+            title: 'Senior Software Engineer'
+            description: 'We are looking for an experienced software engineer...'
+            company_id: '123e4567-e89b-12d3-a456-426614174000'
+            location_id: '123e4567-e89b-12d3-a456-426614174001'
+            salary_range:
+              min: 15000000
+              max: 25000000
+              currency: 'VND'
+            job_type: 'full_time'
+            experience_level: 3
+            expires_at: '2024-12-31T23:59:59Z'
+            requirements:
+              - requirement_type: 'technical'
+                title: 'Programming Languages'
+                description: 'Proficiency in JavaScript/TypeScript'
+                is_required: true
+                level: 'expert'
+                years_experience: 3
+            benefits:
+              - benefit_type: 'financial'
+                title: 'Health Insurance'
+                description: 'Comprehensive health insurance coverage'
+                value_amount: 5000000
+                value_currency: 'VND'
+            skill_ids: ['123e4567-e89b-12d3-a456-426614174002']
+            category_ids: ['123e4567-e89b-12d3-a456-426614174003']
+            work_arrangements:
+              is_remote_allowed: true
+              remote_percentage: 50
+              flexible_hours: true
     responses:
       '201':
-        {
-          description: Job created,
-          content: { application/json: { schema: { $ref: '#/components/schemas/SuccessResponse' } } }
-        }
+        description: Job created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 201
+              message: 'Job created successfully'
       '400':
-        {
-          description: Validation error,
-          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
-        }
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
       '401':
-        { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
       '403':
-        {
-          description: Forbidden - Recruiter only,
-          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
-        }
-
-/jobs/featured:
-  get:
-    tags: [jobs]
-    summary: Get featured jobs (public)
-    responses:
-      '200': { description: OK }
-
-/jobs/latest:
-  get:
-    tags: [jobs]
-    summary: Get latest jobs (public)
-    responses:
-      '200': { description: OK }
-
-/jobs/popular:
-  get:
-    tags: [jobs]
-    summary: Get popular jobs based on view counts
-    parameters:
-      - in: query
-        name: limit
-        schema: { type: integer, default: 10 }
-    responses:
-      '200': { description: OK }
-
-/jobs/trending:
-  get:
-    tags: [jobs]
-    summary: Get trending jobs with high growth rate
-    parameters:
-      - in: query
-        name: limit
-        schema: { type: integer, default: 10 }
-    responses:
-      '200': { description: OK }
-
-/jobs/popular-by-location:
-  get:
-    tags: [jobs]
-    summary: Get popular jobs grouped by location
-    parameters:
-      - in: query
-        name: limit
-        schema: { type: integer, default: 10 }
-    responses:
-      '200': { description: OK }
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/{id}/public:
   get:
     tags: [jobs]
-    summary: Get job detail public
+    summary: Get job detail (public view)
+    description: Get public job details without requiring authentication
+    operationId: getJobPublic
     parameters:
       - name: id
         in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
-      '404': { description: Not found }
+      '200':
+        description: Job details retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job retrieved successfully'
+              data:
+                id: '123e4567-e89b-12d3-a456-426614174000'
+                title: 'Senior Software Engineer'
+                description: 'We are looking for...'
+                # ... job details
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/{id}/view:
   post:
     tags: [jobs]
     summary: Track job view
+    description: Track when a job is viewed (can be anonymous or authenticated)
+    operationId: trackView
     parameters:
       - name: id
         in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
+      '200':
+        description: View tracked successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'View tracked successfully'
 
 /jobs/my-jobs:
   get:
     tags: [jobs]
-    summary: List my jobs (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Get all jobs posted by the recruiter
+    description: Get paginated list of jobs posted by the authenticated recruiter
+    operationId: getMyJobs
+    security:
+      - bearerAuth: []
     parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
-      - in: query
-        name: status
-        schema: { $ref: '#/components/schemas/JobStatus' }
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: Page number for pagination
+        example: 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of jobs per page
+        example: 20
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/JobStatus'
+        description: Filter by job status
+        example: 'approved'
+      - name: sort_by
+        in: query
+        schema:
+          type: string
+          enum: [posted_at, title, expires_at, updated_at]
+          default: posted_at
+        description: Sort field
+        example: posted_at
+      - name: sort_order
+        in: query
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: desc
+        description: Sort order
+        example: desc
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Jobs retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Jobs retrieved successfully'
+              data:
+                jobs: []
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 0
+                  totalPages: 0
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/{id}/manage:
   get:
     tags: [jobs]
-    summary: Get job detail for management (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Get job details for management
+    description: Get detailed job information for management purposes (recruiter who owns the job)
+    operationId: getJobForManage
+    security:
+      - bearerAuth: []
     parameters:
       - name: id
         in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
-      '404': { description: Not found }
+      '200':
+        description: Job details retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job retrieved successfully'
+              data: {}
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the job owner can access management details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/{id}/stats:
   get:
     tags: [jobs]
-    summary: Get job statistics (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Get job statistics
+    description: Get job statistics including view counts and application counts (recruiter who owns the job)
+    operationId: getJobStats
+    security:
+      - bearerAuth: []
     parameters:
       - name: id
         in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
-      '404': { description: Not found }
-
-/jobs/{id}/suggested-candidates:
-  get:
-    tags: [jobs]
-    summary: Get suggested candidates for a job
-    security: [{ bearerAuth: [] }]
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema: { type: string, format: uuid }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 10 }
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Job statistics retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job statistics retrieved successfully'
+              data:
+                view_count: 150
+                application_count: 25
+                unique_view_count: 120
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the job owner can access statistics
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/{id}:
   put:
     tags: [jobs]
-    summary: Update job (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Update a job posting
+    description: Update an existing job posting (recruiter who owns the job)
+    operationId: updateJob
+    security:
+      - bearerAuth: []
     parameters:
       - name: id
         in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateJobRequest'
+          example:
+            title: 'Senior Full Stack Engineer'
+            description: 'Updated job description...'
+            salary_range:
+              min: 18000000
+              max: 30000000
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Job updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job updated successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the job owner can update the job
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
   delete:
     tags: [jobs]
-    summary: Delete job (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Soft delete a job posting
+    description: Soft delete a job posting (recruiter who owns the job)
+    operationId: deleteJob
+    security:
+      - bearerAuth: []
     parameters:
       - name: id
         in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     responses:
-      '200': { description: Deleted }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Job deleted successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job deleted successfully'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the job owner can delete the job
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/{id}/status:
   patch:
     tags: [jobs]
-    summary: Update job status (Recruiter)
-    security: [{ bearerAuth: [] }]
+    summary: Update job status
+    description: Update job status (open/close) - recruiter who owns the job
+    operationId: updateJobStatus
+    security:
+      - bearerAuth: []
     parameters:
       - name: id
         in: path
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
+        description: Job ID (UUID format)
+        example: '123e4567-e89b-12d3-a456-426614174000'
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateJobStatusRequest'
+          example:
+            status: 'closed'
     responses:
-      '200': { description: Updated }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
-
-/jobs/{id}/publish:
-  patch:
-    tags: [jobs]
-    summary: Publish a draft job (Recruiter)
-    security: [{ bearerAuth: [] }]
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema: { type: string, format: uuid }
-    responses:
-      '200': { description: Published }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Job status updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job status updated successfully'
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Only the job owner can update job status
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Job not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/bulk-actions:
   post:
     tags: [jobs]
     summary: Perform bulk actions on multiple jobs
-    security: [{ bearerAuth: [] }]
+    description: Perform bulk actions (close, delete) on multiple jobs owned by the recruiter
+    operationId: bulkJobActions
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BulkJobActionsRequest'
+          example:
+            action: 'close'
+            job_ids:
+              - '123e4567-e89b-12d3-a456-426614174000'
+              - '123e4567-e89b-12d3-a456-426614174001'
     responses:
-      '200': { description: Bulk actions completed }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Bulk actions completed successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Bulk actions completed successfully'
+              data:
+                processed: 2
+                successful: 2
+                failed: 0
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
 /jobs/bulk-extend:
   patch:
     tags: [jobs]
     summary: Bulk extend job expiry dates
-    security: [{ bearerAuth: [] }]
+    description: Extend expiry dates for multiple jobs owned by the recruiter
+    operationId: bulkExtendExpiry
+    security:
+      - bearerAuth: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BulkExtendExpiryRequest'
+          example:
+            job_ids:
+              - '123e4567-e89b-12d3-a456-426614174000'
+              - '123e4567-e89b-12d3-a456-426614174001'
+            new_expires_at: '2024-12-31T23:59:59Z'
     responses:
-      '200': { description: Extended }
-      '400': { description: Validation error }
-      '401': { description: Unauthorized }
-      '403': { description: Forbidden }
+      '200':
+        description: Job expiry dates extended successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              statusCode: 200
+              message: 'Job expiry dates extended successfully'
+              data:
+                processed: 2
+                successful: 2
+                failed: 0
+      '400':
+        description: Bad request - Validation error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Invalid or missing access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Recruiter role required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
 
-/jobs/recently-viewed:
-  get:
-    tags: [jobs]
-    summary: Get jobs recently viewed by authenticated user
-    security: [{ bearerAuth: [] }]
-    parameters:
-      - in: query
-        name: page
-        schema: { type: integer, default: 1 }
-      - in: query
-        name: limit
-        schema: { type: integer, default: 20 }
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }
-  delete:
-    tags: [jobs]
-    summary: Clear recently viewed jobs history
-    security: [{ bearerAuth: [] }]
-    responses:
-      '200': { description: Cleared }
-      '401': { description: Unauthorized }
-
-/jobs/recently-viewed/stats:
-  get:
-    tags: [jobs]
-    summary: Get viewing statistics for user
-    security: [{ bearerAuth: [] }]
-    responses:
-      '200': { description: OK }
-      '401': { description: Unauthorized }

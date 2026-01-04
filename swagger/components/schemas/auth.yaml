@@ -10,7 +10,6 @@ components:
         - email
         - password
         - confirm_password
-        - date_of_birth
       properties:
         name:
           type: string
@@ -38,11 +37,6 @@ components:
           minLength: 6
           example: 'P@ssw0rd123'
           description: Must match the password field
-        date_of_birth:
-          type: string
-          pattern: '^\d{4}-\d{2}-\d{2}$'
-          example: '1990-01-01'
-          description: Date of birth in YYYY-MM-DD format
 
     LoginRequest:
       type: object
@@ -112,6 +106,10 @@ components:
           minLength: 6
           example: 'NewP@ssw0rd123'
           description: Must match the new password field
+        logout_all_devices:
+          type: boolean
+          example: false
+          description: Whether to logout from all devices (optional, defaults to false)
 
     ResetPasswordRequest:
       type: object

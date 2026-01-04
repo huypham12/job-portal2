@@ -11,30 +11,166 @@ components:
         name:
           type: string
           minLength: 3
+          maxLength: 255
           example: 'Công ty Cổ phần Công nghệ ABC'
-          description: Company name (minimum 3 characters)
+          description: Company name (3-255 characters)
         description:
           type: string
+          maxLength: 2000
           example: 'Chuyên cung cấp giải pháp phần mềm cho doanh nghiệp'
-          description: Company description (optional)
+          description: Company description (optional, max 2000 characters)
         logo_url:
           type: string
-          format: url
+          maxLength: 255
           example: 'https://example.com/logo.png'
           description: Company logo URL (optional)
         size:
           type: integer
-          minimum: 1
+          minimum: 0
           example: 100
           description: Company size (number of employees, optional)
-        metadata:
-          type: object
-          additionalProperties: true
-          example:
-            website: 'https://abc-tech.com'
-            industry: 'Technology'
-            benefits: ['Health insurance', 'Flexible working hours']
-          description: Additional company metadata as JSON object (optional)
+        contact_email:
+          type: string
+          format: email
+          maxLength: 255
+          example: 'contact@abc-tech.com'
+          description: Contact email address (optional)
+        contact_phone:
+          type: string
+          maxLength: 20
+          example: '+84 28 1234 5678'
+          description: Contact phone number (optional)
+        contact_address:
+          type: string
+          example: '123 Đường ABC, Quận 1, TP.HCM'
+          description: Contact address (optional)
+        linkedin_url:
+          type: string
+          maxLength: 255
+          example: 'https://linkedin.com/company/abc-tech'
+          description: LinkedIn company page URL (optional)
+        facebook_url:
+          type: string
+          maxLength: 255
+          example: 'https://facebook.com/abc-tech'
+          description: Facebook company page URL (optional)
+        twitter_url:
+          type: string
+          maxLength: 255
+          example: 'https://twitter.com/abc_tech'
+          description: Twitter/X company page URL (optional)
+        tax_code:
+          type: string
+          maxLength: 50
+          example: '1234567890'
+          description: Tax identification code (optional)
+        business_license:
+          type: string
+          maxLength: 100
+          example: 'GP-123456'
+          description: Business license number (optional)
+
+    CreateCompanyDetailsRequest:
+      type: object
+      properties:
+        industry:
+          type: string
+          maxLength: 100
+          example: 'Technology'
+          description: Company industry/sector
+        founded_year:
+          type: integer
+          minimum: 1800
+          maximum: 2024
+          example: 2015
+          description: Year the company was founded
+        employee_count_min:
+          type: integer
+          minimum: 0
+          example: 50
+          description: Minimum number of employees
+        employee_count_max:
+          type: integer
+          minimum: 0
+          example: 200
+          description: Maximum number of employees
+        website_url:
+          type: string
+          maxLength: 255
+          example: 'https://abc-tech.com'
+          description: Company website URL
+        headquarters_location_id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174002'
+          description: ID of headquarters location
+        company_type:
+          type: string
+          maxLength: 50
+          example: 'Corporation'
+          description: Type of company (Corporation, LLC, etc.)
+        revenue_range:
+          type: string
+          maxLength: 50
+          example: '50M-100M'
+          description: Annual revenue range
+        stock_symbol:
+          type: string
+          maxLength: 10
+          example: 'ABCT'
+          description: Stock ticker symbol (if public)
+        culture_description:
+          type: string
+          maxLength: 5000
+          example: 'We value innovation, collaboration, and work-life balance...'
+          description: Company culture description
+
+    UpdateCompanyDetailsRequest:
+      type: object
+      description: At least one field must be provided
+      properties:
+        industry:
+          type: string
+          maxLength: 100
+          example: 'Information Technology'
+        founded_year:
+          type: integer
+          minimum: 1800
+          maximum: 2024
+          example: 2016
+        employee_count_min:
+          type: integer
+          minimum: 0
+          example: 75
+        employee_count_max:
+          type: integer
+          minimum: 0
+          example: 250
+        website_url:
+          type: string
+          maxLength: 255
+          example: 'https://new-abc-tech.com'
+        headquarters_location_id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174003'
+        company_type:
+          type: string
+          maxLength: 50
+          example: 'Private Corporation'
+        revenue_range:
+          type: string
+          maxLength: 50
+          example: '100M-500M'
+        stock_symbol:
+          type: string
+          maxLength: 10
+          example: 'ABCT'
+        culture_description:
+          type: string
+          maxLength: 5000
+          example: 'Updated company culture description...'
+
 
     UpdateCompanyRequest:
       type: object
@@ -168,10 +304,6 @@ components:
         revenue_range: { type: string, maxLength: 50 }
         stock_symbol: { type: string, maxLength: 10 }
         culture_description: { type: string }
-
-    UpdateCompanyDetailsRequest:
-      allOf:
-        - $ref: '#/components/schemas/CompanyDetailsRequest'
 
     CompanyBenefitRequest:
       type: object
