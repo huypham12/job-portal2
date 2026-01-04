@@ -87,7 +87,7 @@ export const searchRepo = {
             search_query: event.query,
             search_type: 'job',
             result_count: event.result_count || 0,
-            filters_used: event.filters || {},
+            filters_used: event.filters || {}
             // session_id: event.session_id // Not in EventRequestDto yet
           }
         })

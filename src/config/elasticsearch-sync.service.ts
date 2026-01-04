@@ -165,7 +165,7 @@ export class ElasticsearchSyncService {
       const job = await prisma.jobs.findUnique({
         where: {
           id: jobId,
-          deleted: false  // Chỉ sync active jobs
+          deleted: false // Chỉ sync active jobs
         },
         include: {
           companies: {
@@ -317,7 +317,11 @@ export class ElasticsearchSyncService {
   /**
    * Sync an application by ID with dual ownership validation
    */
-  async syncApplicationById(applicationId: string, userId: string | null, action: 'upsert' | 'delete'): Promise<boolean> {
+  async syncApplicationById(
+    applicationId: string,
+    userId: string | null,
+    action: 'upsert' | 'delete'
+  ): Promise<boolean> {
     try {
       if (action === 'delete') {
         await elasticsearchSyncService.deleteFromElasticsearch('applications', applicationId)
@@ -395,7 +399,11 @@ export class ElasticsearchSyncService {
   /**
    * Bulk sync jobs by IDs with ownership validation
    */
-  async bulkSyncJobsByIds(jobIds: string[], userId: string | null, action: 'upsert' | 'delete'): Promise<{ synced: number; errors: number }> {
+  async bulkSyncJobsByIds(
+    jobIds: string[],
+    userId: string | null,
+    action: 'upsert' | 'delete'
+  ): Promise<{ synced: number; errors: number }> {
     let synced = 0
     let errors = 0
 
@@ -410,8 +418,8 @@ export class ElasticsearchSyncService {
         select: { id: true }
       })
 
-      const ownedJobIds = ownedJobs.map(j => j.id)
-      const notOwnedJobs = jobIds.filter(id => !ownedJobIds.includes(id))
+      const ownedJobIds = ownedJobs.map((j) => j.id)
+      const notOwnedJobs = jobIds.filter((id) => !ownedJobIds.includes(id))
 
       if (notOwnedJobs.length > 0) {
         console.error(`Bulk job sync ownership violation - user ${userId} doesn't own jobs: ${notOwnedJobs.join(', ')}`)
@@ -699,8 +707,8 @@ export class ElasticsearchSyncService {
             const dbIds = await this.getSampleIdsFromDB(type, 5)
             const esIds = await this.getSampleIdsFromES(type, 5)
 
-            const missingInES = dbIds.filter(id => !esIds.includes(id))
-            const extraInES = esIds.filter(id => !dbIds.includes(id))
+            const missingInES = dbIds.filter((id) => !esIds.includes(id))
+            const extraInES = esIds.filter((id) => !dbIds.includes(id))
 
             if (missingInES.length > 0 || extraInES.length > 0) {
               sampleMismatches.push({
@@ -733,11 +741,20 @@ export class ElasticsearchSyncService {
   private async getSampleIdsFromDB(type: string, limit: number): Promise<string[]> {
     let model: any
     switch (type) {
-      case 'jobs': model = prisma.jobs; break
-      case 'companies': model = prisma.companies; break
-      case 'profiles': model = prisma.profiles; break
-      case 'applications': model = prisma.applications; break
-      default: return []
+      case 'jobs':
+        model = prisma.jobs
+        break
+      case 'companies':
+        model = prisma.companies
+        break
+      case 'profiles':
+        model = prisma.profiles
+        break
+      case 'applications':
+        model = prisma.applications
+        break
+      default:
+        return []
     }
 
     const records = await model.findMany({

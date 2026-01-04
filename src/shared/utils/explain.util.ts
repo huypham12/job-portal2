@@ -53,7 +53,7 @@ export function formatBreakdown(
     availability: 0.05,
     work_arrangement: 0.05,
     benefits: 0.02,
-    category: 0.00
+    category: 0.0
   }
   const w = { ...defaultWeights, ...weights }
 
@@ -68,7 +68,8 @@ export function formatBreakdown(
   const benefits = components.benefits * w.benefits
   const category = components.category * w.category
 
-  const total = text + skills + location + experience + recency + activity + availability + work_arrangement + benefits + category
+  const total =
+    text + skills + location + experience + recency + activity + availability + work_arrangement + benefits + category
 
   // Normalize each to percent of total (if total > 0) and scale to 0..100
   if (total <= 0) {

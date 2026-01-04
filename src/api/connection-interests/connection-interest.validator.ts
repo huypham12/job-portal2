@@ -55,7 +55,7 @@ const GetInterestsQuerySchema = z.object({
   ),
   // Status filter removed - invitations don't have accept/reject status
   interest_type: z.enum(['job_invitation', 'profile_view', 'network_connection']).optional(),
-  role: z.enum(['sent', 'received']).optional(),
+  role: z.enum(['sent', 'received']).optional()
 })
 
 export const GetInterestsSchema = {

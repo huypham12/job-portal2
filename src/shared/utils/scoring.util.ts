@@ -22,7 +22,7 @@ export const DEFAULT_SCORE_WEIGHTS = {
   availability: 0.05, // Increased - must be looking for jobs
   work_arrangement: 0.05, // Reduced - still important but not top priority
   benefits: 0.02, // Reduced - nice to have but not critical
-  category: 0.00 // Removed - industry alignment less important than skills/experience
+  category: 0.0 // Removed - industry alignment less important than skills/experience
 }
 
 /**
@@ -118,9 +118,7 @@ export function computeScoreComponents(input: {
   } else {
     // Count exact matches (case-insensitive)
     const intersectionCount = validRequiredSkills.filter((required) =>
-      validCandidateSkills.some((candidate) =>
-        candidate.toLowerCase() === required.toLowerCase()
-      )
+      validCandidateSkills.some((candidate) => candidate.toLowerCase() === required.toLowerCase())
     ).length
 
     // Calculate overlap ratio - candidate must have at least 50% of required skills
@@ -146,10 +144,10 @@ export function computeScoreComponents(input: {
       experience = 0.7
     } else if (experienceYearsSafe < minYearsForLevel) {
       // Under-qualified: penalize more
-      experience = Math.max(0.1, experienceYearsSafe / minYearsForLevel * 0.5)
+      experience = Math.max(0.1, (experienceYearsSafe / minYearsForLevel) * 0.5)
     } else {
       // Over-qualified: still acceptable but lower score
-      experience = Math.max(0.3, 1.0 - ((experienceYearsSafe - maxYearsForLevel) / maxYearsForLevel))
+      experience = Math.max(0.3, 1.0 - (experienceYearsSafe - maxYearsForLevel) / maxYearsForLevel)
     }
   } else {
     // No experience requirement specified
@@ -224,8 +222,8 @@ export function computeScoreComponents(input: {
   let benefits = 0
   if (validDesiredBenefits.length > 0 && validJobBenefits.length > 0) {
     // Simple exact match count
-    const matchCount = validDesiredBenefits.filter(desired =>
-      validJobBenefits.some(job => job.toLowerCase() === desired.toLowerCase())
+    const matchCount = validDesiredBenefits.filter((desired) =>
+      validJobBenefits.some((job) => job.toLowerCase() === desired.toLowerCase())
     ).length
     benefits = matchCount > 0 ? Math.min(1.0, matchCount / validDesiredBenefits.length) : 0
   } else {

@@ -169,7 +169,10 @@ export const exportResumeValidator = validate(
         // Only accept canonical templates supported by backend
         template: z.enum(['timeline', 'professional', 'compact']).optional().default('professional'),
         format: z.enum(['pdf', 'html']).optional().default('pdf'),
-        html: z.string().max(10 * 1024 * 1024).optional(), // allow up to ~10MB HTML payload
+        html: z
+          .string()
+          .max(10 * 1024 * 1024)
+          .optional(), // allow up to ~10MB HTML payload
         viewportWidth: z.number().int().min(1).optional()
       })
       .passthrough() // allow extra fields from frontend

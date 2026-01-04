@@ -23,16 +23,22 @@ export function jobToESDoc(job: any) {
 
   // Extract skills with proficiency (enhanced nested structure)
   const skillsNested =
-    job.job_skills?.filter((js: any) => js.job_id === job.id && js.skills?.name)?.map((js: any) => ({
-      name: js.skills.name,
-      category: js.skills.category?.name || null,
-      category_type: js.skills.category?.type || null,
-      proficiency_required: js.proficiency || 1
-    })) || []
+    job.job_skills
+      ?.filter((js: any) => js.job_id === job.id && js.skills?.name)
+      ?.map((js: any) => ({
+        name: js.skills.name,
+        category: js.skills.category?.name || null,
+        category_type: js.skills.category?.type || null,
+        proficiency_required: js.proficiency || 1
+      })) || []
 
   const skillsFlat = skillsNested.map((skill: any) => skill.name)
-  const skillsTechnical = skillsNested.filter((skill: any) => skill.category_type === 'technical').map((skill: any) => skill.name)
-  const skillsSoft = skillsNested.filter((skill: any) => skill.category_type !== 'technical').map((skill: any) => skill.name)
+  const skillsTechnical = skillsNested
+    .filter((skill: any) => skill.category_type === 'technical')
+    .map((skill: any) => skill.name)
+  const skillsSoft = skillsNested
+    .filter((skill: any) => skill.category_type !== 'technical')
+    .map((skill: any) => skill.name)
 
   // Extract job requirements with enhanced structure
   const jobRequirementsNested = job.job_requirements?.filter((req: any) => req.job_id === job.id) || []
@@ -168,8 +174,12 @@ export function profileToESDoc(profile: any) {
       })) || []
 
   const skillsFlat = skillsNested.map((skill: any) => skill.name)
-  const skillsTechnical = skillsNested.filter((skill: any) => skill.category_type === 'technical').map((skill: any) => skill.name)
-  const skillsSoft = skillsNested.filter((skill: any) => skill.category_type !== 'technical').map((skill: any) => skill.name)
+  const skillsTechnical = skillsNested
+    .filter((skill: any) => skill.category_type === 'technical')
+    .map((skill: any) => skill.name)
+  const skillsSoft = skillsNested
+    .filter((skill: any) => skill.category_type !== 'technical')
+    .map((skill: any) => skill.name)
 
   // Education data with enhanced structure
   const educationsNested = profile.educations?.filter((edu: any) => edu.profile_id === profile.id) || []

@@ -13,17 +13,17 @@ import { QueryContext, ScoringWeights } from '../search.types'
  */
 export const BOOSTS = {
   // Text field boosts (reduced from original aggressive values)
-  title: 2.0,           // Reduced from 4.0 - titles shouldn't dominate
-  description: 1.5,     // Reduced from 2.5 - descriptions secondary
-  company_name: 1.0,    // Company names for brand recognition
-  location_name: 1.0,   // Location names for geographical search
+  title: 2.0, // Reduced from 4.0 - titles shouldn't dominate
+  description: 1.5, // Reduced from 2.5 - descriptions secondary
+  company_name: 1.0, // Company names for brand recognition
+  location_name: 1.0, // Location names for geographical search
 
   // Skills boosts (increased - this is the priority)
-  skillsExact: 3.0,     // Exact skill matches - highest priority
-  skillsPartial: 1.5,   // Partial skill matches (contains)
+  skillsExact: 3.0, // Exact skill matches - highest priority
+  skillsPartial: 1.5, // Partial skill matches (contains)
 
   // Location boosts (strong but not overwhelming)
-  locationExact: 2.0,   // Exact location match
+  locationExact: 2.0, // Exact location match
   locationProvince: 1.2, // Province-level match
   locationDistrict: 1.3, // District-level match
 
@@ -31,19 +31,19 @@ export const BOOSTS = {
   experienceMatch: 1.2, // Experience level compatibility
 
   // Freshness boosts (moderate - shouldn't override skills)
-  freshnessDays7: 1.5,  // Jobs posted in last 7 days
+  freshnessDays7: 1.5, // Jobs posted in last 7 days
   freshnessDays30: 1.2, // Jobs posted in last 30 days
 
   // Work arrangement preferences
-  remoteAllowed: 1.1,   // Remote work allowed
-  flexibleHours: 1.05,  // Flexible hours available
+  remoteAllowed: 1.1, // Remote work allowed
+  flexibleHours: 1.05, // Flexible hours available
 
   // Benefits and category alignment
-  benefitsMatch: 1.1,   // Benefits alignment
-  categoryMatch: 1.1,   // Category preferences
+  benefitsMatch: 1.1, // Benefits alignment
+  categoryMatch: 1.1, // Category preferences
 
   // Company reputation (slight boost for established companies)
-  companySizeLarge: 1.05, // Companies with 50+ employees
+  companySizeLarge: 1.05 // Companies with 50+ employees
 } as const
 
 /**
@@ -51,16 +51,16 @@ export const BOOSTS = {
  * Used in application-layer scoring for top-K results
  */
 export const DEFAULT_SCORING_WEIGHTS: ScoringWeights = {
-  text: 0.15,           // Text relevance is important but not dominant
-  skills: 0.35,         // Skills matching is the highest priority
-  location: 0.20,       // Location is very important
-  experience: 0.10,     // Experience compatibility matters
-  recency: 0.05,        // Freshness is nice but not critical
-  activity: 0.05,       // Profile activity for candidates
-  availability: 0.05,   // Job availability status
+  text: 0.15, // Text relevance is important but not dominant
+  skills: 0.35, // Skills matching is the highest priority
+  location: 0.2, // Location is very important
+  experience: 0.1, // Experience compatibility matters
+  recency: 0.05, // Freshness is nice but not critical
+  activity: 0.05, // Profile activity for candidates
+  availability: 0.05, // Job availability status
   work_arrangement: 0.03, // Work preferences alignment
-  benefits: 0.01,       // Benefits alignment is minor
-  category: 0.01        // Category preferences are minor
+  benefits: 0.01, // Benefits alignment is minor
+  category: 0.01 // Category preferences are minor
 }
 
 /**
@@ -189,7 +189,7 @@ export function buildJobSearchFunctionScore(context: QueryContext): any {
       function_score: {
         functions,
         score_mode: 'multiply', // Combine boosts multiplicatively
-        boost_mode: 'multiply'  // Multiply with base score
+        boost_mode: 'multiply' // Multiply with base score
       }
     }
   }
@@ -209,7 +209,7 @@ export function buildProfileSearchFunctionScore(context: QueryContext): any {
   if (context.filters?.skill_names && context.filters.skill_names.length > 0) {
     functions.push({
       filter: {
-        terms: { 'skills_flat': context.filters.skill_names }
+        terms: { skills_flat: context.filters.skill_names }
       },
       weight: BOOSTS.skillsExact
     })

@@ -63,7 +63,11 @@ router.get('/failed-summary', validateDto(getFailedSummarySchema), syncControlle
  * @desc Validate data consistency between DB and ES
  * @access Admin only
  */
-router.get('/consistency', validateDto(validateConsistencySchema), syncController.validateConsistency.bind(syncController))
+router.get(
+  '/consistency',
+  validateDto(validateConsistencySchema),
+  syncController.validateConsistency.bind(syncController)
+)
 
 /**
  * @route POST /api/sync/fix-consistency

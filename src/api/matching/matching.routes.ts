@@ -17,5 +17,4 @@ router.get(
   matchCandidatesController
 )
 
-
 export default router

@@ -103,16 +103,16 @@ export type SearchResponse<T = any> = {
  * ScoringComponent - Individual scoring factors for explainability
  */
 export type ScoringComponent = {
-  text: number        // Full-text relevance (0-1)
-  skills: number      // Skills matching (0-1)
-  location: number    // Location match (0-1)
-  experience: number  // Experience compatibility (0-1)
-  recency: number     // Job freshness (0-1)
-  activity: number    // Profile activity (0-1)
+  text: number // Full-text relevance (0-1)
+  skills: number // Skills matching (0-1)
+  location: number // Location match (0-1)
+  experience: number // Experience compatibility (0-1)
+  recency: number // Job freshness (0-1)
+  activity: number // Profile activity (0-1)
   availability: number // Availability match (0-1)
   work_arrangement: number // Remote/flexible preferences (0-1)
-  benefits: number    // Benefits alignment (0-1)
-  category: number    // Category preferences (0-1)
+  benefits: number // Benefits alignment (0-1)
+  category: number // Category preferences (0-1)
 }
 
 /**

@@ -59,9 +59,7 @@ export function computeSkillScore(
 
   // Score each job skill requirement
   for (const jobSkill of normalizedJobSkills) {
-    const candidateSkill = normalizedCandidateSkills.find(
-      cs => cs.name.toLowerCase() === jobSkill.toLowerCase()
-    )
+    const candidateSkill = normalizedCandidateSkills.find((cs) => cs.name.toLowerCase() === jobSkill.toLowerCase())
 
     if (candidateSkill) {
       exactMatches++
@@ -77,8 +75,9 @@ export function computeSkillScore(
     } else {
       // Check for partial matches (contains relationship)
       const partialMatch = normalizedCandidateSkills.find(
-        cs => jobSkill.toLowerCase().includes(cs.name.toLowerCase()) ||
-             cs.name.toLowerCase().includes(jobSkill.toLowerCase())
+        (cs) =>
+          jobSkill.toLowerCase().includes(cs.name.toLowerCase()) ||
+          cs.name.toLowerCase().includes(jobSkill.toLowerCase())
       )
 
       if (partialMatch) {
@@ -103,12 +102,10 @@ export function computeSkillScore(
 
   // Calculate final scores
   const skillMatchRatio = (exactMatches + partialMatches * 0.5) / normalizedJobSkills.length
-  const avgProficiencyScore = normalizedJobSkills.length > 0
-    ? totalProficiencyScore / normalizedJobSkills.length
-    : 0
+  const avgProficiencyScore = normalizedJobSkills.length > 0 ? totalProficiencyScore / normalizedJobSkills.length : 0
 
   // Combined score: 60% skill match ratio, 40% average proficiency
-  const totalScore = (skillMatchRatio * 0.6) + (avgProficiencyScore * 0.4)
+  const totalScore = skillMatchRatio * 0.6 + avgProficiencyScore * 0.4
 
   return {
     exactMatches,
@@ -125,15 +122,17 @@ export function computeSkillScore(
 function normalizeSkillsToStrings(skills: any[]): string[] {
   if (!Array.isArray(skills)) return []
 
-  return skills.map(skill => {
-    if (typeof skill === 'string') {
-      return skill
-    }
-    if (typeof skill === 'object' && skill.name) {
-      return skill.name
-    }
-    return String(skill)
-  }).filter(Boolean)
+  return skills
+    .map((skill) => {
+      if (typeof skill === 'string') {
+        return skill
+      }
+      if (typeof skill === 'object' && skill.name) {
+        return skill.name
+      }
+      return String(skill)
+    })
+    .filter(Boolean)
 }
 
 /**
@@ -145,7 +144,7 @@ function normalizeSkillsToObjects(
 ): Array<{ name: string; proficiency: number; level: string }> {
   if (!Array.isArray(skills)) return []
 
-  return skills.map(skill => {
+  return skills.map((skill) => {
     if (typeof skill === 'string') {
       // Infer proficiency from experience
       const proficiency = inferProficiencyFromExperience(experienceYears)
@@ -213,9 +212,7 @@ export function analyzeSkillGap(
   const strongSkills: Array<{ skill: string; proficiency: number }> = []
 
   for (const jobSkill of normalizedJobSkills) {
-    const candidateSkill = normalizedCandidateSkills.find(
-      cs => cs.name.toLowerCase() === jobSkill.toLowerCase()
-    )
+    const candidateSkill = normalizedCandidateSkills.find((cs) => cs.name.toLowerCase() === jobSkill.toLowerCase())
 
     if (!candidateSkill) {
       missingSkills.push(jobSkill)

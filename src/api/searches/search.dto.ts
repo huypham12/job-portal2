@@ -448,12 +448,6 @@ export const CompanySuggestionsRequestSchema = z.object({
   context: z.record(z.string(), z.any()).optional()
 })
 
-export const PopularCompaniesRequestSchema = z.object({
-  limit: z.number().int().min(1).max(50).default(10),
-  sort_by: z.enum(['size', 'name', 'founded_year']).default('size'),
-  industry: z.string().optional()
-})
-
 export const CompanySearchResponseSchema = z.object({
   total: z.number().int(),
   took_ms: z.number().int(),
@@ -470,24 +464,15 @@ export const CompanySuggestionsResponseSchema = z.object({
   )
 })
 
-export const PopularCompaniesResponseSchema = z.object({
-  companies: z.array(z.any()),
-  sort_by: z.string(),
-  period: z.string()
-})
-
 // Validators
 export const searchCompaniesValidator = zodValidate({ query: CompanySearchRequestSchema })
 export const companiesSuggestionsValidator = zodValidate({ query: CompanySuggestionsRequestSchema })
-export const getPopularCompaniesValidator = zodValidate({ query: PopularCompaniesRequestSchema })
 
 // Export types
 export type CompanySearchRequestDto = z.infer<typeof CompanySearchRequestSchema>
 export type CompanySuggestionsRequestDto = z.infer<typeof CompanySuggestionsRequestSchema>
-export type PopularCompaniesRequestDto = z.infer<typeof PopularCompaniesRequestSchema>
 export type CompanySearchResponseDto = z.infer<typeof CompanySearchResponseSchema>
 export type CompanySuggestionsResponseDto = z.infer<typeof CompanySuggestionsResponseSchema>
-export type PopularCompaniesResponseDto = z.infer<typeof PopularCompaniesResponseSchema>
 
 // Location Search DTOs
 export const LocationSearchRequestSchema = z.object({

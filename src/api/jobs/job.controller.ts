@@ -164,7 +164,6 @@ export class JobController {
     }
   }
 
-
   /**
    * POST /api/jobs/bulk-actions
    * Perform bulk actions on multiple jobs (close, delete, publish)
@@ -218,7 +217,6 @@ export class JobController {
       next(error)
     }
   }
-
 
   /**
    * GET /api/jobs/:id/stats

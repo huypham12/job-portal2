@@ -106,7 +106,7 @@ interface EnvConfig {
   }
   seeding: {
     candidateLimit: number
-  },
+  }
   rollout: {
     searchJobsPercentage: number
     searchPopularPercentage: number

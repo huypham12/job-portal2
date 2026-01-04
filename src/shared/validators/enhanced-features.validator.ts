@@ -6,47 +6,6 @@ import { zodValidate } from './validate-request'
  * popular jobs, and enhanced notifications
  */
 
-// ==================== RECENT SEARCHES VALIDATORS ====================
-
-const getRecentSearchesQuery = z.object({
-  limit: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(50).default(10)),
-  days: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(365).default(30))
-})
-
-export const getRecentSearchesValidator = zodValidate({ query: getRecentSearchesQuery })
-
-const deleteRecentSearchParams = z.object({
-  id: z.preprocess((val) => {
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1))
-})
-
-export const deleteRecentSearchValidator = zodValidate({ params: deleteRecentSearchParams })
-
-const getPopularQueriesQuery = z.object({
-  limit: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(20).default(10)),
-  days: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(90).default(7))
-})
-
-export const getPopularQueriesValidator = zodValidate({ query: getPopularQueriesQuery })
-
 // ==================== RECENTLY VIEWED JOBS VALIDATORS ====================
 
 const getRecentlyViewedJobsQuery = z.object({

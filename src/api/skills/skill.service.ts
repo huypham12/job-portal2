@@ -39,10 +39,7 @@ export class SkillService {
         // filter by related category slug or name
         where.category = {
           // try slug first, fallback to name using OR
-          OR: [
-            { slug: category },
-            { name: category }
-          ]
+          OR: [{ slug: category }, { name: category }]
         }
       }
     }

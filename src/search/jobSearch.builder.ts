@@ -68,7 +68,8 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
   // Full-text search with conservative field boosts
   if (q && q.trim()) {
     // Detect Vietnamese characters for query optimization
-    const vietnameseRegex = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/u
+    const vietnameseRegex =
+      /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/u
     const hasVietnameseChars = vietnameseRegex.test(q.trim())
 
     // Conservative field boosts - skills get priority over titles
@@ -275,10 +276,16 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
   }
 
   // Add function_score for personalization if we have user context
-  const hasUserContext = userSkills || userLocationId || userExperienceLevel ||
-    userPrefersRemote || userPrefersFlexibleHours ||
-    userDesiredSalaryMin || userDesiredSalaryMax ||
-    userDesiredBenefits || userPreferredCategories
+  const hasUserContext =
+    userSkills ||
+    userLocationId ||
+    userExperienceLevel ||
+    userPrefersRemote ||
+    userPrefersFlexibleHours ||
+    userDesiredSalaryMin ||
+    userDesiredSalaryMax ||
+    userDesiredBenefits ||
+    userPreferredCategories
 
   if (hasUserContext) {
     const functionScore = buildJobSearchFunctionScore(context)
@@ -331,10 +338,7 @@ export function buildJobSuggestionsQuery(prefix: string, size = 10): ESQuery {
             }
           }
         ],
-        filter: [
-          { term: { status: 'approved' } },
-          { range: { expires_at: { gt: 'now' } } }
-        ]
+        filter: [{ term: { status: 'approved' } }, { range: { expires_at: { gt: 'now' } } }]
       }
     },
     size,
@@ -352,10 +356,7 @@ export function buildPopularJobsQuery(limit = 20): ESQuery {
       function_score: {
         query: {
           bool: {
-            filter: [
-              { term: { status: 'approved' } },
-              { range: { expires_at: { gt: 'now' } } }
-            ]
+            filter: [{ term: { status: 'approved' } }, { range: { expires_at: { gt: 'now' } } }]
           }
         },
         functions: [

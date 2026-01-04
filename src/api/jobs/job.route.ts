@@ -38,18 +38,6 @@ router.post('/:id/view', jobIdValidator, jobController.trackView)
 // ==================== EMPLOYER ROUTES ====================
 // These routes require authentication and recruiter role for job management
 
-/**
- * GET /api/jobs/:id/public
- * Get job detail (public view)
- */
-router.get('/:id/public', jobIdValidator, jobController.getJobPublic)
-
-/**
- * POST /api/jobs/:id/view
- * Track job view (can be anonymous or authenticated)
- */
-router.post('/:id/view', jobIdValidator, jobController.trackView)
-
 // ==================== EMPLOYER ROUTES ====================
 // These routes require authentication and recruiter role for job management
 

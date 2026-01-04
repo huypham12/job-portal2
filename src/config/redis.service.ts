@@ -20,7 +20,8 @@ let redisClient: Redis | null = null
 const localStore = new Map<string, CacheValue>()
 
 // Initialize Redis client if URL is provided
-if (REDIS_URL && REDIS_URL !== 'redis://localhost:6379') { // Skip default localhost Redis
+if (REDIS_URL && REDIS_URL !== 'redis://localhost:6379') {
+  // Skip default localhost Redis
   try {
     redisClient = new Redis(REDIS_URL, {
       enableReadyCheck: false,
@@ -40,7 +41,6 @@ if (REDIS_URL && REDIS_URL !== 'redis://localhost:6379') { // Skip default local
     redisClient.on('ready', () => {
       console.log('✅ Redis client ready')
     })
-
   } catch (error) {
     console.error('❌ Failed to initialize Redis client:', error)
     redisClient = null

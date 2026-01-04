@@ -3,7 +3,6 @@ import { elasticsearchSyncService } from '../config/elasticsearch-sync.service'
 import { jobToESDoc, profileToESDoc, companyToESDoc, applicationToESDoc } from '../shared/utils/es-transformers'
 
 export class SyncRetryWorker {
-
   /**
    * Get entity data from database for re-sync (public method for controllers)
    */
@@ -170,7 +169,6 @@ export class SyncRetryWorker {
             console.warn(`❌ Re-sync failed for ${sync.entity_type}:${sync.entity_id}`)
             errorCount++
           }
-
         } catch (error) {
           console.error(`❌ Background retry failed for ${sync.entity_type}:${sync.entity_id}:`, error)
           errorCount++
@@ -178,7 +176,6 @@ export class SyncRetryWorker {
       }
 
       console.log(`🔄 Retry batch completed: ${successCount} success, ${errorCount} failed`)
-
     } catch (error) {
       console.error('Sync retry worker error:', error)
     }
@@ -218,7 +215,6 @@ export class SyncRetryWorker {
       if (deletedSuccess.count > 0 || deletedFailed.count > 0) {
         console.log(`🧹 Cleaned up sync records: ${deletedSuccess.count} success, ${deletedFailed.count} failed`)
       }
-
     } catch (error) {
       console.error('Sync cleanup error:', error)
     }
@@ -234,9 +230,12 @@ export class SyncRetryWorker {
     }, 60000)
 
     // Cleanup old records every 24 hours
-    setInterval(() => {
-      this.cleanupOldRecords()
-    }, 24 * 60 * 60 * 1000)
+    setInterval(
+      () => {
+        this.cleanupOldRecords()
+      },
+      24 * 60 * 60 * 1000
+    )
 
     console.log('🔄 Sync retry worker started (runs every 60s, cleanup every 24h)')
   }

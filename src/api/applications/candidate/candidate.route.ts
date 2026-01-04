@@ -23,21 +23,13 @@ router.use(authenticateAccessToken, candidate)
  * POST /api/applications/candidate
  * Create a new job application
  */
-router.post(
-  '/',
-  validateDto(CreateApplicationSchema),
-  candidateController.createApplication
-)
+router.post('/', validateDto(CreateApplicationSchema), candidateController.createApplication)
 
 /**
  * GET /api/applications/candidate
  * Get list of user's applications with pagination and filters
  */
-router.get(
-  '/',
-  validateDto(GetApplicationsSchema),
-  candidateController.getApplications
-)
+router.get('/', validateDto(GetApplicationsSchema), candidateController.getApplications)
 
 /**
  * GET /api/applications/candidate/:id

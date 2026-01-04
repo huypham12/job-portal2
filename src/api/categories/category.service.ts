@@ -21,10 +21,7 @@ export class CategoryService {
         slug: true,
         type: true
       },
-      orderBy: [
-        { type: 'asc' },
-        { name: 'asc' }
-      ]
+      orderBy: [{ type: 'asc' }, { name: 'asc' }]
     })
 
     return categories
@@ -37,14 +34,17 @@ export class CategoryService {
   async getCategoriesGrouped() {
     const categories = await this.getCategories()
 
-    const grouped = categories.reduce((acc, category) => {
-      const type = category.type
-      if (!acc[type]) {
-        acc[type] = []
-      }
-      acc[type].push(category)
-      return acc
-    }, {} as Record<string, typeof categories>)
+    const grouped = categories.reduce(
+      (acc, category) => {
+        const type = category.type
+        if (!acc[type]) {
+          acc[type] = []
+        }
+        acc[type].push(category)
+        return acc
+      },
+      {} as Record<string, typeof categories>
+    )
 
     return grouped
   }

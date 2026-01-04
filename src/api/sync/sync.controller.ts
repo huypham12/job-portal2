@@ -6,7 +6,6 @@ import { HttpError } from '../../shared/common/http-error'
 import { HTTP_STATUS } from '../../shared/constants/httpStatus'
 
 export class SyncController {
-
   /**
    * GET /api/sync/status - Check sync statistics and failed records
    */
@@ -122,11 +121,7 @@ export class SyncController {
         throw new HttpError('Entity not found', HTTP_STATUS.NOT_FOUND)
       }
 
-      const success = await elasticsearchSyncService.syncToElasticsearchWithRetry(
-        entityType + 's',
-        entityId,
-        document
-      )
+      const success = await elasticsearchSyncService.syncToElasticsearchWithRetry(entityType + 's', entityId, document)
 
       res.json({
         success: true,
@@ -178,17 +173,20 @@ export class SyncController {
       })
 
       // Group by entity_type
-      const groupedSummary = summary.reduce((acc, item) => {
-        if (!acc[item.entity_type]) {
-          acc[item.entity_type] = {
-            failed: 0,
-            pending: 0,
-            success: 0
+      const groupedSummary = summary.reduce(
+        (acc, item) => {
+          if (!acc[item.entity_type]) {
+            acc[item.entity_type] = {
+              failed: 0,
+              pending: 0,
+              success: 0
+            }
           }
-        }
-        acc[item.entity_type][item.sync_status] = item._count.sync_status
-        return acc
-      }, {} as Record<string, any>)
+          acc[item.entity_type][item.sync_status] = item._count.sync_status
+          return acc
+        },
+        {} as Record<string, any>
+      )
 
       res.json({
         success: true,

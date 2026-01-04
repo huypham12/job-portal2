@@ -305,7 +305,6 @@ export class NotificationHelper {
     await socketService.sendNotification(data.candidateId, NotificationType.SAVED_JOB_EXPIRING, content)
   }
 
-
   /**
    * Send popular job alert
    */

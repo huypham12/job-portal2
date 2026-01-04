@@ -55,18 +55,24 @@ const usedStockSymbols = new Set<string>()
 const usedCompanyNames = new Set<string>()
 
 // Function to select diverse benefits based on company characteristics
-function selectDiverseBenefits(companyBenefitsData: CompanyBenefitData[], companySize: number, industry: string | null): CompanyBenefitData[] {
+function selectDiverseBenefits(
+  companyBenefitsData: CompanyBenefitData[],
+  companySize: number,
+  industry: string | null
+): CompanyBenefitData[] {
   const selectedBenefits: CompanyBenefitData[] = []
 
   // Determine number of benefits based on company size
   let benefitsCount = 3 // Small companies (default)
-  if (companySize > 1000) benefitsCount = 6 // Large companies
-  else if (companySize > 500) benefitsCount = 5 // Medium-large companies
+  if (companySize > 1000)
+    benefitsCount = 6 // Large companies
+  else if (companySize > 500)
+    benefitsCount = 5 // Medium-large companies
   else if (companySize > 100) benefitsCount = 4 // Medium companies
 
   // Group benefits by type
   const benefitsByType = new Map<string, CompanyBenefitData[]>()
-  companyBenefitsData.forEach(benefit => {
+  companyBenefitsData.forEach((benefit) => {
     if (!benefitsByType.has(benefit.benefit_type)) {
       benefitsByType.set(benefit.benefit_type, [])
     }
@@ -95,7 +101,8 @@ function selectDiverseBenefits(companyBenefitsData: CompanyBenefitData[], compan
   }
 
   // Modern benefits for forward-thinking companies
-  if (Math.random() < 0.3) { // 30% chance
+  if (Math.random() < 0.3) {
+    // 30% chance
     priorityTypes.push('Remote Work', 'Flexible Hours')
   }
 
@@ -107,11 +114,11 @@ function selectDiverseBenefits(companyBenefitsData: CompanyBenefitData[], compan
     attempts++
 
     // Try priority types first
-    let availableTypes = priorityTypes.filter(type => !usedTypes.has(type) && benefitsByType.has(type))
+    let availableTypes = priorityTypes.filter((type) => !usedTypes.has(type) && benefitsByType.has(type))
 
     // If no priority types available, use any remaining types
     if (availableTypes.length === 0) {
-      availableTypes = Array.from(benefitsByType.keys()).filter(type => !usedTypes.has(type))
+      availableTypes = Array.from(benefitsByType.keys()).filter((type) => !usedTypes.has(type))
     }
 
     if (availableTypes.length === 0) break
@@ -129,7 +136,7 @@ function selectDiverseBenefits(companyBenefitsData: CompanyBenefitData[], compan
   // If we still don't have enough benefits, fill with random ones
   while (selectedBenefits.length < benefitsCount && selectedBenefits.length < companyBenefitsData.length) {
     const randomBenefit = companyBenefitsData[Math.floor(Math.random() * companyBenefitsData.length)]
-    if (!selectedBenefits.some(b => b.title === randomBenefit.title)) {
+    if (!selectedBenefits.some((b) => b.title === randomBenefit.title)) {
       selectedBenefits.push(randomBenefit)
     }
   }
@@ -283,8 +290,8 @@ export async function seedCompanies() {
         useMajorCity && majorCityDistricts.length > 0
           ? majorCityDistricts
           : otherDistricts.length > 0
-          ? otherDistricts
-          : allDistricts
+            ? otherDistricts
+            : allDistricts
 
       if (sourceArray.length === 0) {
         throw new Error('No valid districts available for company headquarters')
@@ -409,7 +416,11 @@ export async function seedCompanies() {
           })
 
           // 4. Create diverse company benefits based on company size and industry
-          const selectedBenefits = selectDiverseBenefits(companyBenefitsData, companyData.size || 100, companyDetailData.industry)
+          const selectedBenefits = selectDiverseBenefits(
+            companyBenefitsData,
+            companyData.size || 100,
+            companyDetailData.industry
+          )
 
           const benefitPromises = selectedBenefits.map((benefitData) =>
             prisma.company_benefits.create({
@@ -475,20 +486,23 @@ export async function seedCompanies() {
 
     // Log seeding statistics
     const totalCompanies = companiesData.length
-    const uniqueIndustries = new Set(companyDetailsData.map(d => d.industry).filter(Boolean)).size
-    const companiesWithStockSymbols = companyDetailsData.filter(d => d.stock_symbol).length
-    const companiesWithWebsites = companyDetailsData.filter(d => d.website_url).length
+    const uniqueIndustries = new Set(companyDetailsData.map((d) => d.industry).filter(Boolean)).size
+    const companiesWithStockSymbols = companyDetailsData.filter((d) => d.stock_symbol).length
+    const companiesWithWebsites = companyDetailsData.filter((d) => d.website_url).length
     const avgBenefitsPerCompany = Math.round((totalCompanies * 4) / totalCompanies) // Assuming ~4 benefits per company
 
     // Analyze industry distribution
-    const industryStats = companyDetailsData.reduce((acc, detail) => {
-      const industry = detail.industry || 'Unknown'
-      acc[industry] = (acc[industry] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const industryStats = companyDetailsData.reduce(
+      (acc, detail) => {
+        const industry = detail.industry || 'Unknown'
+        acc[industry] = (acc[industry] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>
+    )
 
     const topIndustries = Object.entries(industryStats)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
 
     console.log('\n📊 Seeding Statistics:')
@@ -503,9 +517,7 @@ export async function seedCompanies() {
       console.log(`  ${index + 1}. ${industry}: ${count} companies (${percentage}%)`)
     })
 
-    console.log(
-      `\n🎉 Successfully seeded ${totalCompanies} recruiters with their companies, details, and benefits!`
-    )
+    console.log(`\n🎉 Successfully seeded ${totalCompanies} recruiters with their companies, details, and benefits!`)
     console.log(`📧 Recruiter emails: recruiter1@gmail.com to recruiter${totalCompanies}@gmail.com`)
     console.log(`🔑 Common password: ${recruiterPassword}`)
     console.log(`📋 Data validation: ✅ Unique names, websites, and stock symbols`)

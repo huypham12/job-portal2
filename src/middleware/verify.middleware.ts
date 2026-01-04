@@ -55,10 +55,10 @@ export const authenticateForgotPasswordToken = async (req: Request, res: Respons
     }
 
     // 1. Giải mã JWT (Kiểm tra chữ ký và Hạn sử dụng (exp))
-    const decodedToken = await verifyToken({
+    const decodedToken = (await verifyToken({
       token,
       secretKey: envConfig.secrets.jwt.forgotPassword
-    }) as TokenPayload
+    })) as TokenPayload
 
     // 2. Tìm user
     const user = await prisma.users.findUnique({

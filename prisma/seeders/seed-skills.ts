@@ -37,9 +37,7 @@ export async function seedSkills() {
         if (!categoryIds.has(skill.category_id)) {
           errorCount++
           if (errorCount <= 5) {
-            console.log(
-              `❌ Skipped skill "${skill.name}": category_id "${skill.category_id}" does not exist`
-            )
+            console.log(`❌ Skipped skill "${skill.name}": category_id "${skill.category_id}" does not exist`)
           }
           continue
         }

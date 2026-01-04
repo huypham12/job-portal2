@@ -9,21 +9,65 @@
  * Location match levels for scoring
  */
 export enum LocationMatchLevel {
-  EXACT = 1.0,      // Same city/district
-  PROVINCE = 0.7,   // Same province, different city
-  REGION = 0.4,     // Same region (North/Central/South Vietnam)
-  REMOTE_OK = 0.8,  // Job allows remote, candidate flexible
-  FLEXIBLE = 0.6,   // Either party flexible
-  NO_MATCH = 0.0    // No location compatibility
+  EXACT = 1.0, // Same city/district
+  PROVINCE = 0.7, // Same province, different city
+  REGION = 0.4, // Same region (North/Central/South Vietnam)
+  REMOTE_OK = 0.8, // Job allows remote, candidate flexible
+  FLEXIBLE = 0.6, // Either party flexible
+  NO_MATCH = 0.0 // No location compatibility
 }
 
 /**
  * Vietnamese regions for geographical matching
  */
 const VIETNAM_REGIONS = {
-  NORTH: ['Hanoi', 'Haiphong', 'Quangninh', 'Bacgiang', 'Bacninh', 'Hungyen', 'Haiduong', 'Namdin', 'Ninhbinh', 'Thanhhoa', 'Nghean', 'Hatinh'],
-  CENTRAL: ['Danang', 'Quangnam', 'Quangngai', 'Binhdinh', 'Phuyen', 'Khanhhoa', 'Ninhthuan', 'Binhthuan', 'Kontum', 'Gialai', 'Daklak', 'Daknong', 'Lamdong'],
-  SOUTH: ['Ho Chi Minh City', 'Cantho', 'An Giang', 'Dongthap', 'Tien Giang', 'Vinh Long', 'Bentre', 'Tra Vinh', 'Soc Trang', 'Bac Lieu', 'Ca Mau', 'Longan', 'Tayninh', 'Binh Duong', 'Dong Nai', 'Bariavungtau']
+  NORTH: [
+    'Hanoi',
+    'Haiphong',
+    'Quangninh',
+    'Bacgiang',
+    'Bacninh',
+    'Hungyen',
+    'Haiduong',
+    'Namdin',
+    'Ninhbinh',
+    'Thanhhoa',
+    'Nghean',
+    'Hatinh'
+  ],
+  CENTRAL: [
+    'Danang',
+    'Quangnam',
+    'Quangngai',
+    'Binhdinh',
+    'Phuyen',
+    'Khanhhoa',
+    'Ninhthuan',
+    'Binhthuan',
+    'Kontum',
+    'Gialai',
+    'Daklak',
+    'Daknong',
+    'Lamdong'
+  ],
+  SOUTH: [
+    'Ho Chi Minh City',
+    'Cantho',
+    'An Giang',
+    'Dongthap',
+    'Tien Giang',
+    'Vinh Long',
+    'Bentre',
+    'Tra Vinh',
+    'Soc Trang',
+    'Bac Lieu',
+    'Ca Mau',
+    'Longan',
+    'Tayninh',
+    'Binh Duong',
+    'Dong Nai',
+    'Bariavungtau'
+  ]
 } as const
 
 /**
@@ -69,7 +113,7 @@ export function computeLocationScore(
   remoteCompatibility = flexibility.remoteScore
 
   // Overall location score combines geographical and flexibility factors
-  const overallScore = (geographicalMatch * 0.6) + (flexibilityMatch * 0.3) + (remoteCompatibility * 0.1)
+  const overallScore = geographicalMatch * 0.6 + flexibilityMatch * 0.3 + remoteCompatibility * 0.1
 
   // Determine match level and type
   const { matchLevel, matchType } = determineMatchLevel(
@@ -95,18 +139,18 @@ export function computeLocationScore(
 /**
  * Compute geographical proximity score
  */
-function computeGeographicalMatch(
-  jobLocation: any,
-  candidateLocation: any
-): number {
+function computeGeographicalMatch(jobLocation: any, candidateLocation: any): number {
   // Exact location match (same city/district)
   if (jobLocation.id && candidateLocation.id && jobLocation.id === candidateLocation.id) {
     return LocationMatchLevel.EXACT
   }
 
   // Province-level match
-  if (jobLocation.province && candidateLocation.province &&
-      jobLocation.province.toLowerCase() === candidateLocation.province.toLowerCase()) {
+  if (
+    jobLocation.province &&
+    candidateLocation.province &&
+    jobLocation.province.toLowerCase() === candidateLocation.province.toLowerCase()
+  ) {
     return LocationMatchLevel.PROVINCE
   }
 
@@ -171,10 +215,8 @@ function determineMatchLevel(
   jobAllowsRemote?: boolean,
   candidatePrefersRemote?: boolean
 ): { matchLevel: LocationMatchLevel; matchType: string } {
-
   // Perfect match: exact location or both remote
-  if (geographicalMatch === LocationMatchLevel.EXACT ||
-      (jobAllowsRemote && candidatePrefersRemote)) {
+  if (geographicalMatch === LocationMatchLevel.EXACT || (jobAllowsRemote && candidatePrefersRemote)) {
     return {
       matchLevel: LocationMatchLevel.EXACT,
       matchType: 'Perfect Match'
@@ -182,8 +224,7 @@ function determineMatchLevel(
   }
 
   // Strong match: province level or remote compatibility
-  if (geographicalMatch >= LocationMatchLevel.PROVINCE ||
-      remoteScore >= LocationMatchLevel.REMOTE_OK) {
+  if (geographicalMatch >= LocationMatchLevel.PROVINCE || remoteScore >= LocationMatchLevel.REMOTE_OK) {
     return {
       matchLevel: LocationMatchLevel.PROVINCE,
       matchType: 'Strong Match'
@@ -191,8 +232,7 @@ function determineMatchLevel(
   }
 
   // Moderate match: region level or flexible
-  if (geographicalMatch >= LocationMatchLevel.REGION ||
-      flexibilityMatch >= LocationMatchLevel.FLEXIBLE) {
+  if (geographicalMatch >= LocationMatchLevel.REGION || flexibilityMatch >= LocationMatchLevel.FLEXIBLE) {
     return {
       matchLevel: LocationMatchLevel.REGION,
       matchType: 'Moderate Match'
@@ -223,7 +263,7 @@ function getVietnamRegion(locationName?: string): keyof typeof VIETNAM_REGIONS |
   const normalizedName = locationName.toLowerCase()
 
   for (const [region, cities] of Object.entries(VIETNAM_REGIONS)) {
-    if (cities.some(city => normalizedName.includes(city.toLowerCase()))) {
+    if (cities.some((city) => normalizedName.includes(city.toLowerCase()))) {
       return region as keyof typeof VIETNAM_REGIONS
     }
   }
@@ -243,8 +283,11 @@ export function calculateLocationDistance(
   description: string
 } {
   // Same province
-  if (location1.province && location2.province &&
-      location1.province.toLowerCase() === location2.province.toLowerCase()) {
+  if (
+    location1.province &&
+    location2.province &&
+    location1.province.toLowerCase() === location2.province.toLowerCase()
+  ) {
     return {
       distance: 0,
       unit: 'same',

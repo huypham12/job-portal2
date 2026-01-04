@@ -31,6 +31,7 @@ src/
 ## 🎯 2. Chi tiết cấu trúc thư mục
 
 ### 📁 components/
+
 ```
 components/
 ├── ui/                          # Base UI components
@@ -67,6 +68,7 @@ components/
 ```
 
 ### 📁 pages/
+
 ```
 pages/
 ├── auth/
@@ -141,6 +143,7 @@ pages/
 ```
 
 ### 📁 hooks/
+
 ```
 hooks/
 ├── useAuth.ts              # Authentication hooks
@@ -153,6 +156,7 @@ hooks/
 ```
 
 ### 📁 services/
+
 ```
 services/
 ├── api/
@@ -171,6 +175,7 @@ services/
 ```
 
 ### 📁 store/
+
 ```
 store/
 ├── auth/
@@ -189,6 +194,7 @@ store/
 ```
 
 ### 📁 utils/
+
 ```
 utils/
 ├── date.ts                 # Date formatting
@@ -202,6 +208,7 @@ utils/
 ## 🛣️ 3. Routing Structure
 
 ### Public Routes
+
 ```
 / (Home)
 /login
@@ -218,6 +225,7 @@ utils/
 ```
 
 ### Candidate Routes (Protected)
+
 ```
 /candidate/dashboard
 /candidate/profile
@@ -240,6 +248,7 @@ utils/
 ```
 
 ### Recruiter Routes (Protected)
+
 ```
 /recruiter/dashboard
 /recruiter/company
@@ -257,6 +266,7 @@ utils/
 ```
 
 ### Admin Routes (Protected)
+
 ```
 /admin/dashboard
 /admin/users
@@ -269,6 +279,7 @@ utils/
 ## 🎨 4. UI Components & Pages
 
 ### Core UI Components
+
 - **Header/Navbar**: Logo, navigation menu, user menu, notifications
 - **Sidebar**: Role-based navigation
 - **SearchBar**: Global search với autocomplete
@@ -282,6 +293,7 @@ utils/
 - **Charts**: Analytics charts (applications, views, etc.)
 
 ### Page Layouts
+
 - **AuthLayout**: Centered form layout
 - **DashboardLayout**: Sidebar + main content
 - **PublicLayout**: Header + footer + content
@@ -290,18 +302,21 @@ utils/
 ## 🔐 5. Authentication Flow
 
 ### Login/Register Process
+
 1. **Login Page**: Email/password form
 2. **Register Page**: Full registration form
 3. **Email Verification**: Verification code input
 4. **Password Reset**: Forgot password flow
 
 ### Role-based Access Control
+
 - **Public**: Job search, company browsing
 - **Candidate**: Profile management, applications, saved jobs
 - **Recruiter**: Job posting, application management, company profile
 - **Admin**: User management, content moderation
 
 ### Protected Routes
+
 - Route guards based on authentication status
 - Role-based route protection
 - Redirect logic for unauthorized access
@@ -309,6 +324,7 @@ utils/
 ## 📊 6. State Management
 
 ### Global State (Redux Toolkit)
+
 - **Auth State**: User info, tokens, role
 - **Jobs State**: Job listings, filters, search results
 - **Applications State**: User applications, status
@@ -316,6 +332,7 @@ utils/
 - **UI State**: Modals, loading states, theme
 
 ### Local State (useState/useReducer)
+
 - Form states
 - Component-specific states
 - Temporary UI states
@@ -323,18 +340,21 @@ utils/
 ## 🔄 7. API Integration
 
 ### Axios Configuration
+
 - Base URL configuration
 - Request/response interceptors
 - Authentication headers
 - Error handling
 
 ### API Services Layer
+
 - Centralized API calls
 - Type-safe request/response
 - Error handling
 - Loading states
 
 ### Data Fetching Strategy
+
 - React Query for server state
 - Optimistic updates
 - Cache management
@@ -343,11 +363,13 @@ utils/
 ## 📱 8. Responsive Design
 
 ### Breakpoints
+
 - Mobile: < 768px
 - Tablet: 768px - 1024px
 - Desktop: > 1024px
 
 ### Mobile-first Approach
+
 - Responsive navigation (hamburger menu)
 - Mobile-optimized forms
 - Touch-friendly interactions
@@ -356,6 +378,7 @@ utils/
 ## 🎯 9. Key Features Implementation
 
 ### Job Search & Filtering
+
 - Full-text search
 - Advanced filters (location, salary, type, etc.)
 - Sort options (relevance, date, salary)
@@ -363,6 +386,7 @@ utils/
 - Saved searches
 
 ### Profile Management
+
 - Multi-step profile completion
 - Dynamic form sections
 - File uploads (resume, avatar)
@@ -370,6 +394,7 @@ utils/
 - Progress tracking
 
 ### Application Workflow
+
 - One-click apply
 - Application status tracking
 - Document uploads
@@ -377,6 +402,7 @@ utils/
 - Application analytics
 
 ### Dashboard Analytics
+
 - Job views/applications charts
 - Profile completeness meter
 - Recent activities
@@ -385,32 +411,38 @@ utils/
 ## 🧪 10. Testing Strategy
 
 ### Unit Tests
+
 - Component testing (Jest + React Testing Library)
 - Hook testing
 - Utility function testing
 
 ### Integration Tests
+
 - API integration tests
 - Form submission tests
 - Navigation tests
 
 ### E2E Tests (Future)
+
 - Critical user flows
 - Cross-browser testing
 
 ## 🚀 11. Performance Optimization
 
 ### Code Splitting
+
 - Route-based code splitting
 - Component lazy loading
 - Vendor chunk separation
 
 ### Image Optimization
+
 - Lazy loading
 - WebP format
 - Responsive images
 
 ### Bundle Optimization
+
 - Tree shaking
 - Dead code elimination
 - Compression
@@ -418,16 +450,19 @@ utils/
 ## 📦 12. Build & Deployment
 
 ### Development
+
 - Hot reload
 - ESLint + Prettier
 - TypeScript strict mode
 
 ### Production Build
+
 - Optimized bundle
 - Source maps
 - Environment variables
 
 ### Deployment
+
 - Docker containerization
 - CI/CD pipeline
 - CDN for assets
@@ -435,6 +470,7 @@ utils/
 ## 🔧 13. Development Tools & Libraries
 
 ### Core Dependencies
+
 ```
 react, react-dom
 next.js or vite
@@ -449,6 +485,7 @@ lucide-react (icons)
 ```
 
 ### Development Dependencies
+
 ```
 typescript
 eslint, prettier

@@ -194,7 +194,6 @@ const updateJobStatusBody = z
   })
   .strict()
 
-
 // ==================== BULK JOB ACTIONS SCHEMA ====================
 const bulkJobActionsBody = z
   .object({

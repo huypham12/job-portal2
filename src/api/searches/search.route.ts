@@ -2,27 +2,18 @@ import { Router } from 'express'
 import { searchJobsController } from './search.controller'
 import { suggestionsController } from './suggestions.controller'
 import { eventsController } from './events.controller'
-import { RecentSearchesController } from './recent-searches.controller'
-import {
-  searchCompaniesController,
-  companiesSuggestionsController,
-  getPopularCompaniesController
-} from './company-search.controller'
+import { searchCompaniesController, companiesSuggestionsController } from './company-search.controller'
 import {
   getRecentlyViewedJobsValidator,
   getPopularJobsValidator,
   getTrendingJobsValidator,
-  getPopularJobsByLocationValidator,
-  getRecentSearchesValidator,
-  deleteRecentSearchValidator,
-  getPopularQueriesValidator
+  getPopularJobsByLocationValidator
 } from '../../shared/validators/enhanced-features.validator'
 import {
   searchJobsValidator,
   suggestionsValidator,
   searchCompaniesValidator,
-  companiesSuggestionsValidator,
-  getPopularCompaniesValidator
+  companiesSuggestionsValidator
 } from './search.dto'
 import { authenticateAccessToken } from '../../middleware/verify.middleware'
 import { authenticatedUser } from '../../middleware/authorize.middleware'
@@ -55,7 +46,7 @@ const gradualRolloutMiddleware = (featureFlag: string, defaultEnabled = false) =
     // Simple percentage-based rollout (0-100)
     if (typeof flagValue === 'number' && flagValue < 100) {
       const userHash = simpleHash(req.ip || req.user?.id || 'anonymous')
-      const rolloutPercentage = (userHash % 100)
+      const rolloutPercentage = userHash % 100
 
       if (rolloutPercentage >= flagValue) {
         // User not in rollout group, continue to next middleware (old endpoint)
@@ -74,7 +65,7 @@ function simpleHash(str: string): number {
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i)
     hash = (hash << 5) - hash + char
-    hash = hash & 0xFFFFFFFF // Convert to 32-bit integer
+    hash = hash & 0xffffffff // Convert to 32-bit integer
   }
   return Math.abs(hash)
 }
@@ -86,15 +77,9 @@ function simpleHash(str: string): number {
  *  - GET  /api/search/jobs (enhanced job search with ES)
  *  - GET  /api/search/suggestions (autocomplete suggestions)
  *  - POST /api/search/events (log search events)
- *  - GET  /api/search/popular-queries (trending queries)
  *  - GET  /api/search/companies (company search)
  *  - GET  /api/search/companies/suggestions (company autocomplete)
- *  - GET  /api/search/companies/popular (popular companies)
  *
- * Authenticated routes (require login):
- *  - GET  /api/search/recent (recent searches history)
- *  - DELETE /api/search/recent/:id (delete recent search)
- *  - DELETE /api/search/recent (clear all recent searches)
  *
  * Job discovery routes (moved from jobs module):
  *  - GET  /api/search/jobs/list (basic job listing)
@@ -177,7 +162,6 @@ router.delete('/jobs/recently-viewed', authenticateAccessToken, RecentlyViewedCo
  */
 router.get('/jobs/recently-viewed/stats', authenticateAccessToken, RecentlyViewedController.getViewingStats)
 
-
 // ==================== CORE SEARCH ROUTES ====================
 // Main search functionality with Elasticsearch
 
@@ -188,29 +172,10 @@ router.post('/events', apiRateLimit, eventsController)
 // ==================== USER SEARCH HISTORY ====================
 // Recent searches and popular queries
 
-router.get(
-  '/recent',
-  authenticateAccessToken,
-  authenticatedUser,
-  getRecentSearchesValidator,
-  RecentSearchesController.getRecentSearches
-)
-router.delete(
-  '/recent/:id',
-  authenticateAccessToken,
-  authenticatedUser,
-  deleteRecentSearchValidator,
-  RecentSearchesController.deleteRecentSearch
-)
-router.delete('/recent', authenticateAccessToken, authenticatedUser, RecentSearchesController.clearRecentSearches)
-router.get('/popular-queries', cacheHeaders(300), apiRateLimit, getPopularQueriesValidator, RecentSearchesController.getPopularQueries)
-
 // ==================== COMPANY SEARCH ROUTES ====================
 // Company discovery and search
 
 router.get('/companies', apiRateLimit, searchCompaniesValidator, searchCompaniesController)
 router.get('/companies/suggestions', strictRateLimit, companiesSuggestionsValidator, companiesSuggestionsController)
-router.get('/companies/popular', cacheHeaders(600), apiRateLimit, getPopularCompaniesValidator, getPopularCompaniesController)
-
 
 export default router

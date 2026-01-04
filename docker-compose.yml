@@ -64,7 +64,11 @@ services:
     networks:
       - job-portal-net
     healthcheck:
-      test: ['CMD-SHELL', 'curl -f -u ${ELASTIC_USERNAME:-elastic}:${ELASTIC_PASSWORD:-changeme} http://localhost:9200/_cluster/health || curl -f http://localhost:9200/_cluster/health']
+      test:
+        [
+          'CMD-SHELL',
+          'curl -f -u ${ELASTIC_USERNAME:-elastic}:${ELASTIC_PASSWORD:-changeme} http://localhost:9200/_cluster/health || curl -f http://localhost:9200/_cluster/health'
+        ]
       interval: 15s
       timeout: 10s
       retries: 10

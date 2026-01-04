@@ -133,14 +133,10 @@ export const searchService = {
       const esQuery = buildJobSearchQuery(queryContext)
 
       // Execute search using the built query
-      const esResp = await elasticsearchService.searchWithTemplate(
-        'jobs',
-        esQuery,
-        {
-          explain: queryContext.options?.explain,
-          profile: queryContext.options?.profile
-        }
-      )
+      const esResp = await elasticsearchService.searchWithTemplate('jobs', esQuery, {
+        explain: queryContext.options?.explain,
+        profile: queryContext.options?.profile
+      })
 
       // Cache results for short period
       try {
@@ -196,7 +192,10 @@ export const searchService = {
               company = { id: dbCompany.id, name: (dbCompany as any).name, logo_url: (dbCompany as any).logo_url }
             }
           } catch (e) {
-            console.warn(`[search] Failed to load company ${companyId} from DB for hit ${h.id}:`, (e as Error)?.message || e)
+            console.warn(
+              `[search] Failed to load company ${companyId} from DB for hit ${h.id}:`,
+              (e as Error)?.message || e
+            )
           }
         }
 
@@ -212,15 +211,20 @@ export const searchService = {
         if (!company || !(company as any).name) {
           // Last-resort placeholder and logging for triage
           console.warn(
-            `[search] Missing company name for ES hit id=${h.id}, company_id=${companyId}, src.company_name='${src?.company_name ||
-              ''}'`
+            `[search] Missing company name for ES hit id=${h.id}, company_id=${companyId}, src.company_name='${
+              src?.company_name || ''
+            }'`
           )
         }
 
         return {
           id: h.id,
           title: src?.title,
-          company: company ?? (src?.company_name ? { id: src?.company_id, name: src.company_name } : { id: src?.company_id, name: 'Chưa có tên công ty' }),
+          company:
+            company ??
+            (src?.company_name
+              ? { id: src?.company_id, name: src.company_name }
+              : { id: src?.company_id, name: 'Chưa có tên công ty' }),
           score: h._score ?? undefined,
           highlight: highlight ? (h as any)._highlight : undefined,
           _source: src
@@ -571,94 +575,6 @@ export const searchService = {
       id: `${eventDto.user_id}_${eventDto.event_type}_${eventDto.timestamp_ms}`,
       document: doc
     })
-  },
-
-  /**
-   * Get popular queries using ES aggregations with DB fallback
-   */
-  async getPopularQueries(days: number = 7, limit: number = 10) {
-    try {
-      // Try ES first for real-time analytics
-      return await this.getPopularQueriesFromES(days, limit)
-    } catch (e) {
-      // Fallback to DB if ES unavailable
-      console.warn('ES popular queries failed, falling back to DB', e)
-      return await this.getPopularQueriesFromDB(days, limit)
-    }
-  },
-
-  /**
-   * Get popular queries from Elasticsearch aggregations
-   */
-  async getPopularQueriesFromES(days: number = 7, limit: number = 10) {
-    const dateThreshold = new Date()
-    dateThreshold.setDate(dateThreshold.getDate() - days)
-
-    try {
-      const client = elasticsearchService.getClient()
-      const esResp = await client.search({
-        index: elasticsearchService.getIndexName('search_events'),
-        body: {
-          query: {
-            bool: {
-              must: [{ term: { event_type: 'impression' } }, { range: { created_at: { gte: dateThreshold } } }]
-            }
-          },
-          aggs: {
-            popular_queries: {
-              terms: {
-                field: 'query.keyword',
-                size: limit,
-                order: { _count: 'desc' }
-              },
-              aggs: {
-                avg_results: { avg: { field: 'result_count' } },
-                last_searched: { max: { field: 'created_at' } }
-              }
-            }
-          },
-          size: 0
-        }
-      })
-
-      const response = esResp as any
-      return (
-        response.aggregations?.popular_queries?.buckets.map((bucket: any) => ({
-          search_query: bucket.key,
-          search_count: bucket.doc_count,
-          avg_results: bucket.avg_results?.value || 0,
-          last_searched: bucket.last_searched?.value
-        })) || []
-      )
-    } catch (e) {
-      console.warn('ES aggregations failed', e)
-      throw e
-    }
-  },
-
-  /**
-   * Get popular queries from database (fallback)
-   */
-  async getPopularQueriesFromDB(days: number = 7, limit: number = 10) {
-    const dateThreshold = new Date()
-    dateThreshold.setDate(dateThreshold.getDate() - days)
-
-    // Use raw SQL for performance (similar to existing implementation)
-    const popularQueries = await prisma.$queryRaw`
-      SELECT
-        search_query,
-        COUNT(*) as search_count,
-        AVG(result_count) as avg_results,
-        MAX(searched_at) as last_searched
-      FROM search_history
-      WHERE searched_at >= ${dateThreshold}
-        AND search_query::text != '{}'
-      GROUP BY search_query
-      ORDER BY search_count DESC
-      LIMIT ${limit}
-    `
-
-    return popularQueries
   },
 
   /**

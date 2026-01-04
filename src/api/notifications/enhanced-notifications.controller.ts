@@ -8,7 +8,6 @@ import { NotificationHelper } from '../../shared/helpers/notification.helper'
  * Handles advanced notification features like job alerts and location-based notifications
  */
 export class EnhancedNotificationsController {
-
   /**
    * POST /api/notifications/send-popular-job-alerts
    * Send alerts about trending/popular jobs

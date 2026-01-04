@@ -609,7 +609,6 @@ export class JobService {
     }
   }
 
-
   /**
    * Get job statistics
    */
@@ -934,7 +933,8 @@ export class JobService {
     })
 
     // Remote work boost: Remote jobs are increasingly popular
-    if (is_remote !== false) { // Don't boost if user explicitly filtered out remote jobs
+    if (is_remote !== false) {
+      // Don't boost if user explicitly filtered out remote jobs
       shouldClauses.push({
         term: {
           is_remote_allowed: {

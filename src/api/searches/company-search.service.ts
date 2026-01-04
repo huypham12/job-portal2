@@ -1,6 +1,11 @@
 import { elasticsearchService } from '../../config/elasticsearch.service'
 import { redisService } from '../../config/redis.service'
-import { CompanySearchRequestDto, CompanySearchResponseDto, CompanySuggestionsRequestDto, CompanySuggestionsResponseDto, PopularCompaniesRequestDto, PopularCompaniesResponseDto } from './search.dto'
+import {
+  CompanySearchRequestDto,
+  CompanySearchResponseDto,
+  CompanySuggestionsRequestDto,
+  CompanySuggestionsResponseDto
+} from './search.dto'
 
 /**
  * Company search service using Elasticsearch
@@ -150,74 +155,9 @@ export const companySearchService = {
         score: s.score
       }))
     }
-  },
+  }
 
   /**
    * Get popular companies based on various metrics
    */
-  async getPopularCompanies(dto: PopularCompaniesRequestDto): Promise<PopularCompaniesResponseDto> {
-    const { limit = 10, sort_by = 'size', industry } = dto
-
-    const cacheKey = `search:companies:popular:${sort_by}:${industry || 'all'}:${limit}`
-    const cacheHit = await redisService.getSearchResponse(cacheKey)
-    if (cacheHit) {
-      return {
-        companies: cacheHit.hits.map((h: any) => h._source),
-        sort_by,
-        period: 'all_time'
-      }
-    }
-
-    // Build query based on sort criteria
-    let sortOptions: any[] = []
-    let query: any = { match_all: {} }
-
-    // Add industry filter if specified
-    if (industry) {
-      query = {
-        bool: {
-          must: [{ match_all: {} }],
-          filter: [{ term: { industry } }]
-        }
-      }
-    }
-
-    switch (sort_by) {
-      case 'size':
-        sortOptions = [{ size: 'desc' }]
-        break
-      case 'name':
-        sortOptions = [{ 'name.keyword': 'asc' }]
-        break
-      case 'founded_year':
-        sortOptions = [{ founded_year: 'desc' }]
-        break
-      default:
-        sortOptions = [{ size: 'desc' }]
-        break
-    }
-
-    const esResp = await elasticsearchService.search({
-      index: 'companies',
-      query,
-      from: 0,
-      size: limit,
-      sort: sortOptions
-    })
-
-    // Cache for 1 hour
-    try {
-      await redisService.setSearchResponse(cacheKey, esResp, 60 * 60)
-    } catch (e) {
-      // Non-fatal
-    }
-
-    const companies = esResp.hits.map((hit) => hit._source)
-
-    return {
-      companies,
-      sort_by,
-      period: 'all_time'
-    }
-  }
 }

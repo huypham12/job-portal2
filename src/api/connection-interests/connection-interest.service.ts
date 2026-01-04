@@ -240,7 +240,6 @@ export const getConnectionInterests = async (
     whereClause.interest_type = interest_type
   }
 
-
   // Filter out expired invitations
   whereClause.expires_at = {
     gte: new Date()

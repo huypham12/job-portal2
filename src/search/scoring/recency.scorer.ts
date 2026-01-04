@@ -8,13 +8,13 @@
  * Recency score levels
  */
 export enum RecencyLevel {
-  VERY_RECENT = 1.0,    // < 1 day
-  RECENT = 0.8,         // 1-3 days
-  FRESH = 0.6,          // 3-7 days
-  MODERATE = 0.4,       // 1-2 weeks
-  STALE = 0.2,          // 2-4 weeks
-  OLD = 0.1,            // 1-3 months
-  ARCHIVED = 0.0        // > 3 months
+  VERY_RECENT = 1.0, // < 1 day
+  RECENT = 0.8, // 1-3 days
+  FRESH = 0.6, // 3-7 days
+  MODERATE = 0.4, // 1-2 weeks
+  STALE = 0.2, // 2-4 weeks
+  OLD = 0.1, // 1-3 months
+  ARCHIVED = 0.0 // > 3 months
 }
 
 /**
@@ -41,7 +41,7 @@ export function computeJobRecencyScore(
     : Infinity
 
   // Determine freshness level
-  let freshness: typeof RecencyLevel[keyof typeof RecencyLevel]
+  let freshness: (typeof RecencyLevel)[keyof typeof RecencyLevel]
   let freshnessLabel: 'very_recent' | 'recent' | 'fresh' | 'moderate' | 'stale' | 'old' | 'archived'
 
   if (daysSincePosted < 1) {
@@ -136,8 +136,7 @@ export function computeProfileRecencyScore(
   }
 
   // Boost score for newer accounts (they're more likely to be active job seekers)
-  const accountFreshnessBonus = accountAgeDays <= 30 ? 0.1 :
-                                accountAgeDays <= 90 ? 0.05 : 0
+  const accountFreshnessBonus = accountAgeDays <= 30 ? 0.1 : accountAgeDays <= 90 ? 0.05 : 0
 
   const finalScore = Math.min(1, activityLevel + accountFreshnessBonus)
 
@@ -214,7 +213,7 @@ export function computeCombinedRecencyScore(
   const applicationTiming = applicationRecency ? applicationRecency.score : 0.5 // Default neutral
 
   // Weighted combination: job freshness is most important for candidates
-  const combinedScore = (jobFreshness * 0.5) + (profileActivity * 0.3) + (applicationTiming * 0.2)
+  const combinedScore = jobFreshness * 0.5 + profileActivity * 0.3 + applicationTiming * 0.2
 
   let recommendation = ''
   if (combinedScore >= 0.8) {
@@ -252,52 +251,48 @@ export function getRecencyQuality(
   if (score >= 0.8) {
     return {
       quality: 'excellent',
-      description: type === 'job' ? 'Very fresh posting' :
-                   type === 'profile' ? 'Highly active candidate' :
-                   'Recent application'
+      description:
+        type === 'job' ? 'Very fresh posting' : type === 'profile' ? 'Highly active candidate' : 'Recent application'
     }
   }
 
   if (score >= 0.6) {
     return {
       quality: 'good',
-      description: type === 'job' ? 'Recently posted' :
-                   type === 'profile' ? 'Active candidate' :
-                   'Recent application'
+      description: type === 'job' ? 'Recently posted' : type === 'profile' ? 'Active candidate' : 'Recent application'
     }
   }
 
   if (score >= 0.4) {
     return {
       quality: 'fair',
-      description: type === 'job' ? 'Moderately fresh' :
-                   type === 'profile' ? 'Moderately active' :
-                   'Somewhat recent application',
-      actionNeeded: type === 'job' ? 'Consider if still actively hiring' :
-                    type === 'profile' ? 'May need re-engagement' :
-                    'Check application status'
+      description:
+        type === 'job' ? 'Moderately fresh' : type === 'profile' ? 'Moderately active' : 'Somewhat recent application',
+      actionNeeded:
+        type === 'job'
+          ? 'Consider if still actively hiring'
+          : type === 'profile'
+            ? 'May need re-engagement'
+            : 'Check application status'
     }
   }
 
   return {
     quality: 'poor',
-    description: type === 'job' ? 'Old posting' :
-                 type === 'profile' ? 'Inactive candidate' :
-                 'Old application',
-    actionNeeded: type === 'job' ? 'Verify if position is still open' :
-                  type === 'profile' ? 'Consider re-engagement campaign' :
-                  'Application may be stale'
+    description: type === 'job' ? 'Old posting' : type === 'profile' ? 'Inactive candidate' : 'Old application',
+    actionNeeded:
+      type === 'job'
+        ? 'Verify if position is still open'
+        : type === 'profile'
+          ? 'Consider re-engagement campaign'
+          : 'Application may be stale'
   }
 }
 
 /**
  * Calculate time-based decay factor
  */
-export function calculateTimeDecay(
-  originalScore: number,
-  ageInDays: number,
-  halfLifeDays: number = 30
-): number {
+export function calculateTimeDecay(originalScore: number, ageInDays: number, halfLifeDays: number = 30): number {
   // Exponential decay: score halves every halfLifeDays
   const decayFactor = Math.pow(0.5, ageInDays / halfLifeDays)
   return originalScore * decayFactor

@@ -64,10 +64,7 @@ export async function profileQuery(
 /**
  * Parse Elasticsearch explanation into readable format
  */
-export function parseExplainResult(
-  explanation: any,
-  depth: number = 0
-): ParsedExplanation {
+export function parseExplainResult(explanation: any, depth: number = 0): ParsedExplanation {
   if (!explanation) {
     return {
       description: 'No explanation available',
@@ -84,9 +81,7 @@ export function parseExplainResult(
 
   // Parse details recursively
   if (explanation.details && Array.isArray(explanation.details)) {
-    parsed.details = explanation.details.map((detail: any) =>
-      parseExplainResult(detail, depth + 1)
-    )
+    parsed.details = explanation.details.map((detail: any) => parseExplainResult(detail, depth + 1))
   }
 
   return parsed
@@ -141,7 +136,6 @@ function summarizeProfile(profile: any): QueryProfileSummary {
     if (summary.bottlenecks.length > 0) {
       summary.recommendations.push('Consider query restructuring or index optimization.')
     }
-
   } catch (error) {
     console.warn('Failed to parse profile summary:', error)
   }
@@ -152,11 +146,7 @@ function summarizeProfile(profile: any): QueryProfileSummary {
 /**
  * Analyze common search issues and provide suggestions
  */
-export function analyzeSearchIssues(
-  query: any,
-  results: any[],
-  explanation?: ParsedExplanation
-): SearchIssueAnalysis {
+export function analyzeSearchIssues(query: any, results: any[], explanation?: ParsedExplanation): SearchIssueAnalysis {
   const analysis: SearchIssueAnalysis = {
     issues: [],
     suggestions: [],
@@ -252,13 +242,11 @@ export function extractTopScoringFactors(
   collectFactors(explanation)
 
   // Sort by score descending and take top factors
-  const topFactors = factors
-    .sort((a, b) => b.score - a.score)
-    .slice(0, maxFactors)
+  const topFactors = factors.sort((a, b) => b.score - a.score).slice(0, maxFactors)
 
   // Calculate percentages
   const totalScore = explanation.score
-  return topFactors.map(factor => ({
+  return topFactors.map((factor) => ({
     ...factor,
     percentage: totalScore > 0 ? (factor.score / totalScore) * 100 : 0
   }))
