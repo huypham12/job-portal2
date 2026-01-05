@@ -213,27 +213,33 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
   }
 
   // Salary range filters (overlap logic)
+  // Desired behavior: return jobs whose salary range overlaps the desired range.
+  // - If both min & max provided => require overlap: job.salary_max >= desired_min*0.8 AND job.salary_min <= desired_max*1.2
+  // - If only min provided => require job.salary_max >= desired_min*0.8
+  // - If only max provided => require job.salary_min <= desired_max*1.2
   if (filters?.salary_min !== undefined || filters?.salary_max !== undefined) {
-    const salaryConditions = []
+    const min = filters.salary_min
+    const max = filters.salary_max
 
-    if (filters.salary_min !== undefined) {
-      salaryConditions.push({
-        range: { salary_min: { gte: filters.salary_min * 0.8 } } // Accept 80% of desired minimum
-      })
-    }
-
-    if (filters.salary_max !== undefined) {
-      salaryConditions.push({
-        range: { salary_max: { lte: filters.salary_max * 1.2 } } // Accept up to 120% of desired maximum
-      })
-    }
-
-    if (salaryConditions.length > 0) {
+    if (min !== undefined && max !== undefined) {
+      // Both bounds: require overlap (both conditions)
       filterClauses.push({
         bool: {
-          should: salaryConditions,
-          minimum_should_match: Math.min(1, salaryConditions.length)
+          must: [
+            { range: { salary_max: { gte: Math.floor(min * 0.8) } } }, // job's max >= desired min (with tolerance)
+            { range: { salary_min: { lte: Math.ceil(max * 1.2) } } } // job's min <= desired max (with tolerance)
+          ]
         }
+      })
+    } else if (min !== undefined) {
+      // Only min: ensure job can pay at least around the desired minimum
+      filterClauses.push({
+        range: { salary_max: { gte: Math.floor(min * 0.8) } }
+      })
+    } else if (max !== undefined) {
+      // Only max: ensure job's minimum is not above the desired maximum
+      filterClauses.push({
+        range: { salary_min: { lte: Math.ceil(max * 1.2) } }
       })
     }
   }

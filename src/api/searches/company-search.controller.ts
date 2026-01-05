@@ -1,35 +1,17 @@
 import { Request, Response } from 'express'
-import { companySearchService } from './company-search.service'
-import { CompanySearchRequestDto, CompanySuggestionsRequestDto } from './search.dto'
+import { searchService } from './search.service'
+import { CompanySuggestionsRequestDto } from './search.dto'
 
 /**
- * Controller for company search operations
+ * Controller for company suggestions
  */
 
 /**
- * Search companies with filters
- * GET /api/search/companies
- */
-export async function searchCompaniesController(req: Request, res: Response) {
-  const query: CompanySearchRequestDto = req.validated!.query
-
-  // Extract recruiterId from authenticated user if they are a recruiter
-  // This enables tenant isolation for authenticated recruiters while allowing public search for candidates
-  const recruiterId = req.decoded_authorization?.role === 'recruiter' ? req.decoded_authorization.user_id : undefined
-
-  const result = await companySearchService.searchCompanies({
-    ...query,
-    recruiterId
-  })
-  return res.json(result)
-}
-
-/**
- * Get company search suggestions
+ * Get company search suggestions for job search
  * GET /api/search/companies/suggestions
  */
 export async function companiesSuggestionsController(req: Request, res: Response) {
   const query: CompanySuggestionsRequestDto = req.validated!.query
-  const result = await companySearchService.getCompanySuggestions(query)
+  const result = await searchService.suggestCompanies(query)
   return res.json(result)
 }

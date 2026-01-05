@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { searchJobsController } from './search.controller'
 import { suggestionsController } from './suggestions.controller'
 import { eventsController } from './events.controller'
-import { searchCompaniesController, companiesSuggestionsController } from './company-search.controller'
+import { companiesSuggestionsController } from './company-search.controller'
 import {
   getRecentlyViewedJobsValidator,
   getPopularJobsValidator,
@@ -12,7 +12,6 @@ import {
 import {
   searchJobsValidator,
   suggestionsValidator,
-  searchCompaniesValidator,
   companiesSuggestionsValidator,
   skillsSuggestionValidator,
   categoriesSuggestionValidator
@@ -208,10 +207,9 @@ router.delete(
   SearchHistoryController.deleteSearchHistoryEntry
 )
 
-// ==================== COMPANY SEARCH ROUTES ====================
-// Company discovery and search
+// ==================== COMPANY AUTOCOMPLETE ====================
+// Company suggestions for job search
 
-router.get('/companies', apiRateLimit, searchCompaniesValidator, searchCompaniesController)
 router.get('/companies/suggestions', strictRateLimit, companiesSuggestionsValidator, companiesSuggestionsController)
 
 // ==================== SKILLS & CATEGORIES AUTOCOMPLETE ====================

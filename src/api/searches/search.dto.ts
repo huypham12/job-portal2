@@ -406,54 +406,12 @@ export const JobSearchResponseSchema = z.object({
 
 export type JobSearchResponseDto = z.infer<typeof JobSearchResponseSchema>
 
-// Company Search DTOs
-export const CompanySearchRequestSchema = z.object({
-  q: z.string().optional(),
-  industry: z.string().optional(),
-  location: z.string().optional(),
-  size_min: z.number().int().min(1).optional(),
-  size_max: z.number().int().min(1).optional(),
-  company_type: z.string().optional(),
-  sort: z.enum(['relevance', 'name', 'size']).default('relevance'),
-  page: z
-    .union([z.number().int().min(1), z.string()])
-    .default(1)
-    .transform((val) => {
-      if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
-        if (isNaN(parsed) || parsed < 1) {
-          throw new Error('page must be a positive integer')
-        }
-        return parsed
-      }
-      return val
-    }),
-  size: z
-    .union([z.number().int().min(1).max(100), z.string()])
-    .default(20)
-    .transform((val) => {
-      if (typeof val === 'string') {
-        const parsed = parseInt(val, 10)
-        if (isNaN(parsed) || parsed < 1 || parsed > 100) {
-          throw new Error('size must be an integer between 1 and 100')
-        }
-        return parsed
-      }
-      return val
-    }),
-  recruiterId: z.string().optional() // Optional for tenant isolation
-})
+// Company Suggestions DTOs (for job search autocomplete)
 
 export const CompanySuggestionsRequestSchema = z.object({
   q: z.string().min(1, 'Query is required'),
   size: z.number().int().min(1).max(20).default(10),
   context: z.record(z.string(), z.any()).optional()
-})
-
-export const CompanySearchResponseSchema = z.object({
-  total: z.number().int(),
-  took_ms: z.number().int(),
-  companies: z.array(z.any())
 })
 
 export const CompanySuggestionsResponseSchema = z.object({
@@ -467,13 +425,10 @@ export const CompanySuggestionsResponseSchema = z.object({
 })
 
 // Validators
-export const searchCompaniesValidator = zodValidate({ query: CompanySearchRequestSchema })
 export const companiesSuggestionsValidator = zodValidate({ query: CompanySuggestionsRequestSchema })
 
 // Export types
-export type CompanySearchRequestDto = z.infer<typeof CompanySearchRequestSchema>
 export type CompanySuggestionsRequestDto = z.infer<typeof CompanySuggestionsRequestSchema>
-export type CompanySearchResponseDto = z.infer<typeof CompanySearchResponseSchema>
 export type CompanySuggestionsResponseDto = z.infer<typeof CompanySuggestionsResponseSchema>
 
 // Location Search DTOs

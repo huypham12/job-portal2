@@ -466,6 +466,88 @@ export const searchService = {
   },
 
   /**
+   * Companies suggestion endpoint for autocomplete in job search
+   */
+  async suggestCompanies(dto: {
+    q: string
+    size?: number
+    context?: Record<string, unknown>
+  }): Promise<SuggestionResponseDto> {
+    const { q, size = 10, context } = dto
+    const cacheKey = `search:suggest:companies:${q}:${size}:${JSON.stringify(context || {})}`
+    const cached = await redisService.getSuggestResponse(cacheKey)
+    if (cached) {
+      return { suggestions: cached.suggestions }
+    }
+
+    try {
+      const esResp = await elasticsearchService.suggest({
+        index: elasticsearchService.getIndexName('companies'),
+        prefix: q,
+        size: Math.min(size * 2, 20), // Get more results to filter
+        context
+      })
+
+      let suggestions = esResp.suggestions || []
+
+      // If completion suggester has few results, supplement with query-based suggestions
+      if ((!suggestions || suggestions.length < 3) && q && q.length > 1) {
+        try {
+          const querySuggestions = await elasticsearchService.searchWithTemplate('companies', {
+            query: {
+              multi_match: {
+                query: q,
+                fields: ['name^3', 'name.autocomplete^2'],
+                fuzziness: 'AUTO',
+                prefix_length: 1
+              }
+            },
+            size: Math.min(size * 2, 20),
+            _source: ['name']
+          })
+
+          const existingNames = new Set(suggestions.map((s: any) => s.text))
+          const additionalSuggestions = (querySuggestions.hits || [])
+            .filter((h: any) => !existingNames.has((h._source as any)?.name))
+            .slice(0, size - suggestions.length)
+            .map((h: any) => ({
+              text: (h._source as any)?.name ?? h.id,
+              payload: h._source,
+              score: h._score
+            }))
+
+          suggestions = [...suggestions, ...additionalSuggestions]
+        } catch (e) {
+          // ignore fallback errors
+        }
+      }
+
+      // Ensure we don't exceed the requested size
+      if (suggestions.length > size) {
+        suggestions = suggestions.slice(0, size)
+      }
+
+      // Cache results
+      try {
+        await redisService.setSuggestResponse(cacheKey, { suggestions }, 20)
+      } catch (e) {
+        console.warn('Failed to cache companies suggest response:', e)
+      }
+
+      return {
+        suggestions: suggestions.map((s: any) => ({
+          text: s.text,
+          payload: s.payload,
+          score: s.score
+        }))
+      }
+    } catch (error) {
+      console.warn('ES companies suggest failed:', error)
+      return { suggestions: [] }
+    }
+  },
+
+  /**
    * Categories suggestion endpoint for autocomplete
    */
   async suggestCategories(dto: {
@@ -544,57 +626,6 @@ export const searchService = {
     } catch (error) {
       console.warn('ES categories suggest failed:', error)
       return { suggestions: [] }
-    }
-  },
-
-  /**
-   * Search companies with mandatory recruiter isolation
-   */
-  async searchCompanies(dto: {
-    q?: string
-    page?: number
-    size?: number
-    recruiterId?: string // Optional for public search, mandatory for tenant isolation
-  }): Promise<{ total: number; hits: any[]; took_ms: number }> {
-    const { q, page = 1, size = 20, recruiterId } = dto
-    const from = (page - 1) * size
-
-    const must: any[] = []
-    const filter: any[] = []
-
-    // Optional: Add recruiter ownership filter only if recruiterId provided
-    // This allows public company search while still supporting tenant isolation for authenticated recruiters
-    if (recruiterId) {
-      filter.push({ term: { recruiter_id: recruiterId } })
-    }
-
-    if (q && q.length) {
-      must.push({
-        multi_match: {
-          query: q,
-          fields: ['name^3', 'description', 'industry', 'website'],
-          fuzziness: 'AUTO',
-          operator: 'and'
-        }
-      })
-    } else {
-      must.push({ match_all: {} })
-    }
-
-    const esQuery = { bool: { must, filter } }
-
-    // Use centralized ES wrapper to ensure consistent id mapping (_id -> id)
-    const resp = await elasticsearchService.search({
-      index: elasticsearchService.getIndexName('companies'),
-      query: esQuery,
-      from,
-      size
-    })
-
-    return {
-      took_ms: resp.took,
-      total: resp.total,
-      hits: resp.hits
     }
   },
 
@@ -838,7 +869,7 @@ export const searchService = {
   async getCompanyById(id: string) {
     try {
       return await elasticsearchService.getById({
-        index: 'companies',
+        index: elasticsearchService.getIndexName('companies'),
         id
       })
     } catch (e) {
