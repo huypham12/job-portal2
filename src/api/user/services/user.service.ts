@@ -333,10 +333,11 @@ export class UserService {
       }
     })
 
-    // Sync to Elasticsearch
+    // Sync to Elasticsearch (re-fetch full profile to ensure transformer gets complete relations)
     setImmediate(async () => {
       try {
-        const esDocument = profileToESDoc(created)
+        const fullProfile = await this.getCompleteProfile(userId)
+        const esDocument = profileToESDoc(fullProfile)
         await elasticsearchSyncService.syncToElasticsearch('profiles', created.id, esDocument)
       } catch (error) {
         console.error(`Profile create sync failed: ${created.id}`, error)

@@ -4,6 +4,8 @@ import { HTTP_STATUS } from '@/shared/constants/httpStatus'
 import { MESSAGES } from '@/shared/constants/messages'
 import { Prisma, user_role } from '@prisma/client'
 import { AdminUpdateUserBody } from './admin.validator'
+import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
+import { jobToESDoc } from '@/shared/utils/es-transformers'
 
 // Định nghĩa kiểu dữ liệu cho queryOptions mà controller gửi xuống
 interface QueryOptions {
@@ -242,13 +244,13 @@ export class AdminService {
           metadata: true,
           deleted: true,
           updated_at: true,
-          companies: {
-            select: {
-              id: true,
-              name: true,
-              logo_url: true
-            }
-          },
+              companies: {
+                include: {
+                  users: true,
+                  company_details: true,
+                  // keep basic fields accessible
+                }
+              },
           locations: {
             select: {
               id: true,
@@ -306,13 +308,13 @@ export class AdminService {
           status: true,
           metadata: true,
           updated_at: true,
-          companies: {
-            select: {
-              id: true,
-              name: true,
-              logo_url: true
-            }
-          },
+              companies: {
+                include: {
+                  users: true,
+                  company_details: true,
+                  // keep basic fields accessible
+                }
+              },
           locations: {
             select: {
               id: true,
@@ -410,7 +412,71 @@ export class AdminService {
           updated_at: true
         }
       })
-      // TODO: Đồng bộ với Elasticsearch
+
+      // Sync to Elasticsearch after status update
+      setImmediate(async () => {
+        try {
+          // Get full job data for sync
+          const jobWithRelations = await prisma.jobs.findUnique({
+            where: { id: jobId },
+            include: {
+              companies: {
+                select: {
+                  id: true,
+                  name: true,
+                  logo_url: true
+                }
+              },
+              locations: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              },
+              job_requirements: true,
+              job_benefits: true,
+              job_skills: {
+                include: {
+                  skills: true
+                }
+              },
+              job_categories: {
+                include: {
+                  categories: true
+                }
+              },
+              job_work_arrangements: true
+            }
+          })
+
+          if (jobWithRelations) {
+            // Ensure recruiter ownership present
+            if (!((jobWithRelations.companies as any)?.recruiter_id)) {
+              try {
+                if (jobWithRelations.company_id) {
+                  const companyRecord = await prisma.companies.findUnique({
+                    where: { id: jobWithRelations.company_id as string },
+                    select: { recruiter_id: true }
+                  })
+                  if (companyRecord && jobWithRelations.companies) {
+                    ;(jobWithRelations.companies as any).recruiter_id = companyRecord.recruiter_id
+                  }
+                }
+              } catch (e) {
+                // ignore and let transformer handle missing ownership
+              }
+            }
+
+            const esDocument = jobToESDoc(jobWithRelations)
+            await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+            console.log(`✅ Synced job approval for ${jobId} to Elasticsearch`)
+          }
+        } catch (error) {
+          console.error(`❌ Failed to sync job approval for ${jobId} to Elasticsearch:`, error)
+        }
+      })
+
       return updatedJob
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -445,6 +511,71 @@ export class AdminService {
           updated_at: true
         }
       })
+
+      // Sync to Elasticsearch after status update
+      setImmediate(async () => {
+        try {
+          // Get full job data for sync
+          const jobWithRelations = await prisma.jobs.findUnique({
+            where: { id: jobId },
+            include: {
+              companies: {
+                select: {
+                  id: true,
+                  name: true,
+                  logo_url: true
+                }
+              },
+              locations: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              },
+              job_requirements: true,
+              job_benefits: true,
+              job_skills: {
+                include: {
+                  skills: true
+                }
+              },
+              job_categories: {
+                include: {
+                  categories: true
+                }
+              },
+              job_work_arrangements: true
+            }
+          })
+
+          if (jobWithRelations) {
+            // Ensure recruiter ownership present
+            if (!((jobWithRelations.companies as any)?.recruiter_id)) {
+              try {
+                if (jobWithRelations.company_id) {
+                  const companyRecord = await prisma.companies.findUnique({
+                    where: { id: jobWithRelations.company_id as string },
+                    select: { recruiter_id: true }
+                  })
+                  if (companyRecord && jobWithRelations.companies) {
+                    ;(jobWithRelations.companies as any).recruiter_id = companyRecord.recruiter_id
+                  }
+                }
+              } catch (e) {
+                // ignore and let transformer handle missing ownership
+              }
+            }
+
+            const esDocument = jobToESDoc(jobWithRelations)
+            await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+            console.log(`✅ Synced job rejection for ${jobId} to Elasticsearch`)
+          }
+        } catch (error) {
+          console.error(`❌ Failed to sync job rejection for ${jobId} to Elasticsearch:`, error)
+        }
+      })
+
       return updatedJob
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

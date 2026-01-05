@@ -145,11 +145,60 @@ export class JobService {
       }
     })
 
-    // Sync to Elasticsearch immediately
+    // Sync to Elasticsearch immediately using full relations to ensure transformer has ownership info
     try {
-      const esDocument = jobToESDoc(job)
+      const jobWithRelations = await prisma.jobs.findUnique({
+        where: { id: job.id },
+        include: {
+          companies: {
+            include: {
+              users: true,
+              company_details: true
+            }
+          },
+          locations: {
+            include: { parent: true }
+          },
+          job_requirements: true,
+          job_benefits: true,
+          job_skills: {
+            include: {
+              skills: { include: { category: true } }
+            }
+          },
+          job_categories: {
+            include: {
+              categories: true
+            }
+          },
+          job_work_arrangements: true
+        }
+      })
+
+      if (jobWithRelations) {
+        // Ensure recruiter ownership is present for transformer
+        if (!(jobWithRelations.companies as any)?.recruiter_id) {
+          try {
+            if (jobWithRelations.company_id) {
+              const companyRecord = await prisma.companies.findUnique({
+                where: { id: jobWithRelations.company_id as string },
+                select: { recruiter_id: true }
+              })
+              if (companyRecord && jobWithRelations.companies) {
+                ;(jobWithRelations.companies as any).recruiter_id = companyRecord.recruiter_id
+              }
+            }
+          } catch (e) {
+            // ignore, transformer will handle missing ownership
+          }
+        }
+
+        const esDocument = jobToESDoc(jobWithRelations)
       await elasticsearchSyncService.syncToElasticsearch('jobs', job.id, esDocument)
       console.log(`✅ Job ${job.id} synced to Elasticsearch successfully`)
+      } else {
+        console.warn(`⚠️ Job ${job.id} not found when preparing ES sync`)
+      }
     } catch (error) {
       console.error(`❌ Failed to sync job ${job.id} to Elasticsearch:`, error)
       // Don't fail job creation due to sync error

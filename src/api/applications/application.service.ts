@@ -152,7 +152,7 @@ export class ApplicationService {
                 title: true,
                 job_type: true,
                 salary_range: true,
-                companies: { select: { name: true } },
+                companies: { select: { id: true, name: true, recruiter_id: true } }, // ensure recruiter_id present
                 locations: { select: { name: true } }
               }
             },

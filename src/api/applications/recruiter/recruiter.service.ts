@@ -706,7 +706,7 @@ export class RecruiterApplicationService {
                 title: true,
                 job_type: true,
                 salary_range: true,
-                companies: { select: { name: true } },
+                companies: { select: { id: true, name: true, recruiter_id: true } },
                 locations: { select: { name: true } }
               }
             },

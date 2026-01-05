@@ -814,6 +814,7 @@ export class ResumeService {
     const profile = await prisma.profiles.findFirst({
       where: { user_id: userId },
       include: {
+        users: true,
         skills: {
           include: { skills: true }
         },
@@ -841,8 +842,18 @@ export class ResumeService {
 
     // Generate HTML preview - respect resume content layout_settings.theme if present
     const layoutSettings = ((resume.content as any) && (resume.content as any).layout_settings) || {}
-    const theme = layoutSettings.theme || 'professional'
+    const theme = layoutSettings.theme || 'modern'
+
+    console.log('🎨 Generating preview HTML:', {
+      resumeId,
+      hasResumeContent: !!resume.content,
+      theme,
+      profileHasData: !!profile.full_name
+    })
+
     const html = this.generateResumeHtml(resume, profile, theme)
+
+    console.log('✅ Generated HTML length:', html?.length || 0)
 
     return {
       content: html,
@@ -854,48 +865,55 @@ export class ResumeService {
    * Helper: Build resume content từ profile data
    */
   private buildResumeContent(profile: any) {
+    console.log('🔧 Building resume content from profile:', {
+      hasUser: !!profile.users,
+      userEmail: profile.users?.email,
+      fullName: profile.full_name,
+      skillsCount: profile.skills?.length || 0,
+      experiencesCount: profile.experiences?.length || 0
+    })
+
     return {
       personal_info: {
-        full_name: profile.full_name,
-        email: profile.users?.email,
-        phone: profile.phone_number,
-        location: profile.location,
-        bio: profile.bio
+        full_name: profile.full_name || 'Your Name',
+        email: profile.users?.email || '',
+        phone: profile.phone_number || '',
+        location: profile.location || '',
+        bio: profile.bio || ''
       },
-      skills: profile.skills?.map((ps: any) => ({
-        name: ps.skills.name,
-        proficiency: ps.proficiency_level
+      skills: (profile.skills || []).map((ps: any) => ({
+        name: ps.skills?.name || 'Skill',
+        proficiency: ps.proficiency_level || 'Beginner'
       })),
-      experiences: profile.experiences?.map((exp: any) => ({
-        title: exp.job_title,
-        company: exp.company_name,
-        location: exp.location,
+      experiences: (profile.experiences || []).map((exp: any) => ({
+        position: exp.job_title || 'Position',
+        company: exp.company_name || 'Company',
+        location: exp.location || '',
         start_date: exp.start_date,
         end_date: exp.end_date,
-        is_current: exp.is_current,
-        description: exp.description
+        is_current: exp.is_current || false,
+        description: exp.description || ''
       })),
-      educations: profile.educations?.map((edu: any) => ({
-        institution: edu.institution_name,
-        degree: edu.degree,
-        field_of_study: edu.field_of_study,
+      educations: (profile.educations || []).map((edu: any) => ({
+        school: edu.institution_name || 'School',
+        degree: edu.degree || 'Degree',
+        field_of_study: edu.field_of_study || '',
         start_date: edu.start_date,
         end_date: edu.end_date,
-        description: edu.description
+        description: edu.description || ''
       })),
-      certifications: profile.certifications?.map((cert: any) => ({
-        name: cert.name,
-        issuing_organization: cert.issuing_organization,
-        issue_date: cert.issue_date,
-        expiration_date: cert.expiration_date,
-        credential_id: cert.credential_id,
-        credential_url: cert.credential_url
+      certifications: (profile.certifications || []).map((cert: any) => ({
+        name: cert.name || 'Certification',
+        issuer: cert.issuing_organization || 'Issuer',
+        date: cert.issue_date,
+        credential_id: cert.credential_id || '',
+        credential_url: cert.credential_url || ''
       })),
-      awards: profile.awards?.map((award: any) => ({
-        title: award.title,
-        issuer: award.issuer,
+      awards: (profile.awards || []).map((award: any) => ({
+        name: award.title || 'Award',
+        issuer: award.issuer || 'Issuer',
         date: award.date,
-        description: award.description
+        description: award.description || ''
       }))
     }
   }
@@ -921,33 +939,887 @@ export class ResumeService {
    * Helper: Generate HTML from resume template
    */
   private generateResumeHtml(resume: any, profile: any, template?: string): string {
-    const content = resume.content || this.buildResumeContent(profile)
-    const layoutSettings = content.layout_settings || {}
-    // Prefer explicit template argument; fall back to content.layout_settings.theme; default to 'professional'
-    const theme = (template && String(template).trim()) || (layoutSettings.theme as string) || 'professional'
+    let content = resume.content
 
-    // Normalize common template aliases from frontend ('modern'/'minimal'/'classic')
-    let normalizedTheme = theme.toLowerCase()
-    if (normalizedTheme === 'modern' || normalizedTheme === 'classic') normalizedTheme = 'professional'
-    if (normalizedTheme === 'minimal') normalizedTheme = 'compact'
-
-    // Route to appropriate template generator
-    switch (normalizedTheme) {
-      case 'timeline':
-        return this.generateTimelineTemplate(resume, content)
-      case 'compact':
-        return this.generateCompactTemplate(resume, content)
-      case 'professional':
-      default:
-        return this.generateProfessionalTemplate(resume, content)
+    // If resume.content doesn't exist or is empty, build from profile
+    if (!content) {
+      content = this.buildResumeContent(profile)
+    } else {
+      // If resume.content exists, ensure it has the right structure
+      // Sometimes resume.content might have { sections: {...} } structure
+      if (content.sections) {
+        content = {
+          personal_info: content.sections.personal_info?.data || {},
+          skills: content.sections.skills?.items || [],
+          experiences: content.sections.experiences?.items || [],
+          educations: content.sections.educations?.items || [],
+          certifications: content.sections.certifications?.items || [],
+          awards: content.sections.awards?.items || [],
+          projects: content.projects || [],
+          languages: content.languages || [],
+          summary: content.summary || '',
+          references: content.references || []
+        }
+      }
+      // If content still doesn't have required fields, merge with profile data
+      if (!content.personal_info || !content.personal_info.full_name) {
+        const profileContent = this.buildResumeContent(profile)
+        content = { ...profileContent, ...content }
+      }
     }
+    const layoutSettings = content.layout_settings || {}
+    // Prefer explicit template argument; fall back to content.layout_settings.theme; default to 'modern'
+    const themeId = (template && String(template).trim()) || (layoutSettings.theme as string) || 'modern'
+
+    // Get theme data from shared constants
+    const themeData = getThemeById(themeId)
+
+    // Route to appropriate template generator based on layout
+    switch (themeData.layout) {
+      case 'header-top':
+        return this.generateClassicTemplate(resume, content, themeData)
+      case 'two-column':
+        return this.generateCreativeTemplate(resume, content, themeData)
+      case 'sidebar':
+      default:
+        return this.generateModernTemplate(resume, content, themeData)
+    }
+  }
+
+  /**
+   * Helper: Generate Classic Template (Header-Top Layout)
+   */
+  private generateClassicTemplate(resume: any, content: any, themeData: CVTheme): string {
+    const themeColors = themeData.colors
+
+    return `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${resume.title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: #f8fafc;
+            padding: 20px;
+          }
+
+          .resume-container {
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+          }
+
+          /* Header Section */
+          .header {
+            background: linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.secondary} 100%);
+            color: white;
+            padding: 50px 40px 30px;
+            text-align: center;
+            position: relative;
+          }
+
+          .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(45deg, transparent 33%, white 33%, white 66%, transparent 66%);
+            background-size: 20px 20px;
+          }
+
+          .profile-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            font-weight: 700;
+            color: ${themeColors.primary};
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 4px solid rgba(255, 255, 255, 0.2);
+          }
+
+          .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.1;
+          }
+
+          .header .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+          }
+
+          .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            opacity: 0.9;
+          }
+
+          .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+          }
+
+          .contact-item i {
+            font-size: 13px;
+          }
+
+          /* Main Content */
+          .main-content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+          }
+
+          .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+          }
+
+          .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+          }
+
+          .section {
+            margin-bottom: 0;
+          }
+
+          .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: ${themeColors.primary};
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid ${themeColors.primary};
+            display: inline-block;
+          }
+
+          /* Experience */
+          .experience-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+          }
+
+          .experience-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+          }
+
+          .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+          }
+
+          .exp-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #1e293b;
+          }
+
+          .exp-company {
+            font-weight: 500;
+            color: ${themeColors.primary};
+            margin-top: 2px;
+          }
+
+          .exp-date {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+          }
+
+          .exp-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #475569;
+            margin-top: 8px;
+          }
+
+          /* Skills */
+          .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+          }
+
+          .skill-item {
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+          }
+
+          /* Education */
+          .education-item {
+            margin-bottom: 20px;
+          }
+
+          .education-item:last-child {
+            margin-bottom: 0;
+          }
+
+          .edu-degree {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1e293b;
+            margin-bottom: 4px;
+          }
+
+          .edu-school {
+            color: ${themeColors.primary};
+            font-weight: 500;
+            margin-bottom: 4px;
+          }
+
+          .edu-date {
+            font-size: 13px;
+            color: #64748b;
+          }
+
+          /* Certifications & Awards */
+          .cert-item, .award-item {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+          }
+
+          .cert-item:last-child, .award-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+          }
+
+          .cert-name, .award-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+          }
+
+          .cert-issuer, .award-issuer {
+            font-size: 13px;
+            color: ${themeColors.primary};
+            margin-bottom: 4px;
+          }
+
+          .cert-date, .award-date {
+            font-size: 12px;
+            color: #64748b;
+          }
+
+          /* Responsive */
+          @media print {
+            body {
+              background: white;
+              padding: 0;
+            }
+            .resume-container {
+              box-shadow: none;
+              max-width: 100%;
+              min-height: auto;
+            }
+          }
+
+          @media (max-width: 1024px) {
+            .main-content {
+              grid-template-columns: 1fr;
+              gap: 35px;
+            }
+            .left-column {
+              order: 1;
+            }
+            .right-column {
+              order: 2;
+            }
+          }
+
+          @media (max-width: 768px) {
+            .resume-container {
+              margin: 10px auto;
+            }
+            .header {
+              padding: 30px 20px 20px;
+              text-align: center;
+            }
+            .profile-photo {
+              width: 90px;
+              height: 90px;
+              font-size: 36px;
+            }
+            .header h1 {
+              font-size: 22px;
+              margin-bottom: 6px;
+            }
+            .header .subtitle {
+              font-size: 14px;
+              margin-bottom: 12px;
+            }
+            .contact-info {
+              flex-direction: column;
+              gap: 8px;
+              font-size: 13px;
+            }
+            .contact-item {
+              justify-content: center;
+            }
+            .main-content {
+              padding: 20px;
+              gap: 25px;
+            }
+            .section h2 {
+              font-size: 16px;
+              margin-bottom: 15px;
+            }
+            .experience-item, .education-item {
+              margin-bottom: 18px;
+            }
+            .skills-grid {
+              grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+              gap: 8px;
+            }
+            .skill-item {
+              padding: 6px 10px;
+              font-size: 12px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            body {
+              padding: 5px;
+            }
+            .resume-container {
+              margin: 0;
+              border-radius: 0;
+            }
+            .header {
+              padding: 25px 15px 15px;
+            }
+            .profile-photo {
+              width: 80px;
+              height: 80px;
+              font-size: 32px;
+            }
+            .header h1 {
+              font-size: 20px;
+            }
+            .main-content {
+              padding: 15px;
+            }
+            .section h2 {
+              font-size: 15px;
+              margin-bottom: 12px;
+            }
+            .exp-title, .edu-degree {
+              font-size: 14px;
+            }
+            .exp-company, .edu-school {
+              font-size: 13px;
+            }
+            .exp-description, .project-description {
+              font-size: 13px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="resume-container">
+          <!-- Header -->
+          <div class="header">
+            ${this.generateClassicHeader(content, themeColors)}
+          </div>
+
+          <!-- Main Content -->
+          <div class="main-content">
+            <div class="left-column">
+              ${this.generateClassicLeftColumn(content, themeColors)}
+            </div>
+            <div class="right-column">
+              ${this.generateClassicRightColumn(content, themeColors)}
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `
+  }
+
+  /**
+   * Helper: Generate Creative Template (Two-Column Layout)
+   */
+  private generateCreativeTemplate(resume: any, content: any, themeData: CVTheme): string {
+    const themeColors = themeData.colors
+
+    return `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${resume.title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+          }
+
+          .resume-container {
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+
+          /* Left Column */
+          .left-column {
+            background: linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.secondary} 100%);
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+
+          .profile-section {
+            text-align: center;
+          }
+
+          .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+          }
+
+          .profile-section h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.2;
+          }
+
+          .profile-section .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+          }
+
+          .contact-list {
+            list-style: none;
+            padding: 0;
+          }
+
+          .contact-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+          }
+
+          .contact-list i {
+            width: 20px;
+            margin-right: 10px;
+            opacity: 0.8;
+          }
+
+          .skills-section {
+            margin-top: auto;
+          }
+
+          .skills-section h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+          }
+
+          .skill-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            margin-right: 8px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          }
+
+          /* Right Column */
+          .right-column {
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+          }
+
+          .section {
+            margin-bottom: 0;
+          }
+
+          .section h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: ${themeColors.primary};
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 15px;
+          }
+
+          .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, ${themeColors.primary}, ${themeColors.secondary});
+            border-radius: 2px;
+          }
+
+          /* Experience */
+          .experience-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            position: relative;
+            padding-left: 20px;
+          }
+
+          .experience-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            background: ${themeColors.primary};
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+          }
+
+          .experience-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+          }
+
+          .exp-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 4px;
+          }
+
+          .exp-company {
+            font-weight: 500;
+            color: ${themeColors.primary};
+            margin-bottom: 4px;
+          }
+
+          .exp-date {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+          }
+
+          .exp-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #475569;
+          }
+
+          /* Education */
+          .education-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            position: relative;
+          }
+
+          .education-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            background: ${themeColors.secondary};
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+          }
+
+          .edu-degree {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1e293b;
+            margin-bottom: 4px;
+          }
+
+          .edu-school {
+            color: ${themeColors.primary};
+            font-weight: 500;
+            margin-bottom: 4px;
+          }
+
+          .edu-date {
+            font-size: 13px;
+            color: #64748b;
+          }
+
+          /* Projects */
+          .project-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            position: relative;
+          }
+
+          .project-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+          }
+
+          .project-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1e293b;
+            margin-bottom: 4px;
+          }
+
+          .project-tech {
+            color: ${themeColors.primary};
+            font-size: 13px;
+            margin-bottom: 4px;
+          }
+
+          .project-date {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+          }
+
+          .project-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #475569;
+          }
+
+          /* Responsive */
+          @media print {
+            body {
+              background: white;
+              padding: 0;
+            }
+            .resume-container {
+              box-shadow: none;
+              max-width: 100%;
+              min-height: auto;
+              border-radius: 0;
+            }
+          }
+
+          @media (max-width: 1024px) {
+            .resume-container {
+              grid-template-columns: 1fr;
+              min-height: auto;
+            }
+            .left-column {
+              order: 1;
+              padding: 35px 25px;
+            }
+            .right-column {
+              order: 2;
+              padding: 35px 25px;
+            }
+          }
+
+          @media (max-width: 768px) {
+            body {
+              padding: 15px;
+            }
+            .resume-container {
+              margin: 0;
+              border-radius: 8px;
+            }
+            .left-column {
+              padding: 25px 20px;
+            }
+            .right-column {
+              padding: 25px 20px;
+            }
+            .profile-photo {
+              width: 90px;
+              height: 90px;
+              font-size: 36px;
+            }
+            .profile-section h1 {
+              font-size: 20px;
+            }
+            .profile-section .subtitle {
+              font-size: 14px;
+            }
+            .contact-list li {
+              font-size: 13px;
+            }
+            .skills-section h3 {
+              font-size: 16px;
+            }
+            .section h2 {
+              font-size: 17px;
+            }
+            .experience-item, .education-item, .project-item {
+              padding-left: 15px;
+            }
+            .experience-item::before, .education-item::before, .project-item::before {
+              width: 6px;
+              height: 6px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            body {
+              padding: 10px;
+            }
+            .resume-container {
+              border-radius: 4px;
+            }
+            .left-column, .right-column {
+              padding: 20px 15px;
+            }
+            .profile-photo {
+              width: 80px;
+              height: 80px;
+              font-size: 32px;
+            }
+            .profile-section h1 {
+              font-size: 18px;
+            }
+            .contact-list li {
+              font-size: 12px;
+            }
+            .skills-section h3 {
+              font-size: 15px;
+            }
+            .section h2 {
+              font-size: 16px;
+            }
+            .exp-title, .project-name {
+              font-size: 14px;
+            }
+            .exp-company, .edu-school, .project-tech {
+              font-size: 12px;
+            }
+            .exp-description, .project-description {
+              font-size: 13px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="resume-container">
+          <!-- Left Column -->
+          <div class="left-column">
+            ${this.generateCreativeLeftColumn(content, themeColors)}
+          </div>
+
+          <!-- Right Column -->
+          <div class="right-column">
+            ${this.generateCreativeRightColumn(content, themeColors)}
+          </div>
+        </div>
+      </body>
+      </html>
+    `
   }
 
   /**
    * Helper: Generate Modern Template (Sidebar Layout)
    */
-  private generateModernTemplate(resume: any, content: any): string {
-    const themeColors = this.getThemeColors('modern')
+  private generateModernTemplate(resume: any, content: any, themeData: CVTheme): string {
+    const themeColors = themeData.colors
 
     return `
       <!DOCTYPE html>
@@ -1248,15 +2120,88 @@ export class ResumeService {
             }
           }
 
+          @media (max-width: 1024px) {
+            .sidebar {
+              width: 250px;
+            }
+            .main-content {
+              padding: 35px;
+            }
+          }
+
           @media (max-width: 768px) {
             .resume-container {
               flex-direction: column;
+              margin: 10px auto;
             }
             .sidebar {
               width: 100%;
+              padding: 30px 20px;
             }
             .main-content {
-              padding: 30px 20px;
+              padding: 25px 20px;
+            }
+            .profile-photo {
+              width: 100px;
+              height: 100px;
+              font-size: 40px;
+            }
+            .sidebar h1 {
+              font-size: 22px;
+            }
+            .sidebar-section h3 {
+              font-size: 11px;
+            }
+            .contact-item {
+              font-size: 13px;
+              margin-bottom: 10px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            body {
+              padding: 5px;
+            }
+            .resume-container {
+              margin: 0;
+              border-radius: 0;
+            }
+            .sidebar {
+              padding: 25px 15px;
+            }
+            .main-content {
+              padding: 20px 15px;
+            }
+            .profile-photo {
+              width: 90px;
+              height: 90px;
+              font-size: 36px;
+            }
+            .sidebar h1 {
+              font-size: 20px;
+            }
+            .sidebar-section {
+              margin-top: 25px;
+              padding-top: 15px;
+            }
+            .contact-item {
+              font-size: 12px;
+              margin-bottom: 8px;
+            }
+            .skill-item {
+              padding: 6px 10px;
+              font-size: 12px;
+              margin-bottom: 6px;
+              margin-right: 6px;
+            }
+            .exp-title {
+              font-size: 15px;
+            }
+            .exp-company {
+              font-size: 13px;
+            }
+            .exp-description {
+              font-size: 13px;
             }
           }
         </style>
@@ -1265,12 +2210,12 @@ export class ResumeService {
         <div class="resume-container">
           <!-- Sidebar -->
           <div class="sidebar">
-            ${this.generateSidebarContent(content, themeColors)}
+            ${this.generateModernSidebarContent(content, themeColors)}
           </div>
 
           <!-- Main Content -->
           <div class="main-content">
-            ${this.generateMainContent(content, themeColors)}
+            ${this.generateModernMainContent(content, themeColors)}
           </div>
         </div>
       </body>
@@ -1279,17 +2224,16 @@ export class ResumeService {
   }
 
   /**
-   * Helper: Get theme colors from shared constants
+   * Helper: Get theme data from shared constants
    */
-  private getThemeColors(theme: string) {
-    const themeData = getThemeById(theme)
-    return themeData.colors
+  private getThemeData(themeId: string): CVTheme {
+    return getThemeById(themeId)
   }
 
   /**
-   * Helper: Generate sidebar content
+   * Helper: Generate Modern Template sidebar content
    */
-  private generateSidebarContent(content: any, themeColors: any): string {
+  private generateModernSidebarContent(content: any, themeColors: any): string {
     const personalInfo = content.personal_info || {}
     const skills = content.skills || []
 
@@ -1344,10 +2288,13 @@ export class ResumeService {
           <h3>Skills</h3>
           ${skills
             .map((skill: any) => {
-              const level = this.getSkillLevel(skill.proficiency_level)
+              // Normalize skill name and level keys from different data shapes
+              const skillName = this.getSkillName(skill)
+              const rawLevel = skill.proficiency_level || skill.proficiency || skill.level || null
+              const level = this.getSkillLevel(rawLevel)
               return `
               <div class="skill-item">
-                <div class="skill-name">${skill.name}</div>
+                <div class="skill-name">${skillName}</div>
                 <div class="skill-level">
                   <div class="skill-level-fill" style="width: ${level}%"></div>
                 </div>
@@ -1363,9 +2310,9 @@ export class ResumeService {
   }
 
   /**
-   * Helper: Generate main content
+   * Helper: Generate Modern Template main content
    */
-  private generateMainContent(content: any, themeColors: any): string {
+  private generateModernMainContent(content: any, themeColors: any): string {
     const personalInfo = content.personal_info || {}
     const experiences = content.experiences || []
     const educations = content.educations || []
@@ -1477,7 +2424,25 @@ export class ResumeService {
       advanced: 85,
       expert: 100
     }
-    return level ? levels[level.toLowerCase()] || 70 : 70
+
+    // Accept numbers, numeric strings, or named levels.
+    if (level == null) return 70
+    if (typeof level === 'number') {
+      // Treat as percentage, clamp 0-100
+      return Math.max(0, Math.min(100, Math.round(level)))
+    }
+
+    const str = String(level).trim()
+    if (!str) return 70
+
+    // If string is numeric (e.g. "75"), parse it
+    const parsed = parseInt(str, 10)
+    if (!Number.isNaN(parsed)) {
+      return Math.max(0, Math.min(100, parsed))
+    }
+
+    const key = str.toLowerCase()
+    return levels[key] || 70
   }
 
   /**
@@ -1703,24 +2668,25 @@ export class ResumeService {
    * Professional template (delegates to modern generator for now)
    */
   private generateProfessionalTemplate(resume: any, content: any): string {
-    // For now, reuse modern template implementation for professional layout
-    return this.generateModernTemplate(resume, content)
+    // Professional theme uses modern layout
+    const themeData = getThemeById('modern')
+    return this.generateModernTemplate(resume, content, themeData)
   }
 
   /**
-   * Timeline template (delegates to modern generator for now)
+   * Timeline template (uses modern layout with timeline styling)
    */
   private generateTimelineTemplate(resume: any, content: any): string {
-    // Timeline layout currently uses the same renderer but could be specialized later
-    return this.generateModernTemplate(resume, content)
+    const themeData = getThemeById('modern')
+    return this.generateModernTemplate(resume, content, themeData)
   }
 
   /**
-   * Compact template (delegates to modern generator for now)
+   * Compact template (uses modern layout with compact styling)
    */
   private generateCompactTemplate(resume: any, content: any): string {
-    // Compact layout currently uses the same renderer but could be specialized later
-    return this.generateModernTemplate(resume, content)
+    const themeData = getThemeById('modern')
+    return this.generateModernTemplate(resume, content, themeData)
   }
 
   /**
@@ -1856,5 +2822,366 @@ export class ResumeService {
     } catch (e) {
       return html
     }
+  }
+
+  /**
+   * Helper: Format date range for templates
+   */
+  private formatDateRange(startDate: string, endDate: string, isCurrent: boolean): string {
+    const formatDate = (dateStr: string) => {
+      if (!dateStr) return ''
+      return new Date(dateStr).toLocaleDateString('vi-VN', {
+        month: 'short',
+        year: 'numeric'
+      })
+    }
+
+    const start = formatDate(startDate) || '—'
+    const end = isCurrent ? 'Hiện tại' : formatDate(endDate) || '—'
+    return `${start} – ${end}`
+  }
+
+  /**
+   * Helper: Get skill name from skill object
+   */
+  private getSkillName(skill: any): string {
+    if (typeof skill === 'string') return skill
+    if (skill?.skills?.name) return skill.skills.name
+    if (skill?.name) return skill.name
+    return 'Kỹ năng'
+  }
+
+  /**
+   * Helper: Generate Classic Template Header
+   */
+  private generateClassicHeader(content: any, themeColors: any): string {
+    const personalInfo = content.personal_info || {}
+
+    // Get initials for profile photo
+    const initials = personalInfo.full_name
+      ? personalInfo.full_name
+          .split(' ')
+          .map((n: string) => n[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2)
+      : 'U'
+
+    const contactItems = []
+    if (personalInfo.email)
+      contactItems.push(`<div class="contact-item"><i class="fas fa-envelope"></i> ${personalInfo.email}</div>`)
+    if (personalInfo.phone)
+      contactItems.push(`<div class="contact-item"><i class="fas fa-phone"></i> ${personalInfo.phone}</div>`)
+    if (personalInfo.location)
+      contactItems.push(
+        `<div class="contact-item"><i class="fas fa-map-marker-alt"></i> ${personalInfo.location}</div>`
+      )
+
+    return `
+      <div class="profile-photo">${initials}</div>
+      <h1>${personalInfo.full_name || 'Your Name'}</h1>
+      <div class="subtitle">${personalInfo.title || 'Professional Title'}</div>
+      <div class="contact-info">
+        ${contactItems.join('')}
+      </div>
+    `
+  }
+
+  /**
+   * Helper: Generate Classic Template Left Column
+   */
+  private generateClassicLeftColumn(content: any, themeColors: any): string {
+    const experiences = content.experiences || []
+    const projects = content.projects || []
+
+    return `
+      <div class="section">
+        <h2>Experience</h2>
+        ${experiences
+          .map(
+            (exp: any) => `
+          <div class="experience-item">
+            <div class="exp-header">
+              <div>
+                <div class="exp-title">${exp.position || 'Position'}</div>
+                <div class="exp-company">${exp.company || 'Company'}</div>
+              </div>
+              <div class="exp-date">${this.formatDateRange(exp.start_date, exp.end_date, exp.is_current)}</div>
+            </div>
+            <div class="exp-description">${exp.description || ''}</div>
+          </div>
+        `
+          )
+          .join('')}
+
+        ${
+          projects.length > 0
+            ? `
+          <h2>Projects</h2>
+          ${projects
+            .map(
+              (project: any) => `
+            <div class="experience-item">
+              <div class="exp-header">
+                <div>
+                  <div class="exp-title">${project.name || 'Project Name'}</div>
+                  <div class="exp-company">${project.technologies ? project.technologies.join(', ') : ''}</div>
+                </div>
+                <div class="exp-date">${this.formatDateRange(project.start_date, project.end_date, project.is_current)}</div>
+              </div>
+              <div class="exp-description">${project.description || ''}</div>
+            </div>
+          `
+            )
+            .join('')}
+        `
+            : ''
+        }
+      </div>
+    `
+  }
+
+  /**
+   * Helper: Generate Classic Template Right Column
+   */
+  private generateClassicRightColumn(content: any, themeColors: any): string {
+    const skills = content.skills || []
+    const educations = content.educations || []
+    const certifications = content.certifications || []
+    const awards = content.awards || []
+
+    return `
+      ${
+        skills.length > 0
+          ? `
+        <div class="section">
+          <h2>Skills</h2>
+          <div class="skills-grid">
+            ${skills.map((skill: any) => `<div class="skill-item">${this.getSkillName(skill)}</div>`).join('')}
+          </div>
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        educations.length > 0
+          ? `
+        <div class="section">
+          <h2>Education</h2>
+          ${educations
+            .map(
+              (edu: any) => `
+            <div class="education-item">
+              <div class="edu-degree">${edu.degree || 'Degree'}</div>
+              <div class="edu-school">${edu.school || 'School'}</div>
+              <div class="edu-date">${this.formatDateRange(edu.start_date, edu.end_date, edu.is_current)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        certifications.length > 0
+          ? `
+        <div class="section">
+          <h2>Certifications</h2>
+          ${certifications
+            .map(
+              (cert: any) => `
+            <div class="cert-item">
+              <div class="cert-name">${cert.name || 'Certification'}</div>
+              <div class="cert-issuer">${cert.issuer || 'Issuer'}</div>
+              <div class="cert-date">${this.formatDate(cert.date)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        awards.length > 0
+          ? `
+        <div class="section">
+          <h2>Awards</h2>
+          ${awards
+            .map(
+              (award: any) => `
+            <div class="award-item">
+              <div class="award-name">${award.name || 'Award'}</div>
+              <div class="award-issuer">${award.issuer || 'Issuer'}</div>
+              <div class="award-date">${this.formatDate(award.date)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+    `
+  }
+
+  /**
+   * Helper: Generate Creative Template Left Column
+   */
+  private generateCreativeLeftColumn(content: any, themeColors: any): string {
+    const personalInfo = content.personal_info || {}
+    const skills = content.skills || []
+
+    // Get initials for profile photo
+    const initials = personalInfo.full_name
+      ? personalInfo.full_name
+          .split(' ')
+          .map((n: string) => n[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2)
+      : 'U'
+
+    const contactItems = []
+    if (personalInfo.email) contactItems.push(`<li><i class="fas fa-envelope"></i> ${personalInfo.email}</li>`)
+    if (personalInfo.phone) contactItems.push(`<li><i class="fas fa-phone"></i> ${personalInfo.phone}</li>`)
+    if (personalInfo.location)
+      contactItems.push(`<li><i class="fas fa-map-marker-alt"></i> ${personalInfo.location}</li>`)
+
+    return `
+      <div class="profile-section">
+        <div class="profile-photo">${initials}</div>
+        <h1>${personalInfo.full_name || 'Your Name'}</h1>
+        <div class="subtitle">${personalInfo.title || 'Professional Title'}</div>
+        <ul class="contact-list">
+          ${contactItems.join('')}
+        </ul>
+      </div>
+
+      ${
+        skills.length > 0
+          ? `
+        <div class="skills-section">
+          <h3>Skills</h3>
+          ${skills.map((skill: any) => `<span class="skill-item">${this.getSkillName(skill)}</span>`).join('')}
+        </div>
+      `
+          : ''
+      }
+    `
+  }
+
+  /**
+   * Helper: Generate Creative Template Right Column
+   */
+  private generateCreativeRightColumn(content: any, themeColors: any): string {
+    const experiences = content.experiences || []
+    const educations = content.educations || []
+    const projects = content.projects || []
+    const certifications = content.certifications || []
+    const awards = content.awards || []
+
+    return `
+      ${
+        experiences.length > 0
+          ? `
+        <div class="section">
+          <h2>Experience</h2>
+          ${experiences
+            .map(
+              (exp: any) => `
+            <div class="experience-item">
+              <div class="exp-title">${exp.position || 'Position'}</div>
+              <div class="exp-company">${exp.company || 'Company'}</div>
+              <div class="exp-date">${this.formatDateRange(exp.start_date, exp.end_date, exp.is_current)}</div>
+              <div class="exp-description">${exp.description || ''}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        educations.length > 0
+          ? `
+        <div class="section">
+          <h2>Education</h2>
+          ${educations
+            .map(
+              (edu: any) => `
+            <div class="education-item">
+              <div class="edu-degree">${edu.degree || 'Degree'}</div>
+              <div class="edu-school">${edu.school || 'School'}</div>
+              <div class="edu-date">${this.formatDateRange(edu.start_date, edu.end_date, edu.is_current)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        projects.length > 0
+          ? `
+        <div class="section">
+          <h2>Projects</h2>
+          ${projects
+            .map(
+              (project: any) => `
+            <div class="project-item">
+              <div class="project-name">${project.name || 'Project Name'}</div>
+              <div class="project-tech">${project.technologies ? project.technologies.join(', ') : ''}</div>
+              <div class="project-date">${this.formatDateRange(project.start_date, project.end_date, project.is_current)}</div>
+              <div class="project-description">${project.description || ''}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        certifications.length > 0 || awards.length > 0
+          ? `
+        <div class="section">
+          <h2>Certifications & Awards</h2>
+          ${certifications
+            .map(
+              (cert: any) => `
+            <div class="experience-item">
+              <div class="exp-title">${cert.name || 'Certification'}</div>
+              <div class="exp-company">${cert.issuer || 'Issuer'}</div>
+              <div class="exp-date">${this.formatDate(cert.date)}</div>
+            </div>
+          `
+            )
+            .join('')}
+          ${awards
+            .map(
+              (award: any) => `
+            <div class="experience-item">
+              <div class="exp-title">${award.name || 'Award'}</div>
+              <div class="exp-company">${award.issuer || 'Issuer'}</div>
+              <div class="exp-date">${this.formatDate(award.date)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+    `
   }
 }

@@ -232,10 +232,29 @@ export class CompanyService {
     // Sync updated company to Elasticsearch
     setImmediate(async () => {
       try {
-        // Fetch complete company data for sync
-        const companyData = await this.getCompanyById(company.id, true)
-        const esDocument = companyToESDoc(companyData)
-        await elasticsearchSyncService.syncToElasticsearch('companies', company.id, esDocument)
+        // Fetch internal company object (keep recruiter_id) for ES sync
+        const companyData = await prisma.companies.findUnique({
+          where: { id: company.id },
+          include: {
+            company_details: {
+              include: {
+                headquarters_location: { select: { id: true, name: true, type: true } }
+              }
+            },
+            company_benefits: true,
+            jobs: {
+              where: { status: 'approved', deleted: false },
+              select: { id: true, title: true, posted_at: true }
+            }
+          }
+        })
+
+        if (companyData) {
+          const esDocument = companyToESDoc(companyData)
+          await elasticsearchSyncService.syncToElasticsearch('companies', company.id, esDocument)
+        } else {
+          console.warn(`⚠️ Company ${company.id} not found for ES sync`)
+        }
       } catch (error) {
         console.error(`Company details update sync failed: ${company.id}`, error)
       }
