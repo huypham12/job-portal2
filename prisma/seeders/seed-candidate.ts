@@ -703,26 +703,15 @@ export async function seedCandidates() {
           // 9. Sync to Elasticsearch (only if available)
           if (isElasticsearchAvailable) {
             try {
-              // @ts-expect-error - Optional elasticsearch dependency
-              const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
-              const esDoc = {
-                id: profile.id,
-                user_id: profile.user_id,
-                full_name: profile.full_name || '',
-                display_name: profile.display_name || '',
-                headline: profile.headline || '',
-                bio: profile.bio || '',
-                desired_job_title: profile.desired_job_title,
-                desired_salary_min: profile.desired_salary_min,
-                desired_salary_max: profile.desired_salary_min, // Use min as max if no max field
-                years_of_experience: profile.years_of_experience || 0,
-                skills: candidateSkills.map((skill) => skill.name), // Use the relevant skills we just assigned
-                location_id: profile.location_id,
-                location_text: profile.location_text || '',
-                is_looking_for_job: profile.is_looking_for_job || false,
-                last_active_at: new Date()
+              // Use syncProfileById to properly sync profile with all relations
+              // This ensures skills_flat, experiences, educations, etc. are populated correctly
+              try {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                const { elasticsearchSyncService } = require('../../../src/config/elasticsearch-sync.service') as any
+                await elasticsearchSyncService.syncProfileById(profile.id, null, 'upsert')
+              } catch (err: any) {
+                console.warn(`⚠️  Failed to sync candidate ${candidateNumber} to Elasticsearch:`, err.message)
               }
-              await elasticsearchSyncService.syncToElasticsearch('profiles', profile.id, esDoc)
             } catch (esError) {
               console.warn(`⚠️  Failed to sync candidate ${candidateNumber} to Elasticsearch:`, esError)
             }

@@ -56,6 +56,8 @@ export const searchService = {
     const {
       q,
       location,
+      locationId, // Exact location UUID (preferred for precise filtering)
+      companyId, // Optional exact company filter
       jobType,
       experienceLevel,
       skills,
@@ -87,6 +89,24 @@ export const searchService = {
       return this.searchJobsLegacy(dto)
     }
 
+    // Resolve location filter input (expand province -> district IDs when possible)
+    let resolvedLocationFilter: string | string[] | undefined = undefined
+    const locationFilterInput = (locationId as any) || (location as any)
+    if (locationFilterInput) {
+      try {
+        const resolvedIds = await searchRepo.getLocationIdsForFilter(String(locationFilterInput))
+        if (resolvedIds && resolvedIds.length > 0) {
+          resolvedLocationFilter = resolvedIds.length === 1 ? resolvedIds[0] : resolvedIds
+        } else {
+          // fallback to using provided locationId (if it was an ID) or leave undefined
+          resolvedLocationFilter = locationId || undefined
+        }
+      } catch (e) {
+        console.warn('Failed to resolve location filter ids, falling back to raw input', e)
+        resolvedLocationFilter = locationId || undefined
+      }
+    }
+
     // Build standardized QueryContext from DTO
     const queryContext: QueryContext = {
       q,
@@ -101,7 +121,11 @@ export const searchService = {
       userPreferredCategories: jobCategories,
       userDesiredBenefits: jobBenefits,
       filters: {
+        // Support both exact ID filtering (preferred) and text-based location_name
+        location_id: resolvedLocationFilter, // Can be string or string[] - jobSearch.builder handles both
         location_name: location,
+        // Support exact company filtering if provided (frontend can send companyId)
+        company_id: companyId,
         job_type: jobType,
         experience_level: experienceLevel,
         skill_names: skills,
@@ -125,10 +149,14 @@ export const searchService = {
     const cacheKey = `search:jobs:v2:${JSON.stringify(queryContext)}:recruiterId:${recruiterId || 'public'}`
     const cacheHit = await redisService.getSearchResponse(cacheKey)
     if (cacheHit) {
+      console.debug(`[search] cache hit for key=${cacheKey} (hits=${cacheHit?.total ?? 'unknown'})`)
       return await this.formatJobSearchResponse(cacheHit, highlight)
     }
 
     try {
+      console.debug(
+        `[search] resolving location filter input="${locationFilterInput}" -> resolved=${Array.isArray(resolvedLocationFilter) ? resolvedLocationFilter.length + ' ids' : resolvedLocationFilter}`
+      )
       // Build complete ES query using the canonical query builder
       const esQuery = buildJobSearchQuery(queryContext)
 
@@ -138,7 +166,28 @@ export const searchService = {
         profile: queryContext.options?.profile
       })
 
-      // Cache results for short period
+      // If ES returned zero results for a query with a location filter,
+      // attempt a DB fallback (handles cases where ES index may be stale).
+      const hasLocationFilter = !!(queryContext.filters?.location_id || queryContext.filters?.location_name)
+      console.debug(`[search] ES returned total=${esResp.total} for cacheKey=${cacheKey}`)
+      if ((esResp.total || 0) === 0 && hasLocationFilter) {
+        try {
+          const dbResp = await this.searchJobsFromDB(dto as any)
+          console.debug(`[search] DB fallback total=${dbResp.total} for cacheKey=${cacheKey}`)
+          // Cache DB fallback result separately to reduce repeated DB load
+          try {
+            await redisService.setSearchResponse(cacheKey + ':db_fallback', dbResp, 30)
+          } catch (e) {
+            // non-fatal
+          }
+          return await this.formatJobSearchResponse(dbResp, highlight)
+        } catch (e) {
+          // If DB fallback fails, continue to return ES response (empty) below
+          console.warn('DB fallback after empty ES result failed', e)
+        }
+      }
+
+      // Cache ES results for short period
       try {
         await redisService.setSearchResponse(cacheKey, esResp, 30)
       } catch (e) {
@@ -292,9 +341,9 @@ export const searchService = {
           const queryResp = await elasticsearchService.searchWithTemplate(index, querySuggestions)
 
           // Avoid duplicates by checking existing suggestion texts
-          const existingTitles = new Set(suggestions.map(s => s.text))
+          const existingTitles = new Set(suggestions.map((s) => s.text))
           const additionalSuggestions = (queryResp.hits || [])
-            .filter(h => !existingTitles.has((h._source as any)?.title))
+            .filter((h) => !existingTitles.has((h._source as any)?.title))
             .slice(0, dto.size - suggestions.length)
             .map((h) => ({
               text: (h._source as any)?.title ?? h.id,
@@ -330,6 +379,170 @@ export const searchService = {
     } catch (error) {
       console.warn('ES suggest failed:', error)
       // Return empty suggestions on error
+      return { suggestions: [] }
+    }
+  },
+
+  /**
+   * Skills suggestion endpoint for autocomplete
+   */
+  async suggestSkills(dto: {
+    q: string
+    size?: number
+    context?: Record<string, unknown>
+  }): Promise<SuggestionResponseDto> {
+    const { q, size = 10, context } = dto
+    const cacheKey = `search:suggest:skills:${q}:${size}:${JSON.stringify(context || {})}`
+    const cached = await redisService.getSuggestResponse(cacheKey)
+    if (cached) {
+      return { suggestions: cached.suggestions }
+    }
+
+    try {
+      const esResp = await elasticsearchService.suggest({
+        index: elasticsearchService.getIndexName('skills'),
+        prefix: q,
+        size: Math.min(size * 2, 20), // Get more results to filter
+        context
+      })
+
+      let suggestions = esResp.suggestions || []
+
+      // If completion suggester has few results, supplement with query-based suggestions
+      if ((!suggestions || suggestions.length < 3) && q && q.length > 1) {
+        try {
+          const querySuggestions = await elasticsearchService.searchWithTemplate('skills', {
+            query: {
+              multi_match: {
+                query: q,
+                fields: ['name^3', 'name.autocomplete^2'],
+                fuzziness: 'AUTO',
+                prefix_length: 1
+              }
+            },
+            size: Math.min(size * 2, 20),
+            _source: ['name']
+          })
+
+          const existingNames = new Set(suggestions.map((s: any) => s.text))
+          const additionalSuggestions = (querySuggestions.hits || [])
+            .filter((h: any) => !existingNames.has((h._source as any)?.name))
+            .slice(0, size - suggestions.length)
+            .map((h: any) => ({
+              text: (h._source as any)?.name ?? h.id,
+              payload: h._source,
+              score: h._score
+            }))
+
+          suggestions = [...suggestions, ...additionalSuggestions]
+        } catch (e) {
+          // ignore fallback errors
+        }
+      }
+
+      // Ensure we don't exceed the requested size
+      if (suggestions.length > size) {
+        suggestions = suggestions.slice(0, size)
+      }
+
+      // Cache results
+      try {
+        await redisService.setSuggestResponse(cacheKey, { suggestions }, 20)
+      } catch (e) {
+        console.warn('Failed to cache skills suggest response:', e)
+      }
+
+      return {
+        suggestions: suggestions.map((s: any) => ({
+          text: s.text,
+          payload: s.payload,
+          score: s.score
+        }))
+      }
+    } catch (error) {
+      console.warn('ES skills suggest failed:', error)
+      return { suggestions: [] }
+    }
+  },
+
+  /**
+   * Categories suggestion endpoint for autocomplete
+   */
+  async suggestCategories(dto: {
+    q: string
+    size?: number
+    context?: Record<string, unknown>
+  }): Promise<SuggestionResponseDto> {
+    const { q, size = 10, context } = dto
+    const cacheKey = `search:suggest:categories:${q}:${size}:${JSON.stringify(context || {})}`
+    const cached = await redisService.getSuggestResponse(cacheKey)
+    if (cached) {
+      return { suggestions: cached.suggestions }
+    }
+
+    try {
+      const esResp = await elasticsearchService.suggest({
+        index: elasticsearchService.getIndexName('categories'),
+        prefix: q,
+        size: Math.min(size * 2, 20), // Get more results to filter
+        context
+      })
+
+      let suggestions = esResp.suggestions || []
+
+      // If completion suggester has few results, supplement with query-based suggestions
+      if ((!suggestions || suggestions.length < 3) && q && q.length > 1) {
+        try {
+          const querySuggestions = await elasticsearchService.searchWithTemplate('categories', {
+            query: {
+              multi_match: {
+                query: q,
+                fields: ['name^3', 'name.autocomplete^2'],
+                fuzziness: 'AUTO',
+                prefix_length: 1
+              }
+            },
+            size: Math.min(size * 2, 20),
+            _source: ['name', 'type']
+          })
+
+          const existingNames = new Set(suggestions.map((s: any) => s.text))
+          const additionalSuggestions = (querySuggestions.hits || [])
+            .filter((h: any) => !existingNames.has((h._source as any)?.name))
+            .slice(0, size - suggestions.length)
+            .map((h: any) => ({
+              text: (h._source as any)?.name ?? h.id,
+              payload: h._source,
+              score: h._score
+            }))
+
+          suggestions = [...suggestions, ...additionalSuggestions]
+        } catch (e) {
+          // ignore fallback errors
+        }
+      }
+
+      // Ensure we don't exceed the requested size
+      if (suggestions.length > size) {
+        suggestions = suggestions.slice(0, size)
+      }
+
+      // Cache results
+      try {
+        await redisService.setSuggestResponse(cacheKey, { suggestions }, 20)
+      } catch (e) {
+        console.warn('Failed to cache categories suggest response:', e)
+      }
+
+      return {
+        suggestions: suggestions.map((s: any) => ({
+          text: s.text,
+          payload: s.payload,
+          score: s.score
+        }))
+      }
+    } catch (error) {
+      console.warn('ES categories suggest failed:', error)
       return { suggestions: [] }
     }
   },
@@ -750,6 +963,12 @@ export const searchService = {
         params.push(jobBenefits)
       }
 
+      // Push sort, size, from parameters before building query
+      const sortParamIndex = params.length + 1
+      const sizeParamIndex = params.length + 2
+      const offsetParamIndex = params.length + 3
+      params.push(sort || 'relevance', size, from)
+
       // Execute database query
       const query = `
         SELECT
@@ -769,18 +988,17 @@ export const searchService = {
         ${whereClause}
         ORDER BY
           CASE
-            WHEN $${params.length + 1} = 'newest' THEN j.posted_at
-            WHEN $${params.length + 1} = 'oldest' THEN j.posted_at
-            WHEN $${params.length + 1} = 'salary_high' THEN (j.salary_range->>'max')::int
-            WHEN $${params.length + 1} = 'salary_low' THEN (j.salary_range->>'min')::int
-            WHEN $${params.length + 1} = 'experience_high' THEN j.experience_level
-            WHEN $${params.length + 1} = 'experience_low' THEN j.experience_level
+            WHEN $${sortParamIndex} = 'newest' THEN j.posted_at
+            WHEN $${sortParamIndex} = 'oldest' THEN j.posted_at
+            WHEN $${sortParamIndex} = 'salary_high' THEN (j.salary_range->>'max')::int
+            WHEN $${sortParamIndex} = 'salary_low' THEN (j.salary_range->>'min')::int
+            WHEN $${sortParamIndex} = 'experience_high' THEN j.experience_level
+            WHEN $${sortParamIndex} = 'experience_low' THEN j.experience_level
             ELSE j.posted_at
           END
           ${sort === 'oldest' || sort === 'salary_low' || sort === 'experience_low' ? 'ASC' : 'DESC'}
-        LIMIT $${params.length + 1} OFFSET $${params.length + 2}
+        LIMIT $${sizeParamIndex} OFFSET $${offsetParamIndex}
       `
-      params.push(sort || 'relevance', size, from)
 
       const jobs = await prisma.$queryRaw(Prisma.sql`${query}`, ...params)
 

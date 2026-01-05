@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { PrismaClient, job_status, job_type } from '@prisma/client'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -684,34 +683,16 @@ export async function seedJobs() {
               // Sync to Elasticsearch if available
               if (isElasticsearchAvailable && isElasticsearchEnabled) {
                 try {
-                  // Optional elasticsearch dependency
-                  // Use try/catch with require to avoid type errors and missing module
-                  let elasticsearchSyncService: any
+                  // Use syncJobById to properly sync job with all relations
+                  // This ensures skills_flat, categories, etc. are populated correctly
                   try {
                     // eslint-disable-next-line @typescript-eslint/no-require-imports
-                    elasticsearchSyncService =
-                      require('../../../src/config/elasticsearch-sync.service').elasticsearchSyncService
-                  } catch (err) {
-                    throw new Error('Elasticsearch sync service not found: ' + err)
+                    const elasticsearchSyncService = require('../../../src/config/elasticsearch-sync.service')
+                      .elasticsearchSyncService as any
+                    await elasticsearchSyncService.syncJobById(job.id, null, 'upsert')
+                  } catch (err: any) {
+                    console.warn(`⚠️  Failed to sync job ${job.id} to Elasticsearch:`, err.message)
                   }
-
-                  const esDoc = {
-                    id: job.id,
-                    title: job.title,
-                    description: job.description,
-                    company_id: job.company_id,
-                    location_id: job.location_id,
-                    salary_range: job.salary_range,
-                    job_type: job.job_type,
-                    experience_level: job.experience_level,
-                    posted_at: job.posted_at,
-                    expires_at: job.expires_at,
-                    status: job.status,
-                    metadata: job.metadata,
-                    created_at: job.updated_at,
-                    updated_at: job.updated_at
-                  }
-                  await elasticsearchSyncService.syncToElasticsearch('jobs', job.id, esDoc)
                 } catch (esError) {
                   console.warn(`⚠️  Failed to sync job ${job.id} to Elasticsearch:`, esError)
                 }

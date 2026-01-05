@@ -76,10 +76,9 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     const searchFields = [
       `title^${BOOSTS.title}`,
       `description^${BOOSTS.description}`,
-      `skills^${BOOSTS.skillsExact}`,
+      `skills_flat^${BOOSTS.skillsExact}`,
       `job_category^${BOOSTS.categoryMatch}`,
       `company_name^${BOOSTS.company_name}`,
-      `location_name^${BOOSTS.location_name}`,
       `job_requirements_title^1.2`,
       `job_benefits_type^1.0`
     ]
@@ -121,9 +120,13 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     filterClauses.push({ term: { company_id: filters.company_id } })
   }
 
-  // Location filter
-  if (filters?.location_id) {
-    filterClauses.push({ term: { location_id: filters.location_id } })
+  // Location filter - accept single id or array of ids (province expanded -> district ids)
+  if (filters?.location_id !== undefined && filters.location_id !== null) {
+    if (Array.isArray(filters.location_id) && filters.location_id.length > 0) {
+      filterClauses.push({ terms: { location_id: filters.location_id } })
+    } else if (typeof filters.location_id === 'string' && filters.location_id.trim()) {
+      filterClauses.push({ term: { location_id: filters.location_id } })
+    }
   }
 
   // Job type filter
@@ -141,8 +144,8 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     filterClauses.push({
       bool: {
         should: [
-          // Exact match trên skills array (keyword)
-          { terms: { skills: filters.skill_names } },
+          // Exact match trên skills_flat array (keyword)
+          { terms: { skills_flat: filters.skill_names } },
           // Nested match cho structured skills
           {
             nested: {
@@ -179,10 +182,6 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
   }
 
   // Category filters
-  if (filters?.job_category) {
-    filterClauses.push({ term: { job_category: filters.job_category } })
-  }
-
   if (filters?.job_category_type) {
     filterClauses.push({ term: { job_category_type: filters.job_category_type } })
   }
@@ -256,17 +255,17 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     })
   }
 
-  // Location name filter (text search)
-  if (filters?.location_name && filters.location_name.trim()) {
-    filterClauses.push({
-      match: {
-        location_name: {
-          query: filters.location_name.trim(),
-          operator: 'and'
-        }
-      }
-    })
-  }
+  // Location name filter (text search) - DISABLED: Location should only use dropdown filters, not text search
+  // if (filters?.location_name && filters.location_name.trim()) {
+  //   filterClauses.push({
+  //     match: {
+  //       location_name: {
+  //         query: filters.location_name.trim(),
+  //         operator: 'and'
+  //       }
+  //     }
+  //   })
+  // }
 
   // === BUILD MAIN QUERY ===
 
@@ -341,7 +340,7 @@ export function buildJobSuggestionsQuery(prefix: string, size = 10): ESQuery {
               fields: [
                 `title^${BOOSTS.title}`,
                 `company_name^${BOOSTS.company_name}`,
-                `skills^${BOOSTS.skillsExact}`,
+                `skills_flat^${BOOSTS.skillsExact}`,
                 `description^${BOOSTS.description}`
               ],
               type: 'best_fields',

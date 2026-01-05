@@ -67,8 +67,10 @@ export const searchRepo = {
     if (!location) return []
 
     if (location.type === 'province') {
-      // Return all districts under this province
-      return await this.getDistrictIdsByProvinceId(location.id)
+      // Return province ID + all districts under this province
+      // This ensures jobs saved with province ID are also found when searching by province
+      const districtIds = await this.getDistrictIdsByProvinceId(location.id)
+      return [location.id, ...districtIds]
     } else if (location.type === 'district') {
       // Return the district ID
       return [location.id]

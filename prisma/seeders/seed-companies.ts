@@ -439,31 +439,16 @@ export async function seedCompanies() {
           // 5. Sync to Elasticsearch if available
           if (isElasticsearchAvailable && isElasticsearchEnabled) {
             try {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore - Optional elasticsearch dependency
-              const { elasticsearchSyncService }: any = await import('../../../src/config/elasticsearch-sync.service')
-              const esDoc = {
-                id: company.id,
-                name: company.name,
-                description: company.description,
-                size: company.size,
-                industry: companyDetail.industry,
-                company_type: companyDetail.company_type,
-                headquarters_location_id: companyDetail.headquarters_location_id,
-                website_url: companyDetail.website_url,
-                is_verified: company.is_verified,
-                status: company.status,
-                created_at: company.created_at,
-                updated_at: company.updated_at,
-                recruiter_id: company.recruiter_id,
-                benefits: selectedBenefits.map((b) => ({
-                  type: b.benefit_type,
-                  title: b.title,
-                  description: b.description,
-                  is_featured: b.is_featured
-                }))
+              // Use syncCompanyById to properly sync company with all relations
+              // This ensures company details, benefits, etc. are populated correctly
+              try {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                const elasticsearchSyncService = require('../../../src/config/elasticsearch-sync.service')
+                  .elasticsearchSyncService as any
+                await elasticsearchSyncService.syncCompanyById(company.id, null, 'upsert')
+              } catch (err: any) {
+                console.warn(`⚠️  Failed to sync company ${recruiterNumber} to Elasticsearch:`, err.message)
               }
-              await elasticsearchSyncService.syncToElasticsearch('companies', company.id, esDoc)
             } catch (esError) {
               console.warn(`⚠️  Failed to sync company ${recruiterNumber} to Elasticsearch:`, esError)
             }

@@ -13,8 +13,11 @@ import {
   searchJobsValidator,
   suggestionsValidator,
   searchCompaniesValidator,
-  companiesSuggestionsValidator
+  companiesSuggestionsValidator,
+  skillsSuggestionValidator,
+  categoriesSuggestionValidator
 } from './search.dto'
+import { getSearchHistoryValidator, searchHistoryIdValidator } from './search-history.validator'
 import { authenticateAccessToken } from '../../middleware/verify.middleware'
 import { authenticatedUser } from '../../middleware/authorize.middleware'
 import { apiRateLimit, strictRateLimit } from '../../middleware/rate-limit.middleware'
@@ -29,7 +32,10 @@ const cacheHeaders = (maxAge: number) => (req: any, res: any, next: any) => {
 // Controllers for enhanced search features
 import { PopularJobsController } from './popular-jobs.controller'
 import { RecentlyViewedController } from './recently-viewed.controller'
+import { SearchHistoryController } from './search-history.controller'
 import { jobController } from '../jobs/job.controller'
+import { skillsSuggestionController } from './skills-suggestions.controller'
+import { categoriesSuggestionController } from './categories-suggestions.controller'
 
 // Validators from jobs module
 import { filterJobsValidator } from '../jobs/job.validator'
@@ -79,6 +85,13 @@ function simpleHash(str: string): number {
  *  - POST /api/search/events (log search events)
  *  - GET  /api/search/companies (company search)
  *  - GET  /api/search/companies/suggestions (company autocomplete)
+ *  - GET  /api/search/skills/suggestions (skills autocomplete)
+ *  - GET  /api/search/categories/suggestions (categories autocomplete)
+ *
+ * Protected routes (auth required):
+ *  - GET    /api/search/history (user's search history)
+ *  - DELETE /api/search/history (clear search history)
+ *  - DELETE /api/search/history/:id (delete specific history entry)
  *
  *
  * Job discovery routes (moved from jobs module):
@@ -172,10 +185,39 @@ router.post('/events', apiRateLimit, eventsController)
 // ==================== USER SEARCH HISTORY ====================
 // Recent searches and popular queries
 
+/**
+ * GET /api/search/history
+ * Get user's search history with pagination
+ */
+router.get('/history', authenticateAccessToken, getSearchHistoryValidator, SearchHistoryController.getSearchHistory)
+
+/**
+ * DELETE /api/search/history
+ * Clear all user's search history
+ */
+router.delete('/history', authenticateAccessToken, SearchHistoryController.clearSearchHistory)
+
+/**
+ * DELETE /api/search/history/:id
+ * Delete a specific search history entry
+ */
+router.delete(
+  '/history/:id',
+  authenticateAccessToken,
+  searchHistoryIdValidator,
+  SearchHistoryController.deleteSearchHistoryEntry
+)
+
 // ==================== COMPANY SEARCH ROUTES ====================
 // Company discovery and search
 
 router.get('/companies', apiRateLimit, searchCompaniesValidator, searchCompaniesController)
 router.get('/companies/suggestions', strictRateLimit, companiesSuggestionsValidator, companiesSuggestionsController)
+
+// ==================== SKILLS & CATEGORIES AUTOCOMPLETE ====================
+// Skills and categories suggestions for enhanced search UX
+
+router.get('/skills/suggestions', strictRateLimit, skillsSuggestionValidator, skillsSuggestionController)
+router.get('/categories/suggestions', strictRateLimit, categoriesSuggestionValidator, categoriesSuggestionController)
 
 export default router

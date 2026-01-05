@@ -328,7 +328,9 @@ export const JobSearchRequestSchema = z.object({
       if (typeof val === 'number') return val === 1
       return val
     }),
-  recruiterId: z.string().uuid().optional() // Optional for tenant isolation
+  recruiterId: z.string().uuid().optional(), // Optional for tenant isolation
+  // Optional exact company filter (UUID)
+  companyId: z.string().uuid().optional()
 })
 
 export const SuggestionRequestSchema = z.object({
@@ -501,9 +503,51 @@ export const SkillsSearchResponseSchema = z.object({
   hits: z.array(z.any())
 })
 
+// Skills Suggestions DTOs
+export const SkillsSuggestionRequestSchema = z.object({
+  q: z.string().min(1, 'Query is required'),
+  size: z.number().int().min(1).max(20).default(10),
+  context: z.record(z.string(), z.unknown()).optional()
+})
+
+export const SkillsSuggestionResponseSchema = z.object({
+  suggestions: z.array(
+    z.object({
+      text: z.string(),
+      payload: z.unknown().optional(),
+      score: z.number().optional()
+    })
+  )
+})
+
+// Categories Suggestions DTOs
+export const CategoriesSuggestionRequestSchema = z.object({
+  q: z.string().min(1, 'Query is required'),
+  size: z.number().int().min(1).max(20).default(10),
+  context: z.record(z.string(), z.unknown()).optional()
+})
+
+export const CategoriesSuggestionResponseSchema = z.object({
+  suggestions: z.array(
+    z.object({
+      text: z.string(),
+      payload: z.unknown().optional(),
+      score: z.number().optional()
+    })
+  )
+})
+
+// Export types
+export type SkillsSuggestionRequestDto = z.infer<typeof SkillsSuggestionRequestSchema>
+export type SkillsSuggestionResponseDto = z.infer<typeof SkillsSuggestionResponseSchema>
+export type CategoriesSuggestionRequestDto = z.infer<typeof CategoriesSuggestionRequestSchema>
+export type CategoriesSuggestionResponseDto = z.infer<typeof CategoriesSuggestionResponseSchema>
+
 // Validators
 export const searchLocationsValidator = zodValidate({ query: LocationSearchRequestSchema })
 export const searchSkillsValidator = zodValidate({ query: SkillsSearchRequestSchema })
+export const skillsSuggestionValidator = zodValidate({ query: SkillsSuggestionRequestSchema })
+export const categoriesSuggestionValidator = zodValidate({ query: CategoriesSuggestionRequestSchema })
 
 // Export types
 export type LocationSearchRequestDto = z.infer<typeof LocationSearchRequestSchema>

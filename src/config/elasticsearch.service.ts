@@ -170,6 +170,8 @@ export const enhancedMappings = {
           }
         },
         title_suggest: { type: 'completion' },
+        skills_suggest: { type: 'completion' },
+        categories_suggest: { type: 'completion' },
         description: {
           type: 'text',
           analyzer: 'vi_analyzer',
@@ -242,7 +244,12 @@ export const enhancedMappings = {
         skills: {
           type: 'nested',
           properties: {
-            name: { type: 'keyword' },
+            name: {
+              type: 'keyword',
+              fields: {
+                autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+              }
+            },
             category: { type: 'keyword' },
             category_type: { type: 'keyword' },
             proficiency_required: { type: 'integer' }
@@ -278,7 +285,12 @@ export const enhancedMappings = {
           type: 'nested',
           properties: {
             category_id: { type: 'keyword' },
-            name: { type: 'keyword' },
+            name: {
+              type: 'keyword',
+              fields: {
+                autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+              }
+            },
             type: { type: 'keyword' }
           }
         },
@@ -504,6 +516,25 @@ export const enhancedMappings = {
     }
   },
 
+  categories: {
+    mappings: {
+      properties: {
+        id: { type: 'keyword' },
+        name: {
+          type: 'text',
+          analyzer: 'vi_analyzer',
+          fields: {
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
+          }
+        },
+        name_suggest: { type: 'completion' },
+        slug: { type: 'keyword' },
+        type: { type: 'keyword' }
+      }
+    }
+  },
+
   applications: {
     mappings: {
       properties: {
@@ -671,8 +702,6 @@ export const elasticsearchService = {
             'company_name^2', // High priority - company name
             'skills_flat^2', // High priority - skills
             'job_category^1', // Medium priority - categories
-            'location_name^1', // Medium priority - location
-            'location_combined^0.8', // Lower priority - combined location
             'job_requirements_title^1.2' // Medium priority - requirements
           ],
           type: 'best_fields',
@@ -1707,6 +1736,7 @@ export const elasticsearchService = {
       { name: 'companies', mapping: enhancedMappings.companies },
       { name: 'locations', mapping: enhancedMappings.locations },
       { name: 'skills', mapping: enhancedMappings.skills },
+      { name: 'categories', mapping: enhancedMappings.categories },
       { name: 'applications', mapping: enhancedMappings.applications }
     ]
 

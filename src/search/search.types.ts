@@ -31,7 +31,7 @@ export type QueryContext = {
     job_type?: string
     experience_level?: number
     company_id?: string
-    location_id?: string
+    location_id?: string | string[]
     salary_min?: number
     salary_max?: number
     posted_after?: Date
