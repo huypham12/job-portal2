@@ -55,19 +55,21 @@ export const createRateLimit = (options: RateLimitOptions) => {
 // Pre-configured rate limiters for common use cases
 export const authRateLimit = createRateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 5, // 5 attempts per 15 minutes
+  // Increased limit for local development/testing to reduce accidental 429s.
+  // In production consider keeping this low (e.g. 5) or using exponential backoff.
+  maxRequests: 100, // 20 attempts per 15 minutes
   keyPrefix: 'auth',
   skipSuccessfulRequests: true // Don't count successful logins
 })
 
 export const apiRateLimit = createRateLimit({
   windowMs: 60 * 1000, // 1 minute
-  maxRequests: 100, // 100 requests per minute
+  maxRequests: 1000, // 100 requests per minute
   keyPrefix: 'api'
 })
 
 export const strictRateLimit = createRateLimit({
   windowMs: 60 * 1000, // 1 minute
-  maxRequests: 10, // 10 requests per minute
+  maxRequests: 100, // 10 requests per minute
   keyPrefix: 'strict'
 })

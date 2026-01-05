@@ -4,13 +4,19 @@
  * Professional Elasticsearch Setup Script for Job Portal
  * Comprehensive setup with Vietnamese language support
  *
+ * Usage:
+ *   npm run dev:es:setup              # Normal setup
+ *   npm run dev:es:setup -- --reset   # Complete reset (removes all containers & volumes)
+ *   npm run dev:es:setup:reset        # Alias for reset setup
+ *
  * Features:
  * - Environment validation
- * - Docker container management
+ * - Docker container management with reset capability
  * - Index initialization with Vietnamese analyzer
  * - Database migration and seeding
  * - Health checks and monitoring
  * - Graceful error handling and cleanup
+ * - Complete cluster reset with --reset flag
  */
 
 import { execSync, ExecSyncOptions, spawn } from 'child_process'
@@ -384,22 +390,48 @@ async function installDependencies(): Promise<boolean> {
 async function startElasticsearch(): Promise<boolean> {
   logStep(5, 'Starting Elasticsearch', '🚀')
 
-  // Stop any existing containers first
-  await runCommand('docker-compose down', 'Stopping existing containers', {
-    silent: true
-  })
+  const shouldReset = process.argv.includes('--reset') || process.argv.includes('-r')
+
+  if (shouldReset) {
+    logWarning('🔄 RESET MODE: Performing complete cleanup of Elasticsearch containers and volumes')
+
+    // Stop and remove containers with volumes
+    if (
+      !(await runCommand('docker-compose down -v', 'Stopping and removing containers with volumes', {
+        timeout: 60000,
+        retries: 1
+      }))
+    ) {
+      logWarning('Could not stop containers with volumes, trying alternative...')
+      await runCommand('docker-compose down', 'Stopping containers', {
+        silent: true
+      })
+    }
+
+    // Remove orphaned containers and volumes
+    await runCommand('docker system prune -f', 'Cleaning up Docker system', {
+      silent: true
+    })
+
+    logSuccess('Complete cleanup performed - all data, volumes, and containers removed')
+  } else {
+    // Normal mode: just stop existing containers
+    await runCommand('docker-compose down', 'Stopping existing containers', {
+      silent: true
+    })
+  }
 
   // Try docker-compose first, then docker compose
   let composeCommand = 'docker-compose'
   if (
-    !(await runCommand(`${composeCommand} up elasticsearch -d`, 'Starting Elasticsearch container', {
+    !(await runCommand(`${composeCommand} up elasticsearch -d`, 'Starting fresh Elasticsearch container', {
       timeout: 120000,
       retries: 1
     }))
   ) {
     composeCommand = 'docker compose'
     if (
-      !(await runCommand(`${composeCommand} up elasticsearch -d`, 'Starting Elasticsearch container (alternative)', {
+      !(await runCommand(`${composeCommand} up elasticsearch -d`, 'Starting fresh Elasticsearch container (alternative)', {
         timeout: 120000,
         retries: 1
       }))
@@ -413,7 +445,7 @@ async function startElasticsearch(): Promise<boolean> {
 
   // Wait for Elasticsearch to be ready with better health checking
   logProgress('Waiting for Elasticsearch to be ready')
-  const maxRetries = 40 // 40 * 3s = 2 minutes
+  const maxRetries = shouldReset ? 60 : 40 // Give more time for fresh start
   let retries = maxRetries
 
   while (retries > 0) {
@@ -425,6 +457,9 @@ async function startElasticsearch(): Promise<boolean> {
       } as ExecSyncOptions)
 
       logSuccess('Elasticsearch is ready and healthy')
+      if (shouldReset) {
+        logSuccess('🎉 Fresh Elasticsearch instance started with clean slate')
+      }
       return true
     } catch {
       retries--
@@ -597,11 +632,19 @@ async function cleanupOnFailure(): Promise<void> {
 
 async function main(): Promise<void> {
   // Display header
+  const resetMode = process.argv.includes('--reset') || process.argv.includes('-r')
+  const headerIcon = resetMode ? '🔄' : '🚀'
+  const headerText = resetMode ? 'ELASTICSEARCH COMPLETE RESET & SETUP' : 'ELASTICSEARCH PROFESSIONAL SETUP WIZARD'
+
   log(`${colors.bold}${colors.magenta}
 ╔════════════════════════════════════════════════════════════════════════════════╗
-║                 🚀 ELASTICSEARCH PROFESSIONAL SETUP WIZARD                   ║
+║                ${headerIcon} ${headerText}                   ║
 ║                Advanced Vietnamese Search Engine for Job Portal              ║
 ╚════════════════════════════════════════════════════════════════════════════════╝${colors.reset}`)
+
+  if (resetMode) {
+    log(`${colors.yellow}🔄 RESET MODE: All containers, volumes, and data will be completely removed!${colors.reset}\n`)
+  }
 
   let setupSuccessful = false
 

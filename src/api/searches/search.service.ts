@@ -275,30 +275,42 @@ export const searchService = {
     }
 
     try {
-      // Try completion suggester first
+      // Try completion suggester first with increased size for better results
       const esResp = await elasticsearchService.suggest({
         index: elasticsearchService.getIndexName(index),
         prefix: dto.q,
-        size: dto.size,
+        size: Math.min(dto.size * 2, 20), // Get more results to filter
         context: enhancedContext
       })
 
       let suggestions = esResp.suggestions || []
 
-      // Fallback to query-based suggestions if completion suggester returns empty
-      if ((!suggestions || suggestions.length === 0) && dto.q && dto.q.length > 0) {
+      // If completion suggester has few results, supplement with query-based suggestions
+      if ((!suggestions || suggestions.length < 3) && dto.q && dto.q.length > 1) {
         try {
-          const fallbackQuery = buildJobSuggestionsQuery(dto.q, dto.size ?? 10)
-          const fallbackResp = await elasticsearchService.searchWithTemplate(index, fallbackQuery)
+          const querySuggestions = buildJobSuggestionsQuery(dto.q, dto.size)
+          const queryResp = await elasticsearchService.searchWithTemplate(index, querySuggestions)
 
-          suggestions = (fallbackResp.hits || []).map((h) => ({
-            text: (h._source as any)?.title ?? h.id,
-            payload: h._source,
-            score: h._score
-          }))
+          // Avoid duplicates by checking existing suggestion texts
+          const existingTitles = new Set(suggestions.map(s => s.text))
+          const additionalSuggestions = (queryResp.hits || [])
+            .filter(h => !existingTitles.has((h._source as any)?.title))
+            .slice(0, dto.size - suggestions.length)
+            .map((h) => ({
+              text: (h._source as any)?.title ?? h.id,
+              payload: h._source,
+              score: h._score
+            }))
+
+          suggestions = [...suggestions, ...additionalSuggestions]
         } catch (e) {
           // ignore fallback errors
         }
+      }
+
+      // Ensure we don't exceed the requested size
+      if (suggestions.length > dto.size) {
+        suggestions = suggestions.slice(0, dto.size)
       }
 
       // Cache results

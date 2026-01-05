@@ -469,9 +469,7 @@ export async function seedCandidates() {
 
       const batchPromises = batch.map(async (profileData, indexInBatch) => {
         const candidateNumber = i + indexInBatch + 1
-        // Generate unique email with timestamp to prevent duplicates across multiple runs
-        const timestamp = Date.now()
-        const email = `candidate${candidateNumber}_${timestamp}@gmail.com`
+        const email = `candidate${candidateNumber}@gmail.com`
 
         try {
           // 1. Create user account

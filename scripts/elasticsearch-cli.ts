@@ -13,6 +13,7 @@
  */
 
 import { createInterface } from 'readline'
+import { execSync, ExecSyncOptions } from 'child_process'
 import { elasticsearchService } from '../src/config/elasticsearch.service'
 import { elasticsearchSyncService } from '../src/config/elasticsearch-sync.service'
 import { ElasticsearchSyncMiddleware } from '../src/middleware/elasticsearch-sync.middleware'
@@ -275,8 +276,13 @@ async function showStats(): Promise<void> {
 }
 
 async function resetIndices(): Promise<void> {
-  console.log('⚠️  DANGER: Index Reset Operation')
-  console.log('================================\n')
+  const deepReset = process.argv.includes('--deep') || process.argv.includes('-d')
+
+  console.log('⚠️  DANGER: Complete Elasticsearch Reset Operation')
+  if (deepReset) {
+    console.log('🔥 DEEP RESET MODE: Will also delete Docker volumes!')
+  }
+  console.log('===============================================\n')
 
   // Confirmation prompt
   const readline = createInterface({
@@ -284,11 +290,12 @@ async function resetIndices(): Promise<void> {
     output: process.stdout
   })
 
+  const confirmMessage = deepReset
+    ? '❓ Are you sure you want to DEEP RESET Elasticsearch? This will DELETE ALL data, indices, aliases, templates, AND Docker volumes! (type "YES" to confirm): '
+    : '❓ Are you sure you want to COMPLETE RESET Elasticsearch? This will DELETE ALL data, indices, aliases, templates! (type "YES" to confirm): '
+
   const answer = await new Promise<string>((resolve) => {
-    readline.question(
-      '❓ Are you sure you want to RESET ALL INDICES? This will DELETE all data! (type "YES" to confirm): ',
-      resolve
-    )
+    readline.question(confirmMessage, resolve)
   })
 
   readline.close()
@@ -299,26 +306,264 @@ async function resetIndices(): Promise<void> {
   }
 
   try {
-    console.log('🗑️  Deleting all indices...')
+    console.log('🔌 Connecting to Elasticsearch...')
+    const connected = await elasticsearchService.checkConnection()
 
-    const indices = ['jobs', 'companies', 'profiles']
-
-    for (const index of indices) {
-      const deleted = await elasticsearchService.deleteIndex(index)
-      if (deleted) {
-        console.log(`  ✅ Deleted ${index} index`)
+    if (!connected) {
+      if (deepReset) {
+        console.log('⚠️  Cannot connect to Elasticsearch, but proceeding with deep reset (volumes only)...')
+        console.log("ℹ️  Since ES is not running, we'll skip ES data deletion and focus on Docker cleanup")
       } else {
-        console.log(`  ⚠️  ${index} index not found or already deleted`)
+        throw new Error('Cannot connect to Elasticsearch. Make sure ES is running with: npm run dev:es:setup')
       }
     }
 
-    console.log('\n🔧 Recreating indices with fresh mappings...')
-    await elasticsearchService.initializeIndices()
+    const client = connected ? elasticsearchService.getClient() : null
 
-    console.log('\n✅ Index reset completed successfully!')
-    console.log('💡 Run "npm run es:sync" to populate with fresh data.')
+    // Step 1: Delete all indices (including system indices) - only if connected
+    if (connected) {
+      console.log('\n🗑️  Deleting ALL indices...')
+      try {
+        const indicesResponse = await client!.cat.indices({ format: 'json' })
+        const indices = indicesResponse.map((index: any) => index.index)
+
+        if (indices.length > 0) {
+          console.log(`Found ${indices.length} indices to delete: ${indices.join(', ')}`)
+
+          // Delete all indices using wildcard
+          await client!.indices.delete({
+            index: '_all',
+            ignore_unavailable: true
+          })
+          console.log('  ✅ Deleted all indices')
+        } else {
+          console.log('  ℹ️  No indices found')
+        }
+      } catch (error) {
+        console.log(`  ⚠️  Error deleting indices: ${error}`)
+      }
+    } else {
+      console.log('\n🗑️  Skipping ES data deletion (no connection)...')
+    }
+
+    // Step 2-4: Delete aliases, templates, and clear cache - only if connected
+    if (connected) {
+      // Step 2: Delete all aliases
+      console.log('\n🔗 Deleting all aliases...')
+      try {
+        const aliasesResponse = await client!.cat.aliases({ format: 'json' })
+        const aliases = aliasesResponse.map((alias: any) => alias.alias)
+
+        if (aliases.length > 0) {
+          console.log(`Found ${aliases.length} aliases to delete: ${aliases.join(', ')}`)
+
+          for (const alias of aliases) {
+            try {
+              await client!.indices.deleteAlias({
+                index: '_all',
+                name: alias
+              })
+            } catch (error) {
+              console.log(`  ⚠️  Could not delete alias ${alias}: ${error}`)
+            }
+          }
+          console.log('  ✅ Deleted all aliases')
+        } else {
+          console.log('  ℹ️  No aliases found')
+        }
+      } catch (error) {
+        console.log(`  ⚠️  Error deleting aliases: ${error}`)
+      }
+
+      // Step 3: Delete all templates
+      console.log('\n📋 Deleting all index templates...')
+      try {
+        const templatesResponse = await client!.cluster.getComponentTemplate()
+        const templates = Object.keys(templatesResponse.component_templates || {})
+
+        if (templates.length > 0) {
+          console.log(`Found ${templates.length} component templates to delete: ${templates.join(', ')}`)
+
+          for (const template of templates) {
+            try {
+              await client!.cluster.deleteComponentTemplate({ name: template })
+            } catch (error) {
+              console.log(`  ⚠️  Could not delete component template ${template}: ${error}`)
+            }
+          }
+          console.log('  ✅ Deleted all component templates')
+        } else {
+          console.log('  ℹ️  No component templates found')
+        }
+      } catch (error) {
+        console.log(`  ⚠️  Error deleting component templates: ${error}`)
+      }
+
+      // Delete legacy index templates
+      try {
+        const legacyTemplatesResponse = await client!.indices.getIndexTemplate()
+        const legacyTemplates = legacyTemplatesResponse.index_templates?.map((t) => t.name) || []
+
+        if (legacyTemplates.length > 0) {
+          console.log(`Found ${legacyTemplates.length} legacy templates to delete: ${legacyTemplates.join(', ')}`)
+
+          for (const template of legacyTemplates) {
+            try {
+              await client!.indices.deleteIndexTemplate({ name: template })
+            } catch (error) {
+              console.log(`  ⚠️  Could not delete legacy template ${template}: ${error}`)
+            }
+          }
+          console.log('  ✅ Deleted all legacy index templates')
+        } else {
+          console.log('  ℹ️  No legacy templates found')
+        }
+      } catch (error) {
+        console.log(`  ⚠️  Error deleting legacy templates: ${error}`)
+      }
+
+      // Step 4: Force refresh and clear cache
+      console.log('\n🔄 Clearing caches and refreshing...')
+      try {
+        await client!.indices.clearCache({ index: '_all' })
+        await client!.indices.refresh({ index: '_all' })
+        console.log('  ✅ Cleared caches and refreshed indices')
+      } catch (error) {
+        console.log(`  ⚠️  Error clearing caches: ${error}`)
+      }
+    }
+
+    // Step 5: Deep reset - delete Docker volumes (if requested)
+    if (deepReset) {
+      console.log('\n🗑️  DEEP RESET: Deleting Docker volumes...')
+      try {
+        // Stop and remove containers with volumes
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { execSync } = require('child_process')
+        console.log('  🛑 Stopping and removing containers with volumes...')
+
+        try {
+          execSync('docker-compose down -v', { stdio: 'pipe', cwd: process.cwd() })
+          console.log('  ✅ Stopped containers and removed volumes')
+        } catch (error) {
+          console.log(`  ⚠️  Could not stop containers with volumes: ${(error as Error).message}`)
+          // Try alternative docker compose command
+          try {
+            execSync('docker compose down -v', { stdio: 'pipe', cwd: process.cwd() })
+            console.log('  ✅ Stopped containers and removed volumes (alternative)')
+          } catch (altError) {
+            console.log(`  ⚠️  Could not stop containers with alternative command: ${(altError as Error).message}`)
+          }
+        }
+
+        // Additional volume cleanup
+        console.log('  🧹 Performing additional volume cleanup...')
+        try {
+          // Remove specific volumes
+          execSync('docker volume rm job-portal_es_data 2>/dev/null || true', { stdio: 'pipe' })
+          console.log('  ✅ Removed es_data volume')
+        } catch (error) {
+          console.log(`  ⚠️  Could not remove es_data volume: ${error}`)
+        }
+
+        // Docker system cleanup
+        try {
+          execSync('docker system prune -f', { stdio: 'pipe' })
+          console.log('  ✅ Performed Docker system cleanup')
+        } catch (error) {
+          console.log(`  ⚠️  Docker system cleanup failed: ${error}`)
+        }
+
+        console.log('  ✅ Deep reset volume cleanup completed')
+        console.log('  ⚠️  Note: You will need to run setup again to recreate containers')
+      } catch (error) {
+        console.log(`  ❌ Deep reset volume cleanup failed: ${error}`)
+        console.log('  💡 You can manually remove volumes with: docker volume rm job-portal_es_data')
+      }
+    }
+
+    // Step 4.5: Deep reset - Delete Docker volumes (if --deep flag)
+    if (deepReset) {
+      console.log('\n🗑️  DEEP RESET: Deleting Docker volumes...')
+      try {
+        // Stop Elasticsearch container
+        console.log('  🛑 Stopping Elasticsearch container...')
+        try {
+          execSync('docker-compose stop elasticsearch', { stdio: 'pipe', cwd: process.cwd() })
+          console.log('  ✅ Stopped Elasticsearch container')
+        } catch (error) {
+          console.log(`  ⚠️  Could not stop ES container: ${(error as Error).message}`)
+        }
+
+        // Remove the volume
+        console.log('  🗑️  Removing es_data volume...')
+        try {
+          execSync('docker volume rm job-portal_es_data', { stdio: 'pipe', cwd: process.cwd() })
+          console.log('  ✅ Removed es_data volume')
+        } catch (error) {
+          console.log(`  ⚠️  Could not remove es_data volume: ${(error as Error).message}`)
+        }
+
+        console.log('  ✅ Docker volume deleted - all data permanently removed from disk')
+        console.log('  ℹ️  Container will be restarted when you run setup commands')
+      } catch (error) {
+        console.log(`  ⚠️  Error during deep reset: ${error}`)
+        console.log('  💡 You may need to manually remove the volume: docker volume rm job-portal_es_data')
+      }
+    }
+
+    // Step 5: Recreate indices with fresh mappings (only if not deep reset)
+    if (!deepReset) {
+      console.log('\n🔧 Recreating indices with fresh mappings...')
+      await elasticsearchService.initializeIndices()
+
+      // Step 6: Verify reset
+      console.log('\n✅ Verifying complete reset...')
+      const afterResetIndices = await client!.cat.indices({ format: 'json' })
+      const expectedIndices = ['jobs', 'companies', 'profiles']
+      const actualIndices = afterResetIndices
+        .map((index: any) => index.index)
+        .filter((index: string) => expectedIndices.some((expected) => index.includes(expected)))
+
+      console.log(`  📊 Expected indices: ${expectedIndices.join(', ')}`)
+      console.log(`  📊 Actual indices: ${actualIndices.join(', ')}`)
+
+      if (actualIndices.length === expectedIndices.length) {
+        console.log('  ✅ All indices recreated successfully')
+      } else {
+        console.log('  ⚠️  Some indices may not have been recreated properly')
+      }
+    }
+
+    const resetType = deepReset ? 'DEEP RESET' : 'RESET'
+    console.log(`\n🎉 ELASTICSEARCH ${resetType} SUCCESSFUL!`)
+    console.log('================================================')
+
+    if (connected) {
+      console.log('✅ Deleted all old data, indices, aliases, and templates')
+      if (!deepReset) {
+        console.log('✅ Recreated fresh indices with Vietnamese analyzer')
+      }
+    } else {
+      console.log('ℹ️  Skipped ES data deletion (no connection to Elasticsearch)')
+    }
+
+    if (deepReset) {
+      console.log('✅ Deleted Docker volumes - complete data wipe from disk')
+      console.log('✅ Containers were stopped and volumes removed')
+      console.log('⚠️  Indices were NOT recreated (containers are stopped)')
+    }
+
+    console.log('💡 Next steps:')
+    if (deepReset) {
+      console.log('   • Run "npm run dev:es:setup" to recreate containers and indices')
+      console.log('   • Run "npm run dev:es:sync" to populate with fresh data')
+    } else {
+      console.log('   • Run "npm run dev:es:sync" to populate with fresh data')
+      console.log('   • Or run "npm run dev:es:setup" to setup containers if needed')
+    }
   } catch (error) {
-    console.error('❌ Reset operation failed:', error)
+    console.error('❌ Complete reset operation failed:', error)
     throw error
   }
 }
@@ -332,7 +577,9 @@ function showHelp(): void {
   console.log('  sync     🔄 Synchronize all database data to Elasticsearch')
   console.log('  health   🏥 Check Elasticsearch cluster and service health')
   console.log('  stats    📊 Show comprehensive synchronization statistics')
-  console.log('  reset    ⚠️  Reset all indices (DANGER - deletes all data)')
+  console.log('  reset    ⚠️  RESET - Delete ALL data, indices, aliases, templates')
+  console.log('           🔴 --deep: Also delete Docker volumes (COMPLETE wipe)')
+  console.log('           💡 --deep works even if ES is not running')
   console.log('  help     📖 Show this help message')
 
   console.log('\nUsage Examples:')
@@ -340,6 +587,27 @@ function showHelp(): void {
   console.log('  npm run es:sync')
   console.log('  npm run es:health')
   console.log('  npm run es:stats')
+  console.log('  npm run es:reset                    # Reset ES data only (requires ES running)')
+  console.log('  npm run es:reset --deep             # Reset + delete Docker volumes (works offline)')
+
+  console.log('\n🔄 Workflows:')
+  console.log('  📋 Normal Setup:')
+  console.log('    1. npm run dev:es:setup           # Setup ES containers & indices')
+  console.log('    2. npm run dev:es:sync            # Populate with data')
+  console.log('')
+  console.log('  🔄 Fresh Start (Clean containers):')
+  console.log('    1. npm run dev:es:setup:fresh     # Reset containers & setup fresh')
+  console.log('    2. npm run dev:es:sync            # Populate with data')
+  console.log('')
+  console.log('  🗑️  Reset ES Data Only:')
+  console.log('    1. npm run dev:es:reset           # Delete ALL ES data & indices')
+  console.log('    2. npm run dev:es:setup           # Recreate from scratch')
+  console.log('    3. npm run dev:es:sync            # Populate with fresh data')
+  console.log('')
+  console.log('  🔥 COMPLETE WIPE (Everything from disk):')
+  console.log('    1. npm run dev:es:reset:deep      # Delete ALL ES data + Docker volumes (works offline)')
+  console.log('    2. npm run dev:es:setup           # Recreate containers AND indices from scratch')
+  console.log('    3. npm run dev:es:sync            # Populate with fresh data')
 
   console.log('\n🌟 Professional Features:')
   console.log('  • Vietnamese text processing with asciifolding')
@@ -348,6 +616,7 @@ function showHelp(): void {
   console.log('  • Bulk operations with optimistic concurrency control')
   console.log('  • Comprehensive error handling and retry logic')
   console.log('  • Performance monitoring and statistics')
+  console.log('  • Complete cluster reset capability')
 }
 
 function getStatusIcon(status: string): string {

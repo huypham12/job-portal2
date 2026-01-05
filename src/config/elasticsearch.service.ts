@@ -166,10 +166,10 @@ export const enhancedMappings = {
           fields: {
             keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
             autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
-            suggest: { type: 'completion' },
             analyzed: { type: 'text', analyzer: 'vi_analyzer' }
           }
         },
+        title_suggest: { type: 'completion' },
         description: {
           type: 'text',
           analyzer: 'vi_analyzer',
@@ -182,10 +182,10 @@ export const enhancedMappings = {
           type: 'text',
           analyzer: 'vi_analyzer',
           fields: {
-            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-            suggest: { type: 'completion' }
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
           }
         },
+        company_name_suggest: { type: 'completion' },
         company_size: { type: 'integer' },
         company_industry: { type: 'keyword' },
 
@@ -336,10 +336,10 @@ export const enhancedMappings = {
           analyzer: 'vi_analyzer',
           fields: {
             keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-            suggest: { type: 'completion' },
             analyzed: { type: 'text', analyzer: 'vi_analyzer' }
           }
         },
+        headline_suggest: { type: 'completion' },
         bio: {
           type: 'text',
           analyzer: 'vi_analyzer'
@@ -348,10 +348,10 @@ export const enhancedMappings = {
           type: 'text',
           analyzer: 'vi_analyzer',
           fields: {
-            keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-            suggest: { type: 'completion' }
+            keyword: { type: 'keyword', normalizer: 'lc_normalizer' }
           }
         },
+        desired_job_title_suggest: { type: 'completion' },
 
         // Skills (từ profile_skills + skills tables)
         skills: {
@@ -443,10 +443,10 @@ export const enhancedMappings = {
           analyzer: 'vi_analyzer',
           fields: {
             keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
-            suggest: { type: 'completion' }
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
           }
         },
+        name_suggest: { type: 'completion' },
         description: { type: 'text', analyzer: 'vi_analyzer' },
         industry: { type: 'keyword' },
         size: { type: 'integer' },
@@ -493,10 +493,10 @@ export const enhancedMappings = {
           analyzer: 'vi_analyzer',
           fields: {
             keyword: { type: 'keyword', normalizer: 'lc_normalizer' },
-            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' },
-            suggest: { type: 'completion' }
+            autocomplete: { type: 'text', analyzer: 'autocomplete_analyzer' }
           }
         },
+        name_suggest: { type: 'completion' },
         category_id: { type: 'keyword' },
         category_name: { type: 'keyword' },
         category_type: { type: 'keyword' }
@@ -875,13 +875,13 @@ export const elasticsearchService = {
     const client = getClient()
     const { index, prefix, size = 10, context } = params
 
-    // Use completion suggester on `title.suggest` by default; callers should ensure index mapping exists.
+    // Use completion suggester on `title_suggest` by default; callers should ensure index mapping exists.
     const suggestBody: any = {
       suggest: {
         completion_suggest: {
           prefix,
           completion: {
-            field: 'title.suggest',
+            field: 'title_suggest',
             size
           }
         }

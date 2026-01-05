@@ -158,7 +158,7 @@ function sanitizeAndValidateData(companiesData: CompanyData[], companyDetailsDat
     const companyDetail = companyDetailsData[i]
 
     // Fix company name duplicates by adding suffix
-    let originalName = company.name
+    const originalName = company.name
     let nameSuffix = 1
     while (companyNames.has(company.name.toLowerCase())) {
       company.name = `${originalName} ${nameSuffix}`
@@ -169,7 +169,7 @@ function sanitizeAndValidateData(companiesData: CompanyData[], companyDetailsDat
 
     // Fix website URL duplicates by adding subdomain
     if (companyDetail.website_url) {
-      let originalUrl = companyDetail.website_url
+      const originalUrl = companyDetail.website_url
       let urlSuffix = 1
       while (websiteUrls.has(companyDetail.website_url.toLowerCase())) {
         const urlObj = new URL(originalUrl)
@@ -182,7 +182,7 @@ function sanitizeAndValidateData(companiesData: CompanyData[], companyDetailsDat
 
     // Fix stock symbol duplicates by adding number suffix
     if (companyDetail.stock_symbol) {
-      let originalSymbol = companyDetail.stock_symbol
+      const originalSymbol = companyDetail.stock_symbol
       let symbolSuffix = 1
       while (stockSymbols.has(companyDetail.stock_symbol.toUpperCase())) {
         companyDetail.stock_symbol = `${originalSymbol}${symbolSuffix}`

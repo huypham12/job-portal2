@@ -323,9 +323,14 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
 
 /**
  * Build query for job suggestions/autocomplete
- * Lightweight query optimized for prefix matching
+ * Uses same logic as main search for consistency
  */
 export function buildJobSuggestionsQuery(prefix: string, size = 10): ESQuery {
+  // Detect Vietnamese characters for consistent behavior with search
+  const vietnameseRegex =
+    /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/u
+  const hasVietnameseChars = vietnameseRegex.test(prefix)
+
   return {
     query: {
       bool: {
@@ -333,8 +338,17 @@ export function buildJobSuggestionsQuery(prefix: string, size = 10): ESQuery {
           {
             multi_match: {
               query: prefix,
-              fields: ['title.suggest', 'company_name.suggest'],
-              type: 'phrase_prefix'
+              fields: [
+                `title^${BOOSTS.title}`,
+                `company_name^${BOOSTS.company_name}`,
+                `skills^${BOOSTS.skillsExact}`,
+                `description^${BOOSTS.description}`
+              ],
+              type: 'best_fields',
+              operator: hasVietnameseChars ? 'or' : 'and',
+              minimum_should_match: hasVietnameseChars ? '30%' : '60%',
+              fuzziness: hasVietnameseChars ? 0 : 'AUTO',
+              prefix_length: hasVietnameseChars ? 0 : 1
             }
           }
         ],

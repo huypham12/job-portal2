@@ -73,6 +73,22 @@ services:
       timeout: 10s
       retries: 10
 
+  redis:
+    image: redis:7-alpine
+    container_name: job-portal-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - job-portal-net
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
   kibana:
     image: docker.elastic.co/kibana/kibana:8.15.2
     container_name: job-portal-kibana
@@ -97,3 +113,4 @@ networks:
 volumes:
   postgres_data:
   es_data:
+  redis_data:

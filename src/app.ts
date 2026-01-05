@@ -18,6 +18,7 @@ import {
   connectionInterestRouter,
   locationRouter
 } from './api'
+import { authRateLimit } from './middleware/rate-limit.middleware'
 import { errorHandler } from './middleware/error-handler.middleware'
 import adminRouter from './api/admin/admin.route'
 import { companyRouter } from './api/companies/company.route'
@@ -141,7 +142,8 @@ const main = async () => {
       })
     )
 
-    app.use('/api/auth', authRouter)
+    // Apply auth-specific rate limiter to auth endpoints
+    app.use('/api/auth', authRateLimit, authRouter)
     app.use('/api/user', userRouter)
     app.use('/api/admin', adminRouter)
     app.use('/api/companies', companyRouter)

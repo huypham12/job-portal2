@@ -78,11 +78,13 @@ export function jobToESDoc(job: any) {
     id: `job_${job.id}`,
     job_id: job.id,
     title: job.title || '',
+    title_suggest: job.title || '', // Completion suggester field
     description: job.description || '',
 
     // Company relationship
     company_id: job.company_id,
     company_name: job.companies?.name || '',
+    company_name_suggest: job.companies?.name || '', // Completion suggester field
     company_size: companySize,
     company_industry: companyIndustry,
 
