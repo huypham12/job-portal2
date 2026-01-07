@@ -11,11 +11,41 @@ export type ScoreComponents = {
   category: number // Category/industry alignment
 }
 
+/**
+ * Percentile-based ES score normalization for better distribution
+ * More robust than min-max normalization, handles outliers better
+ */
+function normalizeESScores(scores: number[], referenceScores?: number[]): number[] {
+  const targetScores = referenceScores || scores
+  if (targetScores.length === 0) return scores.map(() => 0)
+
+  // Sort reference scores để tính percentile
+  const sorted = [...targetScores].sort((a, b) => a - b)
+  const n = sorted.length
+
+  return scores.map((score) => {
+    if (score <= sorted[0]) return 0.0 // Min score = 0
+    if (score >= sorted[n - 1]) return 1.0 // Max score = 1
+
+    // Tìm vị trí percentile của score này
+    let percentile = 0
+    for (let i = 0; i < n; i++) {
+      if (score <= sorted[i]) {
+        percentile = i / (n - 1) // Normalize to 0-1 range
+        break
+      }
+    }
+
+    // Smooth percentile curve để tránh outliers ảnh hưởng quá nhiều
+    return Math.max(0, Math.min(1, percentile))
+  })
+}
+
 // Optimized weights for candidate-job matching (recruiters finding candidates)
 export const DEFAULT_SCORE_WEIGHTS = {
   text: 0.15, // Reduced - text matching less critical for candidate-job fit
   skills: 0.35, // Increased - most important factor for job fit
-  location: 0.15, // Increased - commuting logistics matter
+  location: 0.1, // Reduced - flexible commuting in Vietnam market
   experience: 0.12, // Increased - experience compatibility crucial
   recency: 0.03, // Reduced - job age not relevant for candidate matching
   activity: 0.08, // Increased - recently active profiles preferred
@@ -24,6 +54,77 @@ export const DEFAULT_SCORE_WEIGHTS = {
   benefits: 0.02, // Reduced - nice to have but not critical
   category: 0.0 // Removed - industry alignment less important than skills/experience
 }
+
+/**
+ * Get dynamic weights based on job category for better matching accuracy
+ * Different industries have different priorities (e.g., IT values skills more, Sales values location more)
+ */
+export function getDynamicWeights(jobCategories?: string[]): typeof DEFAULT_SCORE_WEIGHTS {
+  if (!jobCategories || jobCategories.length === 0) {
+    return { ...DEFAULT_SCORE_WEIGHTS }
+  }
+
+  const baseWeights = { ...DEFAULT_SCORE_WEIGHTS }
+  const categories = jobCategories.map((cat) => cat.toLowerCase())
+
+  // IT/Tech/Engineering jobs: prioritize skills over location
+  if (
+    categories.some(
+      (cat) =>
+        cat.includes('it') ||
+        cat.includes('technology') ||
+        cat.includes('engineering') ||
+        cat.includes('software') ||
+        cat.includes('developer') ||
+        cat.includes('programming')
+    )
+  ) {
+    return {
+      ...baseWeights,
+      skills: 0.42, // Increase from 0.35 (+20%)
+      location: 0.12, // Decrease from 0.15 (-20%)
+      category: 0.01, // Small category boost
+      experience: 0.13 // Slight increase for technical roles
+    }
+  }
+
+  // Sales/Marketing/Business Development: prioritize location and communication skills
+  if (categories.some((cat) => cat.includes('sales') || cat.includes('marketing') || cat.includes('business'))) {
+    return {
+      ...baseWeights,
+      location: 0.18, // Increase from 0.15 (+20%)
+      skills: 0.32, // Decrease from 0.35 (-9%)
+      benefits: 0.03, // Increase from 0.02 (+50%)
+      work_arrangement: 0.06 // Increase from 0.05 (+20%)
+    }
+  }
+
+  // Finance/Accounting: prioritize experience and location
+  if (categories.some((cat) => cat.includes('finance') || cat.includes('accounting') || cat.includes('financial'))) {
+    return {
+      ...baseWeights,
+      experience: 0.14, // Increase from 0.12 (+17%)
+      location: 0.17, // Decrease from 0.15 (+13%)
+      skills: 0.33 // Slight decrease from 0.35
+    }
+  }
+
+  // Healthcare/Medical: prioritize location and benefits
+  if (categories.some((cat) => cat.includes('healthcare') || cat.includes('medical') || cat.includes('nursing'))) {
+    return {
+      ...baseWeights,
+      location: 0.17, // Increase from 0.15 (+13%)
+      benefits: 0.03, // Increase from 0.02 (+50%)
+      work_arrangement: 0.06, // Increase from 0.05 (+20%)
+      skills: 0.33 // Slight decrease
+    }
+  }
+
+  // Default weights for other categories
+  return baseWeights
+}
+
+export { normalizeESScores }
 
 /**
  * Simple gaussian function in [0,1] with peak = 1 at mean.
@@ -121,8 +222,21 @@ export function computeScoreComponents(input: {
       validCandidateSkills.some((candidate) => candidate.toLowerCase() === required.toLowerCase())
     ).length
 
-    // Calculate overlap ratio - candidate must have at least 50% of required skills
-    skills = Math.min(1.0, (intersectionCount / validRequiredSkills.length) * 2)
+    // More flexible scoring: reward any skill matches, with diminishing returns
+    if (intersectionCount === 0) {
+      // No exact matches - check for partial matches or related skills
+      skills = 0.1 // Small base score for having skills even if not matching
+    } else {
+      // Score based on overlap ratio, but be more generous
+      const overlapRatio = intersectionCount / validRequiredSkills.length
+      if (overlapRatio >= 0.5) {
+        skills = 1.0 // Full match for 50%+ overlap
+      } else if (overlapRatio >= 0.25) {
+        skills = 0.7 // Good match for 25%+ overlap
+      } else {
+        skills = overlapRatio * 2 // Linear scaling for lower overlaps
+      }
+    }
   }
 
   // === EXPERIENCE: strict compatibility check for candidate-job matching ===
@@ -178,13 +292,23 @@ export function computeScoreComponents(input: {
   // Higher scores get closer to 1, lower scores decay to 0
   const text = textScore > 0 ? 1 / (1 + Math.exp(-textScore * 0.1)) : 0
 
-  // === LOCATION: hierarchical scoring based on match level ===
-  // 1.0 = exact location match (same province/city + district)
-  // 0.7 = same province, different district
-  // 0.3 = different province but same region/country
-  // 0.0 = no location match
-  // If no location preference, give moderate score for candidates with any location
-  const location = locationMatch > 0 ? Math.max(0.1, Math.min(1, locationMatch)) : 0.5
+  // === LOCATION: flexible scoring for Vietnam market ===
+  // Vietnam context: people are willing to commute/relocate for good jobs
+  // 0.8 = exact location match (convenient, cost-effective)
+  // 0.6 = same province (reasonable commuting distance)
+  // 0.4 = same region/country (possible with support)
+  // 0.2 = different region (still possible with relocation)
+  const location = (() => {
+    if (locationMatch >= 1.0) {
+      return 0.8 // Exact match - still important but not absolute
+    } else if (locationMatch >= 0.7) {
+      return 0.6 // Same province - quite good for commuting
+    } else if (locationMatch >= 0.3) {
+      return 0.4 // Same region - acceptable with some effort
+    } else {
+      return 0.2 // Different region - possible with relocation support
+    }
+  })()
 
   // === AVAILABILITY: boost for actively looking candidates (binary) ===
   const availability = isLookingForJob ? 1 : 0

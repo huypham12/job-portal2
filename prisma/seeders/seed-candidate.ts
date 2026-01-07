@@ -512,8 +512,8 @@ export async function seedCandidates() {
             desired_salary_min: validateSalary(profileData.desired_salary_min),
             github_url: validateUrl(profileData.github_url),
             headline: profileData.headline || `Looking for ${profileData.desired_job_title || 'new opportunities'}`,
-            is_looking_for_job: profileData.is_looking_for_job !== false, // Default to true
-            is_public: profileData.is_public !== false, // Default to true
+            is_looking_for_job: true,
+            is_public: true, // Default to true
             linkedin_url: validateUrl(profileData.linkedin_url),
             personal_website: validateUrl(profileData.personal_website),
             years_of_experience: Math.max(0, Math.min(50, profileData.years_of_experience || 0))

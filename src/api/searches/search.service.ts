@@ -675,7 +675,7 @@ export const searchService = {
 
     const esQuery = { bool: { must, filter } }
 
-    // Use centralized ES wrapper to ensure consistent id mapping (_id -> id)
+    // Use centralized ES wrapper for consistent search results
     const resp = await elasticsearchService.search({
       index: elasticsearchService.getIndexName('applications'),
       query: esQuery,
@@ -946,7 +946,7 @@ export const searchService = {
 
     try {
       // Build basic database query with similar filters
-      let whereClause = "WHERE j.status = 'active'"
+      let whereClause = "WHERE j.status = 'approved' AND j.admin_approved = true"
       const params: any[] = []
 
       if (q && q.length > 0) {

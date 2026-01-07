@@ -199,19 +199,6 @@ export const getAllJobsQuerySchema = z.object({
     .transform((val) => val === 'true')
 })
 
-/**
- * 6. Schema cho Body của PATCH /admin/jobs/:id/label
- */
-export const jobLabelBodySchema = z
-  .object({
-    hot: z.boolean().optional(),
-    urgent: z.boolean().optional(),
-    featured: z.boolean().optional()
-  })
-  .strict()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'Body không được rỗng. Cần ít nhất một nhãn để cập nhật.'
-  })
 
 /**
  * 7. Schema cho Body của PATCH /admin/jobs/:id/reject
@@ -224,5 +211,4 @@ export const jobRejectBodySchema = z.object({
 
 export type JobIdParams = z.infer<typeof jobIdParamsSchema>
 export type GetAllJobsQuery = z.infer<typeof getAllJobsQuerySchema>
-export type JobLabelBody = z.infer<typeof jobLabelBodySchema>
 export type JobRejectBody = z.infer<typeof jobRejectBodySchema>

@@ -504,6 +504,7 @@ export async function seedJobs() {
                   posted_at: new Date(jobData.posted_at),
                   expires_at: new Date(jobData.expires_at),
                   status: job_status.approved,
+                  admin_approved: true, // Jobs được seed được coi là đã duyệt
                   metadata: {
                     seeded: true,
                     industry: industry,

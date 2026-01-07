@@ -77,6 +77,7 @@ export class JobService {
         experience_level: data.experience_level,
         expires_at: data.expires_at,
         status: job_status.draft, // Default to draft, admin will approve to 'approved'
+        admin_approved: false, // Jobs mới tạo chưa được duyệt
         metadata: data.metadata as any,
 
         // Create requirements
@@ -194,8 +195,8 @@ export class JobService {
         }
 
         const esDocument = jobToESDoc(jobWithRelations)
-      await elasticsearchSyncService.syncToElasticsearch('jobs', job.id, esDocument)
-      console.log(`✅ Job ${job.id} synced to Elasticsearch successfully`)
+        await elasticsearchSyncService.syncToElasticsearch('jobs', job.id, esDocument)
+        console.log(`✅ Job ${job.id} synced to Elasticsearch successfully`)
       } else {
         console.warn(`⚠️ Job ${job.id} not found when preparing ES sync`)
       }
@@ -250,10 +251,14 @@ export class JobService {
             }
           },
           locations: {
-            select: {
-              id: true,
-              name: true,
-              type: true
+            include: {
+              parent: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true
+                }
+              }
             }
           },
           _count: {
@@ -300,10 +305,14 @@ export class JobService {
           }
         },
         locations: {
-          select: {
-            id: true,
-            name: true,
-            type: true
+          include: {
+            parent: {
+              select: {
+                id: true,
+                name: true,
+                type: true
+              }
+            }
           }
         },
         job_requirements: true,
@@ -490,11 +499,18 @@ export class JobService {
     // REMOVED: Ownership check - handled by middleware
     const job = await this.getJobById(jobId)
 
-    // Can only activate if job was previously approved or draft
-    if (job.status === job_status.closed && status === 'approved') {
-      // Allow reopening closed jobs
-    } else if (job.status === job_status.draft && status === 'approved') {
-      throw new HttpError('Job must be approved by admin before activation', HTTP_STATUS.BAD_REQUEST)
+    // Chỉ cho phép thao tác với jobs đã được admin duyệt
+    if (!job.admin_approved) {
+      throw new HttpError('Job must be approved by admin before status changes', HTTP_STATUS.BAD_REQUEST)
+    }
+
+    // Chỉ cho phép toggle giữa approved và closed
+    if (status === 'approved' && job.status !== job_status.closed) {
+      throw new HttpError('Can only reopen closed jobs', HTTP_STATUS.BAD_REQUEST)
+    }
+
+    if (status === 'closed' && job.status !== job_status.approved) {
+      throw new HttpError('Can only close approved jobs', HTTP_STATUS.BAD_REQUEST)
     }
 
     await prisma.jobs.update({
@@ -523,10 +539,10 @@ export class JobService {
    */
 
   /**
-   * Bulk job actions (close, delete, publish)
+   * Bulk job actions (close, delete)
    * Note: Company ownership is verified by middleware, jobs ownership verified individually
    */
-  async bulkJobActions(companyId: string, action: 'close' | 'delete', jobIds: string[]) {
+  async bulkJobActions(companyId: string, action: 'close' | 'open' | 'delete', jobIds: string[]) {
     // Get all jobs that belong to this company (ownership already verified by middleware)
     const jobs = await prisma.jobs.findMany({
       where: {
@@ -537,7 +553,8 @@ export class JobService {
       select: {
         id: true,
         status: true,
-        title: true
+        title: true,
+        admin_approved: true
       }
     })
 
@@ -552,31 +569,50 @@ export class JobService {
       )
     }
 
-    // Perform bulk action
+    // Determine actionable job IDs depending on action and current state/admin approval
+    let actionableIds: string[] = []
+    let skippedIds: string[] = []
     const updateData: any = {}
     let actionMessage = ''
 
-    switch (action) {
-      case 'close':
-        updateData.status = job_status.closed
-        actionMessage = 'closed'
-        break
-      case 'delete':
-        updateData.deleted = true
-        actionMessage = 'deleted'
-        break
+    if (action === 'open') {
+      const openable = jobs.filter((j) => j.status === job_status.closed && j.admin_approved)
+      actionableIds = openable.map((j) => j.id)
+      skippedIds = foundJobIds.filter((id) => !actionableIds.includes(id))
+      if (actionableIds.length === 0) {
+        throw new HttpError(
+          'No valid jobs to open. Only closed jobs that have been approved by admin can be reopened.',
+          HTTP_STATUS.BAD_REQUEST
+        )
+      }
+      updateData.status = job_status.approved
+      actionMessage = 'opened'
+    } else if (action === 'close') {
+      const closable = jobs.filter((j) => j.status === job_status.approved && j.admin_approved)
+      actionableIds = closable.map((j) => j.id)
+      skippedIds = foundJobIds.filter((id) => !actionableIds.includes(id))
+      if (actionableIds.length === 0) {
+        throw new HttpError('No valid jobs to close. Only approved jobs can be closed.', HTTP_STATUS.BAD_REQUEST)
+      }
+      updateData.status = job_status.closed
+      actionMessage = 'closed'
+    } else if (action === 'delete') {
+      actionableIds = foundJobIds
+      skippedIds = []
+      updateData.deleted = true
+      actionMessage = 'deleted'
     }
 
     await prisma.jobs.updateMany({
       where: {
-        id: { in: foundJobIds }
+        id: { in: actionableIds }
       },
       data: updateData
     })
 
     // Sync all updated jobs to Elasticsearch
     setImmediate(async () => {
-      for (const jobId of foundJobIds) {
+      for (const jobId of actionableIds) {
         try {
           // Fetch updated job data
           const updatedJob = await this.getJobById(jobId)
@@ -589,9 +625,63 @@ export class JobService {
     })
 
     return {
-      message: `Successfully ${actionMessage} ${foundJobIds.length} job(s)`,
-      affected_jobs: foundJobIds.length,
-      job_ids: foundJobIds
+      message: `Successfully ${actionMessage} ${actionableIds.length} job(s)`,
+      affected_jobs: actionableIds.length,
+      job_ids: actionableIds,
+      skipped_job_ids: skippedIds
+    }
+  }
+
+  /**
+   * Publish jobs for recruiter review (draft -> pending_approval)
+   * Note: Company ownership is verified by middleware, jobs ownership verified individually
+   */
+  async publishJobs(companyId: string, jobIds: string[]) {
+    // Get all jobs that belong to this company (ownership already verified by middleware)
+    const jobs = await prisma.jobs.findMany({
+      where: {
+        id: { in: jobIds },
+        company_id: companyId,
+        deleted: false
+      },
+      select: {
+        id: true,
+        status: true,
+        title: true,
+        admin_approved: true
+      }
+    })
+
+    // Check if all requested jobs exist and belong to the company
+    const foundJobIds = jobs.map((job) => job.id)
+    const notFoundJobs = jobIds.filter((id) => !foundJobIds.includes(id))
+
+    if (notFoundJobs.length > 0) {
+      throw new HttpError(
+        `Jobs not found or do not belong to your company: ${notFoundJobs.join(', ')}`,
+        HTTP_STATUS.NOT_FOUND
+      )
+    }
+
+    // Only allow publishing jobs that are in draft status
+    const publishable = jobs.filter((j) => j.status === job_status.draft)
+    const publishIds = publishable.map((j) => j.id)
+    const skippedIds = jobIds.filter((id) => !publishIds.includes(id))
+
+    if (publishIds.length > 0) {
+      await prisma.jobs.updateMany({
+        where: { id: { in: publishIds } },
+        data: { status: job_status.pending_approval }
+      })
+
+      // Note: We don't sync to Elasticsearch here because pending_approval jobs shouldn't be visible to candidates
+    }
+
+    return {
+      message: `Submitted ${publishIds.length} job(s) for admin approval.`,
+      published_count: publishIds.length,
+      published_ids: publishIds,
+      skipped_job_ids: skippedIds
     }
   }
 
@@ -1104,7 +1194,7 @@ export class JobService {
     }
 
     // Extract job IDs from ES results
-    // ES _id is the job UUID, but we prefer job_id from _source for safety
+    // ES _id is always the pure UUID
     // Filter out results with very low scores when search is provided
     let hits = esResponse.hits
 
@@ -1125,14 +1215,8 @@ export class JobService {
     }
 
     const jobIds = hits.map((hit) => {
-      // Prefer job_id from _source (most reliable)
-      if (hit._source?.job_id) {
-        return hit._source.job_id
-      }
-      // Fallback to ES _id (should be the job UUID)
-      const id = hit.id
-      // Remove prefix if exists (job_${uuid} -> uuid)
-      return id.startsWith('job_') ? id.substring(4) : id
+      // ES _id is now always the pure UUID
+      return hit.id
     })
 
     if (jobIds.length === 0) {

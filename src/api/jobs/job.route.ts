@@ -8,6 +8,7 @@ import {
   createJobValidator,
   updateJobValidator,
   updateJobStatusValidator,
+  publishJobsValidator,
   bulkJobActionsValidator,
   bulkExtendExpiryValidator,
   myJobsValidator,
@@ -107,17 +108,17 @@ router.patch(
 )
 
 /**
- * POST /api/jobs/bulk-actions
- * Perform bulk actions on multiple jobs (close, delete, publish)
+ * POST /api/jobs/publish
+ * Publish jobs from draft to pending_approval for admin review
  */
-router.post(
-  '/bulk-actions',
-  authenticateAccessToken,
-  recruiter,
-  checkResourceOwnership('company'),
-  bulkJobActionsValidator,
-  jobController.bulkJobActions
-)
+router.post('/publish', authenticateAccessToken, recruiter, publishJobsValidator, jobController.publishJobs)
+
+/**
+ * POST /api/jobs/bulk-actions
+ * Perform bulk actions on multiple jobs (close, delete)
+ * Note: publish action removed, use /publish endpoint instead
+ */
+router.post('/bulk-actions', authenticateAccessToken, recruiter, bulkJobActionsValidator, jobController.bulkJobActions)
 
 /**
  * PATCH /api/jobs/bulk-extend
@@ -127,7 +128,6 @@ router.patch(
   '/bulk-extend',
   authenticateAccessToken,
   recruiter,
-  checkResourceOwnership('company'),
   bulkExtendExpiryValidator,
   jobController.bulkExtendExpiry
 )

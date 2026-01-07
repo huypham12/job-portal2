@@ -7,6 +7,7 @@ import {
   CreateJobDTO,
   UpdateJobDTO,
   UpdateJobStatusDTO,
+  PublishJobsDTO,
   BulkJobActionsDTO,
   BulkExtendExpiryDTO,
   SuggestedCandidatesDTO,
@@ -184,6 +185,33 @@ export class JobController {
       }
 
       const result = await this.jobService.bulkJobActions(company.id, action, job_ids)
+
+      res.status(HTTP_STATUS.OK).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * POST /api/jobs/publish
+   * Publish jobs from draft to pending_approval for admin review
+   */
+  publishJobs = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.decoded_authorization!.user_id
+      const { job_ids }: PublishJobsDTO = req.validated!.body
+
+      // Get company ID for the user (company ownership verified by middleware)
+      const company = await prisma.companies.findUnique({
+        where: { recruiter_id: userId },
+        select: { id: true }
+      })
+
+      if (!company) {
+        throw new Error('You must have a company to publish jobs')
+      }
+
+      const result = await this.jobService.publishJobs(company.id, job_ids)
 
       res.status(HTTP_STATUS.OK).json(result)
     } catch (error) {

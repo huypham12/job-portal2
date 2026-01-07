@@ -113,67 +113,75 @@ export function formatBreakdown(
 }
 
 /**
- * Generate human-readable insights about the candidate-job match
+ * Generate human-readable insights about the candidate-job match for Vietnam market
  */
 function generateInsights(breakdown: ScoreBreakdown, components: ScoreComponents): string[] {
   const insights: string[] = []
 
-  // Skills insights
-  if (breakdown.skills >= 30) {
-    insights.push('Excellent skills match - candidate has most required skills')
-  } else if (breakdown.skills >= 15) {
-    insights.push('Good skills foundation - some required skills present')
+  // Skills insights - improved for Vietnam context
+  if (breakdown.skills >= 35) {
+    insights.push('🎯 Kỹ năng phù hợp hoàn hảo - candidate sẵn sàng đóng góp ngay')
+  } else if (breakdown.skills >= 20) {
+    insights.push('📈 Có nền tảng kỹ năng tốt - có thể phát triển thêm')
+  } else if (breakdown.skills >= 10) {
+    insights.push('🛠️ Cần bổ sung kỹ năng - đánh giá training budget')
   } else {
-    insights.push('Skills gap identified - may need training')
+    insights.push('⚠️ Khác biệt kỹ năng lớn - xem xét kỹ lưỡng')
   }
 
-  // Experience insights
-  if (breakdown.experience >= 20) {
-    insights.push('Experience level matches job requirements')
-  } else if (breakdown.experience >= 10) {
-    insights.push('Experience is borderline for this role')
+  // Experience insights - improved messaging
+  if (breakdown.experience >= 15) {
+    insights.push('💼 Kinh nghiệm phù hợp - có thể đảm nhận ngay')
+  } else if (breakdown.experience >= 8) {
+    insights.push('📈 Kinh nghiệm cơ bản - cần mentoring và training')
   } else {
-    insights.push('May lack sufficient experience for this position')
+    insights.push('🎓 Mới vào nghề - cần training và supervision')
   }
 
-  // Location insights
-  if (breakdown.location >= 25) {
-    insights.push('Location is a strong match')
+  // Location insights - optimized for Vietnam commuting patterns
+  if (breakdown.location >= 20) {
+    insights.push('📍 Vị trí thuận tiện - tiết kiệm chi phí di chuyển')
   } else if (breakdown.location >= 10) {
-    insights.push('Location match is moderate')
+    insights.push('🚗 Có thể di chuyển - xem xét hỗ trợ chi phí')
   } else {
-    insights.push('Location may be a consideration for commuting')
+    insights.push('✈️ Vị trí xa - cân nhắc remote hoặc relocation support')
   }
 
-  // Activity insights
-  if (breakdown.activity >= 15) {
-    insights.push('Candidate profile is recently active')
+  // Activity insights - improved for Vietnam job market
+  if (breakdown.activity >= 10) {
+    insights.push('🔥 Đang tích cực tìm việc - khả năng cao sẽ chấp nhận offer')
   } else {
-    insights.push('Profile has been inactive - may need re-engagement')
+    insights.push('😴 Ít hoạt động - cần follow-up và re-engagement')
   }
 
   // Availability insights
   if (breakdown.availability >= 10) {
-    insights.push('Candidate is actively seeking employment')
+    insights.push('✅ Đang tìm việc - sẵn sàng cho interview')
   } else {
-    insights.push('Candidate availability status unclear')
+    insights.push('❓ Tình trạng khả dụng chưa rõ - cần xác minh')
   }
 
-  // Work arrangement insights
+  // Work arrangement insights - Vietnam context
   if (breakdown.work_arrangement >= 10) {
-    insights.push('Work arrangement preferences align well')
+    insights.push('🏢 Sở thích làm việc phù hợp (remote/office hours)')
   }
 
-  // Overall assessment
-  if (breakdown.total >= 80) {
-    insights.unshift('⭐ Excellent match - highly recommended')
-  } else if (breakdown.total >= 60) {
-    insights.unshift('✅ Good match - worth considering')
-  } else if (breakdown.total >= 40) {
-    insights.unshift('⚠️ Moderate match - may need assessment')
+  // Benefits insights
+  if (breakdown.benefits >= 5) {
+    insights.push('🎁 Mong muốn phúc lợi phù hợp với công ty')
+  }
+
+  // Overall assessment with actionable Vietnamese messaging
+  const totalScore = breakdown.total
+  if (totalScore >= 80) {
+    insights.unshift('⭐ NGỌC TRAI HIẾM: Ứng viên xuất sắc - ưu tiên interview ngay!')
+  } else if (totalScore >= 65) {
+    insights.unshift('✅ Ứng viên tiềm năng: Đáng xem xét và interview')
+  } else if (totalScore >= 45) {
+    insights.unshift('🤔 Ứng viên trung bình: Cân nhắc nếu thiếu lựa chọn tốt hơn')
   } else {
-    insights.unshift('❌ Poor match - significant gaps identified')
+    insights.unshift('❌ Không phù hợp: Tập trung vào ứng viên khác')
   }
 
-  return insights.slice(0, 5) // Limit to top 5 insights
+  return insights.slice(0, 6) // Top 6 insights for better coverage
 }

@@ -9,7 +9,6 @@ import {
   getAllJobsQuerySchema,
   getAllUsersQuerySchema,
   jobIdParamsSchema,
-  jobLabelBodySchema,
   jobRejectBodySchema,
   userIdParamsSchema,
   validate
@@ -149,24 +148,6 @@ adminRouter.patch(
 )
 
 /**
- * @route PATCH /api/admin/jobs/:id/label
- * @desc Gán nhãn cho tin (Hot/Urgent/Featured)
- * @access Private (Admin only)
- * @body hot?, urgent?, featured?
- */
-adminRouter.patch(
-  '/jobs/:id/label',
-  authenticateAccessToken,
-  verifiedUserValidator,
-  adminOnly,
-  validate({
-    params: jobIdParamsSchema,
-    body: jobLabelBodySchema
-  }),
-  wrapController(adminController.updateJobLabelsController)
-)
-
-/**
  * @route DELETE /api/admin/jobs/:id/violation
  * @desc Gỡ tin vi phạm (soft delete)
  * @access Private (Admin only)
@@ -192,6 +173,20 @@ adminRouter.post(
   adminOnly,
   validate({ params: jobIdParamsSchema }),
   wrapController(adminController.restoreJobController)
+)
+
+/**
+ * @route DELETE /api/admin/jobs/:id/hard-delete
+ * @desc Xóa vĩnh viễn tin tuyển dụng
+ * @access Private (Admin only)
+ */
+adminRouter.delete(
+  '/jobs/:id/hard-delete',
+  authenticateAccessToken,
+  verifiedUserValidator,
+  adminOnly,
+  validate({ params: jobIdParamsSchema }),
+  wrapController(adminController.hardDeleteJobController)
 )
 
 export default adminRouter

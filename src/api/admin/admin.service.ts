@@ -196,7 +196,7 @@ export class AdminService {
     pagination: { page: number; limit: number }
     search?: string
     filters: {
-      status?: 'draft' | 'approved' | 'closed'
+      status?: 'draft' | 'pending_approval' | 'approved' | 'closed'
       deleted?: boolean
     }
   }) {
@@ -244,13 +244,13 @@ export class AdminService {
           metadata: true,
           deleted: true,
           updated_at: true,
-              companies: {
-                include: {
-                  users: true,
-                  company_details: true,
-                  // keep basic fields accessible
-                }
-              },
+          companies: {
+            include: {
+              users: true,
+              company_details: true
+              // keep basic fields accessible
+            }
+          },
           locations: {
             select: {
               id: true,
@@ -277,7 +277,7 @@ export class AdminService {
   }
 
   /**
-   * @description Lấy danh sách tin chờ duyệt (status = draft)
+   * @description Lấy danh sách tin chờ duyệt (status = pending_approval)
    */
   public async getPendingJobs(options: { pagination: { page: number; limit: number } }) {
     const { pagination } = options
@@ -285,7 +285,7 @@ export class AdminService {
     const skip = (page - 1) * limit
 
     const where: Prisma.jobsWhereInput = {
-      status: 'draft',
+      status: 'pending_approval',
       deleted: false
     }
 
@@ -308,13 +308,13 @@ export class AdminService {
           status: true,
           metadata: true,
           updated_at: true,
-              companies: {
-                include: {
-                  users: true,
-                  company_details: true,
-                  // keep basic fields accessible
-                }
-              },
+          companies: {
+            include: {
+              users: true,
+              company_details: true
+              // keep basic fields accessible
+            }
+          },
           locations: {
             select: {
               id: true,
@@ -403,6 +403,7 @@ export class AdminService {
         where: { id: jobId },
         data: {
           status: 'approved',
+          admin_approved: true, // Admin đã duyệt job
           updated_at: new Date()
         },
         select: {
@@ -452,7 +453,7 @@ export class AdminService {
 
           if (jobWithRelations) {
             // Ensure recruiter ownership present
-            if (!((jobWithRelations.companies as any)?.recruiter_id)) {
+            if (!(jobWithRelations.companies as any)?.recruiter_id) {
               try {
                 if (jobWithRelations.company_id) {
                   const companyRecord = await prisma.companies.findUnique({
@@ -551,7 +552,7 @@ export class AdminService {
 
           if (jobWithRelations) {
             // Ensure recruiter ownership present
-            if (!((jobWithRelations.companies as any)?.recruiter_id)) {
+            if (!(jobWithRelations.companies as any)?.recruiter_id) {
               try {
                 if (jobWithRelations.company_id) {
                   const companyRecord = await prisma.companies.findUnique({
@@ -576,57 +577,6 @@ export class AdminService {
         }
       })
 
-      return updatedJob
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
-      }
-      throw error
-    }
-  }
-
-  /**
-   * @description (Admin) Gán nhãn cho tin (Hot/Urgent/Featured)
-   * @param jobId - ID của job cần gán nhãn
-   * @param labels - Các nhãn cần gán
-   */
-  public async updateJobLabels(jobId: string, labels: { hot?: boolean; urgent?: boolean; featured?: boolean }) {
-    try {
-      // Lấy metadata hiện tại
-      const currentJob = await prisma.jobs.findUnique({
-        where: { id: jobId },
-        select: { metadata: true }
-      })
-
-      if (!currentJob) {
-        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
-      }
-
-      // Merge metadata cũ với labels mới
-      const currentMetadata = (currentJob.metadata as any) || {}
-      const updatedMetadata = {
-        ...currentMetadata,
-        labels: {
-          ...(currentMetadata.labels || {}),
-          ...labels
-        }
-      }
-
-      const updatedJob = await prisma.jobs.update({
-        where: { id: jobId },
-        data: {
-          metadata: updatedMetadata as any,
-          updated_at: new Date()
-        },
-        select: {
-          id: true,
-          title: true,
-          metadata: true,
-          updated_at: true
-        }
-      })
-
-      // TODO: Đồng bộ với Elasticsearch
       return updatedJob
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -689,6 +639,46 @@ export class AdminService {
       })
       // TODO: Đồng bộ lại với Elasticsearch nếu status = approved
       return updatedJob
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+      throw error
+    }
+  }
+
+  /**
+   * @description (Admin) Xóa vĩnh viễn một job
+   * @param jobId - ID của job cần xóa
+   */
+  public async hardDeleteJob(jobId: string) {
+    try {
+      // Kiểm tra job có tồn tại không
+      const job = await prisma.jobs.findUnique({
+        where: { id: jobId },
+        select: { id: true, title: true }
+      })
+
+      if (!job) {
+        throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+      }
+
+      // Xóa vĩnh viễn job (các related records sẽ bị xóa cascade theo schema)
+      await prisma.jobs.delete({
+        where: { id: jobId }
+      })
+
+      // Xóa khỏi Elasticsearch
+      setImmediate(async () => {
+        try {
+          await elasticsearchSyncService.deleteFromElasticsearch('jobs', jobId)
+          console.log(`✅ Hard deleted job ${jobId} from Elasticsearch`)
+        } catch (error) {
+          console.error(`❌ Failed to delete job ${jobId} from Elasticsearch:`, error)
+        }
+      })
+
+      return { id: jobId, title: job.title, message: 'Job permanently deleted' }
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
         throw new HttpError(MESSAGES.JOB_NOT_FOUND, HTTP_STATUS.NOT_FOUND)

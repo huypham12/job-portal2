@@ -75,7 +75,8 @@ export function jobToESDoc(job: any) {
 
   return {
     // Core job info
-    id: `job_${job.id}`,
+    id: job.id,
+    document_type: 'job',
     job_id: job.id,
     title: job.title || '',
     title_suggest: job.title || '', // Completion suggester field
@@ -138,6 +139,7 @@ export function jobToESDoc(job: any) {
 
     // Status & dates
     status: job.status,
+    admin_approved: job.admin_approved,
     posted_at: job.posted_at,
     expires_at: job.expires_at,
     updated_at: job.updated_at,
@@ -209,7 +211,8 @@ export function profileToESDoc(profile: any) {
 
   return {
     // Core profile info
-    id: `profile_${profile.id}`,
+    id: profile.id,
+    document_type: 'profile',
     profile_id: profile.id,
     user_id: profile.user_id,
     user_role: profile.users?.role || 'candidate',
@@ -287,7 +290,8 @@ export function companyToESDoc(company: any) {
 
   return {
     // Core company info
-    id: `company_${company.id}`,
+    id: company.id,
+    document_type: 'company',
     company_id: company.id,
     name: company.name || '',
     description: company.description || '',
@@ -387,8 +391,9 @@ export function applicationToESDoc(application: any) {
     ratings.length > 0 ? ratings.reduce((sum: number, rating: number) => sum + rating, 0) / ratings.length : null
 
   return {
-    // ES _id sẽ là application.id (DB id). Trường id trong _source giữ prefix cho mục đích debug.
-    id: `application_${application.id}`,
+    // ES _id is the application.id (DB id)
+    id: application.id,
+    document_type: 'application',
     application_id: application.id,
     job_id: application.job_id,
     profile_id: application.profile_id,

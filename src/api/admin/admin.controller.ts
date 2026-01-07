@@ -7,7 +7,6 @@ import {
   GetAllJobsQuery,
   GetAllUsersQuery,
   JobIdParams,
-  JobLabelBody,
   JobRejectBody,
   UserIdParams
 } from './admin.validator'
@@ -211,22 +210,6 @@ export class AdminController {
     })
   }
 
-  /**
-   * @description (Admin) Gán nhãn cho tin (Hot/Urgent/Featured)
-   * @route PATCH /admin/jobs/:id/label
-   * @access Admin
-   */
-  updateJobLabelsController: PatchHandler<JobLabelBody, any, JobIdParams> = async (req, res) => {
-    const { id } = req.validatedParams
-    const labels = req.validatedBody
-
-    const updatedJob = await this.adminService.updateJobLabels(id, labels)
-
-    res.json({
-      message: 'Cập nhật nhãn công việc thành công.',
-      data: updatedJob
-    })
-  }
 
   /**
    * @description (Admin) Gỡ tin vi phạm (soft delete)
@@ -255,6 +238,21 @@ export class AdminController {
     res.json({
       message: 'Khôi phục tin tuyển dụng thành công.',
       data: updatedJob
+    })
+  }
+
+  /**
+   * @description (Admin) Xóa vĩnh viễn job
+   * @route DELETE /admin/jobs/:id/hard-delete
+   * @access Admin
+   */
+  hardDeleteJobController: DeleteHandler<undefined, any, JobIdParams> = async (req, res) => {
+    const { id } = req.validatedParams
+    const result = await this.adminService.hardDeleteJob(id)
+
+    res.json({
+      message: 'Xóa vĩnh viễn tin tuyển dụng thành công.',
+      data: result
     })
   }
 }

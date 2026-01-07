@@ -191,6 +191,7 @@ model jobs {
   metadata              Json?
   version               Int?                   @default(1)
   deleted               Boolean?               @default(false)
+  admin_approved        Boolean?               @default(false)
   updated_at            DateTime?              @updatedAt @db.Timestamp(6)
   applications          applications[]
   connection_interests  connection_interests[]
@@ -614,6 +615,7 @@ enum application_status {
 
 enum job_status {
   draft
+  pending_approval
   approved
   closed
 }
@@ -671,19 +673,18 @@ enum category_type {
 
 // Sync status tracking for Elasticsearch synchronization
 model sync_status {
-  id               Int      @id @default(autoincrement())
-  entity_type      String   @db.VarChar(50)
-  entity_id        String   @db.VarChar(100)
-  sync_status      String   @db.VarChar(20) @default("pending")
-  last_attempt_at  DateTime @default(now()) @db.Timestamp(6)
-  retry_count      Int      @default(0)
-  error_message    String?  @db.Text
-  created_at       DateTime @default(now()) @db.Timestamp(6)
-  updated_at       DateTime @default(now()) @db.Timestamp(6)
+  id              Int      @id @default(autoincrement())
+  entity_type     String   @db.VarChar(50)
+  entity_id       String   @db.VarChar(100)
+  sync_status     String   @default("pending") @db.VarChar(20)
+  last_attempt_at DateTime @default(now()) @db.Timestamp(6)
+  retry_count     Int      @default(0)
+  error_message   String?  @db.Text
+  created_at      DateTime @default(now()) @db.Timestamp(6)
+  updated_at      DateTime @default(now()) @db.Timestamp(6)
 
   @@unique([entity_type, entity_id])
   @@index([entity_type, sync_status], map: "idx_sync_status_type_status")
   @@index([updated_at], map: "idx_sync_status_updated_at")
-
   @@map("sync_status")
 }

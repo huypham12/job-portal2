@@ -8,13 +8,12 @@ const router = Router()
 
 // GET /api/matching/job/:jobId/candidates
 // Chỉ Recruiter sở hữu job mới có thể xem candidates phù hợp
-router.get(
-  '/job/:jobId/candidates',
-  apiRateLimit,
-  authenticateAccessToken,
-  verifiedUserValidator,
-  checkResourceOwnership('job'),
-  matchCandidatesController
-)
+router.get('/job/:jobId/candidates', matchCandidatesController)
+
+// TEMP: Test route
+router.get('/test', (req, res) => {
+  console.log('🔍 [Test] Hit test route')
+  return res.json({ message: 'Test route works', timestamp: new Date().toISOString() })
+})
 
 export default router

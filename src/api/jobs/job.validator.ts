@@ -194,10 +194,19 @@ const updateJobStatusBody = z
   })
   .strict()
 
+// ==================== PUBLISH JOBS SCHEMA ====================
+// For recruiter to publish jobs from draft to pending_approval
+const publishJobsBody = z
+  .object({
+    job_ids: z.array(z.string().uuid()).min(1, 'At least one job ID is required').max(50, 'Maximum 50 jobs per request')
+  })
+  .strict()
+
 // ==================== BULK JOB ACTIONS SCHEMA ====================
+// Support close/open/delete for jobs management
 const bulkJobActionsBody = z
   .object({
-    action: z.enum(['close', 'delete']),
+    action: z.enum(['close', 'open', 'delete']),
     job_ids: z.array(z.string().uuid()).min(1, 'At least one job ID is required').max(50, 'Maximum 50 jobs per request')
   })
   .strict()
@@ -284,20 +293,15 @@ const myJobsQuery = z.object({
 })
 
 // ==================== PARAMS SCHEMAS ====================
-// Accept either raw UUID or ES-prefixed id "job_<uuid>".
 const jobIdParams = z.object({
-  id: z.preprocess((val) => {
-    if (typeof val === 'string') {
-      return val.startsWith('job_') ? val.substring(4) : val
-    }
-    return val
-  }, z.string().uuid('Invalid job ID'))
+  id: z.string().uuid('Invalid job ID')
 })
 
 // ==================== TYPE EXPORTS ====================
 export type CreateJobDTO = z.infer<typeof createJobBody>
 export type UpdateJobDTO = z.infer<typeof updateJobBody>
 export type UpdateJobStatusDTO = z.infer<typeof updateJobStatusBody>
+export type PublishJobsDTO = z.infer<typeof publishJobsBody>
 export type BulkJobActionsDTO = z.infer<typeof bulkJobActionsBody>
 export type BulkExtendExpiryDTO = z.infer<typeof bulkExtendExpiryBody>
 export type SuggestedCandidatesDTO = z.infer<typeof suggestedCandidatesQuery>
@@ -309,6 +313,7 @@ export type JobIdParams = z.infer<typeof jobIdParams>
 export const createJobValidator = zodValidate({ body: createJobBody })
 export const updateJobValidator = zodValidate({ body: updateJobBody, params: jobIdParams })
 export const updateJobStatusValidator = zodValidate({ body: updateJobStatusBody, params: jobIdParams })
+export const publishJobsValidator = zodValidate({ body: publishJobsBody })
 export const bulkJobActionsValidator = zodValidate({ body: bulkJobActionsBody })
 export const bulkExtendExpiryValidator = zodValidate({ body: bulkExtendExpiryBody })
 export const suggestedCandidatesValidator = zodValidate({ query: suggestedCandidatesQuery, params: jobIdParams })
