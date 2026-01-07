@@ -110,11 +110,11 @@ export const getAllUsersQuerySchema = z.object({
   verified: z
     .enum(['true', 'false'])
     .optional()
-    .transform((val) => val === 'true'),
+    .transform((val) => (val === undefined ? undefined : val === 'true')),
   deleted: z
     .enum(['true', 'false'])
     .optional()
-    .transform((val) => val === 'true')
+    .transform((val) => (val === undefined ? undefined : val === 'true'))
 })
 
 /**
@@ -196,9 +196,8 @@ export const getAllJobsQuerySchema = z.object({
   deleted: z
     .enum(['true', 'false'])
     .optional()
-    .transform((val) => val === 'true')
+    .transform((val) => (val === undefined ? undefined : val === 'true'))
 })
-
 
 /**
  * 7. Schema cho Body của PATCH /admin/jobs/:id/reject

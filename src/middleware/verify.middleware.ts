@@ -206,14 +206,18 @@ export const verifiedUserValidator = async (req: Request, res: Response, next: N
   try {
     const { user_id } = req.decoded_authorization as TokenPayload
 
-    // Kiểm tra trạng thái verified từ database thay vì JWT token
+    // Kiểm tra trạng thái verified và deleted từ database thay vì JWT token
     const user = await prisma.users.findUnique({
       where: { id: user_id },
-      select: { verified: true }
+      select: { verified: true, deleted: true }
     })
 
     if (!user) {
       return next(new HttpError(MESSAGES.USER_NOT_FOUND, HTTP_STATUS.NOT_FOUND))
+    }
+
+    if (user.deleted) {
+      return next(new HttpError('Tài khoản đã bị khóa bởi quản trị viên', HTTP_STATUS.FORBIDDEN))
     }
 
     if (!user.verified) {

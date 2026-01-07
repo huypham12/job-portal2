@@ -403,12 +403,17 @@ export class AuthService {
       throw new HttpError(MESSAGES.USER_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
     }
 
-    // 2. [THAY ĐỔI] Kiểm tra trạng thái 'verified' (dùng cột boolean)
+    // 2. Kiểm tra tài khoản bị khóa
+    if (user.deleted) {
+      throw new HttpError('Tài khoản đã bị khóa bởi quản trị viên', HTTP_STATUS.FORBIDDEN)
+    }
+
+    // 3. [THAY ĐỔI] Kiểm tra trạng thái 'verified' (dùng cột boolean)
     if (!user.verified) {
       throw new HttpError(MESSAGES.USER_NOT_VERIFIED, HTTP_STATUS.FORBIDDEN)
     }
 
-    // 3. [THAY ĐỔI] So sánh mật khẩu (dùng cột 'password_hash')
+    // 4. [THAY ĐỔI] So sánh mật khẩu (dùng cột 'password_hash')
     // (Đã dùng hàm 'compareHash' bạn cung cấp)
     const isMatch = await compareHash(payload.password, user.password_hash)
     if (!isMatch) {
