@@ -498,6 +498,7 @@ export class AdminService {
         where: { id: jobId },
         data: {
           status: 'closed',
+          admin_approved: false,
           metadata: {
             rejection_reason: reason,
             rejected_at: new Date().toISOString()
@@ -597,6 +598,7 @@ export class AdminService {
         data: {
           deleted: true,
           status: 'closed',
+          admin_approved: false,
           updated_at: new Date()
         },
         select: {
@@ -607,7 +609,17 @@ export class AdminService {
           updated_at: true
         }
       })
-      // TODO: Xóa khỏi Elasticsearch
+
+      // Xóa khỏi Elasticsearch vì job đã bị soft delete
+      setImmediate(async () => {
+        try {
+          await elasticsearchSyncService.deleteFromElasticsearch('jobs', jobId)
+          console.log(`✅ Soft deleted job ${jobId} from Elasticsearch`)
+        } catch (error) {
+          console.error(`❌ Failed to delete job ${jobId} from Elasticsearch:`, error)
+        }
+      })
+
       return updatedJob
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -627,6 +639,8 @@ export class AdminService {
         where: { id: jobId },
         data: {
           deleted: false,
+          status: 'pending_approval',
+          admin_approved: false,
           updated_at: new Date()
         },
         select: {
@@ -637,7 +651,56 @@ export class AdminService {
           updated_at: true
         }
       })
-      // TODO: Đồng bộ lại với Elasticsearch nếu status = approved
+
+      // Đồng bộ lại với Elasticsearch nếu job đã được approved trước đó
+      if (updatedJob.status === 'approved') {
+        setImmediate(async () => {
+          try {
+            // Lấy đầy đủ thông tin job để sync
+            const jobWithRelations = await prisma.jobs.findUnique({
+              where: { id: jobId },
+              include: {
+                companies: {
+                  select: {
+                    id: true,
+                    name: true,
+                    logo_url: true
+                  }
+                },
+                locations: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true
+                  }
+                },
+                job_requirements: true,
+                job_benefits: true,
+                job_skills: {
+                  include: {
+                    skills: true
+                  }
+                },
+                job_categories: {
+                  include: {
+                    categories: true
+                  }
+                },
+                job_work_arrangements: true
+              }
+            })
+
+            if (jobWithRelations) {
+              const esDocument = jobToESDoc(jobWithRelations)
+              await elasticsearchSyncService.syncToElasticsearch('jobs', jobId, esDocument)
+              console.log(`✅ Restored and synced job ${jobId} to Elasticsearch`)
+            }
+          } catch (error) {
+            console.error(`❌ Failed to sync restored job ${jobId} to Elasticsearch:`, error)
+          }
+        })
+      }
+
       return updatedJob
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

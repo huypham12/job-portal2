@@ -212,7 +212,7 @@ export class JobService {
    * Get all jobs posted by the employer
    */
   async getMyJobs(userId: string, query: MyJobsDTO) {
-    const { page, limit, status, sort_by, sort_order } = query
+    const { page, limit, search, status, sort_by, sort_order } = query
 
     // Ensure page and limit are numbers
     const pageNum = typeof page === 'string' ? parseInt(page, 10) : Number(page)
@@ -234,6 +234,14 @@ export class JobService {
       company_id: company.id,
       deleted: false,
       ...(status && { status })
+    }
+
+    // Search in title or description (case-insensitive)
+    if (search && search.trim()) {
+      where.OR = [
+        { title: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } }
+      ]
     }
 
     const [jobs, total] = await Promise.all([

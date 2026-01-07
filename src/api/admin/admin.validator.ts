@@ -192,7 +192,7 @@ export const getAllJobsQuerySchema = z.object({
       return num
     }),
   search: z.string().trim().optional(),
-  status: z.enum(['draft', 'approved', 'closed']).optional(),
+  status: z.enum(['draft', 'pending_approval', 'approved', 'closed']).optional(),
   deleted: z
     .enum(['true', 'false'])
     .optional()
