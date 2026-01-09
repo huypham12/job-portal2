@@ -17,6 +17,8 @@ import { Prisma, application_status } from '@prisma/client'
 import { NotificationHelper } from '@/shared/helpers/notification.helper'
 import { elasticsearchSyncService } from '@/config/elasticsearch-sync.service'
 import { applicationToESDoc } from '@/shared/utils/es-transformers'
+import { ApplicationWorkflowState, StageStatus } from '@/shared/constants/enums/application.enum'
+import { ApplicationService } from '../application.service'
 
 export class RecruiterApplicationService {
   /**
@@ -61,6 +63,11 @@ export class RecruiterApplicationService {
           select: {
             user_id: true
           }
+        },
+        jobs: {
+          select: {
+            title: true
+          }
         }
       }
     })
@@ -93,8 +100,6 @@ export class RecruiterApplicationService {
       location,
       salary_min,
       salary_max,
-      has_rating,
-      rating_min,
       applied_after,
       applied_before,
       sort_by = 'applied_at',
@@ -168,22 +173,6 @@ export class RecruiterApplicationService {
     // Apply profiles filter if any conditions were set
     if (Object.keys(profilesFilter).length > 0) {
       where.profiles = profilesFilter
-    }
-
-    if (has_rating === true) {
-      where.application_stages = {
-        some: {
-          rating: { not: null }
-        }
-      }
-    }
-
-    if (rating_min !== undefined) {
-      where.application_stages = {
-        some: {
-          rating: { gte: rating_min }
-        }
-      }
     }
 
     if (applied_after || applied_before) {
@@ -269,8 +258,7 @@ export class RecruiterApplicationService {
             stage_name: true,
             stage_order: true,
             status: true,
-            scheduled_at: true,
-            rating: true
+            scheduled_at: true
           }
         }
       }
@@ -304,8 +292,7 @@ export class RecruiterApplicationService {
         },
         resume: app.resumes,
         current_stage: app.application_stages[0] || null,
-        has_notes: metadata?.notes ? metadata.notes.length > 0 : false,
-        has_rating: app.application_stages.some((stage: any) => stage.rating !== null)
+        has_notes: metadata?.notes ? metadata.notes.length > 0 : false
       }
     })
 
@@ -395,19 +382,6 @@ export class RecruiterApplicationService {
       })
     ])
 
-    // Calculate average rating
-    const ratings = await prisma.application_stages.aggregate({
-      where: {
-        applications: {
-          job_id: jobId
-        },
-        rating: { not: null }
-      },
-      _avg: {
-        rating: true
-      }
-    })
-
     return {
       total,
       by_status,
@@ -416,8 +390,7 @@ export class RecruiterApplicationService {
         today: todayCount,
         this_week: weekCount,
         this_month: monthCount
-      },
-      average_rating: ratings._avg.rating || 0
+      }
     }
   }
 
@@ -425,28 +398,73 @@ export class RecruiterApplicationService {
    * Get detailed CV view of an application
    */
   async getApplicationCV(recruiterId: string, applicationId: string) {
-    // Verify access
-    const app = await this.verifyApplicationAccess(applicationId, recruiterId)
+    // Verify access (permission check)
+    await this.verifyApplicationAccess(applicationId, recruiterId)
 
-    // Update view tracking
-    const currentApp = await prisma.applications.findUnique({
+    // Read current application view_count and metadata to decide whether to notify.
+    const existing = await prisma.applications.findUnique({
       where: { id: applicationId },
-      select: { view_count: true, first_viewed_at: true }
+      select: {
+        id: true,
+        view_count: true,
+        metadata: true,
+        profiles: {
+          select: {
+            user_id: true
+          }
+        },
+        jobs: {
+          select: {
+            title: true
+          }
+        }
+      }
     })
 
-    const updateData: any = {
-      last_viewed_at: new Date(),
-      view_count: { increment: 1 }
-    }
+    // If for some reason not found (shouldn't happen after verify), proceed gracefully
+    if (!existing) {
+      // Fallback: increment view_count and return
+      await prisma.applications.update({
+        where: { id: applicationId },
+        data: { view_count: { increment: 1 } }
+      })
+    } else {
+      // Ensure metadata is an object before spreading (Prisma Json may be string/array/etc)
+      const existingMetadata =
+        existing.metadata && typeof existing.metadata === 'object' && !Array.isArray(existing.metadata)
+          ? existing.metadata
+          : {}
 
-    if (!currentApp?.first_viewed_at) {
-      updateData.first_viewed_at = new Date()
-    }
+      const shouldNotify = !(existingMetadata && (existingMetadata as any).view_notification_sent === true)
 
-    await prisma.applications.update({
-      where: { id: applicationId },
-      data: updateData
-    })
+      const newMetadata = {
+        ...(existingMetadata as Record<string, any>),
+        view_notification_sent: true
+      }
+
+      // Update view_count and metadata atomically
+      await prisma.applications.update({
+        where: { id: applicationId },
+        data: {
+          view_count: { increment: 1 },
+          metadata: newMetadata as any
+        }
+      })
+
+      // Notify candidate only if this is the first view-notification-worthy event
+      if (shouldNotify && existing.profiles?.user_id) {
+        try {
+          await NotificationHelper.notifyApplicationViewed({
+            candidateId: existing.profiles.user_id,
+            jobTitle: existing.jobs?.title || '',
+            applicationId: applicationId
+          })
+        } catch (err) {
+          console.error('Failed to send application viewed notification:', err)
+          // Do not block CV viewing on notification failure
+        }
+      }
+    }
 
     // Get full application details
     const application = await prisma.applications.findUnique({
@@ -627,7 +645,10 @@ export class RecruiterApplicationService {
       },
       candidate,
       resume: application!.resumes,
-      documents: application!.application_documents
+      documents: application!.application_documents.map((doc) => ({
+        ...doc,
+        file_size_bytes: doc.file_size_bytes ? Number(doc.file_size_bytes) : null
+      }))
     }
   }
 
@@ -639,6 +660,15 @@ export class RecruiterApplicationService {
     const app = await this.verifyApplicationAccess(applicationId, recruiterId)
 
     const { status, reason } = data
+
+    // Recruiter cannot set 'withdrawn' (candidate-only action)
+    if (status === ApplicationWorkflowState.WITHDRAWN) {
+      throw new HttpError('Withdrawn status can only be set by the candidate', HTTP_STATUS.FORBIDDEN)
+    }
+
+    // Validate workflow transition
+    const applicationService = new ApplicationService()
+    await applicationService.validateApplicationWorkflow(applicationId, status as ApplicationWorkflowState)
 
     // Get current metadata
     const currentApp = await prisma.applications.findUnique({
@@ -670,34 +700,15 @@ export class RecruiterApplicationService {
       }
     })
 
-    // Send notification to candidate
-    if (app.profiles?.user_id) {
-      try {
-        const statusDisplayMap: Record<string, string> = {
-          reviewed: 'Đã xem',
-          rejected: 'Đã từ chối',
-          interviewing: 'Đang phỏng vấn',
-          offered: 'Đã gửi offer',
-          accepted: 'Đã chấp nhận'
-        }
+    // Update workflow state
+    await applicationService.updateApplicationWorkflowState(applicationId, status as ApplicationWorkflowState)
 
-        await NotificationHelper.notifyApplicationStatusChanged({
-          candidateId: app.profiles.user_id,
-          jobTitle: updatedApplication.jobs.title,
-          status: status,
-          applicationId: applicationId,
-          statusDisplay: statusDisplayMap[status] || status,
-          reason: data.reason
-        })
-      } catch (error) {
-        console.error('Failed to send notification:', error)
-      }
-    }
+    // Delegate workflow state update and notifications to ApplicationService central method
+    await applicationService.updateStatus(applicationId, status as any, data.reason)
 
-    // Sync to Elasticsearch
+    // Sync to Elasticsearch (re-using existing sync logic)
     setImmediate(async () => {
       try {
-        // Re-fetch complete application data for ES sync
         const fullApplication = await prisma.applications.findUnique({
           where: { id: applicationId },
           include: {
@@ -750,9 +761,24 @@ export class RecruiterApplicationService {
    */
   async updateApplicationStage(recruiterId: string, applicationId: string, data: UpdateStageDTO['body']) {
     // Verify access
-    await this.verifyApplicationAccess(applicationId, recruiterId)
+    const app = await this.verifyApplicationAccess(applicationId, recruiterId)
 
-    const { stage_id, status, feedback, rating, interviewer_notes, completed_at } = data
+    const dataWithNewFields = data as any
+    const {
+      stage_id,
+      status,
+      completed_at,
+      recruiter_decision,
+      decision_at,
+      candidate_response_deadline,
+      candidate_accepted_at,
+      candidate_declined_at,
+      decline_reason
+    } = dataWithNewFields
+
+    // Validate stage workflow
+    const applicationService = new ApplicationService()
+    await applicationService.validateStageWorkflow(applicationId, stage_id, status)
 
     // Verify stage belongs to application
     const stage = await prisma.application_stages.findFirst({
@@ -771,12 +797,29 @@ export class RecruiterApplicationService {
       where: { id: stage_id },
       data: {
         status,
-        feedback,
-        rating,
-        interviewer_notes,
-        completed_at: completed_at ? new Date(completed_at) : status === 'completed' ? new Date() : undefined
+        completed_at: completed_at ? new Date(completed_at) : status === StageStatus.COMPLETED ? new Date() : undefined,
+        recruiter_decision: recruiter_decision || undefined,
+        decision_at: decision_at ? new Date(decision_at) : undefined,
+        candidate_response_deadline: candidate_response_deadline ? new Date(candidate_response_deadline) : undefined,
+        candidate_accepted_at: candidate_accepted_at ? new Date(candidate_accepted_at) : undefined,
+        candidate_declined_at: candidate_declined_at ? new Date(candidate_declined_at) : undefined,
+        decline_reason: decline_reason || undefined
       }
     })
+
+    // Enhanced notification
+    if (app.profiles?.user_id) {
+      const nextStage = await this.getNextStage(applicationId, updatedStage.stage_order)
+
+      await NotificationHelper.notifyApplicationStageUpdated({
+        candidateId: app.profiles.user_id,
+        stageName: updatedStage.stage_name,
+        status: updatedStage.status,
+        nextStage: nextStage?.stage_name,
+        applicationId,
+        jobTitle: app.jobs.title
+      })
+    }
 
     return updatedStage
   }
@@ -788,42 +831,56 @@ export class RecruiterApplicationService {
     // Verify access
     const app = await this.verifyApplicationAccess(applicationId, recruiterId)
 
-    const {
-      stage_name,
-      stage_order,
-      scheduled_at,
-      location,
-      meeting_link,
-      meeting_password,
-      interviewer_id,
-      duration_minutes,
-      interviewer_notes
-    } = data
+    const { stage_name, stage_order, scheduled_at, location, interviewer_id, duration_minutes } = data
 
-    // Create stage
+    // Validate workflow state - chỉ cho phép tạo stages khi ở trạng thái INTERVIEWING
+    const applicationService = new ApplicationService()
+    const application = await prisma.applications.findUnique({
+      where: { id: applicationId },
+      select: { status: true, metadata: true }
+    })
+
+    if (!application) throw new HttpError('Application not found', HTTP_STATUS.NOT_FOUND)
+
+    const metadata = application.metadata as any
+    const currentState = metadata?.workflow_state || ApplicationWorkflowState.APPLIED
+
+    if (currentState !== ApplicationWorkflowState.INTERVIEWING) {
+      throw new HttpError('Application must be in interviewing status to add stages', HTTP_STATUS.BAD_REQUEST)
+    }
+
+    // Validate stage_order uniqueness
+    const existingStages = await prisma.application_stages.findMany({
+      where: { application_id: applicationId },
+      select: { stage_order: true }
+    })
+
+    const existingOrders = existingStages.map((s) => s.stage_order)
+    if (existingOrders.includes(stage_order)) {
+      throw new HttpError('Stage order must be unique', HTTP_STATUS.BAD_REQUEST)
+    }
+
+    // Calculate candidate response deadline (24h before scheduled_at) if scheduled_at provided
+    const candidateResponseDeadline = scheduled_at
+      ? new Date(new Date(scheduled_at).getTime() - 24 * 60 * 60 * 1000)
+      : null
+
+    // Create stage with result = pending
     const newStage = await prisma.application_stages.create({
       data: {
         application_id: applicationId,
         stage_name,
         stage_order,
-        status: scheduled_at ? 'scheduled' : 'pending',
+        status: scheduled_at ? StageStatus.SCHEDULED : StageStatus.PENDING,
         scheduled_at: scheduled_at ? new Date(scheduled_at) : null,
-        location: location || null,
-        meeting_link: meeting_link || null,
-        meeting_password: meeting_password || null,
+        location: location || undefined,
         interviewer_id: interviewer_id || null,
         duration_minutes: duration_minutes || null,
-        interviewer_notes
+        candidate_response_deadline: candidateResponseDeadline
       }
     })
 
-    // Update application status to interviewing if not already
-    await prisma.applications.update({
-      where: { id: applicationId },
-      data: {
-        status: application_status.interviewing
-      }
-    })
+    // Không cần auto-transition nữa vì chỉ tạo được stages khi đã ở INTERVIEWING
 
     // Send notification to candidate if interview is scheduled
     if (scheduled_at) {
@@ -854,6 +911,108 @@ export class RecruiterApplicationService {
     }
 
     return newStage
+  }
+
+  /**
+   * Handle recruiter decision after a stage: create next stage or accept application
+   */
+  async makeStageDecision(recruiterId: string, applicationId: string, stageId: string, data: any) {
+    // Verify access
+    const app = await this.verifyApplicationAccess(applicationId, recruiterId)
+
+    // Verify stage exists
+    const stage = await prisma.application_stages.findFirst({
+      where: { id: stageId, application_id: applicationId }
+    })
+
+    if (!stage) {
+      throw new HttpError('Stage not found', HTTP_STATUS.NOT_FOUND)
+    }
+
+    const action = data.action
+
+    // Always record recruiter decision on the stage (per schema) when recruiter invokes a decision.
+    const updatedStage = await prisma.application_stages.update({
+      where: { id: stageId },
+      data: {
+        recruiter_decision: action,
+        decision_at: new Date(),
+        decline_reason: data?.reason || undefined
+      }
+    })
+
+    if (action === 'create_next_stage') {
+      const next = data.next_stage
+      if (!next || !next.stage_name) {
+        throw new HttpError('next_stage.stage_name is required for create_next_stage', HTTP_STATUS.BAD_REQUEST)
+      }
+
+      // Compute next order
+      const existingStages = await prisma.application_stages.findMany({
+        where: { application_id: applicationId },
+        select: { stage_order: true }
+      })
+      const maxOrder = existingStages.length > 0 ? Math.max(...existingStages.map((s) => s.stage_order)) : 0
+      const nextOrder = maxOrder + 1
+
+      const scheduled_at = next.scheduled_at || null
+      const candidateResponseDeadline = scheduled_at
+        ? new Date(new Date(scheduled_at).getTime() - 24 * 60 * 60 * 1000)
+        : null
+
+      const newStage = await prisma.application_stages.create({
+        data: {
+          application_id: applicationId,
+          stage_name: next.stage_name,
+          stage_order: nextOrder,
+          status: scheduled_at ? StageStatus.SCHEDULED : StageStatus.PENDING,
+          scheduled_at: scheduled_at ? new Date(scheduled_at) : null,
+          location: next.location || undefined,
+          interviewer_id: next.interviewer_id || null,
+          duration_minutes: next.duration_minutes || null,
+          candidate_response_deadline: candidateResponseDeadline
+        }
+      })
+
+      // Notify candidate about new interview if scheduled
+      if (newStage.scheduled_at && app.profiles?.user_id) {
+        try {
+          const application = await prisma.applications.findUnique({
+            where: { id: applicationId },
+            include: { jobs: { select: { title: true } } }
+          })
+
+          if (application) {
+            await NotificationHelper.notifyInterviewScheduled({
+              candidateId: app.profiles.user_id,
+              jobTitle: application.jobs.title,
+              scheduledAt: newStage.scheduled_at!.toISOString(),
+              applicationId,
+              stageId: newStage.id
+            })
+          }
+        } catch (error) {
+          console.error('Failed to notify candidate for new stage:', error)
+        }
+      }
+
+      return { previousStage: updatedStage, newStage }
+    } else if (action === 'accept_application') {
+      // Accept the application (recorded recruiter_decision above)
+      const statusResult = await this.updateApplicationStatus(recruiterId, applicationId, {
+        status: ApplicationWorkflowState.ACCEPTED
+      })
+      return { previousStage: updatedStage, application: statusResult }
+    } else if (action === 'reject_application') {
+      // Reject the application (recorded recruiter_decision above)
+      const statusResult = await this.updateApplicationStatus(recruiterId, applicationId, {
+        status: ApplicationWorkflowState.REJECTED,
+        reason: data?.reason || undefined
+      })
+      return { previousStage: updatedStage, application: statusResult }
+    } else {
+      throw new HttpError('Invalid action', HTTP_STATUS.BAD_REQUEST)
+    }
   }
 
   /**
@@ -1136,9 +1295,7 @@ export class RecruiterApplicationService {
             stage_name: true,
             status: true,
             scheduled_at: true,
-            completed_at: true,
-            rating: true,
-            feedback: true
+            completed_at: true
           },
           orderBy: {
             stage_order: 'desc'
@@ -1324,7 +1481,7 @@ export class RecruiterApplicationService {
         where: {
           candidate_id: app.profile_id,
           recruiter_id: recruiterId,
-          interest_type: 'shortlist',
+          interest_type: 'recruiter_to_candidate',
           job_id: app.job_id
         }
       })
@@ -1339,8 +1496,8 @@ export class RecruiterApplicationService {
           candidate_id: app.profile_id,
           recruiter_id: recruiterId,
           job_id: app.job_id,
-          interest_type: 'shortlist',
-          status: 'active',
+          interest_type: 'recruiter_to_candidate',
+          status: 'accepted',
           message: note || 'Added to shortlist'
         }
       })
@@ -1356,7 +1513,7 @@ export class RecruiterApplicationService {
         where: {
           candidate_id: app.profile_id,
           recruiter_id: recruiterId,
-          interest_type: 'shortlist',
+          interest_type: 'recruiter_to_candidate',
           job_id: app.job_id
         }
       })
@@ -1382,8 +1539,8 @@ export class RecruiterApplicationService {
     // Build where clause
     const where: any = {
       recruiter_id: recruiterId,
-      interest_type: 'shortlist',
-      status: 'active'
+      interest_type: 'recruiter_to_candidate',
+      status: 'accepted'
     }
 
     if (job_id) {
@@ -1499,8 +1656,6 @@ export class RecruiterApplicationService {
         profile_id: true,
         status: true,
         applied_at: true,
-        first_viewed_at: true,
-        last_viewed_at: true,
         view_count: true,
         metadata: true,
         jobs: {
@@ -1537,16 +1692,15 @@ export class RecruiterApplicationService {
         status: true,
         scheduled_at: true,
         completed_at: true,
-        feedback: true,
-        rating: true,
-        interviewer_notes: true,
-        candidate_feedback: true,
         location: true,
-        meeting_link: true,
-        meeting_password: true,
         interviewer_id: true,
         duration_minutes: true,
-        result: true,
+        recruiter_decision: true,
+        decision_at: true,
+        candidate_response_deadline: true,
+        candidate_accepted_at: true,
+        candidate_declined_at: true,
+        decline_reason: true,
         created_at: true
       }
     })
@@ -1567,20 +1721,6 @@ export class RecruiterApplicationService {
       }
     })
 
-    // First viewed event
-    if (application.first_viewed_at) {
-      timelineEvents.push({
-        id: `first_viewed_${application.id}`,
-        type: 'application_viewed',
-        title: 'Application First Viewed',
-        description: 'Recruiter viewed this application for the first time',
-        timestamp: application.first_viewed_at,
-        data: {
-          view_count: application.view_count
-        }
-      })
-    }
-
     // Stage events
     for (const stage of stages) {
       // Stage created/scheduled
@@ -1599,9 +1739,14 @@ export class RecruiterApplicationService {
             stage_order: stage.stage_order,
             scheduled_at: stage.scheduled_at,
             location: stage.location,
-            meeting_link: stage.meeting_link,
             interviewer_id: stage.interviewer_id,
-            duration_minutes: stage.duration_minutes
+            duration_minutes: stage.duration_minutes,
+            recruiter_decision: stage.recruiter_decision,
+            decision_at: stage.decision_at,
+            candidate_response_deadline: stage.candidate_response_deadline,
+            candidate_accepted_at: stage.candidate_accepted_at,
+            candidate_declined_at: stage.candidate_declined_at,
+            decline_reason: stage.decline_reason
           }
         })
       }
@@ -1612,16 +1757,12 @@ export class RecruiterApplicationService {
           id: `stage_completed_${stage.id}`,
           type: 'stage_completed',
           title: `${stage.stage_name} Completed`,
-          description: stage.result ? `Result: ${stage.result}` : `${stage.stage_name} stage completed`,
+          description: `${stage.stage_name} stage completed`,
           timestamp: stage.completed_at,
           data: {
             stage_id: stage.id,
             stage_name: stage.stage_name,
-            status: stage.status,
-            result: stage.result,
-            rating: stage.rating,
-            feedback: stage.feedback,
-            candidate_feedback: stage.candidate_feedback
+            status: stage.status
           }
         })
       }
@@ -1684,31 +1825,37 @@ export class RecruiterApplicationService {
         status: stage.status,
         scheduled_at: stage.scheduled_at,
         completed_at: stage.completed_at,
-        result: stage.result,
-        rating: stage.rating,
-        feedback: stage.feedback,
-        interviewer_notes: stage.interviewer_notes,
-        candidate_feedback: stage.candidate_feedback,
-        meeting_details:
-          stage.location || stage.meeting_link
-            ? {
-                location: stage.location,
-                meeting_link: stage.meeting_link,
-                meeting_password: stage.meeting_password,
-                duration_minutes: stage.duration_minutes
-              }
-            : null
+        recruiter_decision: stage.recruiter_decision,
+        decision_at: stage.decision_at,
+        candidate_response_deadline: stage.candidate_response_deadline,
+        candidate_accepted_at: stage.candidate_accepted_at,
+        candidate_declined_at: stage.candidate_declined_at,
+        decline_reason: stage.decline_reason,
+        meeting_details: stage.location
+          ? {
+              location: stage.location,
+              duration_minutes: stage.duration_minutes
+            }
+          : null
       })),
       timeline: timelineEvents,
       summary: {
         total_stages: stages.length,
         completed_stages: stages.filter((s) => s.status === 'completed').length,
-        pending_stages: stages.filter((s) => s.status === 'pending' || s.status === 'scheduled').length,
-        average_rating:
-          stages.filter((s) => s.rating).length > 0
-            ? stages.reduce((sum, s) => sum + (s.rating || 0), 0) / stages.filter((s) => s.rating).length
-            : null
+        pending_stages: stages.filter((s) => s.status === 'pending' || s.status === 'scheduled').length
       }
     }
+  }
+
+  /**
+   * Get next stage for notification
+   */
+  private async getNextStage(applicationId: string, currentOrder: number) {
+    return prisma.application_stages.findFirst({
+      where: {
+        application_id: applicationId,
+        stage_order: currentOrder + 1
+      }
+    })
   }
 }

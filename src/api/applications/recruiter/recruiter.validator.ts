@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { application_status } from '@prisma/client'
+import { StageStatus } from '@/shared/constants/enums/application.enum'
 
 /**
  * Validator for getting applications by job ID
@@ -95,25 +96,6 @@ const GetApplicationsByJobQuerySchema = z.object({
       return isNaN(parsed) || parsed < 0 ? undefined : parsed
     })
     .pipe(z.number().int().min(0).optional()),
-  has_rating: z
-    .union([z.string(), z.undefined()])
-    .optional()
-    .transform((val) => {
-      if (!val || val.trim() === '') return undefined
-      if (val === 'true' || val === '1') return true
-      if (val === 'false' || val === '0') return false
-      return undefined
-    })
-    .pipe(z.boolean().optional()),
-  rating_min: z
-    .union([z.string(), z.undefined()])
-    .optional()
-    .transform((val) => {
-      if (!val || val.trim() === '') return undefined
-      const parsed = parseInt(val, 10)
-      return isNaN(parsed) || parsed < 1 || parsed > 5 ? undefined : parsed
-    })
-    .pipe(z.number().int().min(1).max(5).optional()),
   applied_after: z
     .union([z.string(), z.undefined()])
     .optional()
@@ -134,7 +116,7 @@ const GetApplicationsByJobQuerySchema = z.object({
       },
       { message: 'Invalid date format. Use ISO 8601 format.' }
     ),
-  sort_by: z.enum(['applied_at', 'rating', 'name', 'experience', 'salary']).optional().default('applied_at'),
+  sort_by: z.enum(['applied_at', 'name', 'experience', 'salary']).optional().default('applied_at'),
   order: z.enum(['asc', 'desc']).optional().default('desc')
 })
 
@@ -190,24 +172,7 @@ const UpdateStageParamsSchema = z.object({
 
 const UpdateStageBodySchema = z.object({
   stage_id: z.string().uuid({ message: 'Stage ID must be a valid UUID' }),
-  status: z.string().min(1).max(50),
-  feedback: z.string().optional(),
-  rating: z
-    .union([
-      z.number().int().min(1).max(5),
-      z.string().transform((val) => {
-        const parsed = parseInt(val, 10)
-        if (isNaN(parsed) || parsed < 1 || parsed > 5) {
-          return undefined
-        }
-        return parsed
-      }),
-      z.undefined()
-    ])
-    .optional()
-    .refine((val) => val === undefined || (Number.isInteger(val) && val >= 1 && val <= 5), {
-      message: 'Rating must be an integer between 1 and 5'
-    }),
+  status: z.nativeEnum(StageStatus),
   interviewer_notes: z.string().optional(),
   completed_at: z
     .union([z.string(), z.undefined()])
@@ -266,9 +231,53 @@ const CreateStageBodySchema = z.object({
       },
       { message: 'Invalid datetime format. Use ISO 8601 format.' }
     ),
+  recruiter_decision: z.string().max(50).optional(),
+  decision_at: z
+    .union([z.string(), z.undefined()])
+    .optional()
+    .refine(
+      (val) => {
+        if (!val || val.trim() === '') return true
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      },
+      { message: 'Invalid datetime format. Use ISO 8601 format.' }
+    ),
+  candidate_response_deadline: z
+    .union([z.string(), z.undefined()])
+    .optional()
+    .refine(
+      (val) => {
+        if (!val || val.trim() === '') return true
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      },
+      { message: 'Invalid datetime format. Use ISO 8601 format.' }
+    ),
+  candidate_accepted_at: z
+    .union([z.string(), z.undefined()])
+    .optional()
+    .refine(
+      (val) => {
+        if (!val || val.trim() === '') return true
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      },
+      { message: 'Invalid datetime format. Use ISO 8601 format.' }
+    ),
+  candidate_declined_at: z
+    .union([z.string(), z.undefined()])
+    .optional()
+    .refine(
+      (val) => {
+        if (!val || val.trim() === '') return true
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      },
+      { message: 'Invalid datetime format. Use ISO 8601 format.' }
+    ),
+  decline_reason: z.string().max(255).optional(),
   location: z.string().max(255).optional(),
-  meeting_link: z.string().url().max(500).optional(),
-  meeting_password: z.string().max(100).optional(),
   interviewer_id: z.string().uuid().optional(),
   duration_minutes: z
     .union([
@@ -297,6 +306,40 @@ export const CreateStageSchema = {
 export type CreateStageDTO = {
   params: z.infer<typeof CreateStageParamsSchema>
   body: z.infer<typeof CreateStageBodySchema>
+}
+
+/**
+ * Validator for stage decision by recruiter
+ */
+const StageDecisionBodySchema = z.object({
+  action: z.enum(['create_next_stage', 'accept_application', 'reject_application']),
+  // Optional reason (used for reject_application)
+  reason: z.string().max(255).optional(),
+  // If creating next stage, provide minimal next stage info
+  next_stage: z
+    .object({
+      stage_name: z.string().min(1).max(100),
+      scheduled_at: z.string().optional(),
+      location: z.string().max(255).optional(),
+      duration_minutes: z.union([z.number().int().positive(), z.string().optional()]).optional(),
+      interviewer_id: z.string().uuid().optional()
+    })
+    .optional()
+})
+
+const StageDecisionParamsSchema = z.object({
+  applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' }),
+  stageId: z.string().uuid({ message: 'Stage ID must be a valid UUID' })
+})
+
+export const StageDecisionSchema = {
+  params: StageDecisionParamsSchema,
+  body: StageDecisionBodySchema
+}
+
+export type StageDecisionDTO = {
+  params: z.infer<typeof StageDecisionParamsSchema>
+  body: z.infer<typeof StageDecisionBodySchema>
 }
 
 /**

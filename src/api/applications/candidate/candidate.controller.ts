@@ -43,9 +43,17 @@ export class CandidateApplicationController {
 
       const result = await this.applicationService.getApplications(user_id, filters)
 
+      // Convert BigInt to string for JSON serialization
+      const serializedResult = {
+        ...result,
+        data: JSON.parse(JSON.stringify(result.data, (key, value) =>
+          typeof value === 'bigint' ? value.toString() : value
+        ))
+      }
+
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        ...result
+        ...serializedResult
       })
     } catch (error) {
       next(error)
@@ -62,9 +70,14 @@ export class CandidateApplicationController {
       const { applicationId } = req.params
       const application = await this.applicationService.getApplicationById(user_id, applicationId)
 
+      // Convert BigInt to string for JSON serialization
+      const serializedApplication = JSON.parse(JSON.stringify(application, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        data: application
+        data: serializedApplication
       })
     } catch (error) {
       next(error)
@@ -82,9 +95,92 @@ export class CandidateApplicationController {
 
       const stages = await this.applicationService.getApplicationStages(user_id, applicationId)
 
+      // Convert BigInt to string for JSON serialization
+      const serializedStages = JSON.parse(JSON.stringify(stages, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        data: stages
+        data: serializedStages
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * GET /api/applications/:id/stage/:stageId
+   * Get stage details
+   */
+  getStageDetails = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId, stageId } = req.params
+
+      const stage = await this.applicationService.getStageDetails(user_id, applicationId, stageId)
+
+      // Convert BigInt to string for JSON serialization
+      const serializedStage = JSON.parse(JSON.stringify(stage, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: serializedStage
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * PATCH /api/applications/:id/stage/:stageId/accept
+   * Candidate accepts a scheduled stage
+   */
+  acceptStage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId, stageId } = req.params
+
+      const updated = await this.applicationService.acceptStage(user_id, applicationId, stageId)
+
+      // Convert BigInt to string for JSON serialization
+      const serializedUpdated = JSON.parse(JSON.stringify(updated, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: serializedUpdated,
+        message: 'Stage accepted successfully'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * PATCH /api/applications/:id/stage/:stageId/decline
+   * Candidate declines a scheduled stage
+   */
+  declineStage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId, stageId } = req.params
+      const { reason } = req.body as { reason: string }
+
+      const updated = await this.applicationService.declineStage(user_id, applicationId, stageId, reason)
+
+      // Convert BigInt to string for JSON serialization
+      const serializedUpdated = JSON.parse(JSON.stringify(updated, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: serializedUpdated,
+        message: 'Stage declined successfully'
       })
     } catch (error) {
       next(error)
@@ -102,9 +198,14 @@ export class CandidateApplicationController {
 
       const documents = await this.applicationService.getApplicationDocuments(user_id, applicationId)
 
+      // Convert BigInt to string for JSON serialization
+      const serializedDocuments = JSON.parse(JSON.stringify(documents, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        data: documents
+        data: serializedDocuments
       })
     } catch (error) {
       next(error)
@@ -139,9 +240,14 @@ export class CandidateApplicationController {
         file
       )
 
+      // Convert BigInt to string for JSON serialization
+      const serializedDocument = JSON.parse(JSON.stringify(document, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
-        data: document,
+        data: serializedDocument,
         message: 'Document uploaded successfully'
       })
     } catch (error) {
@@ -160,9 +266,14 @@ export class CandidateApplicationController {
 
       const application = await this.applicationService.withdrawApplication(user_id, applicationId)
 
+      // Convert BigInt to string for JSON serialization
+      const serializedApplication = JSON.parse(JSON.stringify(application, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        data: application,
+        data: serializedApplication,
         message: 'Application withdrawn successfully'
       })
     } catch (error) {
@@ -170,29 +281,4 @@ export class CandidateApplicationController {
     }
   }
 
-  /**
-   * PATCH /api/applications/:id/stages/:stageId/feedback
-   * Submit candidate feedback for interview stage
-   */
-  submitStageFeedback = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { user_id } = req.decoded_authorization as TokenPayload
-      const { applicationId, stageId } = req.params
-      const { candidate_feedback } = req.body
-      const stage = await this.applicationService.submitStageFeedback(
-        user_id,
-        applicationId,
-        stageId,
-        candidate_feedback
-      )
-
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        data: stage,
-        message: 'Feedback submitted successfully'
-      })
-    } catch (error) {
-      next(error)
-    }
-  }
 }

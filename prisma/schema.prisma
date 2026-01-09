@@ -20,16 +20,8 @@ model applications {
   profile_id            String                  @db.Uuid
   cover_letter          String?
   is_withdrawn          Boolean?                @default(false)
-  withdrawn_at          DateTime?               @db.Timestamp(6)
   withdrawn_reason      String?
-  rejected_at           DateTime?               @db.Timestamp(6)
-  rejected_reason       String?
-  first_viewed_at       DateTime?               @db.Timestamp(6)
-  last_viewed_at        DateTime?               @db.Timestamp(6)
   view_count            Int?                    @default(0)
-  offer_sent_at         DateTime?               @db.Timestamp(6)
-  offer_accepted_at     DateTime?               @db.Timestamp(6)
-  offer_declined_at     DateTime?               @db.Timestamp(6)
   application_documents application_documents[]
   application_stages    application_stages[]
   jobs                  jobs                    @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -43,25 +35,24 @@ model applications {
 }
 
 model application_stages {
-  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  application_id     String       @db.Uuid
-  stage_name         String       @db.VarChar(100)
-  stage_order        Int
-  status             String       @db.VarChar(50)
-  scheduled_at       DateTime?    @db.Timestamp(6)
-  completed_at       DateTime?    @db.Timestamp(6)
-  feedback           String?
-  rating             Int?
-  interviewer_notes  String?
-  candidate_feedback String?
-  location           String?      @db.VarChar(255)
-  meeting_link       String?      @db.VarChar(500)
-  meeting_password   String?      @db.VarChar(100)
-  interviewer_id     String?      @db.Uuid
-  duration_minutes   Int?
-  result             String?      @db.VarChar(50)
-  created_at         DateTime     @default(now()) @db.Timestamp(6)
-  applications       applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
+  id                          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  application_id              String       @db.Uuid
+  stage_name                  String       @db.VarChar(100)
+  stage_order                 Int
+  status                      String       @db.VarChar(50)
+  scheduled_at                DateTime?    @db.Timestamp(6)
+  completed_at                DateTime?    @db.Timestamp(6)
+  location                    String?      @db.VarChar(255)
+  interviewer_id              String?      @db.Uuid
+  duration_minutes            Int?
+  created_at                  DateTime     @default(now()) @db.Timestamp(6)
+  recruiter_decision          String?      @db.VarChar(50)
+  decision_at                 DateTime?    @db.Timestamp(6)
+  candidate_response_deadline DateTime?    @db.Timestamp(6)
+  candidate_accepted_at       DateTime?    @db.Timestamp(6)
+  candidate_declined_at       DateTime?    @db.Timestamp(6)
+  decline_reason              String?      @db.VarChar(255)
+  applications                applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
 
   @@index([application_id, stage_order], map: "idx_application_stages_order")
   @@index([status, scheduled_at], map: "idx_application_stages_scheduling")
@@ -607,7 +598,6 @@ enum application_status {
   pending
   reviewed
   interviewing
-  offered
   accepted
   rejected
   withdrawn

@@ -14,7 +14,8 @@ import {
   CompareCandidatesSchema,
   ShortlistCandidateSchema,
   GetShortlistedSchema,
-  GetApplicationTimelineSchema
+  GetApplicationTimelineSchema,
+  StageDecisionSchema
 } from './recruiter.validator'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { recruiter } from '@/middleware/authorize.middleware'
@@ -56,7 +57,6 @@ router.get(
  */
 router.post(
   '/shortlist',
-  checkResourceOwnership('job'),
   validateDto(ShortlistCandidateSchema),
   recruiterController.shortlistCandidate
 )
@@ -67,7 +67,6 @@ router.post(
  */
 router.get(
   '/shortlisted',
-  checkResourceOwnership('job'),
   validateDto(GetShortlistedSchema),
   recruiterController.getShortlistedCandidates
 )
@@ -78,7 +77,6 @@ router.get(
  */
 router.post(
   '/compare',
-  checkResourceOwnership('job'),
   validateDto(CompareCandidatesSchema),
   recruiterController.compareCandidates
 )
@@ -90,7 +88,6 @@ router.post(
  */
 router.post(
   '/bulk-update',
-  checkResourceOwnership('company'),
   validateDto(BulkUpdateSchema),
   recruiterController.bulkUpdateApplications
 )
@@ -182,6 +179,17 @@ router.post(
   checkResourceOwnership('application'),
   validateDto(ContactCandidateSchema),
   recruiterController.contactCandidate
+)
+
+/**
+ * POST /api/applications/:id/stage/:stageId/decision
+ * Recruiter decision after a stage (create next stage or accept application)
+ */
+router.post(
+  '/:applicationId/stage/:stageId/decision',
+  checkResourceOwnership('application'),
+  validateDto(StageDecisionSchema),
+  recruiterController.makeStageDecision
 )
 
 export default router

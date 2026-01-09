@@ -52,6 +52,13 @@ const logRequestBody = (req: Request, _res: Response, next: NextFunction) => {
 resumeRouter.get('/themes', ...authMiddleware, wrapController(resumeController.getAvailableThemes))
 
 /**
+ * @route GET /api/resumes/profile-data
+ * @desc Lấy profile data formatted cho việc tạo CV
+ * @access Private - Candidate only
+ */
+resumeRouter.get('/profile-data', ...authMiddleware, wrapController(resumeController.getProfileData))
+
+/**
  * @route POST /api/resumes/from-profile
  * @desc Tạo CV từ profile - Include ALL profile data
  * @access Private - Candidate only

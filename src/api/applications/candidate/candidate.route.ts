@@ -6,7 +6,8 @@ import {
   GetApplicationsSchema,
   UUIDParamSchema,
   UploadDocumentSchema,
-  StageFeedbackSchema
+  StageFeedbackParamsSchema,
+  StageDeclineSchema
 } from '../application.validator'
 import { authenticateAccessToken } from '@/middleware/verify.middleware'
 import { candidate } from '@/middleware/authorize.middleware'
@@ -89,14 +90,36 @@ router.delete(
 )
 
 /**
- * PATCH /api/applications/candidate/:id/stages/:stageId/feedback
- * Submit candidate feedback for interview stage
+ * GET /api/applications/candidate/:applicationId/stage/:stageId
+ * Get single stage details
+ */
+router.get(
+  '/:applicationId/stage/:stageId',
+  checkResourceOwnership('application'),
+  validateDto({ params: StageFeedbackParamsSchema }),
+  candidateController.getStageDetails
+)
+
+/**
+ * PATCH /api/applications/candidate/:applicationId/stage/:stageId/accept
+ * Candidate accepts a stage
  */
 router.patch(
-  '/:applicationId/stages/:stageId/feedback',
+  '/:applicationId/stage/:stageId/accept',
   checkResourceOwnership('application'),
-  validateDto(StageFeedbackSchema),
-  candidateController.submitStageFeedback
+  validateDto({ params: StageFeedbackParamsSchema }),
+  candidateController.acceptStage
+)
+
+/**
+ * PATCH /api/applications/candidate/:applicationId/stage/:stageId/decline
+ * Candidate declines a stage
+ */
+router.patch(
+  '/:applicationId/stage/:stageId/decline',
+  checkResourceOwnership('application'),
+  validateDto(StageDeclineSchema),
+  candidateController.declineStage
 )
 
 export default router

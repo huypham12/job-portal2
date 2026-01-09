@@ -367,16 +367,7 @@ export function applicationToESDoc(application: any) {
   // Calculate timeline analytics with safety
   const now = new Date()
   const appliedAt = new Date(application.applied_at)
-  const firstViewedAt = application.first_viewed_at ? new Date(application.first_viewed_at) : null
-  const lastViewedAt = application.last_viewed_at ? new Date(application.last_viewed_at) : null
-
   const daysSinceApplied = Math.floor((now.getTime() - appliedAt.getTime()) / (1000 * 60 * 60 * 24))
-  const daysSinceFirstViewed = firstViewedAt
-    ? Math.floor((now.getTime() - firstViewedAt.getTime()) / (1000 * 60 * 60 * 24))
-    : null
-  const daysSinceLastViewed = lastViewedAt
-    ? Math.floor((now.getTime() - lastViewedAt.getTime()) / (1000 * 60 * 60 * 24))
-    : null
 
   // Application stages data with safety
   const currentStage = application.application_stages?.find(
@@ -384,11 +375,6 @@ export function applicationToESDoc(application: any) {
   )
   const completedStagesCount = application.application_stages?.filter((stage: any) => stage.completed_at).length || 0
   const totalStagesCount = application.application_stages?.length || 0
-
-  // Calculate average rating from stages
-  const ratings = application.application_stages?.map((stage: any) => stage.rating).filter(Boolean) || []
-  const averageRating =
-    ratings.length > 0 ? ratings.reduce((sum: number, rating: number) => sum + rating, 0) / ratings.length : null
 
   return {
     // ES _id is the application.id (DB id)
@@ -403,8 +389,6 @@ export function applicationToESDoc(application: any) {
     candidate_id: candidateId, // May be null if recruiter-owned view
     status: application.status,
     applied_at: application.applied_at,
-    first_viewed_at: application.first_viewed_at,
-    last_viewed_at: application.last_viewed_at,
     view_count: application.view_count || 0,
 
     // Enhanced Job info with requirements
@@ -447,20 +431,16 @@ export function applicationToESDoc(application: any) {
     current_stage_status: currentStage?.status || null,
     stages_count: totalStagesCount,
     completed_stages_count: completedStagesCount,
-    average_rating: averageRating,
-    has_rating: ratings.length > 0,
 
     // Timeline analytics
     days_since_applied: daysSinceApplied,
-    days_since_first_viewed: daysSinceFirstViewed,
-    days_since_last_viewed: daysSinceLastViewed,
     total_view_time: application.view_count * 30, // Estimated 30 seconds per view
 
     // Status flags
     has_notes:
       application.application_stages?.some((stage: any) => stage.interviewer_notes || stage.candidate_feedback) ||
       false,
-    is_shortlisted: application.status === 'interviewing' || application.status === 'offered',
+    is_shortlisted: application.status === 'interviewing',
     is_withdrawn: application.is_withdrawn || false,
 
     // Tracking

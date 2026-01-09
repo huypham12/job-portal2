@@ -41,13 +41,16 @@ export class SocketService {
    */
   private handleConnection(socket: Socket) {
     const userId = socket.data.userId
-    console.log(`🔌 User ${userId} connected with socket ${socket.id}`)
+    const userRole = socket.data.userRole || 'unknown'
+    console.log(`🔌 User ${userId} (role: ${userRole}) connected with socket ${socket.id}`)
 
     // Track user socket
     if (!this.userSockets.has(userId)) {
       this.userSockets.set(userId, new Set())
     }
     this.userSockets.get(userId)!.add(socket.id)
+
+    console.log(`📊 Total connections for user ${userId}: ${this.userSockets.get(userId)!.size}`)
 
     // Register event handlers
     this.registerEventHandlers(socket)
@@ -66,8 +69,9 @@ export class SocketService {
 
     // Subscribe to notifications
     socket.on('subscribe:notifications', () => {
-      socket.join(`user:${userId}:notifications`)
-      console.log(`📬 User ${userId} subscribed to notifications`)
+      const roomName = `user:${userId}:notifications`
+      socket.join(roomName)
+      console.log(`📬 User ${userId} (socket ${socket.id}) subscribed to room: ${roomName}`)
 
       // Send initial unread count
       this.sendUnreadCount(userId)
@@ -136,39 +140,57 @@ export class SocketService {
     }
   ) {
     if (!this.io) {
-      console.error('Socket.IO not initialized')
+      console.error('❌ Socket.IO not initialized - cannot send notification')
       return
     }
 
-    // Create notification in database
-    const notification = await notificationService.createNotification({
-      user_id: userId,
-      type,
-      content,
-      title: options?.title,
-      action_url: options?.action_url,
-      action_text: options?.action_text,
-      metadata: options?.metadata,
-      category: options?.category
-    })
+    const roomName = `user:${userId}:notifications`
+    console.log(`🔔 [START] Sending notification to userId: ${userId}, type: ${type}`)
 
-    // Send to all connected sockets of the user
-    this.io.to(`user:${userId}:notifications`).emit('notification:new', {
-      id: notification.id,
-      type: notification.type,
-      content: notification.content,
-      title: notification.title,
-      action_url: notification.action_url,
-      action_text: notification.action_text,
-      metadata: notification.metadata,
-      category: notification.category,
-      sent_at: notification.sent_at
-    })
+    try {
+      // Create notification in database
+      const notification = await notificationService.createNotification({
+        user_id: userId,
+        type,
+        content,
+        title: options?.title,
+        action_url: options?.action_url,
+        action_text: options?.action_text,
+        metadata: options?.metadata,
+        category: options?.category
+      })
 
-    // Update unread count
-    this.sendUnreadCount(userId)
+      console.log(`💾 Notification saved to DB: ${notification.id}`)
 
-    console.log(`📩 Notification sent to user ${userId}: ${type}`)
+      // Check room members
+      const socketsInRoom = await this.io.in(roomName).fetchSockets()
+      console.log(
+        `📡 Room "${roomName}" has ${socketsInRoom.length} connected socket(s): ${socketsInRoom.map((s) => s.id).join(', ') || 'NONE'}`
+      )
+
+      // Send to all connected sockets of the user
+      this.io.to(roomName).emit('notification:new', {
+        id: notification.id,
+        type: notification.type,
+        content: notification.content,
+        title: notification.title,
+        action_url: notification.action_url,
+        action_text: notification.action_text,
+        metadata: notification.metadata,
+        category: notification.category,
+        sent_at: notification.sent_at
+      })
+
+      console.log(`📩 ✅ Notification emitted to room "${roomName}" - Event: notification:new`)
+
+      // Update unread count
+      await this.sendUnreadCount(userId)
+
+      console.log(`🔔 [END] Notification complete for user ${userId}`)
+    } catch (error) {
+      console.error(`❌ Failed to send notification to user ${userId}:`, error)
+      throw error
+    }
   }
 
   /**
@@ -235,6 +257,49 @@ export class SocketService {
    */
   getUserSocketCount(userId: string): number {
     return this.userSockets.get(userId)?.size || 0
+  }
+
+  /**
+   * Get diagnostic information for debugging
+   */
+  getDiagnostics(): {
+    isInitialized: boolean
+    totalUsers: number
+    totalSockets: number
+    userConnections: Array<{ userId: string; socketCount: number; socketIds: string[] }>
+  } {
+    const userConnections = Array.from(this.userSockets.entries()).map(([userId, socketIds]) => ({
+      userId,
+      socketCount: socketIds.size,
+      socketIds: Array.from(socketIds)
+    }))
+
+    return {
+      isInitialized: this.io !== null,
+      totalUsers: this.userSockets.size,
+      totalSockets: userConnections.reduce((sum, user) => sum + user.socketCount, 0),
+      userConnections
+    }
+  }
+
+  /**
+   * Force check if a room exists and list its members
+   */
+  async getRoomInfo(roomName: string): Promise<{ exists: boolean; socketIds: string[] }> {
+    if (!this.io) {
+      return { exists: false, socketIds: [] }
+    }
+
+    try {
+      const sockets = await this.io.in(roomName).fetchSockets()
+      return {
+        exists: sockets.length > 0,
+        socketIds: sockets.map((s) => s.id)
+      }
+    } catch (error) {
+      console.error(`Failed to get room info for ${roomName}:`, error)
+      return { exists: false, socketIds: [] }
+    }
   }
 }
 

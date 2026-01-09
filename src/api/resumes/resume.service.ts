@@ -7,6 +7,7 @@ import puppeteer from 'puppeteer'
 import * as pdfParse from 'pdf-parse'
 import { v4 as uuidv4 } from 'uuid'
 import { CV_THEMES, getThemeById, getAllThemes, type CVTheme } from '@/shared/constants/cv-themes'
+import { UnifiedCVEngine } from '@/shared/templates/unified-cv-engine'
 
 export interface CreateResumeDto {
   title: string
@@ -67,6 +68,56 @@ export class ResumeService {
   }
 
   /**
+   * Validate and normalize resume content structure
+   */
+  private validateAndNormalizeContent(content: any): any {
+    if (!content || typeof content !== 'object') {
+      throw new HttpError('Invalid content structure', HTTP_STATUS.BAD_REQUEST)
+    }
+
+    const normalizedContent = { ...content }
+
+    // Ensure personal_info exists and has required fields
+    if (!normalizedContent.personal_info) {
+      normalizedContent.personal_info = {}
+    }
+
+    // Ensure layout_settings exists with defaults
+    if (!normalizedContent.layout_settings) {
+      normalizedContent.layout_settings = {
+        theme: 'modern',
+        sections_order: ['personal_info']
+      }
+    } else {
+      // Ensure theme has default value
+      normalizedContent.layout_settings.theme = normalizedContent.layout_settings.theme || 'modern'
+      // Ensure sections_order exists
+      normalizedContent.layout_settings.sections_order = normalizedContent.layout_settings.sections_order || [
+        'personal_info'
+      ]
+    }
+
+    // Normalize arrays
+    const arrayFields = [
+      'skills',
+      'experiences',
+      'educations',
+      'certifications',
+      'awards',
+      'projects',
+      'languages',
+      'references'
+    ]
+    arrayFields.forEach((field) => {
+      if (normalizedContent[field] && !Array.isArray(normalizedContent[field])) {
+        normalizedContent[field] = []
+      }
+    })
+
+    return normalizedContent
+  }
+
+  /**
    * Tạo CV từ đầu (manual input from profile data)
    */
   async createResume(userId: string, dto: CreateResumeDto) {
@@ -74,6 +125,12 @@ export class ResumeService {
     const profile = await prisma.profiles.findFirst({
       where: { user_id: userId },
       include: {
+        users: {
+          select: {
+            email: true
+          }
+        },
+        location: true,
         skills: {
           include: { skills: true }
         },
@@ -99,13 +156,16 @@ export class ResumeService {
       })
     }
 
+    // Validate and normalize content
+    const normalizedContent = this.validateAndNormalizeContent(dto.content || this.buildResumeContent(profile))
+
     // Tạo resume mới
     const resume = await prisma.resumes.create({
       data: {
         profile_id: profile.id,
         title: dto.title,
         source_type: 'created',
-        content: dto.content || this.buildResumeContent(profile),
+        content: normalizedContent,
         is_default: dto.is_default || false,
         is_public: dto.is_public || false,
         status: dto.status || 'draft'
@@ -198,82 +258,68 @@ export class ResumeService {
       throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
     }
 
+    // Return flat structure consistent with createResumeFromProfile
     return {
       profile_id: profile.id,
-      sections: {
-        personal_info: {
-          selectable: false,
-          data: {
-            full_name: profile.full_name,
-            email: profile.users?.email,
-            phone: profile.phone_number,
-            bio: profile.bio,
-            location: profile.location_text,
-            headline: profile.headline,
-            linkedin_url: profile.linkedin_url,
-            website: profile.personal_website,
-            date_of_birth: profile.date_of_birth
-          }
-        },
-        skills: {
-          selectable: true,
-          items:
-            profile.skills?.map((ps) => ({
-              id: ps.skill_id,
-              name: ps.skills.name,
-              proficiency_level: ps.level
-            })) || []
-        },
-        experiences: {
-          selectable: true,
-          items:
-            profile.experiences?.map((exp) => ({
-              id: exp.id,
-              job_title: exp.position,
-              company_name: exp.company_name,
-              start_date: exp.start_date,
-              end_date: exp.end_date,
-              is_current: exp.is_current,
-              description: exp.description
-            })) || []
-        },
-        educations: {
-          selectable: true,
-          items:
-            profile.educations?.map((edu) => ({
-              id: edu.id,
-              institution_name: edu.school_name,
-              degree: edu.degree,
-              field_of_study: edu.field_of_study,
-              start_date: edu.start_date,
-              end_date: edu.end_date
-            })) || []
-        },
-        certifications: {
-          selectable: true,
-          items:
-            profile.certifications?.map((cert) => ({
-              id: cert.id,
-              name: cert.name,
-              issuing_organization: cert.issuing_org,
-              issue_date: cert.issue_date,
-              expiration_date: cert.expiry_date,
-              credential_id: cert.credential_id,
-              credential_url: cert.credential_url
-            })) || []
-        },
-        awards: {
-          selectable: true,
-          items:
-            profile.awards?.map((award) => ({
-              id: award.id,
-              title: award.title,
-              issuer: award.issuer,
-              date: award.date,
-              description: award.description
-            })) || []
-        }
-      }
+      personal_info: {
+        full_name: profile.full_name,
+        email: profile.users?.email,
+        phone: profile.phone_number,
+        bio: profile.bio,
+        // Include additional fields used by frontend completion logic
+        desired_job_title: profile.desired_job_title,
+        years_of_experience: profile.years_of_experience,
+        avatar_url: profile.avatar_url,
+        location_id: profile.location_id,
+        location: profile.location_text,
+        headline: profile.headline,
+        linkedin_url: profile.linkedin_url,
+        website: profile.personal_website,
+        date_of_birth: profile.date_of_birth
+      },
+      skills:
+        profile.skills?.map((ps) => ({
+          id: ps.skill_id,
+          name: ps.skills.name,
+          proficiency_level: ps.level
+        })) || [],
+      experiences:
+        profile.experiences?.map((exp) => ({
+          id: exp.id,
+          job_title: exp.position,
+          company_name: exp.company_name,
+          start_date: exp.start_date,
+          end_date: exp.end_date,
+          is_current: exp.is_current,
+          description: exp.description
+        })) || [],
+      educations:
+        profile.educations?.map((edu) => ({
+          id: edu.id,
+          institution_name: edu.school_name,
+          degree: edu.degree,
+          field_of_study: edu.field_of_study,
+          start_date: edu.start_date,
+          end_date: edu.end_date
+        })) || [],
+      certifications:
+        profile.certifications?.map((cert) => ({
+          id: cert.id,
+          name: cert.name,
+          issuing_organization: cert.issuing_org,
+          issue_date: cert.issue_date,
+          expiration_date: cert.expiry_date,
+          credential_id: cert.credential_id,
+          credential_url: cert.credential_url
+        })) || [],
+      awards:
+        profile.awards?.map((award) => ({
+          id: award.id,
+          title: award.title,
+          issuer: award.issuer,
+          date: award.date,
+          description: award.description
+        })) || []
     }
   }
 
@@ -289,6 +335,7 @@ export class ResumeService {
             email: true
           }
         },
+        location: true,
         skills: {
           include: {
             skills: true
@@ -397,10 +444,10 @@ export class ResumeService {
     if (content.certifications) sections.push('certifications')
     if (content.awards) sections.push('awards')
 
-    // Add layout settings
+    // Add layout settings within content (unified structure)
     content.layout_settings = {
       sections_order: sections,
-      theme: dto.theme || 'default'
+      theme: dto.theme || 'modern'
     }
 
     // Unset default if needed
@@ -414,13 +461,16 @@ export class ResumeService {
       })
     }
 
+    // Validate and normalize content
+    const normalizedContent = this.validateAndNormalizeContent(content)
+
     // Create resume
     const resume = await prisma.resumes.create({
       data: {
         profile_id: profile.id,
         title: dto.title,
         source_type: 'created',
-        content: content,
+        content: normalizedContent,
         is_default: dto.is_default || false,
         is_public: dto.is_public || false,
         status: 'draft'
@@ -486,6 +536,11 @@ export class ResumeService {
         ...updatedContent,
         layout_settings: dto.layout_settings
       }
+    }
+
+    // Validate and normalize content if it's being updated
+    if (updatedContent) {
+      updatedContent = this.validateAndNormalizeContent(updatedContent)
     }
 
     const updatedResume = await prisma.resumes.update({
@@ -636,6 +691,17 @@ export class ResumeService {
       })
     }
 
+    // Validate and normalize content if parsed
+    let normalizedContent = null
+    if (parsedContent) {
+      try {
+        normalizedContent = this.validateAndNormalizeContent(parsedContent)
+      } catch (error) {
+        console.warn('Failed to validate parsed PDF content, using null:', error)
+        normalizedContent = null
+      }
+    }
+
     // Tạo resume record
     const resume = await prisma.resumes.create({
       data: {
@@ -646,7 +712,7 @@ export class ResumeService {
         file_name: uploadResult.originalFilename,
         file_size: uploadResult.size,
         mime_type: uploadResult.mimeType,
-        content: parsedContent as any,
+        content: normalizedContent,
         is_default: dto.is_default === true,
         status: 'active'
       }
@@ -702,162 +768,183 @@ export class ResumeService {
    * Export CV to PDF
    */
   async exportResume(userId: string, resumeId: string, dto: ExportResumeDto) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      include: {
-        skills: {
-          include: { skills: true }
-        },
-        experiences: true,
-        educations: true,
-        certifications: true,
-        awards: true
+    try {
+      const profile = await prisma.profiles.findFirst({
+        where: { user_id: userId },
+        include: {
+          users: {
+            select: {
+              email: true
+            }
+          },
+          location: true,
+          skills: {
+            include: { skills: true }
+          },
+          experiences: true,
+          educations: true,
+          certifications: true,
+          awards: true
+        }
+      })
+
+      if (!profile) {
+        throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
       }
-    })
 
-    if (!profile) {
-      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
-    }
+      const resume = await prisma.resumes.findFirst({
+        where: {
+          id: resumeId,
+          profile_id: profile.id
+        }
+      })
 
-    const resume = await prisma.resumes.findFirst({
-      where: {
-        id: resumeId,
-        profile_id: profile.id
+      if (!resume) {
+        throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
       }
-    })
 
-    if (!resume) {
-      throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
-    }
+      // Always generate HTML from server template to ensure consistent PDF rendering.
+      // Frontend-provided HTML (snapshot) will be ignored to avoid mismatches between preview and exported PDF.
+      const html = this.generateResumeHtml(resume, profile, dto.template || 'modern')
 
-    // If frontend provided an HTML snapshot (preview), prefer using it verbatim so PDF matches preview.
-    // Otherwise generate HTML from server template.
-    const frontendProvided = dto.html && typeof dto.html === 'string' && dto.html.trim().length > 0
-    let html: string
-    try {
-      console.log('[ExportDebug] incoming:', {
-        templateParam: dto.template,
-        frontendHtmlProvided: !!dto.html,
-        frontendProvided
-      })
-    } catch (e) {
-      // ignore logging errors
-    }
-    if (frontendProvided) {
-      html = dto.html as string
-    } else {
-      html = this.generateResumeHtml(resume, profile, dto.template || 'modern')
-    }
-    try {
-      console.log('[ExportDebug] final decision:', {
+      console.log('[ExportDebug] final decision: using server template', {
         templateToUse: dto.template || 'generated',
-        finalHtmlLength: typeof html === 'string' ? html.length : null,
-        frontendProvidedUsed: frontendProvided
+        finalHtmlLength: typeof html === 'string' ? html.length : null
       })
-    } catch (e) {
-      // ignore
-    }
-    try {
-      console.log('[ExportDebug] final decision:', {
-        templateToUse: dto.template || 'generated',
-        finalHtmlLength: typeof html === 'string' ? html.length : null,
-        frontendProvidedUsed: frontendProvided
-      })
-    } catch (e) {
-      // ignore
-    }
 
-    if (dto.format === 'html') {
+      if (dto.format === 'html') {
+        return {
+          content: html,
+          contentType: 'text/html'
+        }
+      }
+
+      // Generate PDF từ HTML; allow frontend to suggest viewport width for consistent rendering
+      const pdfBuffer = await this.generatePdfFromHtml(html, dto.viewportWidth)
+
+      // Upload PDF lên S3
+      const uploadResult = await this.s3Service.uploadFile({
+        file: {
+          buffer: pdfBuffer,
+          originalname: `${resume.title}.pdf`,
+          mimetype: 'application/pdf',
+          size: pdfBuffer.length
+        } as Express.Multer.File,
+        folder: `resumes/${profile.id}/exports`,
+        filename: `${uuidv4()}-${resume.title}.pdf`
+      })
+
+      // Lưu file_url vào database để cache
+      await prisma.resumes.update({
+        where: { id: resumeId },
+        data: {
+          file_url: uploadResult.url,
+          file_name: `${resume.title}.pdf`,
+          file_size: pdfBuffer.length,
+          mime_type: 'application/pdf'
+        }
+      })
+
       return {
-        content: html,
-        contentType: 'text/html'
+        url: uploadResult.url,
+        filename: `${resume.title}.pdf`,
+        contentType: 'application/pdf'
       }
-    }
-
-    // Generate PDF từ HTML; allow frontend to suggest viewport width for consistent rendering
-    const pdfBuffer = await this.generatePdfFromHtml(html, dto.viewportWidth)
-
-    // Upload PDF lên S3
-    const uploadResult = await this.s3Service.uploadFile({
-      file: {
-        buffer: pdfBuffer,
-        originalname: `${resume.title}.pdf`,
-        mimetype: 'application/pdf',
-        size: pdfBuffer.length
-      } as Express.Multer.File,
-      folder: `resumes/${profile.id}/exports`,
-      filename: `${uuidv4()}-${resume.title}.pdf`
-    })
-
-    // Lưu file_url vào database để cache
-    await prisma.resumes.update({
-      where: { id: resumeId },
-      data: {
-        file_url: uploadResult.url,
-        file_name: `${resume.title}.pdf`,
-        file_size: pdfBuffer.length,
-        mime_type: 'application/pdf'
+    } catch (error) {
+      console.error('Export error:', error)
+      if (error instanceof HttpError) {
+        throw error
       }
-    })
-
-    return {
-      url: uploadResult.url,
-      filename: `${resume.title}.pdf`,
-      contentType: 'application/pdf'
+      throw new HttpError('Failed to export resume to PDF', HTTP_STATUS.INTERNAL_SERVER_ERROR)
     }
   }
 
   /**
-   * Preview CV
+   * Preview CV - Always uses unified engine for consistency with PDF
    */
   async previewResume(userId: string, resumeId: string) {
-    const profile = await prisma.profiles.findFirst({
-      where: { user_id: userId },
-      include: {
-        users: true,
-        skills: {
-          include: { skills: true }
-        },
-        experiences: true,
-        educations: true,
-        certifications: true,
-        awards: true
+    try {
+      const profile = await prisma.profiles.findFirst({
+        where: { user_id: userId },
+        include: {
+          users: true,
+          location: true,
+          skills: {
+            include: { skills: true }
+          },
+          experiences: true,
+          educations: true,
+          certifications: true,
+          awards: true
+        }
+      })
+
+      if (!profile) {
+        throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
       }
-    })
 
-    if (!profile) {
-      throw new HttpError('Profile not found', HTTP_STATUS.NOT_FOUND)
-    }
+      const resume = await prisma.resumes.findFirst({
+        where: {
+          id: resumeId,
+          profile_id: profile.id
+        }
+      })
 
-    const resume = await prisma.resumes.findFirst({
-      where: {
-        id: resumeId,
-        profile_id: profile.id
+      if (!resume) {
+        throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
       }
-    })
 
-    if (!resume) {
-      throw new HttpError('Resume not found', HTTP_STATUS.NOT_FOUND)
-    }
+      let content: any = resume.content
 
-    // Generate HTML preview - respect resume content layout_settings.theme if present
-    const layoutSettings = ((resume.content as any) && (resume.content as any).layout_settings) || {}
-    const theme = layoutSettings.theme || 'modern'
+      // If resume.content doesn't exist or is empty, build from profile
+      if (!content) {
+        console.log('🔧 Building content from profile for preview')
+        content = this.buildResumeContent(profile)
+      } else {
+        // Validate and normalize content structure
+        try {
+          content = this.validateAndNormalizeContent(content)
+        } catch (validationError) {
+          console.warn(
+            'Content validation failed, rebuilding from profile:',
+            validationError instanceof Error ? validationError.message : String(validationError)
+          )
+          content = this.buildResumeContent(profile)
+        }
+      }
 
-    console.log('🎨 Generating preview HTML:', {
-      resumeId,
-      hasResumeContent: !!resume.content,
-      theme,
-      profileHasData: !!profile.full_name
-    })
+      // Set title
+      content.title = resume.title
 
-    const html = this.generateResumeHtml(resume, profile, theme)
+      // Get theme from layout_settings (unified)
+      const themeId = content.layout_settings?.theme || 'modern'
 
-    console.log('✅ Generated HTML length:', html?.length || 0)
+      console.log('🎨 Generating unified preview HTML:', {
+        resumeId,
+        hasResumeContent: !!resume.content,
+        themeId,
+        profileHasData: !!profile.full_name,
+        contentStructure: Object.keys(content)
+      })
 
-    return {
-      content: html,
-      contentType: 'text/html'
+      const html = UnifiedCVEngine.generateHTML(content, themeId)
+
+      if (!html || html.length === 0) {
+        throw new HttpError('Failed to generate preview HTML', HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      }
+
+      console.log('✅ Generated unified HTML length:', html.length)
+
+      return {
+        content: html,
+        contentType: 'text/html'
+      }
+    } catch (error) {
+      console.error('Preview generation error:', error)
+      if (error instanceof HttpError) {
+        throw error
+      }
+      throw new HttpError('Failed to generate resume preview', HTTP_STATUS.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -878,7 +965,7 @@ export class ResumeService {
         full_name: profile.full_name || 'Your Name',
         email: profile.users?.email || '',
         phone: profile.phone_number || '',
-        location: profile.location || '',
+        location: profile.location_text || profile.location?.name || '',
         bio: profile.bio || ''
       },
       skills: (profile.skills || []).map((ps: any) => ({
@@ -936,54 +1023,55 @@ export class ResumeService {
   }
 
   /**
-   * Helper: Generate HTML from resume template
+   * Helper: Generate HTML from resume template using unified engine
    */
   private generateResumeHtml(resume: any, profile: any, template?: string): string {
-    let content = resume.content
+    let content: any = resume.content
 
     // If resume.content doesn't exist or is empty, build from profile
     if (!content) {
       content = this.buildResumeContent(profile)
     } else {
-      // If resume.content exists, ensure it has the right structure
-      // Sometimes resume.content might have { sections: {...} } structure
-      if (content.sections) {
-        content = {
-          personal_info: content.sections.personal_info?.data || {},
-          skills: content.sections.skills?.items || [],
-          experiences: content.sections.experiences?.items || [],
-          educations: content.sections.educations?.items || [],
-          certifications: content.sections.certifications?.items || [],
-          awards: content.sections.awards?.items || [],
-          projects: content.projects || [],
-          languages: content.languages || [],
-          summary: content.summary || '',
-          references: content.references || []
+      // Ensure content is an object
+      if (typeof content === 'string' || typeof content === 'number' || typeof content === 'boolean') {
+        content = this.buildResumeContent(profile)
+      } else {
+        // If resume.content exists, ensure it has the right structure
+        // Sometimes resume.content might have { sections: {...} } structure
+        if (content.sections) {
+          content = {
+            personal_info: content.sections?.personal_info?.data || {},
+            skills: content.sections?.skills?.items || [],
+            experiences: content.sections?.experiences?.items || [],
+            educations: content.sections?.educations?.items || [],
+            certifications: content.sections?.certifications?.items || [],
+            awards: content.sections?.awards?.items || [],
+            projects: content.projects || content.sections?.projects?.items || [],
+            technologies: content.technologies || content.sections?.technologies?.items || [],
+            highlights: content.highlights || content.sections?.highlights?.items || [],
+            links: content.links || content.sections?.links?.items || [],
+            languages: content.languages || content.sections?.languages?.items || [],
+            summary: content.summary || '',
+            references: content.references || content.sections?.references?.items || []
+          }
+        }
+        // If content still doesn't have required fields, merge with profile data
+        if (!content.personal_info || !content.personal_info.full_name) {
+          const profileContent = this.buildResumeContent(profile)
+          content = { ...profileContent, ...content }
         }
       }
-      // If content still doesn't have required fields, merge with profile data
-      if (!content.personal_info || !content.personal_info.full_name) {
-        const profileContent = this.buildResumeContent(profile)
-        content = { ...profileContent, ...content }
-      }
     }
+
+    // Set title for unified engine
+    content.title = resume.title
+
     const layoutSettings = content.layout_settings || {}
-    // Prefer explicit template argument; fall back to content.layout_settings.theme; default to 'modern'
-    const themeId = (template && String(template).trim()) || (layoutSettings.theme as string) || 'modern'
+    // Prefer explicit template argument; fall back to content.layout_settings.theme; default to 'classic'
+    const themeId = (template && String(template).trim()) || (layoutSettings.theme as string) || 'classic'
 
-    // Get theme data from shared constants
-    const themeData = getThemeById(themeId)
-
-    // Route to appropriate template generator based on layout
-    switch (themeData.layout) {
-      case 'header-top':
-        return this.generateClassicTemplate(resume, content, themeData)
-      case 'two-column':
-        return this.generateCreativeTemplate(resume, content, themeData)
-      case 'sidebar':
-      default:
-        return this.generateModernTemplate(resume, content, themeData)
-    }
+    // Use unified engine for consistent HTML generation
+    return UnifiedCVEngine.generateHTML(content, themeId)
   }
 
   /**
@@ -1816,602 +1904,10 @@ export class ResumeService {
   }
 
   /**
-   * Helper: Generate Modern Template (Sidebar Layout)
-   */
-  private generateModernTemplate(resume: any, content: any, themeData: CVTheme): string {
-    const themeColors = themeData.colors
-
-    return `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${resume.title}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-
-          body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: #2d3748;
-            background: #f7fafc;
-            padding: 20px;
-          }
-
-          .resume-container {
-            max-width: 210mm;
-            min-height: 297mm;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            display: flex;
-            overflow: hidden;
-          }
-
-          /* Sidebar */
-          .sidebar {
-            width: 280px;
-            background: linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.secondary} 100%);
-            color: white;
-            padding: 40px 30px;
-            flex-shrink: 0;
-          }
-
-          .profile-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: white;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            font-weight: 700;
-            color: ${themeColors.primary};
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          }
-
-          .sidebar h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 8px;
-            line-height: 1.2;
-          }
-
-          .sidebar-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-          }
-
-          .sidebar-section:first-of-type {
-            margin-top: 20px;
-            padding-top: 0;
-            border-top: none;
-          }
-
-          .sidebar-section h3 {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-            opacity: 0.9;
-          }
-
-          .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 13px;
-            line-height: 1.4;
-          }
-
-          .contact-item i {
-            width: 20px;
-            margin-right: 10px;
-            opacity: 0.9;
-            font-size: 14px;
-          }
-
-          .contact-item a {
-            color: white;
-            text-decoration: none;
-          }
-
-          .skill-item {
-            margin-bottom: 12px;
-          }
-
-          .skill-name {
-            font-size: 13px;
-            margin-bottom: 6px;
-            font-weight: 500;
-          }
-
-          .skill-level {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-          }
-
-          .skill-level-fill {
-            height: 100%;
-            background: white;
-            border-radius: 3px;
-            transition: width 0.3s ease;
-          }
-
-          /* Main Content */
-          .main-content {
-            flex: 1;
-            padding: 40px 45px;
-            overflow: hidden;
-          }
-
-          .bio {
-            font-size: 14px;
-            color: #4a5568;
-            margin-bottom: 30px;
-            line-height: 1.7;
-            text-align: justify;
-          }
-
-          .section {
-            margin-bottom: 35px;
-          }
-
-          .section-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: ${themeColors.primary};
-            margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 3px solid ${themeColors.primary};
-            display: flex;
-            align-items: center;
-            gap: 10px;
-          }
-
-          .section-title i {
-            font-size: 20px;
-          }
-
-          .timeline-item {
-            position: relative;
-            padding-left: 25px;
-            margin-bottom: 25px;
-            border-left: 2px solid #e2e8f0;
-          }
-
-          .timeline-item:last-child {
-            margin-bottom: 0;
-          }
-
-          .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 6px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: ${themeColors.primary};
-            border: 2px solid white;
-            box-shadow: 0 0 0 2px ${themeColors.primary};
-          }
-
-          .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-            gap: 15px;
-          }
-
-          .timeline-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1a202c;
-            line-height: 1.3;
-          }
-
-          .timeline-subtitle {
-            font-size: 14px;
-            color: ${themeColors.primary};
-            font-weight: 500;
-            margin-bottom: 4px;
-          }
-
-          .timeline-date {
-            font-size: 12px;
-            color: #718096;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-          }
-
-          .timeline-date i {
-            font-size: 11px;
-          }
-
-          .timeline-description {
-            font-size: 13px;
-            color: #4a5568;
-            line-height: 1.6;
-            margin-top: 8px;
-          }
-
-          .certification-item,
-          .award-item {
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            border-left: 3px solid ${themeColors.primary};
-          }
-
-          .cert-name,
-          .award-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a202c;
-            margin-bottom: 4px;
-          }
-
-          .cert-issuer,
-          .award-issuer {
-            font-size: 13px;
-            color: ${themeColors.primary};
-            margin-bottom: 4px;
-          }
-
-          .cert-date,
-          .award-date {
-            font-size: 12px;
-            color: #718096;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-          }
-
-          .cert-date i,
-          .award-date i {
-            font-size: 11px;
-          }
-
-          .cert-credential {
-            font-size: 12px;
-            color: #718096;
-            margin-top: 6px;
-          }
-
-          .cert-credential a {
-            color: ${themeColors.primary};
-            text-decoration: none;
-            font-weight: 500;
-          }
-
-          /* Responsive */
-          @media print {
-            body {
-              background: white;
-              padding: 0;
-            }
-            .resume-container {
-              box-shadow: none;
-              max-width: 100%;
-              min-height: auto;
-            }
-          }
-
-          @media (max-width: 1024px) {
-            .sidebar {
-              width: 250px;
-            }
-            .main-content {
-              padding: 35px;
-            }
-          }
-
-          @media (max-width: 768px) {
-            .resume-container {
-              flex-direction: column;
-              margin: 10px auto;
-            }
-            .sidebar {
-              width: 100%;
-              padding: 30px 20px;
-            }
-            .main-content {
-              padding: 25px 20px;
-            }
-            .profile-photo {
-              width: 100px;
-              height: 100px;
-              font-size: 40px;
-            }
-            .sidebar h1 {
-              font-size: 22px;
-            }
-            .sidebar-section h3 {
-              font-size: 11px;
-            }
-            .contact-item {
-              font-size: 13px;
-              margin-bottom: 10px;
-            }
-          }
-
-          @media (max-width: 480px) {
-            body {
-              padding: 5px;
-            }
-            .resume-container {
-              margin: 0;
-              border-radius: 0;
-            }
-            .sidebar {
-              padding: 25px 15px;
-            }
-            .main-content {
-              padding: 20px 15px;
-            }
-            .profile-photo {
-              width: 90px;
-              height: 90px;
-              font-size: 36px;
-            }
-            .sidebar h1 {
-              font-size: 20px;
-            }
-            .sidebar-section {
-              margin-top: 25px;
-              padding-top: 15px;
-            }
-            .contact-item {
-              font-size: 12px;
-              margin-bottom: 8px;
-            }
-            .skill-item {
-              padding: 6px 10px;
-              font-size: 12px;
-              margin-bottom: 6px;
-              margin-right: 6px;
-            }
-            .exp-title {
-              font-size: 15px;
-            }
-            .exp-company {
-              font-size: 13px;
-            }
-            .exp-description {
-              font-size: 13px;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="resume-container">
-          <!-- Sidebar -->
-          <div class="sidebar">
-            ${this.generateModernSidebarContent(content, themeColors)}
-          </div>
-
-          <!-- Main Content -->
-          <div class="main-content">
-            ${this.generateModernMainContent(content, themeColors)}
-          </div>
-        </div>
-      </body>
-      </html>
-    `
-  }
-
-  /**
    * Helper: Get theme data from shared constants
    */
   private getThemeData(themeId: string): CVTheme {
     return getThemeById(themeId)
-  }
-
-  /**
-   * Helper: Generate Modern Template sidebar content
-   */
-  private generateModernSidebarContent(content: any, themeColors: any): string {
-    const personalInfo = content.personal_info || {}
-    const skills = content.skills || []
-
-    // Get initials for profile photo
-    const initials = personalInfo.full_name
-      ? personalInfo.full_name
-          .split(' ')
-          .map((n: string) => n[0])
-          .join('')
-          .toUpperCase()
-          .substring(0, 2)
-      : 'CV'
-
-    return `
-      <div class="profile-photo">${initials}</div>
-      <h1>${personalInfo.full_name || 'Your Name'}</h1>
-
-      ${
-        personalInfo.email || personalInfo.phone
-          ? `
-        <div class="sidebar-section">
-          <h3>Contact</h3>
-          ${
-            personalInfo.email
-              ? `
-            <div class="contact-item">
-              <i class="fas fa-envelope"></i>
-              <a href="mailto:${personalInfo.email}">${personalInfo.email}</a>
-            </div>
-          `
-              : ''
-          }
-          ${
-            personalInfo.phone
-              ? `
-            <div class="contact-item">
-              <i class="fas fa-phone"></i>
-              <span>${personalInfo.phone}</span>
-            </div>
-          `
-              : ''
-          }
-        </div>
-      `
-          : ''
-      }
-
-      ${
-        skills.length > 0
-          ? `
-        <div class="sidebar-section">
-          <h3>Skills</h3>
-          ${skills
-            .map((skill: any) => {
-              // Normalize skill name and level keys from different data shapes
-              const skillName = this.getSkillName(skill)
-              const rawLevel = skill.proficiency_level || skill.proficiency || skill.level || null
-              const level = this.getSkillLevel(rawLevel)
-              return `
-              <div class="skill-item">
-                <div class="skill-name">${skillName}</div>
-                <div class="skill-level">
-                  <div class="skill-level-fill" style="width: ${level}%"></div>
-                </div>
-              </div>
-            `
-            })
-            .join('')}
-        </div>
-      `
-          : ''
-      }
-    `
-  }
-
-  /**
-   * Helper: Generate Modern Template main content
-   */
-  private generateModernMainContent(content: any, themeColors: any): string {
-    const personalInfo = content.personal_info || {}
-    const experiences = content.experiences || []
-    const educations = content.educations || []
-    const certifications = content.certifications || []
-    const awards = content.awards || []
-
-    return `
-      ${
-        personalInfo.bio
-          ? `
-        <div class="bio">${personalInfo.bio}</div>
-      `
-          : ''
-      }
-
-      ${
-        (content.technologies && content.technologies.length > 0) ||
-        (content.highlights && content.highlights.length > 0) ||
-        (content.links && content.links.length > 0) ||
-        (content.projects && content.projects.length > 0)
-          ? `
-        <div class="section">
-          ${
-            content.technologies && content.technologies.length > 0
-              ? `
-            <h2 class="section-title">
-              <i class="fas fa-tools"></i>
-              Công nghệ nổi bật
-            </h2>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;">
-              ${content.technologies.map((t: any) => `<div style="padding:6px 10px;border-radius:8px;background:#f1f5f9;color:#0f172a;font-weight:500;font-size:13px">${t}</div>`).join('')}
-            </div>
-          `
-              : ''
-          }
-          ${
-            content.highlights && content.highlights.length > 0
-              ? `
-            <h2 class="section-title" style="margin-top:18px;">
-              <i class="fas fa-star"></i>
-              Điểm nổi bật
-            </h2>
-            ${content.highlights
-              .map(
-                (h: any) => `
-              <div class="template-card" style="margin-bottom:10px;">
-                <div class="template-card-title">${h.title || h}</div>
-                ${h.description ? `<div class="template-card-subtitle">${h.description}</div>` : ''}
-              </div>
-            `
-              )
-              .join('')}
-          `
-              : ''
-          }
-          ${
-            content.projects && content.projects.length > 0
-              ? `
-            <h2 class="section-title" style="margin-top:18px;">
-              <i class="fas fa-project-diagram"></i>
-              Dự án
-            </h2>
-            ${content.projects
-              .map((proj: any) => {
-                const links = Array.isArray(proj.links) ? proj.links : []
-                const linksHtml = links.length
-                  ? `<div style="margin-top:8px;">${links.map((l: any) => `<div><a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label || l.url}</a></div>`).join('')}</div>`
-                  : ''
-                return `
-              <div class="template-card" style="margin-bottom:12px;">
-                <div class="template-card-title">${proj.title || proj.name || 'Project'}</div>
-                ${proj.role ? `<div class="template-card-subtitle">${proj.role}</div>` : ''}
-                ${proj.description ? `<div class="template-timeline-description" style="margin-top:8px;">${proj.description}</div>` : ''}
-                ${linksHtml}
-              </div>
-            `
-              })
-              .join('')}
-          `
-              : ''
-          }
-          ${
-            content.links && content.links.length > 0
-              ? `
-            <h2 class="section-title" style="margin-top:18px;">
-              <i class="fas fa-link"></i>
-              Liên kết
-            </h2>
-            <div>
-              ${content.links.map((ln: any) => `<div style="margin-bottom:8px;"><strong style="margin-right:8px">${ln.label ? `${ln.label}:` : ''}</strong><a href="${ln.url}" target="_blank" rel="noopener noreferrer">${ln.url}</a></div>`).join('')}
-            </div>
-          `
-              : ''
-          }
-        </div>
-      `
-          : ''
-      }
-    `
   }
 
   /**
@@ -2498,10 +1994,16 @@ export class ResumeService {
   /**
    * Đảm bảo resume có file_url (generate nếu chưa có)
    */
-  private async ensureResumeHasPdf(userId: string, resumeId: string, template?: string): Promise<string> {
+  public async ensureResumeHasPdf(userId: string, resumeId: string, template?: string): Promise<string> {
     const profile = await prisma.profiles.findFirst({
       where: { user_id: userId },
       include: {
+        users: {
+          select: {
+            email: true
+          }
+        },
+        location: true,
         skills: {
           include: { skills: true }
         },
@@ -2662,31 +2164,6 @@ export class ResumeService {
     } finally {
       await browser.close()
     }
-  }
-
-  /**
-   * Professional template (delegates to modern generator for now)
-   */
-  private generateProfessionalTemplate(resume: any, content: any): string {
-    // Professional theme uses modern layout
-    const themeData = getThemeById('modern')
-    return this.generateModernTemplate(resume, content, themeData)
-  }
-
-  /**
-   * Timeline template (uses modern layout with timeline styling)
-   */
-  private generateTimelineTemplate(resume: any, content: any): string {
-    const themeData = getThemeById('modern')
-    return this.generateModernTemplate(resume, content, themeData)
-  }
-
-  /**
-   * Compact template (uses modern layout with compact styling)
-   */
-  private generateCompactTemplate(resume: any, content: any): string {
-    const themeData = getThemeById('modern')
-    return this.generateModernTemplate(resume, content, themeData)
   }
 
   /**

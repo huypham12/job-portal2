@@ -433,7 +433,6 @@ export class ElasticsearchSyncMiddleware {
     // Calculate aggregated data
     const stages = application.application_stages
     const completedStages = stages.filter((s) => s.status === 'completed')
-    const ratedStages = stages.filter((s) => s.rating)
 
     // Check if shortlisted
     const shortlist = await prisma.connection_interests.findFirst({
@@ -453,8 +452,6 @@ export class ElasticsearchSyncMiddleware {
       user_id: application.profiles.user_id,
       status: application.status,
       applied_at: application.applied_at,
-      first_viewed_at: application.first_viewed_at,
-      last_viewed_at: application.last_viewed_at,
       view_count: application.view_count || 0,
       // Candidate info
       candidate_name: application.profiles.display_name || application.profiles.full_name,
@@ -482,11 +479,8 @@ export class ElasticsearchSyncMiddleware {
       current_stage_status: stages[0]?.status,
       stages_count: stages.length,
       completed_stages_count: completedStages.length,
-      average_rating:
-        ratedStages.length > 0 ? ratedStages.reduce((sum, s) => sum + s.rating!, 0) / ratedStages.length : null,
       // Metadata
       has_notes: (application.metadata as any)?.notes?.length > 0,
-      has_rating: ratedStages.length > 0,
       is_shortlisted: !!shortlist
     }
   }

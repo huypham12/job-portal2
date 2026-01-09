@@ -18,13 +18,13 @@ export const socketAuthMiddleware = (socket: Socket, next: (err?: Error) => void
     // Verify token
     const JWT_SECRET = envConfig.secrets.jwt.access
     const decoded = jwt.verify(token, JWT_SECRET) as {
-      userId: string
+      user_id: string
       role: string
     }
 
-    // Attach user data to socket
-    socket.data.userId = decoded.userId
-    socket.data.role = decoded.role
+    // Attach user data to socket (note: JWT uses user_id, not userId)
+    socket.data.userId = decoded.user_id
+    socket.data.userRole = decoded.role
 
     next()
   } catch (error) {

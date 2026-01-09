@@ -7,6 +7,7 @@
 export interface ThemeColors {
   primary: string
   secondary: string
+  accent?: string
   text: string
   textLight: string
   background: string
@@ -21,46 +22,37 @@ export interface CVTheme {
   layout: TemplateLayout
   colors: ThemeColors
   category: 'professional' | 'creative' | 'modern'
+  isAtsFriendly?: boolean
 }
 
 export const CV_THEMES: Record<string, CVTheme> = {
-  modern: {
-    id: 'modern',
-    name: 'Modern',
-    description: 'Sidebar layout với gradient background, phù hợp cho tech và startup',
-    layout: 'sidebar',
-    category: 'modern',
-    colors: {
-      primary: '#1e293b',
-      secondary: '#334155',
-      text: '#1e293b',
-      textLight: '#64748b',
-      background: '#ffffff'
-    }
-  },
   classic: {
     id: 'classic',
-    name: 'Classic',
-    description: 'Header trên cùng với layout truyền thống, phù hợp cho corporate',
+    name: 'Classic Professional',
+    description: 'ATS-friendly template với layout truyền thống, phù hợp cho corporate jobs',
     layout: 'header-top',
     category: 'professional',
+    isAtsFriendly: true,
     colors: {
-      primary: '#2563eb',
-      secondary: '#1e40af',
+      primary: '#1e40af',    // Navy blue - professional
+      secondary: '#3b82f6',  // Blue
+      accent: '#60a5fa',     // Light blue
       text: '#1e293b',
       textLight: '#64748b',
       background: '#ffffff'
     }
   },
-  creative: {
-    id: 'creative',
-    name: 'Creative',
-    description: 'Layout 2 cột đều nhau với thiết kế sáng tạo, phù hợp cho designer',
-    layout: 'two-column',
-    category: 'creative',
+  modern: {
+    id: 'modern',
+    name: 'Modern Impact',
+    description: 'Personal branding template với design sáng tạo, phù hợp cho tech/startup',
+    layout: 'sidebar',
+    category: 'modern',
+    isAtsFriendly: false,
     colors: {
-      primary: '#7c3aed',
-      secondary: '#6d28d9',
+      primary: '#7c3aed',    // Purple - creative
+      secondary: '#a855f7',  // Light purple
+      accent: '#c084fc',     // Lavender
       text: '#1e293b',
       textLight: '#64748b',
       background: '#ffffff'

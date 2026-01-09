@@ -246,7 +246,7 @@ export class AdminController {
    * @route DELETE /admin/jobs/:id/hard-delete
    * @access Admin
    */
-  hardDeleteJobController: DeleteHandler<undefined, any, JobIdParams> = async (req, res) => {
+  hardDeleteJobController: DeleteHandler<{ message: string; data: any }, any, JobIdParams> = async (req, res) => {
     const { id } = req.validatedParams
     const result = await this.adminService.hardDeleteJob(id)
 

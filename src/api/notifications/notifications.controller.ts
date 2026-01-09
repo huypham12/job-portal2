@@ -21,7 +21,7 @@ export class NotificationController {
       const validatedQuery = getNotificationsQuerySchema.parse(req.query)
 
       // Get user ID from authenticated user
-      const userId = req.user!.userId
+      const userId = req.decoded_authorization!.user_id
 
       // Get notifications
       const result = await notificationService.getNotifications(userId, validatedQuery)
@@ -38,7 +38,7 @@ export class NotificationController {
    */
   async getUnreadCount(req: Request, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.userId
+      const userId = req.decoded_authorization!.user_id
 
       const result = await notificationService.getUnreadCount(userId)
 
@@ -56,7 +56,7 @@ export class NotificationController {
     try {
       // Validate params
       const validatedParams = markAsReadParamsSchema.parse(req.params)
-      const userId = req.user!.userId
+      const userId = req.decoded_authorization!.user_id
 
       const result = await notificationService.markAsRead(validatedParams.id, userId)
 
@@ -72,7 +72,7 @@ export class NotificationController {
    */
   async markAllAsRead(req: Request, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.userId
+      const userId = req.decoded_authorization!.user_id
 
       const result = await notificationService.markAllAsRead(userId)
 
@@ -90,7 +90,7 @@ export class NotificationController {
     try {
       // Validate params
       const validatedParams = deleteNotificationParamsSchema.parse(req.params)
-      const userId = req.user!.userId
+      const userId = req.decoded_authorization!.user_id
 
       const result = await notificationService.deleteNotification(validatedParams.id, userId)
 

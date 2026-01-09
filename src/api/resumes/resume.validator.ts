@@ -166,8 +166,8 @@ export const exportResumeValidator = validate(
     }),
     body: z
       .object({
-        // Only accept canonical templates supported by backend
-        template: z.enum(['timeline', 'professional', 'compact']).optional().default('professional'),
+        // Accept theme IDs from CV_THEMES
+        template: z.enum(['classic', 'modern']).optional().default('modern'),
         format: z.enum(['pdf', 'html']).optional().default('pdf'),
         html: z
           .string()
@@ -191,9 +191,9 @@ export const createResumeFromProfileValidator = validate(
         .max(255, 'Title must not exceed 255 characters')
         .trim(),
       theme: z
-        .enum(['default', 'professional', 'creative', 'modern', 'elegant', 'blue', 'purple', 'green', 'orange', 'red'])
+        .enum(['classic', 'modern'])
         .optional()
-        .default('default'),
+        .default('modern'),
       is_default: z.boolean().optional().default(false),
       is_public: z.boolean().optional().default(false)
     })

@@ -555,8 +555,6 @@ export const enhancedMappings = {
         candidate_id: { type: 'keyword' },
         status: { type: 'keyword' },
         applied_at: { type: 'date' },
-        first_viewed_at: { type: 'date' },
-        last_viewed_at: { type: 'date' },
         view_count: { type: 'integer' },
         job_title: { type: 'text', analyzer: 'vi_analyzer' },
         job_company_name: { type: 'text', analyzer: 'vi_analyzer' },

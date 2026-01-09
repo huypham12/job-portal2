@@ -8,6 +8,8 @@ export enum NotificationType {
   APPLICATION_STATUS_CHANGED = 'application_status_changed',
   APPLICATION_STAGE_UPDATED = 'application_stage_updated',
   INTERVIEW_SCHEDULED = 'interview_scheduled',
+  INTERVIEW_REMINDER_24H = 'interview_reminder_24h',
+  INTERVIEW_REMINDER_1H = 'interview_reminder_1h',
   APPLICATION_WITHDRAWN = 'application_withdrawn',
   APPLICATION_DOCUMENT_UPLOADED = 'application_document_uploaded',
   APPLICATION_SUBMITTED = 'application_submitted',
@@ -28,11 +30,6 @@ export enum NotificationType {
   SAVED_JOB_EXPIRING = 'saved_job_expiring',
   JOB_APPROVED = 'job_approved',
 
-  // Job Alerts
-  POPULAR_JOB_ALERT = 'popular_job_alert',
-  LOCATION_JOB_ALERT = 'location_job_alert',
-  SEARCH_BASED_ALERT = 'search_based_alert',
-
   // System
   SYSTEM_ANNOUNCEMENT = 'system_announcement'
 }
@@ -48,10 +45,14 @@ export const NotificationTemplates: Record<NotificationType, (data: any) => stri
     `Đơn ứng tuyển của bạn cho vị trí ${data.job_title} đã được cập nhật: ${data.status}`,
 
   [NotificationType.APPLICATION_STAGE_UPDATED]: (data) =>
-    `Giai đoạn ứng tuyển của bạn đã chuyển sang: ${data.stage_name}`,
+    `Giai đoạn "${data.stage_name}" đã được cập nhật: ${data.status}${data.next_stage ? `. Tiếp theo: ${data.next_stage}` : ''}`,
 
   [NotificationType.INTERVIEW_SCHEDULED]: (data) =>
     `Buổi phỏng vấn cho vị trí ${data.job_title} đã được lên lịch vào ${data.scheduled_at}`,
+  [NotificationType.INTERVIEW_REMINDER_24H]: (data) =>
+    `Nhắc nhở: Buổi phỏng vấn cho vị trí ${data.job_title} diễn ra sau ~24 giờ vào ${data.scheduled_at}`,
+  [NotificationType.INTERVIEW_REMINDER_1H]: (data) =>
+    `Nhắc nhở: Buổi phỏng vấn cho vị trí ${data.job_title} diễn ra sau ~1 giờ vào ${data.scheduled_at}`,
 
   [NotificationType.APPLICATION_WITHDRAWN]: (data) =>
     `Ứng viên ${data.candidate_name} đã rút đơn ứng tuyển cho vị trí ${data.job_title}`,
@@ -84,15 +85,6 @@ export const NotificationTemplates: Record<NotificationType, (data: any) => stri
   [NotificationType.SAVED_JOB_EXPIRING]: (data) => `Công việc đã lưu "${data.job_title}" sắp hết hạn nộp đơn`,
 
   [NotificationType.JOB_APPROVED]: (data) => `Tin tuyển dụng "${data.job_title}" đã được duyệt và đăng tải`,
-
-  [NotificationType.POPULAR_JOB_ALERT]: (data) =>
-    `Công việc hot: ${data.job_title} đã được ${data.view_count} người xem trong tuần qua`,
-
-  [NotificationType.LOCATION_JOB_ALERT]: (data) =>
-    `Có ${data.job_count} việc làm mới ở ${data.location_name} phù hợp với bạn`,
-
-  [NotificationType.SEARCH_BASED_ALERT]: (data) =>
-    `Có ${data.job_count} việc làm mới phù hợp với tìm kiếm gần đây của bạn`,
 
   [NotificationType.SYSTEM_ANNOUNCEMENT]: (data) => data.message
 }

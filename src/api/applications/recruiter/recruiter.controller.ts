@@ -152,9 +152,14 @@ export class RecruiterApplicationController {
         application_documents: result.documents || []
       }
 
+      // Convert BigInt to string for JSON serialization
+      const serializedPayload = JSON.parse(JSON.stringify(responsePayload, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value
+      ))
+
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        data: responsePayload
+        data: serializedPayload
       })
     } catch (error) {
       next(error)
@@ -221,6 +226,28 @@ export class RecruiterApplicationController {
         success: true,
         data: result,
         message: 'Application stage created successfully'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * POST /api/applications/:id/stage/:stageId/decision
+   * Recruiter decision after a stage (create next stage or accept application)
+   */
+  makeStageDecision = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId, stageId } = req.params
+      const data = req.body as any
+
+      const result = await this.recruiterService.makeStageDecision(user_id, applicationId, stageId, data)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: result,
+        message: 'Stage decision processed successfully'
       })
     } catch (error) {
       next(error)

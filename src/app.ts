@@ -142,6 +142,25 @@ const main = async () => {
       })
     )
 
+    // Health check endpoint
+    app.get('/health', (_req: Request, res: Response) => {
+      res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: envConfig.app.nodeEnv
+      })
+    })
+
+    // Socket diagnostics endpoint (protected - should add auth in production)
+    app.get('/api/socket/diagnostics', (_req: Request, res: Response) => {
+      const diagnostics = socketService.getDiagnostics()
+      res.status(200).json({
+        ...diagnostics,
+        timestamp: new Date().toISOString()
+      })
+    })
+
     // Apply auth-specific rate limiter to auth endpoints
     app.use('/api/auth', authRateLimit, authRouter)
     app.use('/api/user', userRouter)

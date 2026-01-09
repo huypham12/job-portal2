@@ -57,19 +57,3 @@ const getPopularJobsByLocationQuery = z.object({
 })
 
 export const getPopularJobsByLocationValidator = zodValidate({ query: getPopularJobsByLocationQuery })
-
-// ==================== ENHANCED NOTIFICATIONS VALIDATORS ====================
-
-const sendPopularJobAlertsBody = z.object({
-  threshold: z.preprocess((val) => {
-    if (val === undefined || val === null || val === '') return undefined
-    const num = Number(val)
-    return isNaN(num) ? undefined : num
-  }, z.number().int().min(1).max(1000).default(10))
-})
-
-export const sendPopularJobAlertsValidator = zodValidate({ body: sendPopularJobAlertsBody })
-
-export const sendLocationBasedAlertsValidator = zodValidate({})
-
-export const sendSearchBasedAlertsValidator = zodValidate({})

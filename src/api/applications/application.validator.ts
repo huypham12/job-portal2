@@ -95,7 +95,7 @@ export type UploadDocumentDTO = {
 /**
  * Validator for submitting candidate feedback for interview stage
  */
-const StageFeedbackParamsSchema = z.object({
+export const StageFeedbackParamsSchema = z.object({
   applicationId: z.string().uuid({ message: 'Application ID must be a valid UUID' }),
   stageId: z.string().uuid({ message: 'Stage ID must be a valid UUID' })
 })
@@ -112,4 +112,23 @@ export const StageFeedbackSchema = {
 export type StageFeedbackDTO = {
   params: z.infer<typeof StageFeedbackParamsSchema>
   body: z.infer<typeof StageFeedbackBodySchema>
+}
+
+/**
+ * Validator for candidate accept/decline stage endpoints
+ */
+const StageActionParamsSchema = StageFeedbackParamsSchema
+
+const StageDeclineBodySchema = z.object({
+  reason: z.string().min(1).max(255)
+})
+
+export const StageDeclineSchema = {
+  params: StageActionParamsSchema,
+  body: StageDeclineBodySchema
+}
+
+export type StageDeclineDTO = {
+  params: z.infer<typeof StageActionParamsSchema>
+  body: z.infer<typeof StageDeclineBodySchema>
 }
