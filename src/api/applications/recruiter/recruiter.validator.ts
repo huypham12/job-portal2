@@ -404,7 +404,7 @@ export type ContactCandidateDTO = {
  */
 const BulkUpdateBodySchema = z.object({
   application_ids: z.array(z.string().uuid()).min(1, { message: 'At least one application ID is required' }),
-  action: z.enum(['reject', 'accept', 'review']),
+  action: z.enum(['reject', 'accept', 'review', 'interview']),
   reason: z.string().optional()
 })
 
@@ -507,3 +507,100 @@ export const GetApplicationTimelineSchema = {
 }
 
 export type GetApplicationTimelineDTO = z.infer<(typeof GetApplicationTimelineSchema)['params']>
+
+/**
+ * Validator for bulk creating interview stages
+ */
+export const BulkCreateStagesSchema = {
+  body: z.object({
+    application_ids: z
+      .array(z.string().uuid({ message: 'Each application ID must be a valid UUID' }))
+      .min(1, { message: 'At least one application ID is required' })
+      .max(50, { message: 'Maximum 50 applications per batch' }),
+    stage_data: z.object({
+      stage_name: z
+        .string()
+        .min(1, { message: 'Stage name is required' })
+        .max(100, { message: 'Stage name must not exceed 100 characters' }),
+      scheduled_at: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{3})?Z?)?$/, {
+          message: 'Invalid datetime format. Expected: YYYY-MM-DDTHH:mm or ISO 8601'
+        })
+        .transform((val) => {
+          // If it's already a full ISO string, return as is
+          if (val.includes('Z') || val.includes('+') || val.includes(':00')) {
+            return val
+          }
+          // Convert datetime-local format to ISO: add :00 seconds and Z timezone
+          return `${val}:00.000Z`
+        })
+        .optional(),
+      location: z.string().max(255).optional(),
+      duration_minutes: z.number().int().min(1).max(480).optional()
+    })
+  })
+}
+
+export type BulkCreateStagesDTO = z.infer<(typeof BulkCreateStagesSchema)['body']>
+
+/**
+ * Validator for getting interview round by ID
+ */
+export const RoundIdParamSchema = {
+  params: z.object({
+    roundId: z.string().min(1, { message: 'Round ID is required' })
+  })
+}
+
+export type RoundIdParamDTO = z.infer<(typeof RoundIdParamSchema)['params']>
+
+/**
+ * Validator for job ID param (for interview rounds endpoint)
+ */
+export const JobIdRoundsParamSchema = {
+  params: z.object({
+    jobId: z.string().uuid({ message: 'Job ID must be a valid UUID' })
+  })
+}
+
+export type JobIdRoundsParamDTO = z.infer<(typeof JobIdRoundsParamSchema)['params']>
+
+/**
+ * Validator for bulk stage decision
+ */
+export const BulkStageDecisionSchema = {
+  body: z.object({
+    stage_id: z.string().uuid({ message: 'Stage ID must be a valid UUID' }),
+    application_ids: z
+      .array(z.string().uuid({ message: 'Each application ID must be a valid UUID' }))
+      .min(1, { message: 'At least one application ID is required' })
+      .max(50, { message: 'Maximum 50 applications per batch' }),
+    decision: z.enum(['pass', 'fail', 'accept']),
+    next_stage: z
+      .object({
+        stage_name: z
+          .string()
+          .min(1, { message: 'Next stage name is required' })
+          .max(100, { message: 'Stage name must not exceed 100 characters' }),
+        scheduled_at: z
+          .string()
+          .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{3})?Z?)?$/, {
+            message: 'Invalid datetime format. Expected: YYYY-MM-DDTHH:mm or ISO 8601'
+          })
+          .transform((val) => {
+            if (val.includes('Z') || val.includes('+') || val.includes(':00')) {
+              return val
+            }
+            return `${val}:00.000Z`
+          })
+          .optional(),
+        location: z.string().max(255).optional(),
+        duration_minutes: z.number().int().min(1).max(480).optional()
+      })
+      .optional(),
+    reason: z.string().max(500).optional()
+  })
+}
+
+export type BulkStageDecisionDTO = z.infer<(typeof BulkStageDecisionSchema)['body']>

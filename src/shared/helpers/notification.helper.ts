@@ -138,6 +138,54 @@ export class NotificationHelper {
   }
 
   /**
+   * Send bulk interview scheduled notifications (optimized for multiple candidates)
+   */
+  static async notifyBulkInterviewScheduled(data: {
+    candidates: Array<{
+      candidateId: string
+      applicationId: string
+      stageId: string
+    }>
+    jobTitle: string
+    roundId: string
+    roundName: string
+    scheduledAt: string
+    location?: string
+    totalCandidates: number
+  }) {
+    const { candidates, jobTitle, roundId, roundName, scheduledAt, location, totalCandidates } = data
+
+    // Send notifications in parallel
+    await Promise.allSettled(
+      candidates.map(async (candidate) => {
+        try {
+          const content = `Bạn được mời tham gia vòng phỏng vấn "${roundName}" cho vị trí ${jobTitle}`
+
+          await socketService.sendNotification(candidate.candidateId, NotificationType.INTERVIEW_SCHEDULED, content, {
+            title: `Lời mời phỏng vấn: ${roundName}`,
+            action_url: `/candidate/applications/${candidate.applicationId}/stages/${candidate.stageId}`,
+            action_text: 'Xem chi tiết & phản hồi',
+            metadata: {
+              application_id: candidate.applicationId,
+              stage_id: candidate.stageId,
+              round_id: roundId,
+              round_name: roundName,
+              job_title: jobTitle,
+              scheduled_at: scheduledAt,
+              location: location || '',
+              is_group_interview: true,
+              total_candidates: totalCandidates
+            },
+            category: 'interview'
+          })
+        } catch (error) {
+          console.error(`Failed to send notification to candidate ${candidate.candidateId}:`, error)
+        }
+      })
+    )
+  }
+
+  /**
    * Send notification when application stage is updated
    */
   static async notifyApplicationStageUpdated(data: {

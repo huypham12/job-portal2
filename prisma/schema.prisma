@@ -52,6 +52,7 @@ model application_stages {
   candidate_accepted_at       DateTime?    @db.Timestamp(6)
   candidate_declined_at       DateTime?    @db.Timestamp(6)
   decline_reason              String?      @db.VarChar(255)
+  metadata                    Json?
   applications                applications @relation(fields: [application_id], references: [id], onDelete: Cascade)
 
   @@index([application_id, stage_order], map: "idx_application_stages_order")
