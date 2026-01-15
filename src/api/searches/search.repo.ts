@@ -144,5 +144,127 @@ export const searchRepo = {
         status: true
       }
     })
+  },
+
+  /**
+   * Get popular search queries from search_history
+   * Returns aggregated queries sorted by frequency
+   */
+  async getPopularSearchQueries(limit: number = 50): Promise<
+    Array<{
+      q?: string
+      location?: string
+      locationId?: string
+      frequency: number
+    }>
+  > {
+    try {
+      // Get recent searches from last 7 days
+      const recentSearches = await prisma.search_history.findMany({
+        where: {
+          searched_at: {
+            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days ago
+          },
+          result_count: {
+            gt: 0 // Only searches that returned results
+          }
+        },
+        select: {
+          search_query: true
+        },
+        take: 1000 // Limit raw data fetch
+      })
+
+      // Aggregate by query + location
+      const aggregated = new Map<
+        string,
+        {
+          q?: string
+          location?: string
+          locationId?: string
+          frequency: number
+        }
+      >()
+
+      recentSearches.forEach((search) => {
+        const query = search.search_query as any
+        const q = query?.q || ''
+        const location = query?.location || ''
+        const locationId = query?.locationId || ''
+
+        const key = `${q}|${location}|${locationId}`
+
+        if (aggregated.has(key)) {
+          aggregated.get(key)!.frequency++
+        } else {
+          aggregated.set(key, {
+            q: q || undefined,
+            location: location || undefined,
+            locationId: locationId || undefined,
+            frequency: 1
+          })
+        }
+      })
+
+      // Sort by frequency and return top N
+      return Array.from(aggregated.values())
+        .sort((a, b) => b.frequency - a.frequency)
+        .slice(0, limit)
+    } catch (error) {
+      console.error('Failed to get popular search queries:', error)
+      return []
+    }
+  },
+
+  /**
+   * Get top companies by job count or other criteria
+   */
+  async getTopCompanies(limit: number = 100): Promise<any[]> {
+    try {
+      const companies = await prisma.companies.findMany({
+        where: {
+          status: 'approved'
+        },
+        select: {
+          id: true,
+          name: true,
+          logo_url: true,
+          description: true
+        },
+        take: limit,
+        orderBy: {
+          name: 'asc' // Can be changed to job count when available
+        }
+      })
+
+      return companies
+    } catch (error) {
+      console.error('Failed to get top companies:', error)
+      return []
+    }
+  },
+
+  /**
+   * Get all locations for caching
+   */
+  async getAllLocations(): Promise<any[]> {
+    try {
+      const locations = await prisma.locations.findMany({
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          parent_id: true
+        },
+        orderBy: {
+          name: 'asc'
+        }
+      })
+
+      return locations
+    } catch (error) {
+      console.error('Failed to get all locations:', error)
+      return []
+    }
   }
 }

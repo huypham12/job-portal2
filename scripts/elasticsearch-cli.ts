@@ -482,36 +482,6 @@ async function resetIndices(): Promise<void> {
       }
     }
 
-    // Step 4.5: Deep reset - Delete Docker volumes (if --deep flag)
-    if (deepReset) {
-      console.log('\n🗑️  DEEP RESET: Deleting Docker volumes...')
-      try {
-        // Stop Elasticsearch container
-        console.log('  🛑 Stopping Elasticsearch container...')
-        try {
-          execSync('docker-compose stop elasticsearch', { stdio: 'pipe', cwd: process.cwd() })
-          console.log('  ✅ Stopped Elasticsearch container')
-        } catch (error) {
-          console.log(`  ⚠️  Could not stop ES container: ${(error as Error).message}`)
-        }
-
-        // Remove the volume
-        console.log('  🗑️  Removing es_data volume...')
-        try {
-          execSync('docker volume rm job-portal_es_data', { stdio: 'pipe', cwd: process.cwd() })
-          console.log('  ✅ Removed es_data volume')
-        } catch (error) {
-          console.log(`  ⚠️  Could not remove es_data volume: ${(error as Error).message}`)
-        }
-
-        console.log('  ✅ Docker volume deleted - all data permanently removed from disk')
-        console.log('  ℹ️  Container will be restarted when you run setup commands')
-      } catch (error) {
-        console.log(`  ⚠️  Error during deep reset: ${error}`)
-        console.log('  💡 You may need to manually remove the volume: docker volume rm job-portal_es_data')
-      }
-    }
-
     // Step 5: Recreate indices with fresh mappings (only if not deep reset)
     if (!deepReset) {
       console.log('\n🔧 Recreating indices with fresh mappings...')

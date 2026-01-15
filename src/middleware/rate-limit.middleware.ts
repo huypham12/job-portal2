@@ -14,16 +14,17 @@ interface RateLimitOptions {
 // Simple rate limiting middleware using Redis
 export const createRateLimit = (options: RateLimitOptions) => {
   const {
-    windowMs,
-    maxRequests,
-    keyPrefix = 'ratelimit',
-    skipSuccessfulRequests = false,
-    skipFailedRequests = false
+    windowMs, // khoảng thời gian đếm request
+    maxRequests, // Số request tối đa trong window
+    keyPrefix = 'ratelimit', // Phân loại rate limit (auth, api, strict)
+    skipSuccessfulRequests = false, // Không tính các request thành công
+    skipFailedRequests = false // Không tính các request thất bại
   } = options
 
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Create unique key based on IP address and endpoint
+      // auth:192.168.1.10:/login
       const key = `${keyPrefix}:${req.ip}:${req.path}`
 
       // Get current request count
@@ -57,7 +58,7 @@ export const authRateLimit = createRateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   // Increased limit for local development/testing to reduce accidental 429s.
   // In production consider keeping this low (e.g. 5) or using exponential backoff.
-  maxRequests: 100, // 20 attempts per 15 minutes
+  maxRequests: 100, // 100 attempts per 15 minutes
   keyPrefix: 'auth',
   skipSuccessfulRequests: true // Don't count successful logins
 })

@@ -30,6 +30,8 @@ import syncRouter from './api/sync/sync.route'
 import { socketService } from './socket/socket.service'
 import { initializeCronjobs } from './jobs'
 import { SyncRetryWorker } from './workers/sync-retry.worker'
+import { cacheWarmerService } from './shared/cache-warmer.service'
+import { circuitBreakerService } from './shared/circuit-breaker.service'
 // import { elasticsearchService } from './config/elasticsearch.service'
 import YAML from 'yaml'
 import swaggerUi from 'swagger-ui-express'
@@ -161,6 +163,41 @@ const main = async () => {
       })
     })
 
+    // Circuit breaker diagnostics endpoint
+    app.get('/api/circuit-breaker/stats', (_req: Request, res: Response) => {
+      const stats = circuitBreakerService.getAllStats()
+      res.status(200).json({
+        circuit_breakers: stats,
+        timestamp: new Date().toISOString()
+      })
+    })
+
+    // Cache warming stats endpoint
+    app.get('/api/cache/stats', async (_req: Request, res: Response) => {
+      try {
+        const stats = await cacheWarmerService.getStats()
+        res.status(200).json(stats)
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get cache stats' })
+      }
+    })
+
+    // Manual cache refresh endpoint (protected - should add auth in production)
+    app.post('/api/cache/refresh', async (_req: Request, res: Response) => {
+      try {
+        // Run in background
+        cacheWarmerService.refreshCache().catch((err) => {
+          console.error('Background cache refresh failed:', err)
+        })
+        res.status(202).json({
+          message: 'Cache refresh triggered',
+          timestamp: new Date().toISOString()
+        })
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to trigger cache refresh' })
+      }
+    })
+
     // Apply auth-specific rate limiter to auth endpoints
     app.use('/api/auth', authRateLimit, authRouter)
     app.use('/api/user', userRouter)
@@ -215,6 +252,21 @@ const main = async () => {
 
     // Initialize sync retry worker
     SyncRetryWorker.start()
+
+    // Initialize cache warming (async - don't block server startup)
+    setTimeout(async () => {
+      try {
+        console.log('🔥 Starting cache warming...')
+        await Promise.allSettled([
+          cacheWarmerService.warmPopularSearches(30),
+          cacheWarmerService.warmTopCompanies(50),
+          cacheWarmerService.warmTopLocations()
+        ])
+        console.log('✅ Cache warming completed')
+      } catch (error) {
+        console.error('⚠️ Cache warming failed:', error)
+      }
+    }, 5000) // Wait 5 seconds after startup
 
     server.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server is running on http://0.0.0.0:${PORT}`)

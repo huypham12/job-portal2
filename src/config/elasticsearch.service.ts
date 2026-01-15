@@ -24,6 +24,11 @@ export type SearchResponse<T = any> = {
   took: number
   total: number
   hits: Array<{ id: string; _source: T; _score?: number }>
+  // Cache metadata (added by cache layer)
+  cache_hit?: boolean
+  es_took_ms?: number
+  total_took_ms?: number
+  cached_at?: string
 }
 
 export type Suggestion = { text: string; payload?: unknown; score?: number }
@@ -36,6 +41,8 @@ export type SuggestResponse = { suggestions: Suggestion[] }
 import { Client } from '@elastic/elasticsearch'
 
 const ES_NODE = envConfig.elasticsearch.nodeUrl || envConfig.elasticsearch.host || envConfig.elasticsearch.node
+const ES_USERNAME = envConfig.elasticsearch.username
+const ES_PASSWORD = envConfig.elasticsearch.password
 
 // Enhanced Vietnamese analyzer configuration optimized for job portal search
 export const vietnameseAnalyzers = {
@@ -605,7 +612,13 @@ export const enhancedMappings = {
 let esClient: Client | null = null
 function getClient(): Client {
   if (esClient) return esClient
-  esClient = new Client({ node: ES_NODE })
+  esClient = new Client({
+    node: ES_NODE,
+    auth: {
+      username: ES_USERNAME,
+      password: ES_PASSWORD
+    }
+  })
   return esClient
 }
 

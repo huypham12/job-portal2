@@ -314,10 +314,8 @@ services:
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
-      - xpack.security.enabled=false
-      - xpack.security.enrollment.enabled=false
-      - xpack.security.http.ssl.enabled=false
-      - xpack.security.transport.ssl.enabled=false
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=\${ELASTICSEARCH_PASSWORD:-1234}
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -326,7 +324,7 @@ services:
     networks:
       - job-portal-network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      test: ["CMD-SHELL", "curl -u elastic:\${ELASTICSEARCH_PASSWORD:-1234} -f http://localhost:9200/_cluster/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -338,7 +336,8 @@ services:
     container_name: job-portal-kibana
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - xpack.security.enabled=false
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=\${ELASTICSEARCH_PASSWORD:-1234}
     ports:
       - "5601:5601"
     depends_on:
@@ -431,10 +430,14 @@ async function startElasticsearch(): Promise<boolean> {
   ) {
     composeCommand = 'docker compose'
     if (
-      !(await runCommand(`${composeCommand} up elasticsearch -d`, 'Starting fresh Elasticsearch container (alternative)', {
-        timeout: 120000,
-        retries: 1
-      }))
+      !(await runCommand(
+        `${composeCommand} up elasticsearch -d`,
+        'Starting fresh Elasticsearch container (alternative)',
+        {
+          timeout: 120000,
+          retries: 1
+        }
+      ))
     ) {
       logError('Failed to start Elasticsearch container')
       return false
@@ -450,8 +453,8 @@ async function startElasticsearch(): Promise<boolean> {
 
   while (retries > 0) {
     try {
-      // Check both basic connectivity and cluster health
-      execSync('curl -f -s http://localhost:9200/_cluster/health', {
+      // Check both basic connectivity and cluster health with authentication
+      execSync('curl -u elastic:1234 -f -s http://localhost:9200/_cluster/health', {
         stdio: 'ignore',
         timeout: 5000
       } as ExecSyncOptions)

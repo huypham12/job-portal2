@@ -94,8 +94,8 @@ interface EnvConfig {
     node: string
     nodeUrl?: string // alias for ELASTICSEARCH_URL
     host?: string // alias for ELASTICSEARCH_HOST
-    username?: string
-    password?: string
+    username: string
+    password: string
     indexPrefix: string
     esIndexPrefix?: string // alias for ES_INDEX_PREFIX
     enableSecurity: boolean
@@ -103,6 +103,7 @@ interface EnvConfig {
   }
   redis: {
     url: string
+    password?: string
   }
   seeding: {
     candidateLimit: number
@@ -245,15 +246,16 @@ export const envConfig: EnvConfig = {
     node: getEnvVar('ELASTICSEARCH_NODE', false, 'http://localhost:9200'),
     nodeUrl: getEnvVar('ELASTICSEARCH_URL', false),
     host: getEnvVar('ELASTICSEARCH_HOST', false),
-    username: getEnvVar('ELASTICSEARCH_USERNAME', false),
-    password: getEnvVar('ELASTICSEARCH_PASSWORD', false),
+    username: getEnvVar('ELASTICSEARCH_USERNAME', false, 'elastic'),
+    password: getEnvVar('ELASTICSEARCH_PASSWORD', false, '1234'),
     indexPrefix: getEnvVar('ELASTICSEARCH_INDEX_PREFIX', false, 'job_portal'),
     esIndexPrefix: getEnvVar('ES_INDEX_PREFIX', false),
-    enableSecurity: getEnvVar('ELASTIC_ENABLE_SECURITY', false, 'false').toLowerCase() === 'true',
+    enableSecurity: getEnvVar('ELASTIC_ENABLE_SECURITY', false, 'true').toLowerCase() === 'true',
     disableElasticsearch: getEnvVar('DISABLE_ELASTICSEARCH', false, 'false').toLowerCase() === 'true'
   },
   redis: {
-    url: getEnvVar('REDIS_URL', false, 'redis://localhost:6379')
+    url: getEnvVar('REDIS_URL', false, 'redis://localhost:6379'),
+    password: getEnvVar('REDIS_PASSWORD', false, '1234')
   },
   seeding: {
     candidateLimit: parseInt(getEnvVar('CANDIDATE_SEED_LIMIT', false, '1000'))

@@ -400,7 +400,11 @@ export const JobHitSchema = z.object({
 
 export const JobSearchResponseSchema = z.object({
   total: z.number().int(),
-  took_ms: z.number().int(),
+  took_ms: z.number().int(), // DEPRECATED - use total_took_ms instead (kept for backward compat)
+  es_took_ms: z.number().int().optional(), // Original Elasticsearch query time
+  total_took_ms: z.number().int(), // Actual total time (includes cache lookup or ES query)
+  cache_hit: z.boolean(), // Whether result came from cache
+  cached_at: z.string().optional(), // ISO timestamp when cached (if cache hit)
   hits: z.array(JobHitSchema)
 })
 

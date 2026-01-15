@@ -16,7 +16,12 @@ export const checkResourceOwnership = (
       const { user_id, role } = req.decoded_authorization as TokenPayload
       const userRole = role as string
       const paramId =
-        req.params.applicationId || req.params.id || req.params.userId || req.params.jobId || req.params.profileId
+        req.params.applicationId ||
+        req.params.id ||
+        req.params.userId ||
+        req.params.jobId ||
+        req.params.profileId ||
+        req.params.companyId
       const resourceId = paramId ?? (resourceType === 'user' ? user_id : undefined)
       if (!resourceId) {
         return next(new HttpError('Missing resource ID in URL parameters', HTTP_STATUS.BAD_REQUEST))
