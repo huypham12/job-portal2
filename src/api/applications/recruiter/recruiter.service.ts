@@ -308,6 +308,51 @@ export class RecruiterApplicationService {
   }
 
   /**
+   * Get dashboard statistics for recruiter (all jobs overview)
+   */
+  async getDashboardStats(recruiterId: string) {
+    // Get recruiter's company
+    const company = await prisma.companies.findFirst({
+      where: { recruiter_id: recruiterId }
+    })
+
+    if (!company) {
+      throw new Error('Company not found for recruiter')
+    }
+
+    // Count active jobs (approved)
+    const activeJobs = await prisma.jobs.count({
+      where: {
+        company_id: company.id,
+        status: 'approved'
+      }
+    })
+
+    // Count draft jobs
+    const draftJobs = await prisma.jobs.count({
+      where: {
+        company_id: company.id,
+        status: 'draft'
+      }
+    })
+
+    // Count total applications across all jobs
+    const totalApplications = await prisma.applications.count({
+      where: {
+        jobs: {
+          company_id: company.id
+        }
+      }
+    })
+
+    return {
+      active_jobs: activeJobs,
+      draft_jobs: draftJobs,
+      total_applications: totalApplications
+    }
+  }
+
+  /**
    * Get application statistics for a job
    */
   async getJobApplicationStats(recruiterId: string, jobId: string) {
@@ -650,6 +695,36 @@ export class RecruiterApplicationService {
         file_size_bytes: doc.file_size_bytes ? Number(doc.file_size_bytes) : null
       }))
     }
+  }
+
+  /**
+   * Get application documents (recruiter view)
+   */
+  async getApplicationDocuments(recruiterId: string, applicationId: string) {
+    // Verify access
+    await this.verifyApplicationAccess(applicationId, recruiterId)
+
+    // Get documents
+    const documents = await prisma.application_documents.findMany({
+      where: { application_id: applicationId },
+      orderBy: {
+        created_at: 'desc'
+      },
+      select: {
+        id: true,
+        document_type: true,
+        file_url: true,
+        original_filename: true,
+        mime_type: true,
+        file_size_bytes: true,
+        created_at: true
+      }
+    })
+
+    return documents.map((doc) => ({
+      ...doc,
+      file_size_bytes: doc.file_size_bytes ? Number(doc.file_size_bytes) : null
+    }))
   }
 
   /**

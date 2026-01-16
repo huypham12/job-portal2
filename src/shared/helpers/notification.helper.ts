@@ -91,7 +91,7 @@ export class NotificationHelper {
 
       await socketService.sendNotification(data.candidateId, NotificationType.APPLICATION_STATUS_CHANGED, content, {
         title: `Cập nhật đơn ứng tuyển: ${data.jobTitle}`,
-        action_url: `/candidate/applications/${data.applicationId}`,
+        action_url: `/applications/${data.applicationId}`,
         action_text: 'Xem chi tiết',
         metadata: {
           application_id: data.applicationId,
@@ -125,7 +125,7 @@ export class NotificationHelper {
 
     await socketService.sendNotification(data.candidateId, NotificationType.INTERVIEW_SCHEDULED, content, {
       title: `Lịch phỏng vấn: ${data.jobTitle}`,
-      action_url: `/candidate/applications/${data.applicationId}/stages/${data.stageId}`,
+      action_url: `/applications/${data.applicationId}`,
       action_text: 'Xem lịch phỏng vấn',
       metadata: {
         application_id: data.applicationId,
@@ -163,7 +163,7 @@ export class NotificationHelper {
 
           await socketService.sendNotification(candidate.candidateId, NotificationType.INTERVIEW_SCHEDULED, content, {
             title: `Lời mời phỏng vấn: ${roundName}`,
-            action_url: `/candidate/applications/${candidate.applicationId}/stages/${candidate.stageId}`,
+            action_url: `/applications/${candidate.applicationId}`,
             action_text: 'Xem chi tiết & phản hồi',
             metadata: {
               application_id: candidate.applicationId,
@@ -203,7 +203,7 @@ export class NotificationHelper {
     const templateData = NotificationHelper.mapToTemplateData(data)
     await socketService.sendNotification(data.candidateId, NotificationType.APPLICATION_STAGE_UPDATED, content, {
       title: `Cập nhật giai đoạn: ${data.jobTitle}`,
-      action_url: `/candidate/applications/${data.applicationId}`,
+      action_url: `/applications/${data.applicationId}`,
       action_text: 'Xem chi tiết',
       metadata: {
         application_id: data.applicationId,
@@ -248,7 +248,7 @@ export class NotificationHelper {
 
       await socketService.sendNotification(data.candidateId, NotificationType.APPLICATION_STATUS_CHANGED, content, {
         title: `Đơn ứng tuyển được xem: ${templateData.job_title}`,
-        action_url: `/candidate/applications/${data.applicationId}`,
+        action_url: `/applications/${data.applicationId}`,
         action_text: 'Xem chi tiết',
         metadata: {
           application_id: data.applicationId,
@@ -280,7 +280,7 @@ export class NotificationHelper {
 
     await socketService.sendNotification(data.candidateId, type, content, {
       title: `Nhắc lịch phỏng vấn: ${data.jobTitle}`,
-      action_url: `/candidate/applications/${data.applicationId}/stages/${data.stageId}`,
+      action_url: `/applications/${data.applicationId}`,
       action_text: 'Xem lịch phỏng vấn',
       metadata: {
         application_id: data.applicationId,
@@ -377,7 +377,7 @@ export class NotificationHelper {
 
     await socketService.sendNotification(data.recruiterId, NotificationType.APPLICATION_DOCUMENT_UPLOADED, content, {
       title: `Tài liệu mới: ${data.jobTitle}`,
-      action_url: `/recruiter/applications/${data.applicationId}/documents`,
+      action_url: `/recruiter/applications/${data.applicationId}`,
       action_text: 'Xem tài liệu',
       metadata: {
         application_id: data.applicationId,
@@ -404,7 +404,7 @@ export class NotificationHelper {
 
     await socketService.sendNotification(data.candidateId, NotificationType.OFFER_RECEIVED, content, {
       title: `Chúc mừng! Bạn đã nhận được offer: ${data.jobTitle}`,
-      action_url: `/candidate/applications/${data.applicationId}/offer`,
+      action_url: `/applications/${data.applicationId}`,
       action_text: 'Xem offer',
       metadata: {
         application_id: data.applicationId,
@@ -482,7 +482,7 @@ export class NotificationHelper {
 
     await socketService.sendNotification(data.candidateId, NotificationType.CONNECTION_INTEREST_RECEIVED, content, {
       title: `${data.recruiterName} quan tâm đến hồ sơ của bạn`,
-      action_url: `/candidate/connections/${data.interestId}`,
+      action_url: `/connections/${data.interestId}`,
       action_text: 'Xem chi tiết',
       metadata: {
         interest_id: data.interestId,

@@ -159,6 +159,15 @@ export class ResumeService {
     // Validate and normalize content
     const normalizedContent = this.validateAndNormalizeContent(dto.content || this.buildResumeContent(profile))
 
+    // Debug: Log received content
+    console.log('=== DEBUG: Content received in createResume ===')
+    console.log('Projects:', JSON.stringify(dto.content?.projects, null, 2))
+    console.log('Languages:', JSON.stringify(dto.content?.languages, null, 2))
+    console.log('References:', JSON.stringify(dto.content?.references, null, 2))
+    console.log('Normalized Projects:', JSON.stringify(normalizedContent.projects, null, 2))
+    console.log('Normalized Languages:', JSON.stringify(normalizedContent.languages, null, 2))
+    console.log('Normalized References:', JSON.stringify(normalizedContent.references, null, 2))
+
     // Tạo resume mới
     const resume = await prisma.resumes.create({
       data: {
@@ -2401,12 +2410,30 @@ export class ResumeService {
             <div class="experience-item">
               <div class="exp-header">
                 <div>
-                  <div class="exp-title">${project.name || 'Project Name'}</div>
-                  <div class="exp-company">${project.technologies ? project.technologies.join(', ') : ''}</div>
+                  <div class="exp-title">${project.name || 'Project Name'}${project.role ? ` - ${project.role}` : ''}</div>
+                  <div class="exp-company">${project.client || ''}${project.client && project.tech_stack?.length ? ' | ' : ''}${project.tech_stack && Array.isArray(project.tech_stack) ? project.tech_stack.join(', ') : ''}</div>
                 </div>
                 <div class="exp-date">${this.formatDateRange(project.start_date, project.end_date, project.is_current)}</div>
               </div>
-              <div class="exp-description">${project.description || ''}</div>
+              ${project.description ? `<div class="exp-description">${project.description}</div>` : ''}
+              ${
+                project.highlights && Array.isArray(project.highlights) && project.highlights.length > 0
+                  ? `
+                <ul class="project-highlights">
+                  ${project.highlights.map((h: string) => `<li>${h}</li>`).join('')}
+                </ul>
+              `
+                  : ''
+              }
+              ${
+                project.links && Array.isArray(project.links) && project.links.length > 0
+                  ? `
+                <div class="project-links">
+                  ${project.links.map((link: any) => `<a href="${link.url}" target="_blank">${link.label || link.url}</a>`).join(' | ')}
+                </div>
+              `
+                  : ''
+              }
             </div>
           `
             )
@@ -2426,6 +2453,8 @@ export class ResumeService {
     const educations = content.educations || []
     const certifications = content.certifications || []
     const awards = content.awards || []
+    const languages = content.languages || []
+    const references = content.references || []
 
     return `
       ${
@@ -2453,6 +2482,27 @@ export class ResumeService {
               <div class="edu-degree">${edu.degree || 'Degree'}</div>
               <div class="edu-school">${edu.school || 'School'}</div>
               <div class="edu-date">${this.formatDateRange(edu.start_date, edu.end_date, edu.is_current)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        languages.length > 0
+          ? `
+        <div class="section">
+          <h2>Languages</h2>
+          ${languages
+            .map(
+              (lang: any) => `
+            <div class="language-item">
+              <div class="language-name">${lang.name || 'Language'}</div>
+              <div class="language-level">${lang.proficiency_level || 'Intermediate'}</div>
+              ${lang.certificate ? `<div class="language-cert">${lang.certificate}${lang.certificate_url ? ` (<a href="${lang.certificate_url}" target="_blank">View</a>)` : ''}</div>` : ''}
             </div>
           `
             )
@@ -2495,6 +2545,29 @@ export class ResumeService {
               <div class="award-name">${award.name || 'Award'}</div>
               <div class="award-issuer">${award.issuer || 'Issuer'}</div>
               <div class="award-date">${this.formatDate(award.date)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        references.length > 0
+          ? `
+        <div class="section">
+          <h2>References</h2>
+          ${references
+            .map(
+              (ref: any) => `
+            <div class="reference-item">
+              <div class="reference-name">${ref.name || 'Name'}</div>
+              ${ref.position ? `<div class="reference-position">${ref.position}${ref.company ? ` at ${ref.company}` : ''}</div>` : ''}
+              ${ref.email ? `<div class="reference-contact">Email: ${ref.email}</div>` : ''}
+              ${ref.phone ? `<div class="reference-contact">Phone: ${ref.phone}</div>` : ''}
+              ${ref.relationship ? `<div class="reference-relationship">${ref.relationship}</div>` : ''}
             </div>
           `
             )
@@ -2561,6 +2634,8 @@ export class ResumeService {
     const projects = content.projects || []
     const certifications = content.certifications || []
     const awards = content.awards || []
+    const languages = content.languages || []
+    const references = content.references || []
 
     return `
       ${
@@ -2615,10 +2690,49 @@ export class ResumeService {
             .map(
               (project: any) => `
             <div class="project-item">
-              <div class="project-name">${project.name || 'Project Name'}</div>
-              <div class="project-tech">${project.technologies ? project.technologies.join(', ') : ''}</div>
+              <div class="project-name">${project.name || 'Project Name'}${project.role ? ` - ${project.role}` : ''}</div>
+              ${project.client ? `<div class="project-client">Client: ${project.client}</div>` : ''}
+              <div class="project-tech">${project.tech_stack && Array.isArray(project.tech_stack) ? project.tech_stack.join(', ') : ''}</div>
               <div class="project-date">${this.formatDateRange(project.start_date, project.end_date, project.is_current)}</div>
-              <div class="project-description">${project.description || ''}</div>
+              ${project.description ? `<div class="project-description">${project.description}</div>` : ''}
+              ${
+                project.highlights && Array.isArray(project.highlights) && project.highlights.length > 0
+                  ? `
+                <ul class="project-highlights">
+                  ${project.highlights.map((h: string) => `<li>${h}</li>`).join('')}
+                </ul>
+              `
+                  : ''
+              }
+              ${
+                project.links && Array.isArray(project.links) && project.links.length > 0
+                  ? `
+                <div class="project-links">
+                  ${project.links.map((link: any) => `<a href="${link.url}" target="_blank">${link.label || link.url}</a>`).join(' | ')}
+                </div>
+              `
+                  : ''
+              }
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        languages.length > 0
+          ? `
+        <div class="section">
+          <h2>Languages</h2>
+          ${languages
+            .map(
+              (lang: any) => `
+            <div class="language-item">
+              <div class="language-name">${lang.name || 'Language'} - ${lang.proficiency_level || 'Intermediate'}</div>
+              ${lang.certificate ? `<div class="language-cert">${lang.certificate}${lang.certificate_url ? ` (<a href="${lang.certificate_url}" target="_blank">View</a>)` : ''}</div>` : ''}
             </div>
           `
             )
@@ -2651,6 +2765,28 @@ export class ResumeService {
               <div class="exp-title">${award.name || 'Award'}</div>
               <div class="exp-company">${award.issuer || 'Issuer'}</div>
               <div class="exp-date">${this.formatDate(award.date)}</div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        references.length > 0
+          ? `
+        <div class="section">
+          <h2>References</h2>
+          ${references
+            .map(
+              (ref: any) => `
+            <div class="reference-item">
+              <div class="reference-name">${ref.name || 'Name'}</div>
+              ${ref.position ? `<div class="reference-position">${ref.position}${ref.company ? ` at ${ref.company}` : ''}</div>` : ''}
+              ${ref.email ? `<div class="reference-contact">${ref.email}</div>` : ''}
+              ${ref.phone ? `<div class="reference-contact">${ref.phone}</div>` : ''}
             </div>
           `
             )

@@ -30,6 +30,12 @@ const recruiterController = new RecruiterApplicationController()
 router.use(authenticateAccessToken, recruiter)
 
 /**
+ * GET /api/applications/dashboard/stats
+ * Get dashboard statistics overview for recruiter
+ */
+router.get('/dashboard/stats', recruiterController.getDashboardStats)
+
+/**
  * GET /api/applications/job/:jobId
  * Get all applications for a specific job
  */
@@ -55,42 +61,26 @@ router.get(
  * POST /api/applications/shortlist
  * Add or remove candidate from shortlist
  */
-router.post(
-  '/shortlist',
-  validateDto(ShortlistCandidateSchema),
-  recruiterController.shortlistCandidate
-)
+router.post('/shortlist', validateDto(ShortlistCandidateSchema), recruiterController.shortlistCandidate)
 
 /**
  * GET /api/applications/shortlisted
  * Get shortlisted candidates
  */
-router.get(
-  '/shortlisted',
-  validateDto(GetShortlistedSchema),
-  recruiterController.getShortlistedCandidates
-)
+router.get('/shortlisted', validateDto(GetShortlistedSchema), recruiterController.getShortlistedCandidates)
 
 /**
  * POST /api/applications/compare
  * Compare multiple candidates side-by-side
  */
-router.post(
-  '/compare',
-  validateDto(CompareCandidatesSchema),
-  recruiterController.compareCandidates
-)
+router.post('/compare', validateDto(CompareCandidatesSchema), recruiterController.compareCandidates)
 
 /**
  * POST /api/applications/bulk-update
  * Bulk update multiple applications
  * Note: This must come before /:id routes to avoid conflict
  */
-router.post(
-  '/bulk-update',
-  validateDto(BulkUpdateSchema),
-  recruiterController.bulkUpdateApplications
-)
+router.post('/bulk-update', validateDto(BulkUpdateSchema), recruiterController.bulkUpdateApplications)
 
 /**
  * GET /api/applications/:id/timeline
@@ -112,6 +102,17 @@ router.get(
   checkResourceOwnership('application'),
   validateDto(ApplicationIdParamSchema),
   recruiterController.getApplicationCV
+)
+
+/**
+ * GET /api/applications/:id/documents
+ * Get application documents (recruiter view)
+ */
+router.get(
+  '/:applicationId/documents',
+  checkResourceOwnership('application'),
+  validateDto(ApplicationIdParamSchema),
+  recruiterController.getApplicationDocuments
 )
 
 /**

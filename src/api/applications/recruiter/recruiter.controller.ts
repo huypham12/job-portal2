@@ -65,6 +65,25 @@ export class RecruiterApplicationController {
   }
 
   /**
+   * GET /api/applications/dashboard/stats
+   * Get dashboard statistics for recruiter (all jobs overview)
+   */
+  getDashboardStats = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+
+      const stats = await this.recruiterService.getDashboardStats(user_id)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: stats
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
    * GET /api/applications/:id/timeline
    * Get full application timeline with all stages
    */
@@ -98,6 +117,26 @@ export class RecruiterApplicationController {
       res.status(HTTP_STATUS.OK).json({
         success: true,
         data: cv
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * GET /api/applications/:id/documents
+   * Get application documents (recruiter view)
+   */
+  getApplicationDocuments = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { user_id } = req.decoded_authorization as TokenPayload
+      const { applicationId } = req.params
+
+      const documents = await this.recruiterService.getApplicationDocuments(user_id, applicationId)
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: documents
       })
     } catch (error) {
       next(error)
@@ -153,9 +192,9 @@ export class RecruiterApplicationController {
       }
 
       // Convert BigInt to string for JSON serialization
-      const serializedPayload = JSON.parse(JSON.stringify(responsePayload, (key, value) =>
-        typeof value === 'bigint' ? value.toString() : value
-      ))
+      const serializedPayload = JSON.parse(
+        JSON.stringify(responsePayload, (key, value) => (typeof value === 'bigint' ? value.toString() : value))
+      )
 
       res.status(HTTP_STATUS.OK).json({
         success: true,

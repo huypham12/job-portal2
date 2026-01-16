@@ -307,10 +307,33 @@ export class UnifiedCVEngine {
                     .map(
                       (project: any) => `
                     <div class="cv-item">
-                      <div class="cv-item-title">${project.title || project.name || 'Dự án'}</div>
-                      <div class="cv-item-subtitle">${project.role || ''}</div>
-                      <div class="cv-item-date">${this.formatDateRange(project.start_date, project.end_date)}</div>
+                      <div class="cv-item-title">${project.name || project.title || 'Dự án'}</div>
+                      ${project.role ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Vai trò:</strong> ${project.role}</div>` : ''}
+                      ${project.client ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Khách hàng:</strong> ${project.client}</div>` : ''}
+                      ${project.tech_stack && Array.isArray(project.tech_stack) && project.tech_stack.length > 0 ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Công nghệ:</strong> ${project.tech_stack.join(', ')}</div>` : ''}
+                      <div class="cv-item-date">${this.formatDateRange(project.start_date, project.end_date, project.is_current)}</div>
                       ${project.description ? `<p style="font-size: 13px; margin-top: 5px; color: #475569;">${project.description}</p>` : ''}
+                      ${
+                        project.highlights && Array.isArray(project.highlights) && project.highlights.length > 0
+                          ? `
+                        <div style="margin-top: 5px;">
+                          <strong style="font-size: 12px; color: #475569;">Điểm nổi bật:</strong>
+                          <ul style="font-size: 12px; margin-top: 3px; padding-left: 20px; color: #64748b;">
+                            ${project.highlights.map((h: string) => `<li>${h}</li>`).join('')}
+                          </ul>
+                        </div>
+                      `
+                          : ''
+                      }
+                      ${
+                        project.links && Array.isArray(project.links) && project.links.length > 0
+                          ? `
+                        <div style="font-size: 12px; margin-top: 5px;">
+                          <strong style="color: #475569;">Link:</strong> ${project.links.map((link: any) => `<a href="${link.url}" target="_blank" style="color: ${colors.primary}; margin-left: 5px;">${link.label || link.url}</a>`).join(' | ')}
+                        </div>
+                      `
+                          : ''
+                      }
                     </div>
                   `
                     )
@@ -387,15 +410,23 @@ export class UnifiedCVEngine {
                   ? `
                 <div class="cv-section">
                   <h3 class="cv-section-title">Ngôn ngữ</h3>
-                  <div class="cv-skills">
-                    ${languages
-                      .map(
-                        (lang: any) => `
-                      <span class="cv-skill">${lang.name || lang.language} - ${lang.proficiency || lang.level || 'Trung cấp'}</span>
-                    `
-                      )
-                      .join('')}
-                  </div>
+                  ${languages
+                    .map(
+                      (lang: any) => `
+                    <div class="cv-item">
+                      <div class="cv-item-title">${lang.name || lang.language || 'Ngôn ngữ'}</div>
+                      <div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Trình độ:</strong> ${lang.proficiency_level || lang.proficiency || lang.level || 'Intermediate'}</div>
+                      ${
+                        lang.certificate
+                          ? `<div style="font-size: 12px; color: #64748b; margin-top: 3px;">
+                        <strong>Chứng chỉ:</strong> ${lang.certificate}${lang.certificate_url ? ` (<a href="${lang.certificate_url}" target="_blank" style="color: ${colors.primary};">Xem</a>)` : ''}
+                      </div>`
+                          : ''
+                      }
+                    </div>
+                  `
+                    )
+                    .join('')}
                 </div>
               `
                   : ''
@@ -412,9 +443,11 @@ export class UnifiedCVEngine {
                       (ref: any) => `
                     <div class="cv-item">
                       <div class="cv-item-title">${ref.name || 'Người tham khảo'}</div>
-                      <div class="cv-item-subtitle">${ref.position || ref.title || ''} ${ref.company ? `tại ${ref.company}` : ''}</div>
-                      ${ref.email ? `<div style="font-size: 12px; color: #64748b;">📧 ${ref.email}</div>` : ''}
-                      ${ref.phone ? `<div style="font-size: 12px; color: #64748b;">📱 ${ref.phone}</div>` : ''}
+                      ${ref.position ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Chức vụ:</strong> ${ref.position}</div>` : ''}
+                      ${ref.company ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Công ty:</strong> ${ref.company}</div>` : ''}
+                      ${ref.relationship ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><strong>Mối quan hệ:</strong> ${ref.relationship}</div>` : ''}
+                      ${ref.email ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><strong>Email:</strong> ${ref.email}</div>` : ''}
+                      ${ref.phone ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><strong>Điện thoại:</strong> ${ref.phone}</div>` : ''}
                     </div>
                   `
                     )
@@ -731,10 +764,33 @@ export class UnifiedCVEngine {
                   .map(
                     (project: any) => `
                   <div style="margin-bottom: 15px;">
-                    <div style="font-weight: 600; font-size: 14px; color: #1e293b;">${project.title || project.name || 'Dự án'}</div>
-                    <div style="color: ${colors.primary}; font-size: 13px;">${project.role || ''}</div>
-                    <div style="font-size: 12px; color: #64748b;">${this.formatDateRange(project.start_date, project.end_date)}</div>
+                    <div style="font-weight: 600; font-size: 14px; color: #1e293b;">${project.name || project.title || 'Dự án'}</div>
+                    ${project.role ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Vai trò:</strong> ${project.role}</div>` : ''}
+                    ${project.client ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Khách hàng:</strong> ${project.client}</div>` : ''}
+                    ${project.tech_stack && Array.isArray(project.tech_stack) && project.tech_stack.length > 0 ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Công nghệ:</strong> ${project.tech_stack.join(', ')}</div>` : ''}
+                    <div style="font-size: 12px; color: #64748b; margin-top: 2px;">${this.formatDateRange(project.start_date, project.end_date, project.is_current)}</div>
                     ${project.description ? `<p style="font-size: 13px; margin-top: 5px; color: #475569;">${project.description}</p>` : ''}
+                    ${
+                      project.highlights && Array.isArray(project.highlights) && project.highlights.length > 0
+                        ? `
+                      <div style="margin-top: 5px;">
+                        <strong style="font-size: 12px; color: #475569;">Điểm nổi bật:</strong>
+                        <ul style="font-size: 12px; margin-top: 3px; padding-left: 20px; color: #64748b;">
+                          ${project.highlights.map((h: string) => `<li>${h}</li>`).join('')}
+                        </ul>
+                      </div>
+                    `
+                        : ''
+                    }
+                    ${
+                      project.links && Array.isArray(project.links) && project.links.length > 0
+                        ? `
+                      <div style="font-size: 12px; margin-top: 5px;">
+                        <strong style="color: #475569;">Link:</strong> ${project.links.map((link: any) => `<a href="${link.url}" target="_blank" style="color: ${colors.primary}; margin-left: 5px;">${link.label || link.url}</a>`).join(' | ')}
+                      </div>
+                    `
+                        : ''
+                    }
                   </div>
                 `
                   )
@@ -813,17 +869,25 @@ export class UnifiedCVEngine {
                 ? `
               <div class="cv-section">
                 <h3 class="cv-section-title">Ngôn ngữ</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                  ${languages
-                    .map(
-                      (lang: any) => `
-                    <span style="background: rgba(124, 58, 237, 0.1); color: ${colors.primary}; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 500;">
-                      ${lang.name || lang.language} - ${lang.proficiency || lang.level || 'Trung cấp'}
-                    </span>
-                  `
-                    )
-                    .join('')}
-                </div>
+                ${languages
+                  .map(
+                    (lang: any) => `
+                  <div style="margin-bottom: 12px;">
+                    <div style="font-weight: 600; font-size: 14px; color: #1e293b;">${lang.name || lang.language || 'Ngôn ngữ'}</div>
+                    <div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Trình độ:</strong> ${lang.proficiency_level || lang.proficiency || lang.level || 'Intermediate'}</div>
+                    ${
+                      lang.certificate
+                        ? `
+                      <div style="font-size: 12px; color: #64748b; margin-top: 3px;">
+                        <strong>Chứng chỉ:</strong> ${lang.certificate}${lang.certificate_url ? ` (<a href="${lang.certificate_url}" target="_blank" style="color: ${colors.primary};">Xem</a>)` : ''}
+                      </div>
+                    `
+                        : ''
+                    }
+                  </div>
+                `
+                  )
+                  .join('')}
               </div>
             `
                 : ''
@@ -840,9 +904,11 @@ export class UnifiedCVEngine {
                     (ref: any) => `
                   <div style="margin-bottom: 15px;">
                     <div style="font-weight: 600; font-size: 14px; color: #1e293b;">${ref.name || 'Người tham khảo'}</div>
-                    <div style="color: ${colors.primary}; font-size: 13px;">${ref.position || ref.title || ''} ${ref.company ? `tại ${ref.company}` : ''}</div>
-                    ${ref.email ? `<div style="font-size: 12px; color: #64748b;">📧 ${ref.email}</div>` : ''}
-                    ${ref.phone ? `<div style="font-size: 12px; color: #64748b;">📱 ${ref.phone}</div>` : ''}
+                    ${ref.position ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Chức vụ:</strong> ${ref.position}</div>` : ''}
+                    ${ref.company ? `<div style="font-size: 13px; color: #64748b; margin-top: 2px;"><strong>Công ty:</strong> ${ref.company}</div>` : ''}
+                    ${ref.relationship ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><strong>Mối quan hệ:</strong> ${ref.relationship}</div>` : ''}
+                    ${ref.email ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><strong>Email:</strong> ${ref.email}</div>` : ''}
+                    ${ref.phone ? `<div style="font-size: 12px; color: #64748b; margin-top: 2px;"><strong>Điện thoại:</strong> ${ref.phone}</div>` : ''}
                   </div>
                 `
                   )
