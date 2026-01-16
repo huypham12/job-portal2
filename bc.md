@@ -12,6 +12,74 @@
   "title_suggest": "Senior Backend Node.js Developer",
   "description": "Chúng tôi đang tìm kiếm Senior Backend Developer có kinh nghiệm Node.js, TypeScript, Redis và Elasticsearch."
 }
+
+
+{
+  "job": {
+    "id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+    "title": "Senior Backend Developer",
+    "description": "Phát triển hệ thống backend cho nền tảng tuyển dụng.",
+    "salary_range": {
+      "min": 2000,
+      "max": 3500,
+      "currency": "USD"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+  },
+  "job_skills": [
+    {
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "skill_id": "d4e5f6a7-1111-4b22-8c33-123456789abc" // Node.js
+    },
+    {
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "skill_id": "e5f6a7b8-2222-4c33-9d44-23456789abcd" // PostgreSQL
+    }
+  ],
+  "job_categories": [
+    {
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "category_id": "f6a7b8c9-3333-4d44-8e55-3456789abcde" // Backend
+    }
+  ],
+  "job_requirements": [
+    {
+      "id": "a111b222-c333-4d44-8e55-3456789abcde",
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "requirement_type": "technical",
+      "title": "Kinh nghiệm Node.js",
+      "description": "Tối thiểu 3 năm kinh nghiệm phát triển với Node.js.",
+      "is_required": true,
+      "level": "senior",
+      "years_experience": 3,
+      "created_at": "2026-01-16T08:00:00.000Z"
+    }
+  ],
+  "job_benefits": [
+    {
+      "id": "b222c333-d444-4e55-8f66-456789abcdef",
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "benefit_type": "insurance",
+      "title": "Bảo hiểm sức khỏe",
+      "description": "Được tham gia bảo hiểm sức khỏe toàn diện.",
+      "value_amount": 10000000,
+      "value_currency": "VND",
+      "created_at": "2026-01-16T08:00:00.000Z"
+    }
+  ],
+  "job_work_arrangements": {
+    "id": "c333d444-e555-4f66-9a77-56789abcdef0",
+    "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+    "is_remote_allowed": true,
+    "remote_percentage": 100,
+    "flexible_hours": true,
+    "travel_requirement": "Không yêu cầu",
+    "overtime_expected": false,
+    "shift_type": "day",
+    "created_at": "2026-01-16T08:00:00.000Z"
+  }
+}
 ```
 
 ```ts
@@ -36,7 +104,7 @@ title: {
 }
 ```
 
-```tree
+````tree
 Cluster
 └── Node
     └── Index (jobs_index – logic)
@@ -64,4 +132,83 @@ Cluster
  ....
 
 
+```json
+{
+  "job": {
+    "id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+    "title": "Senior Backend Developer",
+    "description": "Phát triển hệ thống backend cho nền tảng tuyển dụng.",
+    "company_id": "c2f7d8e3-5678-4bcd-8ef0-0987654321cd",
+    "location_id": "a3d9e6b1-4321-4cba-9fed-2345678901ef",
+    "salary_range": {
+      "min": 2000,
+      "max": 3500,
+      "currency": "USD"
+    },
+    "job_type": "full_time",
+    "experience_level": 3,
+    "posted_at": "2026-01-16T08:00:00.000Z",
+    "expires_at": "2026-02-16T08:00:00.000Z",
+    "status": "approved",
+    "metadata": {
+      "priority": "high"
+    },
+    "version": 1,
+    "deleted": false,
+    "admin_approved": true
+  },
+  "job_skills": [
+    {
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "skill_id": "d4e5f6a7-1111-4b22-8c33-123456789abc" // Node.js
+    },
+    {
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "skill_id": "e5f6a7b8-2222-4c33-9d44-23456789abcd" // PostgreSQL
+    }
+  ],
+  "job_categories": [
+    {
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "category_id": "f6a7b8c9-3333-4d44-8e55-3456789abcde" // Backend
+    }
+  ],
+  "job_requirements": [
+    {
+      "id": "a111b222-c333-4d44-8e55-3456789abcde",
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "requirement_type": "technical",
+      "title": "Kinh nghiệm Node.js",
+      "description": "Tối thiểu 3 năm kinh nghiệm phát triển với Node.js.",
+      "is_required": true,
+      "level": "senior",
+      "years_experience": 3,
+      "created_at": "2026-01-16T08:00:00.000Z"
+    }
+  ],
+  "job_benefits": [
+    {
+      "id": "b222c333-d444-4e55-8f66-456789abcdef",
+      "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+      "benefit_type": "insurance",
+      "title": "Bảo hiểm sức khỏe",
+      "description": "Được tham gia bảo hiểm sức khỏe toàn diện.",
+      "value_amount": 10000000,
+      "value_currency": "VND",
+      "created_at": "2026-01-16T08:00:00.000Z"
+    }
+  ],
+  "job_work_arrangements": {
+    "id": "c333d444-e555-4f66-9a77-56789abcdef0",
+    "job_id": "b1e8c7f2-1234-4a56-9abc-1234567890ab",
+    "is_remote_allowed": true,
+    "remote_percentage": 100,
+    "flexible_hours": true,
+    "travel_requirement": "Không yêu cầu",
+    "overtime_expected": false,
+    "shift_type": "day",
+    "created_at": "2026-01-16T08:00:00.000Z"
+  }
+}
 ```
+````

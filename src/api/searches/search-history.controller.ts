@@ -55,10 +55,10 @@ export class SearchHistoryController {
 
       // Transform response to match frontend expectations
       const history = searchHistory.map((item) => ({
-        id: item.id,
-        query: item.search_query,
+        id: Number(item.id), // Convert BigInt to Number for JSON serialization
+        term: item.search_query, // Frontend expects 'term' not 'query'
         type: item.search_type,
-        searched_at: item.searched_at,
+        timestamp: item.searched_at?.getTime() || Date.now(), // Convert to timestamp for frontend
         result_count: item.result_count,
         filters: item.filters_used
       }))

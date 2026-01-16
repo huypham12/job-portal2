@@ -4,6 +4,14 @@
  */
 import { prisma } from '../../config/database.service'
 
+/**
+ * Helper function to check if string is a valid UUID
+ */
+function isValidUUID(str: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  return uuidRegex.test(str)
+}
+
 export const searchRepo = {
   async getCompaniesByIds(ids: string[]): Promise<Record<string, unknown>[]> {
     if (!ids || !ids.length) return []
@@ -25,13 +33,17 @@ export const searchRepo = {
   async getLocationByNameOrId(
     locationInput: string
   ): Promise<{ id: string; name: string; type: string; parent_id?: string | null } | null> {
-    // First try to find by ID (UUID)
-    let location = await prisma.locations.findUnique({
-      where: { id: locationInput },
-      select: { id: true, name: true, type: true, parent_id: true }
-    })
+    let location = null
 
-    // If not found by ID, try to find by name
+    // Only try findUnique if input is a valid UUID
+    if (isValidUUID(locationInput)) {
+      location = await prisma.locations.findUnique({
+        where: { id: locationInput },
+        select: { id: true, name: true, type: true, parent_id: true }
+      })
+    }
+
+    // If not found by ID or input wasn't UUID, try to find by name
     if (!location) {
       location = await prisma.locations.findFirst({
         where: { name: { equals: locationInput, mode: 'insensitive' } },
@@ -81,18 +93,33 @@ export const searchRepo = {
 
   async saveEvent(event: import('./events.dto').EventRequestDto): Promise<void> {
     try {
-      // For search events, save to search_history if it's an impression event
-      if (event.event_type === 'impression' && event.query) {
-        await prisma.search_history.create({
-          data: {
-            profile_id: event.user_id || '', // Need to get profile_id from user_id
-            search_query: event.query,
-            search_type: 'job',
-            result_count: event.result_count || 0,
-            filters_used: event.filters || {}
-            // session_id: event.session_id // Not in EventRequestDto yet
-          }
-        })
+      // For search events, save to search_history
+      if ((event.event_type === 'search' || event.event_type === 'impression') && event.query) {
+        // Get profile_id from user_id if provided
+        let profileId = event.user_id
+
+        if (event.user_id && isValidUUID(event.user_id)) {
+          const user = await prisma.users.findUnique({
+            where: { id: event.user_id },
+            select: { profiles: { select: { id: true } } }
+          })
+          profileId = user?.profiles?.id || event.user_id
+        }
+
+        if (profileId) {
+          await prisma.search_history.create({
+            data: {
+              profile_id: profileId,
+              search_query: event.query,
+              search_type: 'job',
+              result_count: event.result_count || 0,
+              filters_used: event.filters || {}
+            }
+          })
+          console.log(
+            `✅ [search.repo] Saved search history for query: "${event.query}", results: ${event.result_count}`
+          )
+        }
       }
       // For other events, we rely on ES storage for now
     } catch (e) {

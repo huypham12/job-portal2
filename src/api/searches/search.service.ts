@@ -163,11 +163,46 @@ export const searchService = {
         // Build complete ES query using the canonical query builder
         const esQuery = buildJobSearchQuery(queryContext)
 
+        // Enable explain and profile in dev mode for debugging
+        const isDev = process.env.NODE_ENV !== 'production'
+        const enableExplain = queryContext.options?.explain ?? isDev
+        const enableProfile = queryContext.options?.profile ?? isDev
+
         // Execute search using the built query
         const result = await elasticsearchService.searchWithTemplate('jobs', esQuery, {
-          explain: queryContext.options?.explain,
-          profile: queryContext.options?.profile
+          explain: enableExplain,
+          profile: enableProfile
         })
+
+        // Log ES response for debugging
+        console.log('\n📊 [ES Response Summary]')
+        console.log('   Total hits:', result.total)
+        console.log('   Took (ms):', result.took)
+        console.log('   Max score:', result.hits?.[0]?._score || 'N/A')
+        console.log('   Returned:', result.hits?.length || 0, 'documents\n')
+
+        // Log detailed scoring breakdown if explain is enabled
+        if (enableExplain && result.hits?.length > 0) {
+          console.log('🎯 [Score Breakdown]')
+          result.hits.forEach((hit: any, idx: number) => {
+            console.log(`\n--- Result #${idx + 1}: ${hit._source?.title || hit._id} ---`)
+            console.log(`ID: ${hit._source?.id}`)
+            console.log(`Company: ${hit._source?.company_name}`)
+            console.log(`Location: ${hit._source?.location_name}`)
+            console.log(`Final Score: ${hit._score}`)
+
+            if (hit._explanation) {
+              console.log('\n📝 Score Calculation:')
+              this.logScoringBreakdown(hit._explanation, 1)
+            }
+          })
+        }
+
+        // Log performance profile if enabled
+        if (enableProfile && 'profile' in result && (result as any).profile) {
+          console.log('\n⚡ [Performance Profile]')
+          console.log(JSON.stringify((result as any).profile, null, 2))
+        }
 
         // If ES returned zero results for a query with a location filter,
         // attempt a DB fallback (handles cases where ES index may be stale).
@@ -1259,5 +1294,21 @@ export const searchService = {
    */
   async invalidateAllSearchCaches(): Promise<void> {
     await cacheManager.invalidateAllSearches()
+  },
+
+  /**
+   * Helper to recursively log scoring breakdown from explain
+   */
+  logScoringBreakdown(explanation: any, indent = 0): void {
+    const prefix = '   '.repeat(indent)
+    if (!explanation) return
+
+    console.log(`${prefix}├─ ${explanation.description} = ${explanation.value}`)
+
+    if (explanation.details && explanation.details.length > 0) {
+      explanation.details.forEach((detail: any) => {
+        this.logScoringBreakdown(detail, indent + 1)
+      })
+    }
   }
 }

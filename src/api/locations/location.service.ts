@@ -1,6 +1,14 @@
 import { prisma } from '@/config/database.service'
 import { LocationType } from '@prisma/client'
 
+/**
+ * Helper function to check if string is a valid UUID
+ */
+function isValidUUID(str: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  return uuidRegex.test(str)
+}
+
 export class LocationService {
   /**
    * Get all provinces (tỉnh/thành)
@@ -36,6 +44,11 @@ export class LocationService {
    * Used for dropdown/select options after selecting a province
    */
   async getDistrictsByProvinceId(provinceId: string) {
+    // Validate UUID format
+    if (!isValidUUID(provinceId)) {
+      throw new Error('Invalid province ID format')
+    }
+
     // First verify that the province exists
     const province = await prisma.locations.findUnique({
       where: { id: provinceId },
@@ -84,6 +97,11 @@ export class LocationService {
    * Returns location with parent (if district) and children (if province)
    */
   async getLocationById(locationId: string) {
+    // Validate UUID format
+    if (!isValidUUID(locationId)) {
+      throw new Error('Invalid location ID format')
+    }
+
     const location = await prisma.locations.findUnique({
       where: { id: locationId },
       select: {

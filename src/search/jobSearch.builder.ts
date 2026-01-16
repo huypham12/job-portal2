@@ -84,7 +84,11 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
     ]
 
     // Vietnamese-optimized parameters
+    // and tất cả các token phải khớp với tài liệu (AND) để tránh kết quả quá rộng
+    // or cho phép một số token khớp (OR) để tăng tính bao phủ
     const operator = hasVietnameseChars ? 'or' : 'and'
+    // Vietnamese: cho phép khớp một phần (30%) do tính đa dạng ngữ pháp
+    // English/Latin: yêu cầu khớp nghiêm ngặt hơn (60%) để tránh kết quả không liên quan
     const minShouldMatch = hasVietnameseChars ? '30%' : '60%'
 
     mustClauses.push({
@@ -295,6 +299,7 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
   if (hasUserContext) {
     const functionScore = buildJobSearchFunctionScore(context)
     if (functionScore.function_score) {
+      console.log('⚡ [Function Score] Applying personalization scoring:', JSON.stringify(functionScore, null, 2))
       queryBody = {
         function_score: {
           query: queryBody,
@@ -322,6 +327,9 @@ export function buildJobSearchQuery(context: QueryContext): ESQuery {
   if (options?.profile) {
     esQuery.profile = true
   }
+
+  // Log query for debugging
+  console.log('🔍 [ES Query Builder] Generated query:', JSON.stringify(esQuery, null, 2))
 
   return esQuery
 }

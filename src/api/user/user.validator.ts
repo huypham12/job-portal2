@@ -227,7 +227,7 @@ const profileEducationBody = z.object({
 // Profile skill validation
 const profileSkillBody = z.object({
   skill_id: z.string().uuid(),
-  proficiency: z.number().int().min(1).max(5).optional(),
+  proficiency: z.number().int().optional(),
   level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional()
 })
 
@@ -261,7 +261,7 @@ const updateProfileEducationBody = profileEducationBody.partial()
 // For skills, only allow updating proficiency and level, not skill_id
 const updateProfileSkillBody = z
   .object({
-    proficiency: z.number().int().min(1).max(5).optional(),
+    proficiency: z.number().int().optional(),
     level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional()
   })
   .refine((v) => Object.keys(v).length > 0, { message: 'At least one field must be provided' })
