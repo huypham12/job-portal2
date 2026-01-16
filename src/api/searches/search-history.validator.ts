@@ -15,12 +15,10 @@ export const GetSearchHistorySchema = z.object({
 
 // Schema for URL parameters (like history ID)
 export const SearchHistoryIdParamSchema = z.object({
-  params: z.object({
-    id: z
-      .string()
-      .regex(/^\d+$/, 'ID must be a valid number')
-      .transform((val) => parseInt(val, 10))
-  })
+  id: z
+    .string()
+    .regex(/^\d+$/, 'ID must be a valid number')
+    .transform((val) => parseInt(val, 10))
 })
 
 // Validation functions
